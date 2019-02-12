@@ -1,0 +1,8 @@
+ds= ripples(20)
+try:
+    r= where( not(valid(ds)) )  # this is a runtime error
+except:
+    print 'as expected'
+r= where( valid(ds).eq(0) )  # this is how this must be done.
+print r
+
