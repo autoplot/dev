@@ -1,0 +1,11 @@
+# There's no easy way to remove a set of indeces.  This provides a new
+# method for removing fill.
+
+ds= ripples(20)
+ds= removeIndeces( ds, where( valid(ds).eq(0) ) )
+print ds.length()
+plot( 0, ds )
+
+ds= ripples(20,10)
+ds= removeIndeces( ds, where( valid(slice1(ds,0)).eq(0) ) )
+plot( 1, ds )
