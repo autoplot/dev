@@ -1,0 +1,8 @@
+ds= sin( linspace( .1, PI,16 ) ) + findgen(16) % 2 
+#ds[1::2]= -99
+ds[4]= -99
+ds[8]= -99
+ds.putProperty( QDataSet.FILL_VALUE, -99 )
+
+result= ds
+
