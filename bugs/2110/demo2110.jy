@@ -1,0 +1,5 @@
+i= indgen(400)
+x= i % 20
+y= i // 20
+z= flatten( ripples(20,20) ) [ :,-1 ]
+plot( x,y,z, renderType='spectrogram' )
