@@ -1,0 +1,23 @@
+# demo JGit library.  See https://www.baeldung.com/jgit
+
+import sys
+addToSearchPath(sys.path,
+    'https://repo.eclipse.org/content/groups/releases//org/eclipse/jgit/org.eclipse.jgit/5.2.1.201812262042-r/org.eclipse.jgit-5.2.1.201812262042-r.jar',
+    monitor )
+    
+from org.eclipse.jgit.api import Git
+from org.eclipse.jgit.awtui import AwtCredentialsProvider
+
+from java.io import File
+
+#git= Git.cloneRepository().setURI("https://github.com/autoplot/dev.git").setDirectory(File("/tmp/ap/dev.g")).call()
+git= Git.init().setDirectory(File('/tmp/ap/dev.g')).call()
+ 
+commit = git.commit()
+commit.setMessage("added content 17")
+commit.call()
+
+push= git.push()
+credentialsProvider = AwtCredentialsProvider()
+push.setCredentialsProvider( credentialsProvider )
+print push.call()
