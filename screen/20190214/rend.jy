@@ -18,6 +18,6 @@ class AllSortsRenderer( Renderer ):
             iy= int( yaxis.transform( datum(yy.slice(i)) ) ) 
             g.drawImage( imgs[int(rand()*len(imgs))], ix, iy, None )
 
-ds= ripples(10)
+ds= ripples(20)
 
 plot( ds, renderer= AllSortsRenderer() )
