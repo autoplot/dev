@@ -1,0 +1,24 @@
+from org.das2.graph import Renderer
+from org.das2.qds import SemanticOps
+from javax.imageio import ImageIO
+
+ff= listDirectory('https://github.com/autoplot/dev/screen/*.png')
+imgs=[]
+for i in len(ff):
+    imgs[i]= ImageIO.read( getFile( 'https://github.com/autoplot/dev/screen/'+ff[i] ) )
+
+class AllSortsRenderer( Renderer ):
+    def render( self, g, xaxis, yaxis, mon ):
+        ds= self.getDataSet()
+        xx= SemanticOps.xtagsDataSet( ds )
+        yy= ds
+        
+        for i in xrange(xx.length()):
+            ix= int( xaxis.transform( datum(xx.slice(i)) ) )
+            iy= int( yaxis.transform( datum(yy.slice(i)) ) ) 
+            
+            g.drawLine( ix, iy, ix+1, iy+1 )
+
+ds= ripples(10)
+
+plot( ds, renderer= AllSortsRenderer() )
