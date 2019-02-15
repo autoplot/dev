@@ -14,3 +14,4 @@ plot( xx, yy, renderType='stairSteps', fillColor='pink', color='red', xpos='50px
 plot( 1, xx, yy, renderType='scatter', symbolSize=3, xpos='50px,650px', ypos='100px,500px', xrange=[50,650] )
 
 dom.plots[0].xaxis.scale= datum(1.0)
+dom.plotElements[0].style.reference= datum(-0.1)
