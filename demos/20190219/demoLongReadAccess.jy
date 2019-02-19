@@ -1,0 +1,37 @@
+
+bmag= getDataSet('vap+cdaweb:ds=RBSP-B_MAGNETOMETER_4SEC-SM_EMFISIS-L3&filter=rbsp&id=Magnitude&timerange=2019-01-06')
+tt= bmag.property(QDataSet.DEPEND_0)
+
+print 'The first timetag, represented as a Datum:'
+print tt[1]
+
+print 'Its double value:'
+print tt[1].value()
+
+print 'Its long value:'
+from org.das2.qds import LongReadAccess
+print tt.capability(LongReadAccess).lvalue(1)
+
+print 'Even slice works:'
+print tt.slice(1).capability(LongReadAccess).lvalue()
+
+print 'Now we do this with the array-backed dataset, LDataSet.'
+import jarray
+from org.das2.qds import LDataSet
+tt= LDataSet.wrap( jarray.zeros(10,'l') )
+from org.das2.qds import LongWriteAccess
+lwa= tt.capability(LongWriteAccess)
+lwa.putLValue( 1, 9223372036854775807 )
+
+print 'The first timetag, represented as a Datum:'
+print tt[1]
+
+print 'Its double value:'
+print tt[1].value()
+
+print 'Its long value:'
+from org.das2.qds import LongReadAccess
+print tt.capability(LongReadAccess).lvalue(1)
+
+print 'Even slice works:'
+print tt.slice(1).capability(LongReadAccess).lvalue()
