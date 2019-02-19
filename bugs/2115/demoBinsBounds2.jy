@@ -1,0 +1,39 @@
+# this was used to debug a new mode where the DataGeneralPathBuilder handles the histogram mode.
+
+setLayoutOverplot(2)
+
+from org.das2.graph import Painter
+from java.awt import BasicStroke
+stroke= BasicStroke(0.5,0,0,1.0,[1,5],0)
+
+smallFont= dom.canvases[0].controller.dasCanvas.font
+class GridPaint( Painter ):
+    def paint(self,g):
+        g.font= smallFont.deriveFont( 8. )
+        g.color= Color.LIGHT_GRAY
+        g.stroke= stroke
+        for i in xrange(0,1000,20):
+            g.drawLine( 0, i, 1000, i )
+            g.drawLine( i, 0, i, 1000 )
+        g.color= Color.GRAY
+        for i in xrange(0,1000,100):
+            g.drawLine( 0, i, 1000, i )
+            g.drawLine( i, 0, i, 1000 )
+            g.drawString( '%d'%i, i, 12 )
+            g.drawString( '%d'%i, 0, i )
+
+dom.canvases[0].controller.dasCanvas.addBottomDecorator( GridPaint() )
+        
+xx= linspace( 100, 600, 31 )
+yy= sin( linspace( 0,PI*5, 31 ) )
+yy[ 2 ] = -99
+
+xx= append( xx[0:7], xx[9:] )
+yy= append( yy[0:7], yy[9:] )
+
+yy= dataset(yy,fillValue=-99)
+plot( xx, yy, renderType='stairSteps', fillColor='pink', color='red', xpos='50px,650px', ypos='100px,500px', xrange=[50,650] )
+plot( 1, xx, yy, renderType='scatter', symbolSize=3, xpos='50px,650px', ypos='100px,500px', xrange=[50,650] )
+
+dom.plots[0].xaxis.scale= datum(1.0)
+dom.plotElements[0].style.reference= datum(-0.1)
