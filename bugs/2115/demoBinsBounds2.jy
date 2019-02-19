@@ -24,12 +24,13 @@ class GridPaint( Painter ):
 
 dom.canvases[0].controller.dasCanvas.addBottomDecorator( GridPaint() )
         
-xx= linspace( 100, 600, 31 )
-yy= sin( linspace( 0,PI*5, 31 ) )
+xx= linspace( 100, 600, 26 )
+yy= sin( linspace( 0,PI*5, 26 ) )
 yy[ 2 ] = -99
 
 xx= append( xx[0:7], xx[9:] )
 yy= append( yy[0:7], yy[9:] )
+yy[7]= -0.4
 
 yy= dataset(yy,fillValue=-99)
 plot( xx, yy, renderType='stairSteps', fillColor='pink', color='red', xpos='50px,650px', ypos='100px,500px', xrange=[50,650] )
