@@ -1,0 +1,19 @@
+# demo code which does diffs.
+# cd /home/jbf/project/autoplot/git-other/
+# git clone https://github.com/java-diff-utils/java-diff-utils.git
+# cd java-diff-utils/
+# mvn package
+
+import sys
+addToSearchPath(sys.path,'file:/home/jbf/project/autoplot/git-other/java-diff-utils/target/java-diff-utils-4.1-SNAPSHOT.jar', None )
+
+original= [ 'a','b','c' ]
+revised= [ 'a', 'c' ]
+
+from com.github.difflib import DiffUtils
+
+result= DiffUtils.diff(original, revised)
+print result
+for d in result.getDeltas():
+    print d
+    
