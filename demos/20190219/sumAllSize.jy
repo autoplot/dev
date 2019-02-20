@@ -1,10 +1,8 @@
 fedo= getDataSet('https://cdaweb.sci.gsfc.nasa.gov/sp_phys/data/rbsp/rbspa/l3/ect/hope/pitchangle/rel03/2012/rbspa_rel03_ect-hope-pa-l3_20121210_v6.1.0.cdf?where=Mode_Ele.eq(mode)&FEDO')
-ss= size( fedo )
+(nrec,nen)= size( fedo )
 
-print ss
-
-sum= 0
-for i in xrange( ss[0] ):
-    for j in xrange( ss[1] ):
+sum= 0.
+for i in xrange( nrec ):
+    for j in xrange( nen ):
         sum= sum + fedo[i,j] 
 print sum
