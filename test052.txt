@@ -1,0 +1,3 @@
+# Scripts listed below will be run on the testing server.
+http://autoplot.org/data/script/sayHello.jy
+http://autoplot.org/data/script/sayHello.jy?arg=789
