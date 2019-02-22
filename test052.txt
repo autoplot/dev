@@ -1,4 +1,7 @@
 # Scripts listed below will be run on the testing server.
+
 http://autoplot.org/data/script/sayHello.jy
 #http://autoplot.org/data/script/sayHello.jy?arg=789  arguments dont work...
+
+# relative links to this file should be used.
 bugs/20190222/demoUnitsAssumptions.jy
