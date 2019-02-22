@@ -1,6 +1,7 @@
 # Scripts listed below will be run on the testing server,
 # http://jfaden.net/jenkins/job/autoplot-test052/
 
+# Scripts outside dev are not allowed.  On the test there will be a message in stdout.
 http://autoplot.org/data/script/sayHello.jy
 #http://autoplot.org/data/script/sayHello.jy?arg=789  arguments dont work...
 
