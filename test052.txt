@@ -1,4 +1,5 @@
-# Scripts listed below will be run on the testing server.
+# Scripts listed below will be run on the testing server,
+# http://jfaden.net/jenkins/job/autoplot-test052/
 
 http://autoplot.org/data/script/sayHello.jy
 #http://autoplot.org/data/script/sayHello.jy?arg=789  arguments dont work...
