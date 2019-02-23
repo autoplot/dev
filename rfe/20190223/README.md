@@ -1,0 +1,1 @@
+It seems possible to me that the filesystems objects could be made to download a file if the name is already known.  Sites like github where we have a file reference already and don't need to list could be supported.
