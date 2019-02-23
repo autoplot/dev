@@ -1,0 +1,7 @@
+# Bob and I were wondering why Autoplot can't get a file if it can't list it.  I need to
+# review this.
+
+from org.das2.util.filesystem import FileSystem
+fs= FileSystem.create('https://raw.githubusercontent.com/autoplot/scripts/master/')
+fo= fs.getFileObject('makeTutorialHtml.jy')
+f= fo.getFile(monitor)
