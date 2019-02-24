@@ -1,0 +1,14 @@
+# suggest aggregations fails to identify some simple cases.  Enumerate these.
+
+from org.autoplot.datasource import DataSourceUtil
+
+def doTest( file, expect ):
+    result= DataSourceUtil.makeAggregation( file )
+    if ( result!=expect ):
+        print 'fails with '+file + ', got '+result + ' and expected ' + expect
+    else: 
+        print 'okay got ' + result
+        
+
+doTest( '/tmp/2019/12/d_20191201.dat', 'file:///tmp/$Y/$m/d_$Y$m$d.dat?timerange=2019-12-01' )
+
