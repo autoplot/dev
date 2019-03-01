@@ -3,10 +3,14 @@
 import sys
 addToSearchPath(sys.path,
     'https://repo.eclipse.org/content/groups/releases//org/eclipse/jgit/org.eclipse.jgit/5.2.1.201812262042-r/org.eclipse.jgit-5.2.1.201812262042-r.jar',
+    'https://download.eclipse.org/jgit/site/5.2.1.201812262042-r/apidocs/',
     monitor )
+from org.das2.jythoncompletion import JavadocLookup
+JavadocLookup.getInstance().setLinkForJavaSignature('org/eclipse/jgit','https://download.eclipse.org/jgit/site/5.2.1.201812262042-r/apidocs/')
+    
     
 from org.eclipse.jgit.api import Git
-from org.eclipse.jgit.awtui import AwtCredentialsProvider
+#from org.eclipse.jgit.awtui import AwtCredentialsProvider
 
 from java.io import File
 
@@ -18,6 +22,6 @@ commit.setMessage("added content 17")
 commit.call()
 
 push= git.push()
-credentialsProvider = AwtCredentialsProvider()
-push.setCredentialsProvider( credentialsProvider )
+#credentialsProvider = AwtCredentialsProvider()
+#push.setCredentialsProvider( credentialsProvider )
 print push.call()
