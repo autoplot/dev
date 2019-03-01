@@ -1,0 +1,30 @@
+
+htmltemp= '''
+<head>
+    <title>%(dat)s</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div id='header'>
+        <strong>%(dat)s</strong>%(summary)s <br>%(prevs)s %(nexts)s %(poss)s
+    </div>
+    <div id='content'>
+        <figure id='fig'>
+             <a href=%(img)s">
+             <img id='contentImg' src="%(img)s"></a>
+             <figcaption id="fcap">%(cap)s</figcaption>
+        </figure>
+    </div>
+</body>
+</html>
+'''
+    #html.write( htmltemp )
+thedate='thedate'
+summary='summary'
+prevs= 'prev'
+nexts= 'next'
+poss= 'poss'
+img= 'img'
+cap= 'cap'
+
+print htmltemp % { 'dat':thedate, 'summary':summary, 'prevs':prevs, 'nexts':nexts, 'poss':poss, 'img': img, 'cap':cap } 

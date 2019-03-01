@@ -2,6 +2,12 @@
 # review this.
 
 from org.das2.util.filesystem import FileSystem
+FileSystem.reset()
+
+# In this step, Das2 attempts to connect to the root, so that authentication can be done.
 fs= FileSystem.create('https://raw.githubusercontent.com/autoplot/scripts/master/')
+
 fo= fs.getFileObject('makeTutorialHtml.jy')
 f= fo.getFile(monitor)
+
+print 'length=', f.length()

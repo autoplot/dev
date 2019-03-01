@@ -1,0 +1,28 @@
+# Jon has funky CDF files which are a bit beyond existing specs.  This causes strange errors on Autoplot's side.
+
+timerange = getParam('timerange', '2018-09-20', 'Timerange to load')
+uri = getParam('uri','http://spp-isois.sr.unh.edu/data/EPILo/level2/psp_isois-epilo_l2-ic_$Y$m$d_v$(v,sep).cdf?H_Flux_HiTimeRes','URI to load')
+look = getParam('look', 0, 'Look direction')
+
+full = getDataSet(uri, timerange, monitor)
+#full= ripples( 20,4,5 )
+#
+#tt= linspace( '2018-09-20T00:00Z', '2018-09-20T04:50Z', 20 )
+#full.putProperty( QDataSet.DEPEND_0, tt )
+#
+#en= logspace( 10,1000, 4 )
+#en.putProperty( QDataSet.LABEL, 'Energy' )
+#full.putProperty( QDataSet.DEPEND_1, en )
+#
+#an= linspace( 30, 140, 5 )
+#an.putProperty( QDataSet.LABEL, 'Angle' )
+#full.putProperty( QDataSet.DEPEND_2, an )
+
+#sliced = full
+#sliced = full[:, look, :]    # This drops metadata.
+sliced = slice1( full, look )  # This creates an invalid dataset.
+
+
+#sliced.putProperty('DEPEND_1', full.property('DEPEND_2')[:, look, :])
+
+data = sliced

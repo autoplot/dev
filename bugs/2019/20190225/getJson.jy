@@ -1,0 +1,14 @@
+
+from java.nio.file import Files,FileSystem, Paths
+
+uri= URI( PWD + 'data-specification-issues-71-401888052.2.json' ) 
+bytes= Files.readAllBytes( Paths.get( uri ) )
+
+from java.io import ByteArrayInputStream
+from org.json import JSONObject
+from java.lang import String
+
+jo= JSONObject( String(bytes) )
+
+print jo.toString(4)
+

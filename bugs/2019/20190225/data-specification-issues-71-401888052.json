@@ -1,0 +1,34 @@
+{"HAPI": "2.0",
+"status": { "code": 1200, "message": "OK"},
+"startDate": "2016-01-01T00:00:00.000Z",
+"stopDate": "2016-01-31T24:00:00.000Z",
+"definitions" :
+{
+{ "proton_e_bins": { "name": "energy",
+"units": "keV",
+"centers": [ 15, 25, 35 ] }
+}
+},
+"parameters": [
+{ "name": "Time",
+"type": "isotime",
+"units": "UTC",
+"fill": null,
+"length": 24
+},
+{ "name": "proton_spectrum",
+"type": "double",
+"size": [3],
+"units": "particles/(sec ster cm^2 keV)",
+"fill": "-1e31",
+"bins": [ { "$ref": "#/definitions/proton_e_bins" } ]
+},
+{ "name": "proton_spectrum_uncerts",
+"type": "double",
+"size": [3],
+"units": "particles/(sec ster cm^2 keV)",
+"fill": "-1e31",
+"bins": [ { "$ref": "#/parameters[1]/bins[0]" } ] # this may not work?
+}
+]
+}

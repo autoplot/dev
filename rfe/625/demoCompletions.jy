@@ -1,0 +1,24 @@
+# This was introduced to experiment with completions within the painter.
+# I always have to interrupt my workflow to get the java2d web page docs out,
+# and it would be nice if completions could pick up this use case.
+
+from org.das2.util import GrannyTextRenderer
+from java.awt.geom import Rectangle2D
+
+s= 'Color !(painter;block;blue;32) Blue'
+from org.das2.util import ColorUtil
+
+class BlockPainter( GrannyTextRenderer.Painter ):
+    def paint( self, g, args ):
+        if ( len(args)>0 ):
+            c= ColorUtil.decodeColor(args[0])
+            g.color= c  
+        if ( len(args)>1 ):
+            w= int(args[1])
+        else:
+            w= g.fontMetrics.height
+        r= Rectangle2D.Float( 0, -w, w, w )
+        g.fill(r)  # completions here to see what can be done with g.
+        return r
+ann= annotation(text=s)
+ann.controller.dasAnnotation.addPainter('block',BlockPainter())

@@ -1,0 +1,35 @@
+from org.das2.graph import Renderer
+from java.awt.geom import Ellipse2D
+
+class MyRend( Renderer ):
+    def doAutorange( self, ds ):
+        xx= ds[:,0]
+        yy= ds[:,1]
+        return join( extent(xx), extent(yy) )
+    def render( self, g, xaxis, yaxis, monitor ):
+        ds= self.getDataSet()
+        if ( ds==None ): return
+        if ( ds.rank()!=2 ): raise Exception("data must be rank 2, having n recs each 4 elements: x,y,s,c")
+        s= reverse(sort(ds[:,2]))
+        for i in s:
+            d= ds[i,:]
+            x= d[0]
+            y= d[1]
+            s= d[2].value()
+            c= d[3]
+            g.color= Color(int(c))
+            ix= xaxis.transform( x ) - s/2
+            iy= yaxis.transform( y ) - s/2
+            g.fill( Ellipse2D.Double( ix, iy, s, s ) )
+
+ff= 'file:/home/jbf/data/earthdata.backup/pop/1000-largest-us-cities-by-population-with-geographic-coordinates.csv'
+yy= getDataSet( ff + '?column=Lat' )
+xx= getDataSet( ff + '?column=Lon' )
+ss= getDataSet( ff + '?column=Population' )
+dss= getDataSet( ff + '?column=Growth From 2000 to 2013' )
+ss= sqrt(ss)/100
+cc= replicate( 0xAAFFAA, xx.length() )
+r= where( dss.lt(0) )
+cc[r]= 0xAAAAFF
+
+plot( bundle( xx, yy, ss, cc ), renderer= MyRend() )

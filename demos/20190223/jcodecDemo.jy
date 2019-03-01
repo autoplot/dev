@@ -1,0 +1,51 @@
+import sys
+    
+addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec-javase/0.2.2/jcodec-javase-0.2.2.jar',monitor.getSubtaskMonitor('jar1'))
+addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec/0.2.2/jcodec-0.2.2.jar',monitor.getSubtaskMonitor('jar2'))
+
+from org.jcodec.api.awt import AWTSequenceEncoder
+
+iframe= 0
+framePeriod= 1/datum('30Hz')
+
+from java.io import File
+
+enc = AWTSequenceEncoder.createSequenceEncoder(File( "2.mp4"), 30 )
+
+nn= 800
+dsx= zeros(nn)
+dsy= zeros(nn)
+dsz= randu(nn)*100
+
+monitor.setTaskSize(1000)
+monitor.started()
+
+plot( None, renderType='colorScatter', zrange=[0,100], xrange=[-1.4,1.4], yrange=[-1.4,1.4] )
+ann= annotation( text='featured point', anchorOffset='1em,1em', anchorType='data', anchorPosition='SW', pointAt='1,1' )
+
+dom.options.autoranging= False
+
+ddx= randn(nn)/1000
+ddy= randn(nn)/1000
+
+for i in xrange(1000):
+    monitor.setTaskProgress(i)
+    if ( monitor.cancelled ): break
+    dsx= dsx+ddx
+    dsy= dsy+ddy
+    ddx= ddx + randn(nn)/1000
+    ddy= ddy + randn(nn)/1000
+    ddx= ddx - dsy / 70
+    ddy= ddy + dsx / 70
+    ddx= ddx * 0.8
+    ddy= ddy * 0.8
+    dsx= dsx * 0.99
+    dsy= dsy * 0.99
+    ann.pointAtX= datum( dsx[-1] )
+    ann.pointAtY= datum( dsy[-1] )
+    plot( dsx, dsy, dsz, symbolSize=15 )
+    im= writeToBufferedImage()
+    enc.encodeImage( im )
+monitor.finished()
+
+enc.finish()

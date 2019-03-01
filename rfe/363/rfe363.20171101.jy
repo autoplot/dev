@@ -1,0 +1,21 @@
+# This will be the most difficult completion to support, because 
+# it will mean missing information is needed in the CompletionContext structure.
+
+from org.das2.graph import Painter
+class MyPainter(Painter):
+    def paint(self,g):
+        g.fillRect( 50,50,200,200 )
+        g.fillRect( 100,100,200,200 )
+        #g.draw<C>
+
+dom.canvases[0].controller.getDasCanvas().addBottomDecorator(MyPainter())
+
+from java.awt import Graphics2D
+from java.awt.image import BufferedImage
+bi=BufferedImage(640,480,BufferedImage.TYPE_4BYTE_ABGR)
+g= bi.getGraphics()
+g.fillRect( 100,100,200,200 )  # This works
+
+# regarding item20171101 of rte363, the completion would require an instantiation of 
+# the arguments to the function, where this is possible.  Or, completions could be 
+# based on querying the Class Type of the object, rather than the object itsself.
