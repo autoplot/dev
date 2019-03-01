@@ -1,0 +1,23 @@
+# demo how to get each screen's position
+
+from java.awt import GraphicsEnvironment
+ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
+gs = ge.getScreenDevices()
+
+devices= []
+for i in xrange(len(gs)):
+    dm = gs[i].getDisplayMode()
+    print str(i) + ", width: " + str(dm.getWidth()) + ", height: " + str(dm.getHeight())
+    gc = gs[i].getDefaultConfiguration()  # when I adjust Linux after Java has started, changes are not seen.
+    b= gc.getBounds()
+    print str(i) + ", bounds: " + str(b) 
+    devices.append(b)
+    
+from javax.swing import JPanel
+class MyT( JPanel ):
+    def paintComponent( self, g ):
+        from java.awt.geom import AffineTransform
+        for b in devices: 
+            g.drawRoundRect( b.x/5, b.y/5, b.width/5, b.height/5, 15, 15 )
+
+addTab( 'TV', MyT() )
