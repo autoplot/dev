@@ -45,7 +45,7 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+jyds:file:/home/jbf/ct/autoplot/bugs/2109/demoBug2.jyds"/>
+                <property default="" name="uri" type="String" value="vap+jyds:%{PWD}/demoBug2.jyds"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
