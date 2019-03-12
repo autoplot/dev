@@ -1,0 +1,9 @@
+# Note the line is truncated with the vap+dat reader.
+
+ds1= getDataSet('vap+dat:'+PWD+'/multilineComments.csv')
+ds2= getDataSet('vap+csv:'+PWD+'/multilineComments.csv')
+
+print ds1, ds2
+for i in xrange(ds1.length()):
+    print ds1[i]
+    print ds2[i,2]
