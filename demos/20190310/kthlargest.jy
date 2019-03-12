@@ -10,7 +10,7 @@ ds[96]= 4.5
 print 'because of noise: ', max(ds)
 
 from java.util import TreeSet
-max5= TreeSet()
+max5= TreeSet()  # this is a bug, because TreeSet elements must be unique.
 
 for i in xrange(0,5):
     max5.add(ds[i].value())
