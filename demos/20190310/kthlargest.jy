@@ -1,0 +1,34 @@
+# Demonstrate using heap to get the top 5 elements.
+
+ds= rand(10000)
+print 'the ideal max: ', max(ds)
+
+ds[80]= 4.5
+ds[82]= 4.5
+ds[96]= 4.5
+
+print 'because of noise: ', max(ds)
+
+from java.util import TreeSet
+max5= TreeSet()
+
+for i in xrange(0,5):
+    max5.add(ds[i].value())
+    
+sm= max5.first()
+for i in xrange(5,ds.length()):
+    dsiv= ds[i].value()
+    if ( dsiv>sm ):
+        max5.remove(sm)
+        max5.add(dsiv)
+        sm= max5.first()
+
+print 'fifth biggest: ', max5.first()
+
+from org.das2.qds import DataSetUtil
+
+largest=DataSetUtil.nLargest( ds, 5 )
+print 'n largest: '
+for l in largest:
+    print l 
+

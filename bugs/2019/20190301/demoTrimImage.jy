@@ -1,0 +1,10 @@
+ds= getDataSet('file:///home/jbf/fun/nx7400pics/2008_03_09/IMG_2922.JPG')
+from org.das2.qds.examples import Schemes
+
+print Schemes.isCompositeImage(ds)
+plot( ds )
+
+ds= trim( ds, dataset(datumRange([1000,1400])),dataset(datumRange([1000,1500])) )
+print Schemes.isCompositeImage(ds)
+
+plot( 1, ds, renderType='image' )
