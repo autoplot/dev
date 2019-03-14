@@ -1,0 +1,6 @@
+
+from org.das2.components.propertyeditor import PropertyEditor
+pe= PropertyEditor( dom.plots[0].xaxis )
+pe.setListenForExternalChanges(True)
+
+addTab( 'x-axis', pe )

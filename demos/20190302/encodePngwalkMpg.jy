@@ -1,0 +1,103 @@
+# script demonstrating write pngwalk to mp4, minding timetags.  The PNGWalkTool should be
+# running as the second application ( AppManager.getInstance().getApplication(1) )
+
+fps= getParam( 'fps', 15, 'frames per second', [ 15,30 ] )
+
+outf= getParam( 'out', '/home/jbf/tmp/product.%02d.mp4' % fps, 'mpg output file' )
+
+from org.autoplot import AppManager
+pwt= AppManager.getInstance().getApplication(1)
+
+from org.autoplot.pngwalk import PngWalkTool
+#assert isinstance( pwt, PngWalkTool )
+
+d= 'http://central.maven.org/maven2/org/jcodec/'
+import sys
+addToSearchPath( sys.path,d+'jcodec/0.2.2/jcodec-0.2.2.jar',monitor.getSubtaskMonitor('load jar'))
+addToSearchPath( sys.path,d+'jcodec-javase/0.2.2/jcodec-javase-0.2.2.jar',monitor.getSubtaskMonitor('load jar'))
+
+from org.jcodec.api.awt import AWTSequenceEncoder
+from org.jcodec.common.io import NIOUtils
+from org.jcodec.common.model import Rational
+from org.jcodec.common.model import ColorSpace, Picture
+from org.jcodec.common.Format import MOV,H264
+
+seq= pwt.getSequence()
+
+qc= seq.getQualityControlSequence()
+
+from java.io import File,PrintWriter
+
+enc = AWTSequenceEncoder.createSequenceEncoder(File(outf),fps)
+framePeriod= datum('1s')/fps
+
+seq.first()
+im= seq.currentImage()
+image= im.waitForImage()  # current BufferedImage
+newImage=True
+msg= None
+if ( qc!=None ):
+   msg= qc.getQualityControlRecord(0)
+   captionsSbv= File(outf+'.sbv')
+   captionsSbvOut= PrintWriter(captionsSbv)
+
+currentTime= im.getDatumRange().min()
+firstTime= currentTime
+
+if ( seq.size()<2 ):
+    raise Exception('must have two or more images')
+
+i=0
+nextT= seq.imageAt(i+1).getDatumRange().min()
+
+def formatTime( dsec1, dsec2 ):
+    tp= TimeParser.create('$(H,Y=2000,m=1,d=1):$M:$S.$(subsec,places=2)')
+    tf1= tp.format(Units.t2000.createDatum(dsec1.doubleValue(Units.seconds)))
+    tf2= tp.format(Units.t2000.createDatum(dsec2.doubleValue(Units.seconds)))
+    return tf1+','+tf2
+    
+monitor.setTaskSize(seq.size())
+monitor.started()
+while i < seq.size():
+   if ( currentTime>=nextT ):
+       i=i+1
+       if ( i==seq.size() ):
+           break
+       seq.setIndex(i)
+       msg= None
+       if ( qc!=None ): msg= qc.getQualityControlRecord(0)
+       im= seq.imageAt(i)
+       image= im.waitForImage() 
+       newImage= True
+       if ( i==seq.size()-1 ):
+           nextT= currentTime+'2s'
+       else:
+           nextT= seq.imageAt(i+1).getDatumRange().min()
+       print 'index:%03d currentTime:%s nextRecordAt:%s' % ( i, currentTime, nextT )
+   monitor.setTaskProgress( i )
+   if ( newImage ):
+       if ( image.width % 2 > 0 or image.height % 2 > 0  ):
+          image= image.getSubimage( 0, 0, ( image.width // 2 * 2 ), ( image.height//2 * 2 ) )
+       if ( qc!=None ):
+          msg= qc.getQualityControlRecord(i)
+          print 'cc(%3d): '+msg.getLastComment()
+       if ( msg!=None ):
+          txt= msg.getLastComment()
+          if len(txt)>0:
+              g= image.getGraphics()
+              g.drawString( txt, 12,12 )
+              dt= currentTime-firstTime
+              hangTime= datum('4s') * len(txt) / 60 
+              tf= formatTime(dt,dt+hangTime)
+              captionsSbvOut.println(tf)
+              captionsSbvOut.println(txt)
+              captionsSbvOut.println("")
+          
+       newImage= False
+   enc.encodeImage( image )
+   currentTime= currentTime + framePeriod
+   #print currentTime, ' next record in ', nextT-currentTime
+   
+enc.finish()
+monitor.finished()
+captionsSbvOut.close()

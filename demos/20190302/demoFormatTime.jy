@@ -1,0 +1,7 @@
+def formatTime( dsec ):
+    tp= TimeParser.create('$(H,Y=2000,m=1,d=1):$M:$S.$(subsec,places=2)')
+    tf1= tp.format(Units.t2000.createDatum(dsec))
+    tf2= tp.format(Units.t2000.createDatum(dsec+4.0))
+    return tf1+','+tf2
+    
+print formatTime( 3.4 )
