@@ -1,0 +1,11 @@
+dir= 'file:///home/jbf/Desktop/20180425_jeremy_phone/'
+#dir= '/home/jbf/Downloads/'
+ff= listDirectory( dir + '*.jpg')
+for f in ff:
+    mm=getMetadata( dir+f,monitor.getSubtaskMonitor(f) )
+    gpslat= mm.get( 'GPS Latitude' )
+    gpslon= mm.get( 'GPS Longitude' )
+    if ( gpslat!=None ):
+        print f, gpslat, gpslon 
+    else:
+        print f, '???'

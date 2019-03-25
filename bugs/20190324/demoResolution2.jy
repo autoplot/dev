@@ -1,0 +1,4 @@
+# record [9] should be 2016-05-05T12:54:54.002 232 668
+y= getDataSet('https://cdaweb.gsfc.nasa.gov/istp_public/data/mms/mms2/edp/brst/l2/scpot/2016/05/mms2_edp_brst_l2_scpot_20160505125454_v2.4.0.cdf?mms2_edp_scpot_brst_l2')
+y= y[8:18]
+formatDataSet(y,'/home/jbf/tmp/20190324/scpot.txt?tformat=nanoseconds' )

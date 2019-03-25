@@ -1,0 +1,5 @@
+tp= TimeParser.create("$Y-$m-$dT$H:$M:$S.$(subsec,places=6)");
+print tp.format( Units.us2000.createDatum(4005006) )
+
+tp= TimeParser.create("$Y-$m-$dT$H:$M:$S.$(subsec,places=9)");
+print tp.format( Units.us2000.createDatum(3004005006) )

@@ -1,0 +1,12 @@
+# verify new code which decomposes CDFTT2000 into TimeStructs.
+
+t= Units.cdfTT2000.createDatum(-43135816000000L)
+t= Units.cdfTT2000.createDatum(-43135816000011L)
+
+print t
+print TimeUtil.toTimeStruct(t)
+
+tp= TimeParser.create('$Y-$m-$dT$H:$M:$S.$(subsec,places=9)')
+print tp.format(t)
+
+t= Units.cdfTT2000.createDatum(0)
