@@ -1,0 +1,10 @@
+f= 'https://www.untamedscience.com/science/wp-content/uploads/2013/10/fall-leaf.jpg'
+lookup= getDataSet( f )
+vv= getDataSet( f+'?channel=value' )
+plot( 1, vv )
+
+r= where( vv.lt(100) )
+#plot( 1, r )
+(lookup[r,0],lookup[r,2])= (lookup[r,2],lookup[r,0])
+
+plot( lookup )

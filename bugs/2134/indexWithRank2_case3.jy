@@ -1,0 +1,11 @@
+f= 'https://www.untamedscience.com/science/wp-content/uploads/2013/10/fall-leaf.jpg'
+lookup= getDataSet( f )
+
+t1= outerProduct( indgen(70)+390, ones(71) )
+t2= outerProduct( ones(70), indgen(71)+270 )
+
+t= lookup[t1,t2,0]
+lookup[t1,t2,0]= lookup[t1,t2,2]
+lookup[t1,t2,2]= t
+
+plot( lookup )
