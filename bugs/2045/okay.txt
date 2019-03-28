@@ -1,0 +1,34 @@
+== 144 009 ==
+uri: http://autoplot.org/data/dat/examples/timeFields2.dat?depend0Units=hours+since+2001-01-01T00&column=field3&depend0=field0
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: ENTRY field3[field0=24] (GSM)
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINE: result.range at this point is -0.5759999752044678 to 11.305 GSM
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: from properties: typical: null null GSM
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: getRange from typical: -Infinity to Infinity GSM
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: range at 918: -1.1700499739646912 to 11.899 GSM
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINE: autorange field3[field0=24] (GSM) -> -1.1700499739646912 to 11.899 GSM
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: RETURN -1.1700499739646912 to 11.899 GSM
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: ENTRY field0[24] (hr since 2001-01-01T00:00:00.000Z)
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINE: result.range at this point is 2005-12-31 23:00 to 2006-01-02 00:00
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: from properties: typical: null null hr since 2001-01-01T00:00:00.000Z
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: getRange from typical: 1684-03-17 through 2231-10-16
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: range at 909: 2005-12-31 23:00 to 2006-01-02 01:00
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINE: autorange field0[24] (hr since 2001-01-01T00:00:00.000Z) -> 2005-12-31 23:00 to 2006-01-02 01:00
+Mar 28, 2019 11:02:57 AM org.autoplot.AutoRangeUtil autoRange
+FINER: RETURN 2005-12-31 23:00 to 2006-01-02 01:00
+dataset: field3[field0=24] (GSM)
+wrote to file: test144_http_autoplot.org_data_dat_examples_timeFields2.dat_depend0Units_hours_since_2001-01-01T00_column_field3_depend0_field0.png
+Read in     0.193 seconds (test144_009): http://autoplot.org/data/dat/examples/timeFields2.dat?depend0Units=hours+since+2001-01-01T00&column=field3&depend0=field0
+Plot in     0.444 seconds (test144_009): http://autoplot.org/data/dat/examples/timeFields2.dat?depend0Units=hours+since+2001-01-01T00&column=field3&depend0=field0
