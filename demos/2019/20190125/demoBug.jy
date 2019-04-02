@@ -1,0 +1,17 @@
+number_Bandpasses=10
+setLayout(number_Bandpasses,2)  
+for j in xrange(number_Bandpasses):
+        plot((2*j),None,yrange=[-180,180],ytitle='freqRange')
+        plot((2*j)+1,None,yrange=[-180,180])
+        
+        bind( dom.plots[(2*j)].xaxis, 'range', dom.plots[(2*j)+1].xaxis, 'range' )
+        bind( dom.plots[(2*j)].yaxis, 'range', dom.plots[(2*j)+1].yaxis, 'range' )
+        bind( dom.plots[(2*j)].zaxis, 'range', dom.plots[(2*j)+1].zaxis, 'range' )
+        if j > 0:
+            bind( dom.plots[(2*j)].xaxis, 'range', dom.plots[(2*j)-1].xaxis, 'range' )
+            bind( dom.plots[(2*j)].yaxis, 'range', dom.plots[(2*j)-1].yaxis, 'range' )
+            bind( dom.plots[(2*j)].zaxis, 'range', dom.plots[(2*j)-1].zaxis, 'range' )
+        if j != (number_Bandpasses-1):
+            dom.plots[(2*j)].xaxis.setDrawTickLabels(False)
+            dom.plots[(2*j)+1].xaxis.setDrawTickLabels(False)
+
