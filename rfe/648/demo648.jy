@@ -1,0 +1,10 @@
+# print the total number of elements of a QUBE dataset, where each record has the same form:
+ds= zeros(20,30,40)
+from org.das2.qds import DataSetUtil
+print DataSetUtil.product( DataSetUtil.qubeDims(ds) ) 
+
+# print the total number of elements of a non-QUBE, where each record might be different:
+count=0
+for d in ds:
+    count= count + DataSetUtil.product( DataSetUtil.qubeDims(d) ) 
+print count

@@ -1,0 +1,25 @@
+from org.jdesktop.beansbinding import Converter
+
+# this converter works because convertForward and convertReverse are inverse functions.
+class MyBC( Converter ):
+    def convertForward( self, v ):
+        return v[::-1]
+    def convertReverse( self, v ):
+        return v[::-1]
+        
+# this converter fails because convertForward and convertReverse are not inverse functions.
+class MyAbsurdBC( Converter ):
+    def convertForward( self, v ):
+        print 'forward'
+        return v+'a'
+    def convertReverse( self, v ):
+        print 'reverse'
+        return v+'a'
+        
+#bind( dom.plots[0].yaxis, 'label', dom.plots[0].xaxis, 'label', MyBC() )
+#bind( dom.plots[0].xaxis, 'label', dom.plots[0].zaxis, 'label', MyBC() )
+#bind( dom.plots[0].zaxis, 'label', dom.plots[0].yaxis, 'label', MyBC() )
+
+bind( dom.plots[0].yaxis, 'label', dom.plots[0].xaxis, 'label', MyAbsurdBC() )
+bind( dom.plots[0].xaxis, 'label', dom.plots[0].zaxis, 'label', MyAbsurdBC() )
+bind( dom.plots[0].zaxis, 'label', dom.plots[0].yaxis, 'label', MyAbsurdBC() )
