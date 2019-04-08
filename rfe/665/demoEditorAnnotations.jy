@@ -1,0 +1,8 @@
+app= getApplication()
+sp= app.getScriptPanel()
+eas= sp.getEditorAnnotationsSupport()
+
+for i in xrange(1,8):
+   eas.annotateLine( i, 'error', 'Jeremy hi there' )
+   sleep(100)
+   
