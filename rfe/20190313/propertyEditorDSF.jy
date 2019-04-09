@@ -1,0 +1,6 @@
+
+from org.das2.components.propertyeditor import PropertyEditor
+pe= PropertyEditor( dom.dataSourceFilters[8] )
+pe.setListenForExternalChanges(True)
+
+addTab( 'dsf', pe )
