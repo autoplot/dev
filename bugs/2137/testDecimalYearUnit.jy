@@ -1,0 +1,21 @@
+from org.das2.datum import DecimalYearConverter
+print DecimalYearConverter(True).convert(0.0)
+print DecimalYearConverter(False).convert(2000.0)
+
+d=Units.us2000.parse('2010-182T12:00')
+dy= DecimalYearConverter(True).convert( d.doubleValue(Units.us2000) )
+print dy
+print Units.us2000.createDatum( DecimalYearConverter(False).convert(dy) )
+
+print TimeUtil.getSecondsSinceMidnight(Units.decimalYear.parse('2010-182T12:00') )
+
+dy1= Units.decimalYear.parse('2010-182T12:00') 
+dy2= Units.decimalYear.parse('2010-182T14:00') 
+print (dy2-dy1).convertTo(Units.hours)
+
+#d=Units.us2000.parse('2010-002T00:00')
+#dy= convertUnitsTo(d,Units.decimalYear)
+#print dy
+#d0= convertUnitsTo(dy,Units.us2000)
+#print d0
+
