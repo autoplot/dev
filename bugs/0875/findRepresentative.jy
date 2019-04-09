@@ -1,0 +1,6 @@
+# demo bug 0875
+from org.das2.fsm import FileStorageModel
+from org.das2.util.filesystem import FileSystem
+fs= FileSystem.create('https://emfisis-soc.physics.uiowa.edu/Flight/RBSP-A/L4')
+fsm= FileStorageModel.create( fs,'$Y/$m/$d/rbsp-a_density_emfisis_$Y$m$d_v$(v,sep).cdf' )
+print fsm.getRepresentativeFile(monitor)
