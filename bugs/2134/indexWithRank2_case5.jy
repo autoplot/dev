@@ -1,10 +1,12 @@
 f= 'https://www.untamedscience.com/science/wp-content/uploads/2013/10/fall-leaf.jpg'
-lookup= getDataSet( f )
+leaf= getDataSet( f )
 vv= getDataSet( f+'?channel=value' )
 plot( 1, vv )
 
-r= where( vv.lt(100) )
-#plot( 1, r )
-(lookup[r,0],lookup[r,2])= (lookup[r,2],lookup[r,0])
+xx= indgen( vv.length() )
 
-plot( lookup )
+r= where( vv.lt(100).and( xx.gt(350) ).and( xx.lt(400) ) )
+#plot( 1, r )
+(leaf[r,0],leaf[r,2])= (leaf[r,2],leaf[r,0])
+
+plot( leaf )
