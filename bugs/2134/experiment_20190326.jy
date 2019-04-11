@@ -1,0 +1,12 @@
+randomSeed(0)
+ds= randn(40,40)
+r= where( ds.lt(0) )
+print 'r=', r
+print 'ds[r]=', ds[r]   # this is a rank 1 result
+idx1= dataset( [[3,4],[4,5],[5,6],[6,7]] )
+print 'idx1=', idx1
+print 'idx1[0]=', idx1[0]
+print 'ds[idx1[0]]=', ds[idx1[0]] # is this ds[[3,4],:] or ds[3,4]?
+print 'ds[idx1[:,0],idx1[:,1]]= ', ds[idx1[:,0],idx1[:,1]] 
+print ds[3,4], ds[idx1[0],idx1[1]][0], ' should be the same'
+print ds[idx1] 
