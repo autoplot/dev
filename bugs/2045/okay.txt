@@ -1,40 +1,7 @@
-== 144 009 ==
-uri: http://autoplot.org/data/dat/examples/timeFields2.dat?depend0Units=hours+since+2001-01-01T00&column=field3&depend0=field0
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: ENTRY field3[field0=24] (GSM)
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINE: result.range at this point is -0.5759999752044678 to 11.305 GSM
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: from properties: typical: null null GSM
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: isLog=false ftmin=fill
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: getRange from typical: -Infinity to Infinity GSM
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: range at 918: -1.1700499739646912 to 11.899 GSM
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINE: autorange field3[field0=24] (GSM) -> -1.1700499739646912 to 11.899 GSM
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: RETURN -1.1700499739646912 to 11.899 GSM
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: ENTRY field0[24] (hr since 2001-01-01T00:00:00.000Z)
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINE: result.range at this point is 2005-12-31 23:00 to 2006-01-02 00:00
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: from properties: typical: null null hr since 2001-01-01T00:00:00.000Z
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: isLog=false ftmin=fill
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: getRange from typical: 1684-03-17 through 2231-10-16
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: entering domain divider bit: 2005-12-31 23:00 to 2006-01-02 00:00
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: range at 909: 2005-12-31 23:00 to 2006-01-02 01:00
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINE: autorange field0[24] (hr since 2001-01-01T00:00:00.000Z) -> 2005-12-31 23:00 to 2006-01-02 01:00
-Mar 28, 2019 1:04:33 PM org.autoplot.AutoRangeUtil autoRange
-FINER: RETURN 2005-12-31 23:00 to 2006-01-02 01:00
-dataset: field3[field0=24] (GSM)
-wrote to file: test144_http_autoplot.org_data_dat_examples_timeFields2.dat_depend0Units_hours_since_2001-01-01T00_column_field3_depend0_field0.png
-Read in     0.195 seconds (test144_009): http://autoplot.org/data/dat/examples/timeFields2.dat?depend0Units=hours+since+2001-01-01T00&column=field3&depend0=field0
-Plot in     0.453 seconds (test144_009): http://autoplot.org/data/dat/examples/timeFields2.dat?depend0Units=hours+since+2001-01-01T00&column=field3&depend0=field0
+[2019-03-29 07:58:58] [FINER  ] entering domain divider bit: 2005-12-31 23:00 to 2006-01-02 00:00 
+[2019-03-29 07:58:58] [FINER  ] domainDivider selected: OTDomainDivider by 1 HOUR hr since 2001-01-01T00:00:00.000Z 
+[2019-03-29 07:58:58] [FINER  ] result.range.min(): 43,823 hr since 2001-01-01T00:00:00.000Z 
+[2019-03-29 07:58:58] [FINER  ] here's that interesting case 
+[2019-03-29 07:58:58] [FINER  ] range.max-rmin: 60.0 min 
+[2019-03-29 07:58:58] [FINER  ] min: 2005-12-31T23:00:00.000Z, range containing min: 2005-12-31 23:00 to 24:00 
+[2019-03-29 07:58:58] [FINER  ] max: 2006-01-02T00:00:00.000Z, range containing max: 2006-01-02 0:00 to 1:00 

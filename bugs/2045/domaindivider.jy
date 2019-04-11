@@ -1,0 +1,8 @@
+from org.das2.datum import DomainDividerUtil,OrdinalTimeDomainDivider
+
+tu= Units.lookupTimeUnits("hr since 2001-01-01T00:00:00Z")
+da= tu.createDatum(43823.99999999999)
+dd= DomainDividerUtil.getDomainDivider(da,da)
+r= dd.rangeContaining(da)
+print da, da.getUnits()
+print r, r.getUnits(), convertUnitsTo( da - r.min(), Units.nanoseconds )

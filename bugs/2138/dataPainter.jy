@@ -1,0 +1,66 @@
+load( PWD + 'exploreRange.vap' )
+
+dsf= dom.dataSourceFilters[3]
+
+selectx= None
+selecty= None
+selectz= None
+selectt= None
+
+from org.das2.graph import Painter
+class MySelectPainter(Painter):
+    def paint(self,g):
+        global selectx,selecty,selectz,selectt
+        if ( selectx==None ): return
+        from java.awt.geom import Ellipse2D
+        
+        zaxis= dom.controller.getElementById('plot_10').getZaxis()
+        
+        p= dom.controller.getElementById('plot_2')
+        g.setClip( p.controller.dasPlot.getAxisClip() )
+        for i in xrange(selectx.length()):
+            ix= p.xaxis.controller.dasAxis.transform(selectt[i])
+            iy= p.yaxis.controller.dasAxis.transform(selectx[i])
+            z= datum( selectz[i] )
+            iz= zaxis.controller.dasAxis.rgbTransform(z.doubleValue(z.units),z.units)
+            g.color= Color(iz)
+            g.fill(Ellipse2D.Double(ix-5,iy-5,10,10))
+
+        p= dom.controller.getElementById('plot_3')
+        g.setClip( p.controller.dasPlot.getAxisClip() )
+        for i in xrange(selectx.length()):
+            ix= p.xaxis.controller.dasAxis.transform(selectt[i])
+            iy= p.yaxis.controller.dasAxis.transform(selecty[i])
+            z= datum( selectz[i] )
+            iz= zaxis.controller.dasAxis.rgbTransform(z.doubleValue(z.units),z.units)
+            g.color= Color(iz)
+            g.fill(Ellipse2D.Double(ix-5,iy-5,10,10))
+
+        p= dom.controller.getElementById('plot_4')
+        g.setClip( p.controller.dasPlot.getAxisClip() )
+        for i in xrange(selectx.length()):
+            ix= p.xaxis.controller.dasAxis.transform(selectt[i])
+            iy= p.yaxis.controller.dasAxis.transform(selectz[i])
+            z= datum( selectz[i] )
+            iz= zaxis.controller.dasAxis.rgbTransform(z.doubleValue(z.units),z.units)
+            g.color= Color(iz)
+            g.fill(Ellipse2D.Double(ix-5,iy-5,10,10))
+   
+def boxSelected(event):
+    global selectx,selecty,selectz,selectt
+    ds= dsf.controller.dataSet
+    r= where( within( ds[:,0],event.getXRange()).and( within( ds[:,1], event.getYRange() ) ) )
+    selectx= ds[r,0]
+    selecty= ds[r,1]
+    selectz= ds[r,2]
+    selectt= dom.dataSourceFilters[0].controller.dataSet[r]
+    if ( selectt.length()!=selectx.length() ):
+        print selectt.length()
+        print selectx.length()
+        raise Exception("they dont match I thought they would")
+    selectt= selectt.property(QDataSet.DEPEND_0)
+        
+    
+addMouseModule( dom.controller.getElementById('plot_10'),'data paint',boxSelected)
+
+dom.canvases[0].controller.dasCanvas.addBottomDecorator(MySelectPainter())

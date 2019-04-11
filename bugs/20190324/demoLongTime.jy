@@ -10,3 +10,7 @@ tp= TimeParser.create('$Y-$m-$dT$H:$M:$S.$(subsec,places=9)')
 print tp.format(t)
 
 t= Units.cdfTT2000.createDatum(0)
+
+print tp.parse( '2000-01-01T00:00:00.000000001' )
+print tp.parse( '2000-01-01T00:00:00.000020002' )
+print tp.parse( '2000-01-01T00:00:00.300030003' )
