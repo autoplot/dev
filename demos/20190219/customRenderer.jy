@@ -6,7 +6,7 @@ class MyRend( Renderer ):
         xx= ds[:,0]
         yy= ds[:,1]
         return join( extent(xx), extent(yy) )
-    def render( self, g, xaxis, yaxis, monitor ):
+    def render( self, g, xaxis, yaxis, monitor=None ):
         ds= self.getDataSet()
         if ( ds==None ): return
         if ( ds.rank()!=2 ): raise Exception("data must be rank 2, having n recs each 4 elements: x,y,s,c")

@@ -8,7 +8,7 @@ for i in xrange(len(ff)):
     imgs.append( ImageIO.read( getFile( 'https://github.com/autoplot/dev/screen/20190214/'+ff[i], monitor.getSubtaskMonitor(ff[i]) ) ) )
 
 class AllSortsRenderer( Renderer ):
-    def render( self, g, xaxis, yaxis, mon ):
+    def render( self, g, xaxis, yaxis, mon=None ):
         ds= self.getDataSet()
         xx= SemanticOps.xtagsDataSet( ds )
         yy= ds
