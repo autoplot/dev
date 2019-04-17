@@ -1,0 +1,52 @@
+# demo real-time simplify view
+
+from org.autoplot.scriptconsole import JythonScriptPanel
+from javax.swing import JSplitPane,JScrollPane,JViewport
+from javax.swing.event import DocumentListener
+from org.autoplot.jythonsupport import SimplifyScriptSupport
+
+etp= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
+
+script= getApplication().getTabs().getTabByTitle('script')
+
+if ( isinstance( script, JScrollPane ) ):
+    print 'it is a pane'
+    script= script.getComponent(0)
+    if ( isinstance( script, JViewport ) ):
+        print 'port my view'
+        script= script.getComponent(0)
+        
+print 'script: ', script
+oldJythonScriptPanel= script.getComponent(0)
+print 'oldJythonScriptPanel: ', oldJythonScriptPanel
+print 'text', oldJythonScriptPanel.editorPanel.text
+
+class MyDocumentListener(DocumentListener):
+    def changedUpdate( self, e ):
+        print 'it changed'
+        self.update()
+    def insertUpdate( self, e):
+        print 'insert u'
+        self.update()
+    def removeUpdate( self, e ):
+        print "removed from"
+        self.update()
+    def update(self):
+        s= oldJythonScriptPanel.editorPanel.text  
+        s= SimplifyScriptSupport.simplifyScriptToCompletions(s);
+        etp.editorPanel.text= s
+        
+docl= MyDocumentListener()
+ep= oldJythonScriptPanel.getEditorPanel()
+print 'ep=', ep
+ep.document.addDocumentListener(docl)
+
+if ( not isinstance( script, JSplitPane ) ):
+    splitPane= JSplitPane()
+    splitPane.setLeftComponent(oldJythonScriptPanel)
+    splitPane.setRightComponent(etp)
+    addTab('script',splitPane)
+    etp.scrollPane.verticalScrollBar.model= oldJythonScriptPanel.scrollPane.verticalScrollBar.model
+
+else:
+    print 'only once!'
