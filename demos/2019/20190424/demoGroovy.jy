@@ -1,0 +1,27 @@
+import sys
+addToSearchPath( sys.path,'https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.6.zip/groovy-2.5.6/lib/groovy-2.5.6.jar',monitor )
+
+from java.lang import Thread
+
+from groovy.lang import GroovyShell 
+from org.codehaus.groovy.control import CompilerConfiguration;
+from org.codehaus.groovy.control.customizers import ImportCustomizer;
+
+shell= GroovyShell()
+print shell.evaluate('3*5')
+script = shell.parse('3*5')
+
+print script
+print script.run()
+
+script= '''
+def myClosure = {
+       a,b,c->
+       y = a+b+c
+       println y
+}
+myClosure(1,2,3)
+
+'''
+pscript = shell.parse(script)
+pscript.run()
