@@ -32,9 +32,13 @@ class MyDocumentListener(DocumentListener):
         print "removed from"
         self.update()
     def update(self):
-        s= oldJythonScriptPanel.editorPanel.text  
-        s= SimplifyScriptSupport.simplifyScriptToCompletions(s);
-        etp.editorPanel.text= s
+        try:
+            s= oldJythonScriptPanel.editorPanel.text  
+            s= SimplifyScriptSupport.simplifyScriptToCompletions(s);
+            etp.editorPanel.text= s
+            etp.editorPanel.background= Color.WHITE
+        except:
+            etp.editorPanel.background= Color.YELLOW
         
 docl= MyDocumentListener()
 ep= oldJythonScriptPanel.getEditorPanel()
