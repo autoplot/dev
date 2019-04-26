@@ -1,0 +1,2 @@
+load( PWD + 'demo1285.vap' )
+dom.plotElements[0].controller.renderer.setListIconSymSize(10)
