@@ -1,0 +1,9 @@
+size= getParam( 'n', 1000000, 'number of points' )
+seed= getParam( 'seed', 5334, 'random seed (0=no seed)' )
+
+if ( seed!=0 ): randomSeed(seed)
+
+x= accum( randn( size ) )
+y= accum( randn( size ) ) 
+
+result= link( x, y )
