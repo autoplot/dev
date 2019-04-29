@@ -1,0 +1,8 @@
+from org.das2.graph import Painter
+from java.awt.geom import Rectangle2D
+
+class MyPainter(Painter):
+    def paint( self, g ):
+        g.fill( Rectangle2D.Double( 0, 0, 1000, 1000 ) )
+        
+dom.plots[0].controller.dasPlot.setBottomDecorator( MyPainter() )
