@@ -1,0 +1,19 @@
+# For some reason, Kristoff is not able to use my github files.
+
+from org.das2.util.filesystem import FileSystem
+from org.autoplot.datasource import URISplit
+split= URISplit.parse('https://github.com/jbfaden/scripts/experimentalFunctions.jy')
+print split.path
+fs= FileSystem.create(split.path)
+print fs
+
+fo= fs.getFileObject('experimentalFunctions.jy')
+f= fo.getFile()
+if ( not f.delete() ):
+    print 'could not delete'
+f= fo.getFile()
+print fo.size, ' should be 1409 (on 2019-05-08...)' 
+
+print 'check caching'
+f= fo.getFile()
+print fo.size, ' should be 1409 (on 2019-05-08...)' 
