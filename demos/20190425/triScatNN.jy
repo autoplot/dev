@@ -1,0 +1,11 @@
+ds= outerProduct( sin( linspace(0,4*PI,1000) ),ones(1000) )
+#plot( ds )
+
+xx= randu(1000)*1000
+yy= randu(1000)*1000
+zz= interpolate( ds, xx, yy ) + randu(1000)
+
+setLayoutOverplot(2)
+
+plot( 0, xx, yy, zz, renderType='spectrogram>rebin=nnTriScat&colorTable=blue_white_red' )
+plot( 1, xx, yy, renderType='scatter' )

@@ -1,0 +1,15 @@
+jarf= getFile('http://www.java2s.com/Code/JarDownload/imgscalr/imgscalr-lib-4.1.jar.zip/imgscalr-lib-4.1.jar',monitor)
+print jarf
+import sys
+addToSearchPath(sys.path,jarf.toString(),None)
+
+f= getFile('file:///home/jbf/data/gardenhouse/camera/2019/04/14/20190414T001102.jpg',None)
+from javax.imageio import ImageIO
+image= ImageIO.read(f)
+
+from java.lang import System
+t0= System.currentTimeMillis()
+
+from org.imgscalr import Scalr
+image= Scalr.resize( image, 150, [] )
+print System.currentTimeMillis()-t0

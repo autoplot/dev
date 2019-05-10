@@ -1,0 +1,17 @@
+
+import java.lang.Double
+Fill= java.lang.Double.NaN
+
+Th = dataset([3.4, 44.0, Fill, 10.1, 41, 19.8])
+zz = outerProduct(ones(2), Th)
+
+gg = replicate(Fill, len(Th) )
+for I in range(len(Th)):
+    gg[I] = reduceSum(zz[:, I], 0)
+plot( gg )
+sleep(1000)  # bug: waitUntilIdle() immediately after plot doesn't wait.
+waitUntilIdle()
+
+for g in gg:
+    print g,
+print ''

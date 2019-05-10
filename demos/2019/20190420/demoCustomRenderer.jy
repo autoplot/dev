@@ -1,0 +1,46 @@
+# demo custom renderer.  This takes a ds[n,4] and plots dots
+# with each record: [x,y,rad,color]
+# Note, the plan is to redo how custom renderers are done, so this may change.
+
+from org.das2.qds import SemanticOps
+from org.das2.graph import Renderer
+
+from java.lang import IllegalArgumentException
+
+cb= dom.plots[0].zaxis.controller.getDasAxis()
+dom.plots[0].zaxis.visible= True
+
+from java.awt.geom import Ellipse2D
+
+class MyRend( Renderer ):
+  def render( self, g, xAxis, yAxis, mon=None ):
+     ds= self.getDataSet()
+     print ds
+     if ds==None: return
+     if ( ds.rank()!=2 or ds.length(0)!=4 ):
+        self.getParent().postException( self, IllegalArgumentException( "dataset is not ds[n,4]" ) )
+        return
+     xds= ds[:,0]
+     yds= ds[:,1]
+     rds= ds[:,2]/2
+     cds= ds[:,3]
+
+     xu= SemanticOps.getUnits( xds )
+     yu= SemanticOps.getUnits( yds )
+     cu= SemanticOps.getUnits( cds )
+     ru= SemanticOps.getUnits( rds )
+
+     for i in xrange( yds.length() ):
+        x= xAxis.transform( xds.value(i), xu )
+        y= yAxis.transform( yds.value(i), yu )        
+        g.setColor( Color( cb.rgbTransform( cds.value(i), cu ) ) )
+        x2= xAxis.transform( xds.value(i)+rds.value(i), xu ) - x
+        g.fill( Ellipse2D.Double( x-x2/2, y-x2/2, x2/2, x2/2 ) )
+
+ds= randn( 1000,4 )
+
+myr= MyRend()
+myr.setDataSet( ds )  # this is a bug.  The plot command doesn't properly set the dataset with custom renderers.
+
+plot( ds, renderer=myr, xrange='-5 to 5', yrange='-5 to 5', zrange='0 to 3' )
+dom.plots[0].zaxis.visible= True

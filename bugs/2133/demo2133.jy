@@ -1,0 +1,18 @@
+# record [9] should be 2016-05-05T12:54:54.002 232 668
+# 515724962186232668
+
+d= Units.cdfTT2000.parse('2016-05-05T12:54:54.002232000Z')
+print d.doubleValue(d.units)
+print 515724962186232668
+
+y= getDataSet('https://cdaweb.gsfc.nasa.gov/istp_public/data/mms/mms2/edp/brst/l2/scpot/2016/05/mms2_edp_brst_l2_scpot_20160505125454_v2.4.0.cdf?mms2_edp_scpot_brst_l2[0:100]')
+y= y[8:18]
+e= y.property( QDataSet.DEPEND_0 )
+
+ref= Units.cdfTT2000.parse('2016-05-05T12:54:54.002232000Z')
+from org.das2.qds import LongReadAccess
+lra= e[0].capability( LongReadAccess )
+print lra.lvalue()
+print ref.longValue(Units.cdfTT2000)
+print (lra.lvalue()-ref.longValue(Units.cdfTT2000)), 'should be 668 nanoseconds'
+formatDataSet(y,PWD[5:] + 'scpot.txt?tformat=nanoseconds' )
