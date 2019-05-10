@@ -1,0 +1,3 @@
+ds= randu(1000)
+m= mad( ds )
+print m, m.property(QDataSet.USER_PROPERTIES).get("mean")
