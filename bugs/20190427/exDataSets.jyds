@@ -1,9 +1,18 @@
-size= getParam( 'n', 1000000, 'number of points' )
+scheme= getParam( 'scheme', 'scatter', 'data scheme (type)', ['scatter','series'] )
+
+n= getParam( 'n', 1000000, 'number of points' )
 seed= getParam( 'seed', 5334, 'random seed (0=no seed)' )
+modu= getParam( 'mod', 'F', 'mod of data to limit extent', ['T','F'] )
 
 if ( seed!=0 ): randomSeed(seed)
 
-x= accum( randn( size ) )
-y= accum( randn( size ) ) 
+if ( scheme=='scatter' ):
+    x= accum( randn( n ) )
+elif ( scheme=='series' ):
+    x= linspace( 0, 100, n )
+y= accum( randn( n ) ) 
 
+if ( modu=='T' ):
+    y= mod( y, 20 )
+    
 result= link( x, y )

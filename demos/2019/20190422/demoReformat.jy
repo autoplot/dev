@@ -1,0 +1,23 @@
+from org.das2.datum import UnitsUtil
+
+load= []
+cc= getCompletions('http://autoplot.org/data/autoplot.cdf?')
+for c in cc:
+    if ( c.endswith('=') ):
+        continue
+    load.append( c )
+print load
+
+ds= None
+for l in load:
+    ds1= getDataSet(l)
+    if ( UnitsUtil.isTimeLocation( ds1.property( QDataSet.UNITS ) ) ):
+        continue    
+    if ( ds1.rank()==1 ):
+        ds= bundle( ds, ds1 )
+    else:
+        for k in xrange(ds1.length(0)):
+            ds= bundle( ds, ds1[:,k] )
+
+formatDataSet( ds, '/tmp/foo.txt' )
+

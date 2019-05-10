@@ -1,0 +1,19 @@
+from org.das2.qds import SparseDataSetBuilder
+sdsb= SparseDataSetBuilder(2)
+from java.lang import Boolean
+sdsb.putProperty(QDataSet.QUBE,Boolean.FALSE)
+sdsb.setLength(3)
+sdsb.putValue(0,0,1)
+sdsb.putValue(0,1,2)
+sdsb.putValue(1,0,1)
+sdsb.putValue(1,1,2)
+sdsb.putValue(1,2,3)
+sdsb.putValue(2,0,1)
+sdsb.putValue(2,1,2)
+sdsb.putValue(2,2,3)
+sdsb.putValue(2,3,4)
+sds= sdsb.getDataSet()
+
+ds= reduceMean(sds,1)
+
+# this shows a bug, where you can't get a SparseDataSet to show as a non-qube.

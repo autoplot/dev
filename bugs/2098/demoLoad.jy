@@ -1,0 +1,17 @@
+from org.das2.stream import StreamTool
+from org.das2.client import QDataSetStreamHandler
+from org.das2.util.monitor import NullProgressMonitor
+from org.autoplot.datasource import DataSetURI
+from java.nio.channels import ReadableByteChannel,FileChannel
+from java.io import FileInputStream
+
+qdsh= QDataSetStreamHandler()
+
+#url= URL('http://www-pw.physics.uiowa.edu/~jbf/autoplot/data.nobackup/d2s/d2s/mex_marsis_ne.d2t')
+url= URL('file:///home/jbf/public_html/mydata/d2s/furnace.20060123.d2s')
+f= DataSetURI.downloadResourceAsTempFile( url, NullProgressMonitor() )
+
+inch= FileInputStream(f).getChannel()
+StreamTool.readStream( inch,qdsh)
+
+plot( qdsh.getDataSet(), renderType='polar' )

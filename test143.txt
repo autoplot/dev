@@ -1,2 +1,6 @@
 
 http://autoplot.org/data/sst.mnmean.nc?sst
+
+# ASCII Tests
+# something makes it so the following doesn't work in testing.  See test037 where a script is used to load.
+#vap+dat:ftp://ftp.seismo.nrcan.gc.ca/intermagnet/minute/definitive/IAGA2002/2004/08/aae20040816dmin.min?skipLines=26&time=field0&timeFormat=$Y-$m-$d+$H:$M:$S&fill=99999.0&column=field3&label=AAEX 
