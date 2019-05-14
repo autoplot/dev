@@ -47,5 +47,5 @@ ds= dsb.getDataSet()
 plot( ds[:,0], ds[:,1], yrange=[-c1,c1], xrange=[-0.1*c1,0.9*c1],
       lineThick=3, isotropic=True, ytitle=units, xtitle=units )
 
-annotation( 4, anchorType='data', pointAt=[c1*1.3,0], anchorOffset='0em,0em', 
-    anchorPosition='CENTER', text='Transmitter' )
+annotation( 4, anchorType='data', pointAt=[c1*1.6,0], anchorOffset='2em,-0.5em', 
+    anchorPosition='E', text='Transmitter' )
