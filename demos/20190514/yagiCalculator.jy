@@ -1,0 +1,51 @@
+# created from http://www.rfwireless-world.com/calculators/3-element-Yagi-Antenna-Calculator.html
+
+Fr= getParam( 'frequency', 200, 'Operating Frequency in MHz'  )
+me= getParam( 'me', 'metric', 'Metric or English Units', [ 'English','metric'] )
+
+lambd=( (3* (pow(10,8)))/(Fr*(pow(10,6))) );
+
+if ( me=='English' ):
+    lambd= lambd*39.3701  # Google
+    units= 'inch'
+else:
+    units= 'm'
+
+c1 = 0.495*lambd
+c2 = 0.473*lambd
+c3 = 0.440*lambd
+c4 = 0.125*lambd
+c5 = 0.125*lambd
+
+dsb= DataSetBuilder(2,100,2)
+
+dsb.nextRecord( [ 0, 0 ] )
+dsb.nextRecord( [ 0, -c1/2 ] )
+dsb.nextRecord( [ 0, c1/2 ] )
+dsb.nextRecord( [ 0, 0 ] )
+annotation( 0, pointAt=[0,c1/2], text='Reflector Length=%.3f %s'%( c1, units), 
+   anchorType='data', anchorPosition='SW', anchorOffset='-3em,3em', fontSize='1em' )
+
+dsb.nextRecord( [ c4, 0 ] )
+dsb.nextRecord( [ c4, -c2/2 ] )
+dsb.nextRecord( [ c4, c2/2 ] )
+dsb.nextRecord( [ c4, 0 ] )
+annotation( 1, pointAt=[c4,c2/2], text='Dipole Length=%.3f %s'%( c2, units) ,
+   anchorType='data', anchorPosition='SW', anchorOffset='-1em,2em', fontSize='1em' )
+
+dsb.nextRecord( [ c4+c5, 0 ] )
+dsb.nextRecord( [ c4+c5, -c3/2 ] )
+dsb.nextRecord( [ c4+c5, c3/2 ] )
+dsb.nextRecord( [ c4+c5, 0 ] )
+annotation( 2, pointAt=[c4+c5,c3/2], text='Director Length=%.3f %s'%( c3, units), 
+   anchorType='data', anchorPosition='SW', anchorOffset='1em,1em', fontSize='1em' )
+
+annotation( 3, pointAt=[c4/2,0], text='Spacing=%.3f %s'%( c4, units), 
+   anchorType='data', anchorPosition='N', anchorOffset='0em,7em', fontSize='1em' )
+
+ds= dsb.getDataSet() 
+plot( ds[:,0], ds[:,1], yrange=[-c1,c1], xrange=[-0.1*c1,0.9*c1],
+      lineThick=3, isotropic=True, ytitle=units, xtitle=units )
+
+annotation( 4, anchorType='data', pointAt=[c1*1.3,0], anchorOffset='0em,0em', 
+    anchorPosition='CENTER', text='Transmitter' )
