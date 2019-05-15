@@ -3,7 +3,7 @@
 Fr= getParam( 'frequency', 200, 'Operating Frequency in MHz'  )
 me= getParam( 'me', 'metric', 'Metric or English Units', [ 'English','metric'] )
 
-lambd=( (3* (pow(10,8)))/(Fr*(pow(10,6))) );
+lambd=( (3* (pow(10.,8)))/(Fr*(pow(10.,6))) );
 
 if ( me=='English' ):
     lambd= lambd*39.3701  # Google
@@ -44,6 +44,7 @@ annotation( 3, pointAt=[c4/2,0], text='Spacing=%.3f %s'%( c4, units),
    anchorType='data', anchorPosition='N', anchorOffset='0em,7em', fontSize='1em' )
 
 ds= dsb.getDataSet() 
+
 plot( ds[:,0], ds[:,1], yrange=[-c1,c1], xrange=[-0.1*c1,0.9*c1],
       lineThick=3, isotropic=True, ytitle=units, xtitle=units )
 
