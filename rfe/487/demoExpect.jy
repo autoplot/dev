@@ -1,0 +1,21 @@
+# experiment with calling IDL script from Autoplot, so that it can be used with the run batch code.
+#
+# =discussion=
+# I have a procedure convertToAscii which converts IDLSave files to ASCII files.  It would be nice if I could
+# call this from IDL.  Ivar and others have asked for such functionality.  Its signature is like:
+# "pro convertToAscii, f, indir=indir" and it is written in the file /home/jbf/public_html/juno/trajPlot.
+
+from org.das2.util import Expect
+
+expect= Expect.spawn('idl')
+expect.default_timeout= 20
+
+expect.expect(['IDL'])
+expect.send( '!prompt= \'IDL> \'+string(10b)+string(13b)\n' )
+expect.expect(['IDL'])
+
+expect.send( 'print, \'hello\'\n' )
+expect.expect(['hello'])
+expect.expect(['IDL'])  
+
+print 'done!'
