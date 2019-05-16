@@ -2,6 +2,7 @@
 from java.nio.file import Files,FileSystem, Paths
 
 uri= URI( PWD + 'data-specification-issues-71-401888052.2.json' ) 
+print 'uri=', uri
 bytes= Files.readAllBytes( Paths.get( uri ) )
 
 from java.io import ByteArrayInputStream
