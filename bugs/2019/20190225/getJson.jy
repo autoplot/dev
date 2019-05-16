@@ -3,7 +3,10 @@ from java.nio.file import Files,FileSystem, Paths
 
 uri= URI( PWD + 'data-specification-issues-71-401888052.2.json' ) 
 print 'uri=', uri
-bytes= Files.readAllBytes( Paths.get( uri ) )
+
+f= getFile(uri,monitor)
+
+bytes= Files.readAllBytes( f.toPath() )
 
 from java.io import ByteArrayInputStream
 from org.json import JSONObject
