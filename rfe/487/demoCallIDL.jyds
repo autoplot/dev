@@ -14,9 +14,11 @@ s= getParam( 's', 1, 'multiplier' )
 
 pwd= PWD[5:]
 
-f= open( pwd+'callMyIdlFunction.idl','w')
-f.write( '.comp '+cmd + '\n' )
-f.write( '.comp das2stream.pro\n' )
+ff= getFile( pwd + cmd + '.pro', monitor.getSubtaskMonitor('read pro') )
+das2stream= getFile( pwd + 'das2stream.pro', monitor.getSubtaskMonitor('read das2stream.pro')  )
+f= open( '/tmp/ap/callMyIdlFunction.idl','w')
+f.write( '.comp '+ str(ff) + '\n' )
+f.write( '.comp '+ str(das2stream) )
 f.write( 'myIdlFunction, '+str(n)+','+str(s)+', out\n' )
 f.write( 'das2stream, { x:indgen(n_elements(out)), y:out }, \'output.d2s\', /ascii\n' )
 f.write( 'exit\n' )
