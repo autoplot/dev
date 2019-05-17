@@ -1,0 +1,35 @@
+# experiment with calling IDL script from Autoplot, so that it can be used with the run batch code.
+#
+# =discussion=
+# I have a procedure convertToAscii which converts IDLSave files to ASCII files.  It would be nice if I could
+# This calls an IDL routine to create data for plotting.  Ivar and others have asked for such functionality.  
+# This writes a little wrapper function to call IDL and have it write a Das2Stream of a result.
+
+from java.io import File
+
+cmd= 'myIdlFunction'
+
+n= getParam( 'n', 20, 'number of points' )
+s= getParam( 's', 1, 'multiplier' )
+
+pwd= PWD[5:]
+
+f= open( pwd+'callMyIdlFunction.idl','w')
+f.write( '.comp '+cmd + '\n' )
+f.write( '.comp das2stream.pro\n' )
+f.write( 'myIdlFunction, '+str(n)+','+str(s)+', out\n' )
+f.write( 'das2stream, { x:indgen(n_elements(out)), y:out }, \'output.d2s\', /ascii\n' )
+f.write( 'exit\n' )
+f.close()
+
+from java.lang import ProcessBuilder
+pb= ProcessBuilder(['idl','callMyIdlFunction.idl'])
+pb.directory(File(pwd))
+pb.redirectOutput(File(pwd+'output.txt'))
+pb.redirectErrorStream(True)
+process= pb.start()
+process.waitFor()
+
+data= getDataSet( PWD + 'output.d2s' )
+result= data
+
