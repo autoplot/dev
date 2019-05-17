@@ -1,0 +1,3 @@
+randomSeed(5334)
+plot( toDegrees( atan2( accum( randn( 700) ), accum( randn( 700) ), ) ),
+      ytickValues='+30' )
