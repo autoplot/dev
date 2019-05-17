@@ -1,0 +1,25 @@
+from org.das2.util import GrannyTextRenderer
+
+reset()
+s= 'Cassini went to !(painter;block;blue) Saturn.'
+from org.das2.util import ColorUtil
+
+class BlockPainter( GrannyTextRenderer.Painter ):
+    def paint( self, g, args ):
+        h= g.getFontMetrics().getHeight()
+        w= h
+        c0= g.color
+        if ( len(args)>0 ):
+            c= ColorUtil.decodeColor(args[0])
+            g.color= c
+        from java.awt.geom import Ellipse2D,Line2D,Rectangle2D
+        g.translate( w/2,0 )
+        g.draw( Ellipse2D.Double( 0, -h, w, h ) )
+        g.draw( Line2D.Double( -w/2, -h/2, 3*w/2., -h/2 ) )
+        r= Rectangle2D.Double( 0, -h, w*2, h )
+        g.setColor(c0)
+        
+        return r
+
+ann= annotation(text=s)
+ann.controller.dasAnnotation.addPainter( 'block', BlockPainter() )
