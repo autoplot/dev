@@ -9,3 +9,5 @@ b= annotation( 1, anchorOffset='1em,2em', fontSize='1em', text='!(color;saddleBr
 
 # !a for exponent, or !e for small exponent
 c= annotation( 2, anchorOffset='1em,4em', fontSize='1em', text='kg m!A2!n s!A-2!nA!e-1!n S/C!dA!n', background=None )
+
+# see demoPainterAnnoCustom.jy for adding custom code to draw arbitrary shapes.
