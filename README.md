@@ -13,5 +13,4 @@ fixed and never described in SourceForge.
 
 Note scripts can be run directly in Autoplot directly (that's new, see 2019a branch) using https://github.com/autoplot/dev/blob/master/bugs/20190212/demoWhereNot.jy or https://github.com/autoplot/dev/bugs/20190212/demoWhereNot.jy
 
-Here's a test of including LaTeX in documents:
-<a href="https://www.codecogs.com/eqnedit.php?latex=E=mc^2" target="_blank"><img src="https://latex.codecogs.com/gif.latex?E=mc^2" title="E=mc^2" /></a>
+
