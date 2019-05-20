@@ -1,0 +1,11 @@
+#Here's a test of including LaTeX in documents:
+# <a href="https://www.codecogs.com/eqnedit.php?latex=E=mc^2" target="_blank">
+# <img src="https://latex.codecogs.com/gif.latex?E=mc^2" title="E=mc^2" /></a>
+
+a= annotation( 0, anchorOffset='1em,1em', fontSize='1em', text='Here !(color;blue)Blue!(color) Sky', background=None )
+
+# Unicode can be used, provided the current font supports the character.  &#9632; is a solid block.
+b= annotation( 1, anchorOffset='1em,2em', fontSize='1em', text='!(color;saddleBrown)&#9632;!(color) Density', background=None )
+
+# !a for exponent, or !e for small exponent
+c= annotation( 2, anchorOffset='1em,4em', fontSize='1em', text='kg m!A2!n s!A-2!nA!e-1!n S/C!dA!n', background=None )
