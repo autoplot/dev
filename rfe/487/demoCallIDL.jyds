@@ -17,10 +17,10 @@ pwd= PWD[5:]
 File( '/tmp/ap' ).mkdirs()
 
 ff= getFile( pwd + cmd + '.pro', monitor.getSubtaskMonitor('read pro') )
-das2stream= getFile( pwd + 'das2stream.pro', monitor.getSubtaskMonitor('read das2stream.pro')  )
+das2streamLib= getFile( pwd + 'das2stream.pro', monitor.getSubtaskMonitor('read das2stream.pro')  )
 f= open( '/tmp/ap/callMyIdlFunction.idl','w')
 f.write( '.comp '+ str(ff) + '\n' )
-f.write( '.comp '+ str(das2stream) + '\n' )
+f.write( '.comp '+ str(das2streamLib) + '\n' )
 f.write( 'myIdlFunction, '+str(n)+','+str(s)+', out\n' )
 f.write( 'das2stream, { x:indgen(n_elements(out)), y:out }, \'/tmp/ap/output.d2s\', /ascii\n' )
 f.write( 'exit\n' )
