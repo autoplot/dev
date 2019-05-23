@@ -1,0 +1,47 @@
+# See http://autoplot.org//CustomRenderers#Adding_Custom_Renderers
+
+from org.das2.graph import Renderer
+from java.awt.geom import GeneralPath
+
+class HistogramRenderer( Renderer ):
+   def autorange( self, ds ):
+       xr= extent( ds )
+       yr= extent( ds.property( QDataSet.DEPEND_0 ) )
+       bds= join(rescaleRange(xr,-0.1,1.1),rescaleRange(yr,-0.1,1.1))
+       return bds
+
+   def render( self, g, xaxis, yaxis, monitor=None ):
+       xzero= xaxis.transform(0,xaxis.getUnits())
+       ds= self.getDataSet()
+       if ( ds==None ): return
+       yds= ds.property(QDataSet.DEPEND_0)
+       ddy= float( ( yds[1]-yds[0] ) / 2 )
+       cc= self.getColorControl('color',Color.BLUE)
+       cb= cc.darker()
+       gp= GeneralPath()
+       yd= yaxis.transform(yds[0]-ddy,yaxis.getUnits())
+       gp.moveTo( xzero, yd )
+       for i in range(ds.length()):
+           y= yds.value(i)
+           x= ds.value(i)
+           xd= xaxis.transform(x,xaxis.getUnits())
+           yd= yaxis.transform(y,yaxis.getUnits())
+           yd0= yaxis.transform(y-ddy,yaxis.getUnits())
+           yd1= yaxis.transform(y+ddy,yaxis.getUnits())
+           gp.lineTo( xd, yd0 )
+           gp.lineTo( xd, yd1 )
+       gp.lineTo( xzero, yd1 )       
+       g.setColor( cc )
+       g.fill( gp )
+       g.setColor( cb )
+       g.draw( gp )
+
+# demo code below shows its use.
+reset()
+randomSeed(5334)
+ds= append( randomn(5334,10000) , 3+randomn(5335,20000) )
+setCanvasSize(724,460)
+plot( ds, xpos='3em,70%-3em', ypos='50px,400px', color=Color.BLUE, renderType='scatter', symbolSize=3 )
+
+plot( 1, histogram(ds,50), xpos='70%+2em,100%-2em',  ypos='50px,400px', color=Color.BLUE, 
+      ydrawTickLabels=False, renderer= HistogramRenderer() )
