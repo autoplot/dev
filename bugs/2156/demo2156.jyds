@@ -1,0 +1,5 @@
+tr= getParam('timerange','2012-10-10/2012-11-26' )
+
+tt= linspace( tr.min().toString(), tr.max().toString(), 100 )
+result= sin(tt-'2012-10-10' )
+
