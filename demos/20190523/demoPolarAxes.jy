@@ -2,23 +2,24 @@ from org.das2.graph import Painter
 from org.das2.util import GrannyTextRenderer
 from java.awt import BasicStroke
 from org.das2.graph import DasDevicePosition
+from java.awt.geom import Ellipse2D, Line2D
 
-# draw the polar axes
+# draw polar axes on the first plot.
 class AxisPainter( Painter ):
     def paint( self,g ):
+        p= dom.plots[0].controller.dasPlot
         g.setColor( Color.GRAY )
         for r in [ 90, 80, 70, 60, 50, 40 ]:
             g= g.create()
-            s= BasicStroke( 0.5,BasicStroke.CAP_BUTT,BasicStroke.JOIN_MITER,10.0, [2.,2.], 0. )
+            s= BasicStroke( 1.0,BasicStroke.CAP_BUTT,BasicStroke.JOIN_MITER,10.0, [2.,2.], 0. )
             g.setStroke(s)
             g.setClip( DasDevicePosition.toRectangle( p.getRow(), p.getColumn() ) )
             xmin= p.XAxis.transform( datum( r-90 ) )
             ymin= p.YAxis.transform( datum( 90-r ) )
             xmax= p.XAxis.transform( datum( 90-r ) )
             ymax= p.YAxis.transform( datum( r-90 ) )
-            g.drawOval( int( xmin ), int( ymin ), int( xmax-xmin ), int( ymax-ymin ) )
+            g.draw( Ellipse2D.Double( xmin, ymin, xmax-xmin, ymax-ymin ) )
             m='%d'
-            if ( pole=='S' ): m='-%d'
             if ( r==70 or r==50 ): g.drawString( m%r, p.XAxis.transform( datum( (r-90)*cos(TAU/8) ) )-4, p.YAxis.transform( datum( (90-r)*cos(TAU/8) ) )-4 )
         x0= p.XAxis.transform( datum(0) )
         y0= p.YAxis.transform( datum(0) ) 
@@ -26,15 +27,11 @@ class AxisPainter( Painter ):
             t= TAU * r / 12.
             x= p.XAxis.transform( datum( cos( t ) * ( 90-40 ) ) )
             y= p.YAxis.transform( datum( sin( t ) * ( 90-40 ) ) )  
-            g.drawLine(int( x0), int(y0),int( x), int(y) ) 
+            g.draw( Line2D.Double( x0, y0, x, y )  )
         g.drawString( '270', p.XAxis.transform( datum( -50 ) ), p.YAxis.transform( datum( 0 ) ) )
         g.drawString( '90', p.XAxis.transform( datum(50) ), p.YAxis.transform( datum( 0 ) ) )
-        if ( flip=='T' or pole=='N' ):
-            g.drawString( '0', p.XAxis.transform( datum(0) ), p.YAxis.transform( datum( 50 ) ) )
-            g.drawString( '180', p.XAxis.transform( datum(0) ), p.YAxis.transform( datum( -50 ) ) )
-        else:
-            g.drawString( '0', p.XAxis.transform( datum(0) ), p.YAxis.transform( datum( -50 ) ) )
-            g.drawString( '180', p.XAxis.transform( datum(0) ), p.YAxis.transform( datum( 50 ) ) )
+        g.drawString( '0', p.XAxis.transform( datum(0) ), p.YAxis.transform( datum( 50 ) ) )
+        g.drawString( '180', p.XAxis.transform( datum(0) ), p.YAxis.transform( datum( -50 ) ) )
 
 
 dom.canvases[0].controller.dasCanvas.removeBottomDecorators()
