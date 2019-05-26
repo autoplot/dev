@@ -1,0 +1,11 @@
+from org.das2.util.filesystem import FileSystem
+FileSystem.reset()
+
+fs= FileSystem.create('http://radiojove.org/archive/data/')
+print 'fs.offline=', fs.offline
+
+from org.autoplot.datasource import DataSetURI
+ff= DataSetURI.getFile('http://radiojove.org/archive/data/1556842548UT190501173508_HNRAO_1.spd', monitor )
+
+print ff
+print fs.listDirectory('/')
