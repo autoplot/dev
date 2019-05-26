@@ -1,0 +1,31 @@
+# this URI uses spaces to delimit the arguments
+
+ds= getDataSet('vap+das2stream:file:/home/jbf/ct/autoplot/bugs/2159/demoJoinDropRecord.d2s?useOldD2sParser=F' )
+print ds # returns 30 record types dataset[30,1423*,513*] (dimensionless)
+
+ds= getDataSet('vap+das2stream:file:/home/jbf/ct/autoplot/bugs/2159/demoJoinDropRecord.d2s?useOldD2sParser=T' )
+print ds # returns 31 record types dataset[31,1423*,513*] (dimensionless)
+
+stop
+
+ds= getDataSet('vap+das2Server:http://star.physics.uiowa.edu/das/das2Server?dataset=das2_1/cassini/wbCas80&start_time=2009-11-02T07:00:00.000Z&end_time=2009-11-02T09:20:00.000Z&-fft_length+2048+-toss_mfr+0+-fft_overlap+-looper_period+0+-wbr_duration+40&key=33164252')
+print ds
+
+# this URI uses space to indicate the 20V argument.  
+#ds= getDataSet('vap+das2Server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Juno/WAV/Housekeeping&start_time=2013-11-01T00:00:00.000Z&end_time=2013-11-02T00:00:00.000Z& 5.5U')
+#print ds
+
+ds= getDataSet('vap+das2Server:http://planet.physics.uiowa.edu/das/das2Server?dataset=juno/waves/flight/housekeeping&start_time=2013-11-01T00:00:00.000Z&end_time=2013-11-02T00:00:00.000Z&+5.5U')
+print ds
+
+ds= getDataSet('vap+das2Server:http://planet.physics.uiowa.edu/das/das2Server?end_time=2013-11-02T00:00:00.000Z&start_time=2013-11-01T00:00:00.000Z&+5.5U&dataset=Juno/WAV/Housekeeping')
+print ds 
+
+## this URI uses URI-encoded plus to indicate the +20V argument.  This is the "correct" version
+#ds= getDataSet('vap+das2Server:http://www-pw.physics.uiowa.edu/das/das2Server?dataset=juno/waves/flight/housekeeping.dsdf&start_time=2013-11-01T00:00:00.000Z&end_time=2013-11-02T00:00:00.000Z&%2B5.5U')
+#print ds
+
+# this URI uses plus to indicate the +20V argument.  Note there's a special hack where if the first characted of the params is a +, then it is encoded as a plus (%20)
+# This currently fails because the old server has not been updated to look for pluses.
+#ds= getDataSet('vap+das2Server:http://www-pw.physics.uiowa.edu/das/das2Server?dataset=juno/waves/flight/housekeeping.dsdf&start_time=2013-11-01T00:00:00.000Z&end_time=2013-11-02T00:00:00.000Z&+5.5U')
+#print ds
