@@ -1,0 +1,33 @@
+loadData= True
+if ( loadData ):
+    randomSeed(5335)
+    
+    zz= zeros( 100,100 )
+    
+    for j in xrange(10):
+      xx= accum( randn(1000) ) 
+      yy= accum( randn(1000) )
+    
+      for i in xrange(xx.length()):
+        ix= xx[i]+50
+        iy= yy[i]+50
+        if ( ix>=0 and ix<100 ):
+            if ( iy>=0 and iy<100 ):
+               zz[ix,iy]= zz[ix,iy]+1
+    
+      zz= smooth1( zz, 5 )
+      zz= smooth( zz, 5 )
+      
+    
+    zz= zz[5:-5,5:-5]
+    formatDataSet( zz, PWD + 'data.cdf?elev' )
+    
+else:
+    zz= getDataSet( PWD + 'data.cdf?elev' )
+
+r= where(zz.eq(0))
+zz[r]= 0.1
+
+setLayoutOverplot(2)
+plot( 0, zz )
+plot( 1, zz, renderType='contour>levels=+1.&labels=T&lineThick=1.0&labelCadence=100px&color=Black&format=%d&labelOrient=N' )
