@@ -7,15 +7,18 @@
 
 from org.das2.util import Expect
 
-expect= Expect.spawn('idl')
-expect.default_timeout= 20
+expect= Expect.spawn(PWD[5:]+'que.sh')
 
-expect.expect(['IDL'])
-expect.send( '!prompt= \'IDL> \'+string(10b)+string(13b)\n' )
-expect.expect(['IDL'])
+expect.default_timeout= 100
+        
+expect.expect(['Enter your name'])
+expect.send( 'I am Nikhil\n' )
 
-expect.send( 'print, \'hello\'\n' )
-expect.expect(['hello'])
-expect.expect(['IDL'])  
+expect.expect(['Enter your age'])
+expect.send( '24\n' )
 
+expect.expect(['Enter your salary'])
+expect.send( '100k\n' )
+
+expect.expectEOF()
 print 'done!'
