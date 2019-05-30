@@ -1,4 +1,4 @@
-loadData= False
+loadData= True
 if ( loadData ):
     randomSeed(5335)
     
