@@ -8,6 +8,7 @@
 
 f= getParam( 'resourceURI', 'https://dds.cr.usgs.gov/pub/data/DEM/250/P/pittsburgh-e', 'DEM file' )
 fil=getFile(f,False,monitor.getSubtaskMonitor('download file'))
+u= getParam( 'units', 'ft', 'units for measurements', [ 'ft', 'm' ] )
 
 loc= 0
 totalLength= fil.length()
@@ -17,25 +18,60 @@ usascii= Charset.forName( 'US-ASCII' )
 
 ds=getDataSet( 'vap+bin:%s?byteOffset=0&byteLength=1024' % fil.toURI() )
 loc= loc + 1024
- 
+
+arecord= ds.collectString(usascii)
+
+title= arecord[0:134]
+
+xyunits= arecord[529:535].strip()
+if ( xyunits=='0' ):
+    xyunits='radian'
+elif ( xyunits=='1' ):
+    xyunits='feet'
+elif ( xyunits=='2' ):
+    xyunits='meter'
+elif ( xyunits=='3' ):
+    xyunits='arc-second'
+    
+zunits= arecord[535:541].strip()
+unitsMult= 1.
+if ( u=='m' and zunits=='1' ):
+    unitsMult= 0.3048
+if ( u=='ft' and zunits=='2' ):
+    unitsMult= 3.28084
+
+eastingSW= arecord[546:570]
+northinSW= arecord[570:594]
+eastingNW= arecord[594:618]
+northinNW= arecord[618:642]
+
+eastingNE= arecord[642:666]
+northinNE= arecord[666:690]
+eastingSE= arecord[690:714]
+northinSE= arecord[714:738]
+
+def f( s ): return float( s.replace('D','E') )
+    
 from java.lang import Integer
-ncol= Integer.parseUnsignedInt( ds.trim( 858, 858+6 ).collectString( usascii ).strip() )
+ncol= Integer.parseUnsignedInt( ds.trim( 858, 864 ).collectString( usascii ).strip() )
 
 monitor.setTaskSize( totalLength )
 monitor.started()
 monitor.setProgressMessage('read data')
 
 dsb= DataSetBuilder(2,totalLength/1024,ncol)
+dsb.putProperty( QDataSet.TITLE, title )
+dsb.putProperty( QDataSet.LABEL, 'Elevation (%{UNITS})' )
+
 ifield=0
 dd= zeros(ncol)
 while ( loc<totalLength ):
     monitor.setTaskProgress(loc)
-    data= getDataSet( 'vap+bin:file:/home/jbf/Downloads/pittsburgh-e?byteOffset=%d&byteLength=1024' % loc )
+    data= getDataSet( 'vap+bin:%s?byteOffset=%d&byteLength=1024' % ( fil.toURI(), loc ) )
     srec= data.collectString(usascii)
     ss= srec.split()
     if ( ifield==0 ):
          ss= ss[9:]
-    print len(ss), ifield
     for i in xrange(len(ss)):
         dd[ifield+i]= float(ss[i])
     ifield= ifield + len(ss)
@@ -44,4 +80,21 @@ while ( loc<totalLength ):
         ifield= 0
     loc= loc + 1024
 result= dsb.getDataSet()
+
+result.putProperty( QDataSet.UNITS, Units.lookupUnits( u ) )
+if ( unitsMult!=1. ):
+    result= result * unitsMult
+
+if ( eastingNE==eastingSE and eastingNW==eastingSW ):
+    horizontal= linspace( f( eastingNW ), f( eastingNE ), result.length() )
+    horizontal.putProperty( QDataSet.LABEL, 'Eastings (%{UNITS})' )
+    horizontal.putProperty( QDataSet.UNITS, xyunits )
+    result.putProperty( QDataSet.DEPEND_0, horizontal )
+
+if ( northinNE==northinNW and northinSE==northinSW ):
+    vertical= linspace( f( northinNE ), f( northinSE ), result.length(0) )
+    vertical.putProperty( QDataSet.LABEL, 'Northings (%{UNITS})' )
+    vertical.putProperty( QDataSet.UNITS, xyunits )
+    result.putProperty( QDataSet.DEPEND_1, vertical )
+
 monitor.finished()
