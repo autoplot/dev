@@ -18,15 +18,15 @@ if ( loadData ):
       zz= smooth1( zz, 5 )
       zz= smooth( zz, 5 )
       
-    
     zz= zz[5:-5,5:-5]
-    formatDataSet( zz, PWD + 'data.cdf?elev' )
+    #formatDataSet( zz, PWD + 'data.cdf?elev' )
     
 else:
     zz= getDataSet( PWD + 'data.cdf?elev' )
 
+zz[77:,77:]= 0
 r= where(zz.eq(0))
-zz[r]= 0.1
+zz[r]= 0.0
 
 setLayoutOverplot(2)
 plot( 0, zz )
