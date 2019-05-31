@@ -19,7 +19,7 @@ if ( loadData ):
       zz= smooth( zz, 5 )
       
     zz= zz[5:-5,5:-5]
-    formatDataSet( zz, PWD + 'data.cdf?elev' )
+    #formatDataSet( zz, PWD + 'data.cdf?elev' )
     
 else:
     zz= getDataSet( PWD + 'data.cdf?elev' )
