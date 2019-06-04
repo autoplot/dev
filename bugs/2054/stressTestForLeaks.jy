@@ -1,0 +1,76 @@
+# title: Generates Heap Dump, which will take up to a minute.
+# label: Heap Dump
+
+from javax.management import MBeanServer
+from java.lang.management import ManagementFactory
+from com.sun.management import HotSpotDiagnosticMXBean
+
+import os
+
+def dumpHeap():
+    mkdir('/tmp/apheap/')
+    
+    dft= TimeParser.create('$Y$m$d_$H$M$S').format( TimeUtil.now() )
+    dft= '/tmp/apheap/' + dft + '.hprof'
+    fn= getParam( 'file', dft, 'location of the heap output.  THIS TAKES A MINUTE!' )
+    
+    print 'Perform garbage collection...'
+    from java.lang import System
+    System.gc()
+    System.gc()
+    
+    print 'Writing heap to '+fn+ '...'
+    
+    HOTSPOT_BEAN_NAME = "com.sun.management:type=HotSpotDiagnostic"
+    
+    server = ManagementFactory.getPlatformMBeanServer()
+    hotspotMBean = ManagementFactory.newPlatformMXBeanProxy( server,
+            HOTSPOT_BEAN_NAME, HotSpotDiagnosticMXBean )
+    
+    if os.path.exists(fn):
+       os.remove(fn) 
+    
+    hotspotMBean.dumpHeap( fn, False );
+    
+    print 'Done, wrote heap to '+fn
+
+
+from java.lang import System
+
+a= xrange(10000)
+t0= System.currentTimeMillis()
+
+monitor.setTaskSize(len(a))
+monitor.started()
+
+print '#run total duration(ms)'
+for i in a:
+    setLayout(1,2)
+    plot( 0, 'http://autoplot.org/data/autoplot.cdf?Magnitude' )
+    plot( 1, 'http://autoplot.org/data/autoplot.cdf?Q_FLAG' )
+    setStatus('number of images written: '+str(i))
+    #plot(0,'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=Oct+2016')    
+    #plot(1,'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=N1800&timerange=Oct+2016')
+    dom.plots[0].yaxis.range=datumRange('0 to 10')
+    dom.plots[1].yaxis.range=datumRange('0 to 30')
+    waitUntilIdle()
+    dom.controller.setPlot(dom.plots[0])
+    sleep(200)
+    dom.controller.setPlot(dom.plots[1])
+    sleep(200)
+    writeToPng('/tmp/ap/%05d_a.png'%i)
+    reset()
+    waitUntilIdle()
+    plot( 0, 'vap+inline:ripples(200,100)+sin(outerProduct(linspace(0,PI,200),linspace(0,1,100)))' )
+    #plot(0,'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=T1800&timerange=Oct+2016')
+    writeToPng('/tmp/ap/%05d_b.png'%i)
+    t1= System.currentTimeMillis()
+    #print '%d %d %d' % ( i, len(a), t1-t0 )
+    monitor.setTaskProgress(i)
+    t0= t1
+    if ( (i-30)%50==0 ):
+        dom.controller.peekBindingSupport().printStatus()
+    if ( i==0 or ( i>00 and i%100 == 0 ) ):
+        dumpHeap()
+        
+        
