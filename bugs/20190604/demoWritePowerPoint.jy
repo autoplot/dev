@@ -1,5 +1,7 @@
 # This shows a bug where the Apache POI jars are added to the path after the other jars, so the old version is conflicting with 
 # the new one.  I was just playing, so I need to return to explore this further.
+#
+# See https://sourceforge.net/p/autoplot/bugs/2168/
 
 from java.io import ByteArrayOutputStream, FileOutputStream
 
