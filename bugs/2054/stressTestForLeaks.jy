@@ -42,6 +42,7 @@ t0= System.currentTimeMillis()
 
 monitor.setTaskSize(len(a))
 monitor.started()
+monitor.setProgressMessage('next heap dump at 100')
 
 print '#run total duration(ms)'
 for i in a:
@@ -70,7 +71,7 @@ for i in a:
     t0= t1
     if ( (i-30)%50==0 ):
         dom.controller.peekBindingSupport().printStatus()
-    if ( i==0 or ( i>00 and i%100 == 0 ) ):
+    if ( i>00 and i%100 == 0 ):
         dumpHeap()
-        
+        monitor.setProgressMessage('next heap dump at %d'%(i+100))
         
