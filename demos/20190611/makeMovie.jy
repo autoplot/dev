@@ -1,0 +1,29 @@
+# demonstration code for making a movie.
+
+import sys
+addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec-javase/0.2.2/jcodec-javase-0.2.2.jar',monitor.getSubtaskMonitor('jar1'))
+addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec/0.2.2/jcodec-0.2.2.jar',monitor.getSubtaskMonitor('jar2'))
+
+from org.jcodec.api.awt import AWTSequenceEncoder
+from javax.imageio import ImageIO
+from java.io import File
+
+enc = AWTSequenceEncoder.createSequenceEncoder(File("/tmp/apmovie.mp4"),24)
+
+i= 0
+monitor.setTaskSize(400)
+monitor.started()
+monitor.setProgressMessage('encoding the movie')
+
+setCanvasSize(720,720)
+
+while i<400:
+   monitor.setTaskProgress(i)
+   plot( link( linspace(0,i,1000) * randn(1000)/100+sin(linspace(0,PI+i/100.,1000)), 
+               linspace(0,i,1000) * randn(1000)/100+cos(linspace(0,PI+i/100.,1000)) ),
+               xrange=[-6,6], yrange=[-6,6] )
+   img= writeToBufferedImage()
+   enc.encodeImage(img)
+   i=i+1
+enc.finish()
+monitor.finished()
