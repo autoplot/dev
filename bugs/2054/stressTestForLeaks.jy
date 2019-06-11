@@ -1,5 +1,9 @@
-# title: Generates Heap Dump, which will take up to a minute.
-# label: Heap Dump
+# title: Stress Autoplot by plot, reset, plot reset, ...
+# label: Stress Autoplot 1
+# This runs a stress test on Autoplot, hoping to find leaks which degrade performance and waste memory, 
+# and eventually lead to the software crashing.  This creates a plot, resets, creates a two-panel plot, and resets, 
+# repeating this many (10000) times.  Periodically (every 100 iterations) the heap memory is dumped to /tmp/apheap/,
+# and the hprof file can be loaded in the Netbeans editor.
 
 from javax.management import MBeanServer
 from java.lang.management import ManagementFactory
