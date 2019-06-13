@@ -1,0 +1,9 @@
+# title: add DOM tab
+# label: add DOM tab
+
+from org.das2.components.propertyeditor import PropertyEditor
+pe= PropertyEditor( dom )
+pe.setListenForExternalChanges(True)
+
+addTab( 'dom', pe )
+
