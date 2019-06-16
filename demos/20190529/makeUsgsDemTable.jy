@@ -1,0 +1,24 @@
+#base= 'https://dds.cr.usgs.gov/pub/data/DEM/250/'
+base= 'file:/home/jbf/autoplot_data/fscache/https/dds.cr.usgs.gov/pub/data/DEM/250/'
+ff= listDirectory( base)
+
+w= open( PWD[5:]+'usgsDemTable.txt', 'w' )
+w.write( 'name, lonmin, lonmax, latmin, latmax\n' )
+monitor.setTaskSize( len(ff) )
+monitor.started()
+for fff in ff:
+    monitor.setTaskProgress(monitor.getTaskProgress()+1)
+    ff3= listDirectory( base + fff )
+    for ff4 in ff3:
+        if ( ff4.endswith('.gz') ):
+            ff4= ff4[0:-3]
+            try:
+                ds= getDataSet( "vap+jyds:" + base + fff + ff4 + "?script="+PWD+"readUsgsDemBounds.jyds" )
+                xr= ds.slice(0)
+                yr= ds.slice(1)
+                w.write( '%s, %f, %f, %f, %f\n' % ( ff4, yr[0], yr[1], xr[0], xr[1] ) )
+            except:
+                print 'fail: '+ff4
+monitor.finished()
+
+w.close()
