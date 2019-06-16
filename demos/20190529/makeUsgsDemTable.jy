@@ -1,5 +1,5 @@
-#base= 'https://dds.cr.usgs.gov/pub/data/DEM/250/'
-base= 'file:/home/jbf/autoplot_data/fscache/https/dds.cr.usgs.gov/pub/data/DEM/250/'
+base= 'https://dds.cr.usgs.gov/pub/data/DEM/250/'
+#base= 'file:/home/jbf/autoplot_data/fscache/https/dds.cr.usgs.gov/pub/data/DEM/250/'
 ff= listDirectory( base)
 
 w= open( PWD[5:]+'usgsDemTable.txt', 'w' )
