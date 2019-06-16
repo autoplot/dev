@@ -92,7 +92,7 @@ if ( eastingNE==eastingSE and eastingNW==eastingSW ):
     result.putProperty( QDataSet.DEPEND_0, horizontal )
 
 if ( northinNE==northinNW and northinSE==northinSW ):
-    vertical= linspace( f( northinNE ), f( northinSE ), result.length(0) )
+    vertical= linspace( f(  northinSE ), f( northinNE ), result.length(0) )
     vertical.putProperty( QDataSet.LABEL, 'Northings (%{UNITS})' )
     vertical.putProperty( QDataSet.UNITS, xyunits )
     result.putProperty( QDataSet.DEPEND_1, vertical )
