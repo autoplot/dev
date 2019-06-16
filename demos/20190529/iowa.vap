@@ -1,0 +1,1559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vap appVersionTag="20190614a" domVersion="1.08">
+    <Application id="app_0">
+        <property class="Annotation" length="0" name="annotations"/>
+        <property class="BindingModel" length="7" name="bindings">
+            <property default="null" type="propertyBinding" value="app_0.timeRange to plot_0.context  (app_0)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_1.colortable  (plot_0)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_2.colortable  (plot_0)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_3.colortable  (plot_0)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_4.colortable  (plot_0)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_5.colortable  (plot_0)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_6.colortable  (plot_0)"/>
+        </property>
+        <property class="Canvas" length="1" name="canvases">
+            <Canvas id="canvas_0">
+                <property class="Column" length="0" name="columns"/>
+                <property name="fitted" type="Boolean" value="true"/>
+                <property default="sans-10" name="font" type="String" value="Dialog-bold-12"/>
+                <property default="480" name="height" type="Integer" value="566"/>
+                <property name="marginColumn" type="DomNode">
+                    <Column id="marginColumn_0">
+                        <property default="2em" name="left"
+                            type="String" value="+10.0em"/>
+                        <property name="parent" type="String" value=""/>
+                        <property default="100%-3em" name="right"
+                            type="String" value="100.00%-7.0em"/>
+                    </Column>
+                </property>
+                <property name="marginRow" type="DomNode">
+                    <Row id="marginRow_0">
+                        <property default="+100%-2em" name="bottom"
+                            type="String" value="100%-3em"/>
+                        <property name="parent" type="String" value=""/>
+                        <property default="+2em" name="top"
+                            type="String" value="2em"/>
+                    </Row>
+                </property>
+                <property class="Row" length="1" name="rows">
+                    <Row id="row_1">
+                        <property name="bottom" type="String" value="+100%-2em"/>
+                        <property default="" name="parent" type="String" value="marginRow_0"/>
+                        <property name="top" type="String" value="+2em"/>
+                    </Row>
+                </property>
+                <property default="640" name="width" type="Integer" value="1300"/>
+            </Canvas>
+        </property>
+        <property class="Connector" length="0" name="connectors"/>
+        <property class="DataSourceFilter" length="9" name="dataSourceFilters">
+            <DataSourceFilter id="data_0">
+                <property name="fill" type="String" value=""/>
+                <property name="filters" type="String" value=""/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/des_moines-e?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_1">
+                <property name="fill" type="String" value=""/>
+                <property default="" name="filters" type="String" value=" "/>
+                <property default="" name="uri" type="String" value="vap+txt:http://autoplot.org/data/coastlines.zip/coastlines/namer-riv.txt"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_2">
+                <property name="fill" type="String" value=""/>
+                <property default="" name="filters" type="String" value=" "/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/des_moines-w?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_3">
+                <property name="fill" type="String" value=""/>
+                <property name="filters" type="String" value=""/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/davenport-e?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_4">
+                <property name="fill" type="String" value=""/>
+                <property name="filters" type="String" value=""/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/davenport-w?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_5">
+                <property name="fill" type="String" value=""/>
+                <property default="" name="filters" type="String" value=" "/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/B/burlington-e?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_6">
+                <property name="fill" type="String" value=""/>
+                <property default="" name="filters" type="String" value=" "/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/B/burlington-w?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_7">
+                <property name="fill" type="String" value=""/>
+                <property name="filters" type="String" value=""/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/C/centerville-e?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+            <DataSourceFilter id="data_8">
+                <property name="fill" type="String" value=""/>
+                <property name="filters" type="String" value=""/>
+                <property default="" name="uri" type="String" value="vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/C/centerville-w?script=%{PWD}readUsgsDem.jyds"/>
+                <property name="validRange" type="String" value=""/>
+            </DataSourceFilter>
+        </property>
+        <property name="eventsListUri" type="String" value=""/>
+        <property name="options" type="DomNode">
+            <Options>
+                <property name="autolabelling" type="Boolean" value="true"/>
+                <property name="autolayout" type="Boolean" value="true"/>
+                <property name="autorangeType" type="String" value=""/>
+                <property name="autoranging" type="Boolean" value="true"/>
+                <property name="background" type="color" value="#ffffff"/>
+                <property default="sans-12" name="canvasFont"
+                    type="String" value="Dialog-bold-12"/>
+                <property name="color" type="color" value="#0"/>
+                <property name="dataVisible" type="Boolean" value="false"/>
+                <property name="dayOfYear" type="Boolean" value="false"/>
+                <property name="displayLogLevel" type="level" value="ALL"/>
+                <property name="drawAntiAlias" type="Boolean" value="true"/>
+                <property name="drawGrid" type="Boolean" value="false"/>
+                <property name="drawMinorGrid" type="Boolean" value="false"/>
+                <property name="fillColor" type="color" value="#404040"/>
+                <property name="flipColorbarLabel" type="Boolean" value="false"/>
+                <property name="foreground" type="color" value="#0"/>
+                <property name="id" type="String" value=""/>
+                <property name="layoutVisible" type="Boolean" value="false"/>
+                <property name="lineThickness" type="String" value="1px"/>
+                <property name="logConsoleVisible" type="Boolean" value="false"/>
+                <property name="logMessageTimeoutSec" type="Integer" value="20"/>
+                <property name="mouseModule"
+                    type="enum:org.virbo.autoplot.MouseModuleType" value="boxZoom"/>
+                <property name="multiLineTextAlignment" type="Float" value="0.5"/>
+                <property name="nearestNeighbor" type="Boolean" value="false"/>
+                <property name="overRendering" type="Boolean" value="false"/>
+                <property name="printingLogLevel" type="level" value="ALL"/>
+                <property name="printingTag" type="String" value=""/>
+                <property name="scanEnabled" type="Boolean" value="true"/>
+                <property name="scriptVisible" type="Boolean" value="false"/>
+                <property name="serverEnabled" type="Boolean" value="false"/>
+                <property name="sliceRebinnedData" type="Boolean" value="false"/>
+                <property name="specialEffects" type="Boolean" value="false"/>
+                <property name="textAntiAlias" type="Boolean" value="true"/>
+                <property name="ticklen" type="String" value="0.66em"/>
+                <property name="useTimeRangeEditor" type="Boolean" value="false"/>
+            </Options>
+        </property>
+        <property class="PlotElement" length="9" name="plotElements">
+            <PlotElement id="plotElement_0">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_0"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_0">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property name="title" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-93.05091666666667 to -91.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="arc-second: 3.6192"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="40.94908333333333 to 42.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="arc-second: 8.6607"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="597.605006 to 1092.0275940000001"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.0795"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_0">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="None"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_2">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_2"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_2">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property default="" name="title" type="String" value="!c "/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-94.05091666666667 to -92.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0059922"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="40.94908333333333 to 42.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0046987"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="670.603696 to 1291.338624"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.0795"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_2">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_3">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_3"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_3">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property name="title" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-91.05091666666667 to -89.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0059922"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="40.94908333333333 to 42.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0046987"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="508.85828399999997 to 934.7113160000001"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.7085"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_3">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_4">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_4"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_4">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property name="title" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-92.05091666666667 to -90.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0059922"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="40.94908333333333 to 42.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0046987"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="505.085318 to 1013.943602"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.7085"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_4">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_5">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_5"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_5">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property default="" name="title" type="String" value="!c "/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-91.05091666666667 to -89.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0038350"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="39.94908333333333 to 41.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0030072"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="406.660118 to 843.3399220000001"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.7167"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_5">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_6">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_6"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_6">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property default="" name="title" type="String" value="!c "/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-92.05091666666667 to -90.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0038350"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="39.94908333333333 to 41.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0030072"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="412.07350399999996 to 874.0157760000001"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.9316"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_6">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_7">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_7"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_7">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property name="title" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-93.05091666666667 to -91.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0047938"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="39.94908333333333 to 41.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0037590"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="555.9383379999999 to 1100.885862"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.9316"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_1">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_8">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoRenderType"
+                    type="Boolean" value="true"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_8"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property name="legendLabel" type="String" value=""/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_8">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property name="title" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="-94.05091666666667 to -92.94908333333333 degrees"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0047938"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="degrees" value="39.94908333333333 to 41.05091666666667"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0037590"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="691.272988 to 1290.354372"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.9316"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="spectrogram"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_2">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property default="None" name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="Solid"/>
+                        <property name="symbolSize" type="Double" value="1.0"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+            <PlotElement id="plotElement_1">
+                <property name="active" type="Boolean" value="true"/>
+                <property default="false" name="autoComponent"
+                    type="Boolean" value="true"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property name="autoRenderType" type="Boolean" value="false"/>
+                <property name="cadenceCheck" type="Boolean" value="true"/>
+                <property name="component" type="String" value=""/>
+                <property default="" name="dataSourceFilterId"
+                    type="String" value="data_1"/>
+                <property name="displayLegend" type="Boolean" value="false"/>
+                <property default="" name="legendLabel" type="String" value="field1"/>
+                <property name="parent" type="String" value=""/>
+                <property name="plotDefaults" type="DomNode">
+                    <Plot id="plot_defaults_1">
+                        <property name="autoBinding" type="Boolean" value="false"/>
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property name="columnId" type="String" value=""/>
+                        <property name="context" type="datumRange">
+                            <datumRange units="us2000" value="2010-01-01"/>
+                        </property>
+                        <property name="displayLegend" type="Boolean" value="true"/>
+                        <property name="displayTitle" type="Boolean" value="true"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="isotropic" type="Boolean" value="false"/>
+                        <property name="legendPosition"
+                            type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                        <property name="rowId" type="String" value=""/>
+                        <property name="ticksURI" type="String" value=""/>
+                        <property default="" name="title" type="String" value="!c "/>
+                        <property name="visible" type="Boolean" value="true"/>
+                        <property name="xaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property default="" name="label"
+                                    type="String" value="field0"/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="" value="-171.63216715 to -48.891721849999996 "/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0010053"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="yaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property default="false"
+                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property default="" name="label"
+                                    type="String" value="field1"/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="" value="23.35513855 to 76.44541645000001"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="degrees: 0.0024057"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                        <property name="zaxis" type="DomNode">
+                            <Axis>
+                                <property default="false"
+                                    name="autoLabel" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
+                                <property name="autoRangeHints"
+                                    type="String" value=""/>
+                                <property name="drawTickLabels"
+                                    type="Boolean" value="true"/>
+                                <property name="flipped" type="Boolean" value="false"/>
+                                <property name="fontSize" type="String" value="1em"/>
+                                <property name="id" type="String" value=""/>
+                                <property name="label" type="String" value=""/>
+                                <property name="log" type="Boolean" value="false"/>
+                                <property name="opposite" type="Boolean" value="false"/>
+                                <property name="range" type="datumRange">
+                                    <datumRange units="ft" value="597.605006 to 1092.0275940000001"/>
+                                </property>
+                                <property name="reference" type="String" value=""/>
+                                <property default="0.1 (dimensionless)"
+                                    name="scale" type="datum" value="ft: 1.0795"/>
+                                <property name="tickValues"
+                                    type="String" value=""/>
+                                <property name="visible" type="Boolean" value="true"/>
+                            </Axis>
+                        </property>
+                    </Plot>
+                </property>
+                <property default="" name="plotId" type="String" value="plot_0"/>
+                <property name="renderControl" type="String" value=""/>
+                <property default="series" name="renderType"
+                    type="enum:org.virbo.autoplot.RenderType" value="scatter"/>
+                <property name="style" type="DomNode">
+                    <PlotElementStyle id="style_1">
+                        <property name="antiAliased" type="Boolean" value="true"/>
+                        <property name="color" type="color" value="#0"/>
+                        <property name="colortable"
+                            type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                        <property default="#808080" name="fillColor"
+                            type="color" value="#404040"/>
+                        <property name="fillDirection" type="String" value="both"/>
+                        <property name="fillToReference" type="Boolean" value="false"/>
+                        <property name="lineWidth" type="Double" value="1.0"/>
+                        <property name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property name="rebinMethod"
+                            type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="binAverage"/>
+                        <property name="reference" type="datum" value="0.0 (dimensionless)"/>
+                        <property name="showLimits" type="Boolean" value="true"/>
+                        <property name="symbolConnector"
+                            type="enum:org.das2.graph.PsymConnector" value="None"/>
+                        <property default="1.0" name="symbolSize"
+                            type="Double" value="3.4000000029802324"/>
+                    </PlotElementStyle>
+                </property>
+            </PlotElement>
+        </property>
+        <property class="Plot" length="1" name="plots">
+            <Plot id="plot_0">
+                <property name="autoBinding" type="Boolean" value="false"/>
+                <property default="false" name="autoLabel"
+                    type="Boolean" value="true"/>
+                <property name="colortable"
+                    type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
+                <property default="" name="columnId" type="String" value="marginColumn_0"/>
+                <property name="context" type="datumRange">
+                    <datumRange units="us2000" value="2010-01-01"/>
+                </property>
+                <property name="displayLegend" type="Boolean" value="true"/>
+                <property name="displayTitle" type="Boolean" value="true"/>
+                <property name="fontSize" type="String" value="1em"/>
+                <property name="isotropic" type="Boolean" value="false"/>
+                <property name="legendPosition"
+                    type="enum:org.das2.graph.LegendPosition" value="NE"/>
+                <property default="" name="rowId" type="String" value="row_1"/>
+                <property name="ticksURI" type="String" value=""/>
+                <property name="title" type="String" value=""/>
+                <property name="visible" type="Boolean" value="true"/>
+                <property name="xaxis" type="DomNode">
+                    <Axis id="xaxis_0">
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="autoRange" type="Boolean" value="false"/>
+                        <property name="autoRangeHints" type="String" value=""/>
+                        <property name="drawTickLabels" type="Boolean" value="true"/>
+                        <property name="flipped" type="Boolean" value="false"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="label" type="String" value=""/>
+                        <property name="log" type="Boolean" value="false"/>
+                        <property name="opposite" type="Boolean" value="false"/>
+                        <property name="range" type="datumRange">
+                            <datumRange units="degrees" value="-94.0775443506357 to -88.8235935958342"/>
+                        </property>
+                        <property name="reference" type="String" value=""/>
+                        <property default="0.1 (dimensionless)"
+                            name="scale" type="datum" value="degrees: 0.0047938"/>
+                        <property name="tickValues" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                    </Axis>
+                </property>
+                <property name="yaxis" type="DomNode">
+                    <Axis id="yaxis_0">
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property name="autoRange" type="Boolean" value="false"/>
+                        <property name="autoRangeHints" type="String" value=""/>
+                        <property name="drawTickLabels" type="Boolean" value="true"/>
+                        <property name="flipped" type="Boolean" value="false"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="label" type="String" value=""/>
+                        <property name="log" type="Boolean" value="false"/>
+                        <property name="opposite" type="Boolean" value="false"/>
+                        <property name="range" type="datumRange">
+                            <datumRange units="degrees" value="40.231326485953396 to 41.95294106928677"/>
+                        </property>
+                        <property name="reference" type="String" value=""/>
+                        <property default="0.1 (dimensionless)"
+                            name="scale" type="datum" value="degrees: 0.0037590"/>
+                        <property name="tickValues" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                    </Axis>
+                </property>
+                <property name="zaxis" type="DomNode">
+                    <Axis id="zaxis_0">
+                        <property default="false" name="autoLabel"
+                            type="Boolean" value="true"/>
+                        <property default="false" name="autoRange"
+                            type="Boolean" value="true"/>
+                        <property name="autoRangeHints" type="String" value=""/>
+                        <property name="drawTickLabels" type="Boolean" value="true"/>
+                        <property name="flipped" type="Boolean" value="false"/>
+                        <property name="fontSize" type="String" value="1em"/>
+                        <property name="label" type="String" value=""/>
+                        <property name="log" type="Boolean" value="false"/>
+                        <property name="opposite" type="Boolean" value="false"/>
+                        <property name="range" type="datumRange">
+                            <datumRange units="ft" value="406.660118 to 1291.338624"/>
+                        </property>
+                        <property name="reference" type="String" value=""/>
+                        <property default="0.1 (dimensionless)"
+                            name="scale" type="datum" value="ft: 1.9316"/>
+                        <property name="tickValues" type="String" value=""/>
+                        <property name="visible" type="Boolean" value="true"/>
+                    </Axis>
+                </property>
+            </Plot>
+        </property>
+        <property name="timeRange" type="datumRange">
+            <datumRange units="us2000" value="2010-01-01"/>
+        </property>
+    </Application>
+</vap>
