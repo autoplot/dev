@@ -2,12 +2,13 @@
 # <a href="https://www.codecogs.com/eqnedit.php?latex=E=mc^2" target="_blank">
 # <img src="https://latex.codecogs.com/gif.latex?E=mc^2" title="E=mc^2" /></a>
 
-a= annotation( 0, anchorOffset='1em,1em', fontSize='1em', text='Here !(color;blue)Blue!(color) Sky', background=None )
+a= annotation( 0, anchorOffset='1em,1em', fontSize='1em', text='Here !(color;blue)Blue!(color) Sky' )
 
 # Unicode can be used, provided the current font supports the character.  &#9632; is a solid block.
-b= annotation( 1, anchorOffset='1em,2em', fontSize='1em', text='!(color;saddleBrown)&#9632;!(color) Density', background=None )
+b= annotation( 1, anchorOffset='1em,3em', fontSize='1em', text='!(color;saddleBrown)&#9632;!(color) Density' )
 
 # !a for exponent, or !e for small exponent
-c= annotation( 2, anchorOffset='1em,4em', fontSize='1em', text='kg m!A2!n s!A-2!nA!e-1!n S/C!dA!n', background=None )
+c= annotation( 2, anchorOffset='1em,5em', fontSize='1em', text='kg m!A2!n s!A-2!nA!e-1!n S/C!dA!n', background=None )
 
 # see demoPainterAnnoCustom.jy for adding custom code to draw arbitrary shapes.
+plot( 'vap+inline:ripples(301,301)+randn(301,301)+distance(301,301,130,130,20,20)', xrange=[0,300], yrange=[0,300] )
