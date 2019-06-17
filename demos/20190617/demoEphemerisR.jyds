@@ -1,0 +1,15 @@
+# demonstrate that time need not be the monotonic parameter used for ephemeris
+
+# what is the format when you want HH:MM in some other context?
+
+ds= getDataSet( 'vap+hapi:http://hapi-server.org/servers/SSCWeb/hapi?id=rbspa&timerange=2017-11-12&parameters=Time,Radius' )
+
+t= ds.property( QDataSet.DEPEND_0 )
+r= where( within( t, '2017-11-12T03:30/07:00' ) )
+
+ds= ds[r]
+t= t[r]
+t.putProperty( QDataSet.FORMAT, 'HH:mm' )
+
+result= link( ds, t )
+

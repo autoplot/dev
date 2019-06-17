@@ -1,0 +1,4 @@
+# demonstrate that time need not be the monotonic parameter used for ephemeris
+
+plot( "vap+inline:ds=getDataSet('vap+cdaweb:ds=RBSP-A_DENSITY_EMFISIS-L4&filter=rbsp&id=density&timerange=2017-11-12')&rbspa=getDataSet('vap+hapi:http://hapi-server.org/servers/SSCWeb/hapi?id=rbspa&timerange=2017-11-12&parameters=Time,Radius')&rbspa=synchronizeOne(ds,rbspa)&link(rbspa,ds)&timerange=2017-11-12" )
+dom.plots[0].ticksURI= PWD + 'demoEphemerisR.jyds'
