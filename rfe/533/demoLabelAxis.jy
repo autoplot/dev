@@ -1,0 +1,7 @@
+plot( [1,1,2,2,3,3] )
+from org.das2.graph import LabelAxis
+la= LabelAxis()
+
+r= dom.plots[0].controller.dasPlot.dasRow
+c= dom.plots[0].controller.dasPlot.dasColumn
+dom.canvases[0].controller.dasCanvas.addComponent( la, r, c )
