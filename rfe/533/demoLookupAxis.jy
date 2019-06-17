@@ -1,0 +1,15 @@
+from org.das2.graph import LookupAxis
+
+Bm= getDataSet('https://emfisis.physics.uiowa.edu/Flight/RBSP-A/LANL/MagEphem/2014/rbspa_def_MagEphem_OP77Q_20140109_v1.0.0.h5?Bm[:,0]')
+R= getDataSet('https://emfisis.physics.uiowa.edu/Flight/RBSP-A/LANL/MagEphem/2014/rbspa_def_MagEphem_OP77Q_20140109_v1.0.0.h5?Rgse')
+R= magnitude(R)
+
+plot( Bm )
+plot( 1, R )
+
+dp= dom.plots[0].controller.dasPlot
+l= LookupAxis( dom.plots[0].xaxis.controller.dasAxis )
+l.setDataSet( R )
+dom.canvases[0].controller.dasCanvas.add( l,dp.row, dp.column )
+
+
