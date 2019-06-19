@@ -1,0 +1,32 @@
+# title: Tool for drawing angles
+# label: Angle tool
+
+from org.das2.graph import Arrow,Painter
+from java.awt.geom import Point2D, Ellipse2D, Rectangle2D, Arc2D
+from java.awt import BasicStroke
+
+a1= getParam( 'angle1', 0 )
+a2= getParam( 'angle2', 30 )
+headStyleS= getParam( 'head', 'DRAFTING', 'head type', ['DRAFTING', 'FAT_TRIANGLE', 'THIN_TRIANGLE' ] )
+a1= a1 * TAU / 360
+a2= a2 * TAU / 360
+
+r= 100
+origin= Point2D.Double(400,400)
+
+headStyle= Arrow.HeadStyle.valueOf(headStyleS)
+
+class MyPainter( Painter ):
+    def paint( self, g ):
+        global a1,a2
+        head= Point2D.Double(400 + cos(a1)*r, 400-sin(a1)*r )
+        Arrow.paintArrow( g, head, origin, 15, headStyle )
+        head= Point2D.Double(400 + cos(a2)*r, 400-sin(a2)*r )
+        Arrow.paintArrow( g, head, origin, 15, headStyle )
+        a1= a1 * TAU / 360
+        rr= Rectangle2D.Double( 350,350,100, 100 )
+        g.stroke= BasicStroke( 2 )
+        a= Arc2D.Double( rr, a1*360/TAU, a2*360/TAU, Arc2D.OPEN )
+        g.draw( a )
+reset()        
+dom.canvases[0].controller.dasCanvas.addTopDecorator(MyPainter())
