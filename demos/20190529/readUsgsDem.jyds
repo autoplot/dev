@@ -106,5 +106,6 @@ if ( northinNE==northinNW and northinSE==northinSW ):
     else:
         vertical.putProperty( QDataSet.UNITS, xyunits )
     result.putProperty( QDataSet.DEPEND_1, vertical )
+result.putProperty( QDataSet.TITLE, title.strip() )
 
 monitor.finished()
