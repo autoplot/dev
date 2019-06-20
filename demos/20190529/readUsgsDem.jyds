@@ -6,9 +6,10 @@
 #   directions.  The QDataSet data model has never represented such data as a grid.
 
 f= getParam( 'resourceURI', 'https://dds.cr.usgs.gov/pub/data/DEM/250/P/pittsburgh-e', 'DEM file' )
-fil=getFile(f,False,monitor.getSubtaskMonitor('download file'))
 u= getParam( 'units', 'ft', 'units for measurements', [ 'ft', 'm' ] )
 l= getParam( 'locationUnits', 'degrees', 'units for lat lon units', [ 'arcsecs', 'degrees' ] )
+
+fil=getFile(f,False,monitor.getSubtaskMonitor('download file'))
 
 loc= 0
 totalLength= fil.length()
