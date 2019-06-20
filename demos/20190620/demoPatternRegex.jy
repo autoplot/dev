@@ -1,0 +1,14 @@
+f= getFile(URL('http://jfaden.net/jenkins/job/autoplot-test037/lastSuccessfulBuild/consoleText'),monitor)
+
+from java.util.regex import Pattern
+
+#p= Pattern.compile( '.*completed test (.*) in (.*) seconds.*' )
+p= Pattern.compile( '.* (.*) in (.*) .*' )
+
+for line in open(str(f),'r'):
+    m= p.matcher(line)
+    if ( m.matches() ):
+        print m.group(1), ' ', m.group(2)
+    else:
+        print '-' # grr why?
+    
