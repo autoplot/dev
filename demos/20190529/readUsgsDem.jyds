@@ -19,6 +19,7 @@ usascii= Charset.forName( 'US-ASCII' )
 ds=getDataSet( 'vap+bin:%s?byteOffset=0&byteLength=1024' % fil.toURI() )
 loc= loc + 1024
 
+# vap+bin returns an unsigned byte dataset, which provides the "collectString" method.
 arecord= ds.collectString(usascii)
 
 title= arecord[0:134]
