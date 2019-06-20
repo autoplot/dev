@@ -12,7 +12,8 @@ cmd= 'myIdlFunction'
 n= getParam( 'n', 20, 'number of points' )
 s= getParam( 's', 1, 'multiplier' )
 
-File( '/tmp/ap' ).mkdirs()
+fdir=File( '/tmp/ap' )
+fdir.mkdirs()
 
 ff= getFile( PWD + cmd + '.pro', monitor.getSubtaskMonitor('read pro') )
 das2streamLib= getFile( PWD + 'das2stream.pro', monitor.getSubtaskMonitor('read das2stream.pro')  )
@@ -26,12 +27,12 @@ f.close()
 
 from java.lang import ProcessBuilder
 pb= ProcessBuilder(['idl','/tmp/ap/callMyIdlFunction.idl'])
-pb.directory(File(pwd))
-pb.redirectOutput(File(pwd+'output.txt'))
+pb.directory(fdir)
+pb.redirectOutput(File(fdir,'output.txt'))
 pb.redirectErrorStream(True)
 process= pb.start()
 process.waitFor()
 
-data= getDataSet( '/tmp/ap/output.d2s' )
+data= getDataSet( File(fdir,'/output.d2s').toString() )
 result= data
 
