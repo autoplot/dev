@@ -1,3 +1,5 @@
+# I think this doesn't work because the encoding is not transmitted by the jenkins server properly.
+
 f= getFile(URL('http://jfaden.net/jenkins/job/autoplot-test037/lastSuccessfulBuild/consoleText'),monitor)
 
 from java.util.regex import Pattern
