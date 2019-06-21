@@ -1,0 +1,30 @@
+# remove background by selecting colors 
+
+plot( PWD+'sanddollar.jpg' )
+ 
+img= dom.dataSourceFilters[0].controller.dataSet
+plot( 1, img )
+
+def ff(evt):
+    print evt, img
+    xr= evt.getXRange()
+    im= img[ int(xr.min()):int(xr.max()), :, : ]
+    yr= evt.getYRange()
+    im= img[ :, int(yr.min()):int(yr.max()), : ]
+    print im
+    im= reform( im, [ im.length()*im.length(0), 3 ] )
+    print im
+    rr= extent(im[:,0])
+    gg= extent(im[:,1])
+    bb= extent(im[:,2])
+    print rr, gg, bb    
+    r= where( within( img[:,:,0], rr )
+              .and( within( img[:,:,1], gg ) )
+              .and( within( img[:,:,2], bb ) ) )
+    img[ r,0 ] = 255
+    img[ r,1 ] = 255
+    img[ r,2 ] = 255
+    
+    plot( 1, img )
+
+addMouseModule( dom.plots[0], 'remove background', ff )
