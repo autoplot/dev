@@ -1,14 +1,33 @@
 f= getFile(URL('http://jfaden.net/jenkins/job/autoplot-test037/lastSuccessfulBuild/consoleText'),monitor)
 
-from java.util.regex import Pattern
+import re
 
-#p= Pattern.compile( '.*completed test (.*) in (.*) seconds.*' )
-p= Pattern.compile( '.* (.*) in (.*) .*' )
+# Useful tool for building regex expressions:
+# http://txt2re.com/index-python.php3?s=completed%20test%20/home/jbf/ct/hudson/script/test037/fftBenchmark.jy%20in%2031.0%20seconds&-5&-17&1&31&40&39&15&43&42&41&7
+txt='completed test /home/jbf/ct/hudson/script/test037/fftBenchmark.jy in 31.0 seconds'
 
-for line in open(str(f),'r'):
-    m= p.matcher(line)
-    if ( m.matches() ):
-        print m.group(1), ' ', m.group(2)
-    else:
-        print '-' # grr why?
-    
+re1='completed'	# Word 1
+re2='\\s+'	# White Space 1
+re3='test'	# Word 2
+re4='\\s+'	# White Space 2
+re5='((?:\\/[\\w\\.\\-]+)+)'	# Unix Path 1
+re6='\\s+'	# White Space 3
+re7='in'	# Word 3
+re8='\\s+'	# White Space 4
+re9='([+-]?\\d*\\.\\d+)(?![-+0-9\\.])'	# Float 1
+re10='\\s+'	# White Space 5
+re11='seconds'	# Word 4
+
+rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8+re9+re10+re11,re.IGNORECASE|re.DOTALL)
+
+dsb= DataSetBuilder( 2, 100, 3 )
+
+count=0
+for txt in open(str(f),'r'):
+    m = rg.search(txt)
+    if m:
+        count= count+1
+        dsb.nextRecord( [ count, float(m.group(2)), m.group(1) ] )
+
+plot( dsb.getDataSet(), ytitle='task time, seconds', renderType='digital' )
+
