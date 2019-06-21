@@ -1,4 +1,10 @@
-f= getFile(URL('http://jfaden.net/jenkins/job/autoplot-test037/lastSuccessfulBuild/consoleText'),monitor)
+# grab the console output from Autoplot Jenkins test037, and grab the lines like
+# "completed test /home/jbf/ct/hudson/script/test037/fftBenchmark.jy in 31.0 seconds"
+# and form a dataset.  This will create an image in /tmp/ap, so this can be 
+# used with the run batch tool to survey all builds.
+
+resourceURI= getParam( 'resourceURI', 'http://jfaden.net/jenkins/job/autoplot-test037/lastSuccessfulBuild/consoleText', 'Jenkins test037 Log File' )
+f= getFile(resourceURI,monitor)
 
 import re
 
@@ -29,5 +35,15 @@ for txt in open(str(f),'r'):
         count= count+1
         dsb.nextRecord( [ count, float(m.group(2)), m.group(1) ] )
 
-plot( dsb.getDataSet(), ytitle='task time, seconds', renderType='digital' )
+ds= dsb.getDataSet()
 
+setLayoutOverplot(2)
+plot( ds, ytitle='task time, seconds', renderType='digital>align=SW', xrange=[0,50], yrange=[0,200] )
+plot( 1, ds[:,0], ds[:,1], renderType='stairSteps', symbolSize=10 )
+
+r= re.compile('.*/(.*)/consoleText')
+m= r.search(resourceURI)
+if ( m ):
+    print 'writeToPng /tmp/ap/'+m.group(1)+'.png'
+    writeToPng( '/tmp/ap/'+m.group(1)+'.png' )
+    
