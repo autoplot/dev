@@ -1,9 +1,12 @@
 # remove background by selecting colors 
+from org.autoplot.imagedatasource.ImageDataSourceFormat import fromRGBtoHSV, fromHSVtoRGB
 
 plot( PWD+'sanddollar.jpg' )
  
 img= dom.dataSourceFilters[0].controller.dataSet
-plot( 1, img )
+img= fromRGBtoHSV(img)
+
+plot( 1, fromHSVtoRGB(img), renderType='image'  )
 
 def ff(evt):
     print evt, img
@@ -13,18 +16,19 @@ def ff(evt):
     im= img[ :, int(yr.min()):int(yr.max()), : ]
     print im
     im= reform( im, [ im.length()*im.length(0), 3 ] )
-    print im
-    rr= extent(im[:,0])
-    gg= extent(im[:,1])
-    bb= extent(im[:,2])
-    print rr, gg, bb    
-    r= where( within( img[:,:,0], rr )
-              .and( within( img[:,:,1], gg ) )
-              .and( within( img[:,:,2], bb ) ) )
-    img[ r,0 ] = 255
-    img[ r,1 ] = 255
-    img[ r,2 ] = 255
     
-    plot( 1, img )
+    print im
+    hh= extent(im[:,0])
+    ss= extent(im[:,1])
+    vv= extent(im[:,2])
+    print hh, ss, vv    
+    r= where( within( img[:,:,0], hh )
+              .and( within( img[:,:,1], ss ) )
+              .and( within( img[:,:,2], vv ) ) )
+    img[ r,0 ] = 0
+    img[ r,1 ] = 0
+    img[ r,2 ] = 100
+    
+    plot( 1, fromHSVtoRGB(img), renderType='image' )
 
 addMouseModule( dom.plots[0], 'remove background', ff )
