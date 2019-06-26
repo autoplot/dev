@@ -1,0 +1,23 @@
+
+# title: show margin column and row
+# label: show margin column
+
+from org.das2.graph import ColorUtil, Painter
+from java.awt.geom import Rectangle2D
+rmin= dom.canvases[0].marginRow.controller.dasRow.getDMinimum()
+rmax= dom.canvases[0].marginRow.controller.dasRow.getDMaximum()
+cmin= dom.canvases[0].marginColumn.controller.dasColumn.getDMinimum()
+cmax= dom.canvases[0].marginColumn.controller.dasColumn.getDMaximum()
+
+class MyPainter( Painter ):
+    def paint( self, g ):
+        rmin= dom.canvases[0].marginRow.controller.dasRow.getDMinimum()
+        rmax= dom.canvases[0].marginRow.controller.dasRow.getDMaximum()
+        cmin= dom.canvases[0].marginColumn.controller.dasColumn.getDMinimum()
+        cmax= dom.canvases[0].marginColumn.controller.dasColumn.getDMaximum()
+        g.color= ColorUtil.decodeColor( 'thistle' )
+        g.fill( Rectangle2D.Double( cmin, rmin, cmax-cmin, rmax-rmin ) )
+        g.drawString( str(dom.canvases[0].marginColumn.controller.dasColumn), cmin, rmin )
+       
+reset()
+dom.canvases[0].controller.dasCanvas.addBottomDecorator(MyPainter())
