@@ -1,0 +1,20 @@
+randomSeed(5334)
+xx= exp( randn(10000) )
+yy= exp( randn(10000) )
+zz= -1 * sqrt( log(xx)**2 + log(yy)**2 )
+
+from org.das2.qds.util import BinAverage
+ds= BinAverage.binAverage( bundle(xx,yy,zz), 10**linspace(-3,3,100), 10**linspace(-3,3,100) )
+
+plot( ds )
+
+randomSeed(5334)
+xx= exp( randn(100000) )
+yy= exp( randn(100000) )
+zz= exp( randn(100000) )
+ff= -1 * sqrt( log(xx)**2 + log(yy)**2 + log(zz)**2 )
+
+from org.das2.qds.util import BinAverage
+ds= BinAverage.binAverageBundle( bundle(xx,yy,zz,ff), 10**linspace(-3,3,100), 10**linspace(-3,3,100), 10**linspace(-3,3,100) )
+
+plot( 1, ds )
