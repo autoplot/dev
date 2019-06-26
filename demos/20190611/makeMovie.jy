@@ -24,6 +24,7 @@ while i<400:
                xrange=[-6,6], yrange=[-6,6] )
    img= writeToBufferedImage()
    enc.encodeImage(img)
+   if monitor.cancelled: break
    i=i+1
 enc.finish()
 monitor.finished()
