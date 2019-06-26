@@ -17,7 +17,10 @@ class MyPainter( Painter ):
         cmax= dom.canvases[0].marginColumn.controller.dasColumn.getDMaximum()
         g.color= ColorUtil.decodeColor( 'thistle' )
         g.fill( Rectangle2D.Double( cmin, rmin, cmax-cmin, rmax-rmin ) )
-        g.drawString( str(dom.canvases[0].marginColumn.controller.dasColumn), cmin, rmin )
+        h= g.font.size
+        g.color= Color.WHITE
+        g.drawString( str(dom.canvases[0].marginRow.controller.dasRow), cmin, rmin+1*h )
+        g.drawString( str(dom.canvases[0].marginColumn.controller.dasColumn), cmin, rmin+2*h )
        
 reset()
 dom.canvases[0].controller.dasCanvas.addBottomDecorator(MyPainter())
