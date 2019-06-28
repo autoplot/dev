@@ -1,0 +1,15 @@
+orb= getDataSet("vap+inline:ds=getDataSet('vap+hapi:http://hapi-server.org/servers/SSCWeb/hapi?id=rbspa&parameters=Time,Y_GEO,Z_GEO&timerange=2019-02-08')&smooth(trim1(ds,0,2),39)&timerange=2019-02-08")
+orb= orb.trim( 39, orb.length()-39 )
+plot( orb, renderType='orbitPlot>fontSize=0.5em' )
+
+orbrend= dom.plotElements[0].controller.renderer
+gtrl= orbrend.tickLabeller
+
+from org.das2.datum.format import DatumFormatter
+
+tp= TimeParser.create('$Y-!c$m-$d!c$H:$M')
+class MyDatumFormatter( DatumFormatter ):
+    def format( self, d ):
+        return tp.format(d)
+    
+gtrl.formatter= MyDatumFormatter()
