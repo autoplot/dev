@@ -1,0 +1,25 @@
+uri4= 'http://cdaweb.gsfc.nasa.gov/istp_public/data/ace/sis/level_2_cdaweb/sis_h1/2012/ac_h1_sis_20120117_v04.cdf?flux_He'
+uri5= 'http://cdaweb.gsfc.nasa.gov/istp_public/data/ace/mag/level_2_cdaweb/mfi_k0/2012/ac_k0_mfi_20120117_v01.cdf?Magnitude'
+
+from java.lang import System
+from org.das2.util.filesystem import FileSystemSettings, FileSystem
+from org.virbo.datasource import FileSystemUtil
+from java.io import File
+
+def rmthem():
+    ff= File( FileSystem.settings().getLocalCacheDir(), 'http/cdaweb.gsfc.nasa.gov/istp_public/data/ace/sis/level_2_cdaweb/sis_h1/2012/ac_h1_sis_20120117_v04.cdf' )
+    if ( not ff.delete() ): print 'problem'
+    ff= File( FileSystem.settings().getLocalCacheDir(), 'http/cdaweb.gsfc.nasa.gov/istp_public/data/ace/mag/level_2_cdaweb/mfi_k0/2012/ac_k0_mfi_20120117_v01.cdf' )
+    if ( not ff.delete() ): print 'problem'
+    
+rmthem()    
+t0= System.currentTimeMillis()
+( flux4min, density5min ) = getDataSets( ( uri4,uri5 ), monitor.getSubtaskMonitor('getDataSets') )
+print 'read two datasets in %.2f' % ( System.currentTimeMillis()-t0 )
+
+rmthem()
+t0= System.currentTimeMillis()
+flux4min= getDataSet( uri4, monitor.getSubtaskMonitor('flux') )
+density5min= getDataSet( uri5, monitor.getSubtaskMonitor('density') )
+print 'read two separate datasets in %.2f' % ( System.currentTimeMillis()-t0 )
+
