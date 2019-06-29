@@ -1,0 +1,117 @@
+setLayout(2,2)
+setCanvasSize(740,740)
+
+aa= linspace( 0, PI*3, 1000 )
+xx= cos( aa ) + aa/10
+yy= sin( aa )+aa/10
+tt= linspace( '2015-01-01T00:00Z', '2015-01-02T00:00Z' , 1000 )
+xx= putProperty( xx, QDataSet.DEPEND_0, tt )
+yy= putProperty( yy, QDataSet.DEPEND_0, tt )
+plot( 0, xx, yy, renderType='orbitPlot' )
+plot( 3, xx, yy, renderType='orbitPlot' )
+
+#from org.virbo.dataset.examples import Schemes
+#evt= Schemes.eventsList()
+evt= createEvent('2015-001T00:00/PT2H',0x00FF00, 'Mode1')
+evt= createEvent( evt, '2015-001T02:00/PT4H',0xFFFF00, 'Mode2')
+evt= createEvent( evt, '2015-001T06:00/PT4H',0x00FFFF, 'Mode0')
+evt= createEvent( evt, '2015-001T16:00/PT4H',0xFF0000, 'Warning')
+evt= createEvent( evt, '2015-001T10:00/PT8H',0xA0A0A0, 'Off')
+evt= createEvent( evt, '2015-001T18:00/PT4H',0xFFFF00, 'Mode2')
+plot( 1, evt )
+
+from org.das2.graph import Renderer
+from java.awt.geom import Line2D
+from java.awt import BasicStroke,RenderingHints
+class MyRenderer( Renderer ):
+    def render( self, g, xaxis, yaxis, monitor=None ):
+        g.setRenderingHint( RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY )
+        g.setStroke( BasicStroke( 5.0, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL ) )
+        for evt1 in evt:
+            r= where( within( tt, datumRange( evt1[0:2] ) ) )
+            icolor= int( evt1[2] ) 
+            icolor= icolor & 0xF0FFFFFF
+            color= Color( (icolor>>16)&0xFF,(icolor>>8)&0xFF, (icolor>>0)&0xFF,  128 )
+            g.setColor(color)
+            for ip in xrange( r.length()-1 ):
+                rip0= r[ip]
+                rip1= rip0+1
+                ix0= xaxis.transform( xx[rip0] )
+                iy0= yaxis.transform( yy[rip0] )
+                ix1= xaxis.transform( xx[rip0+1] )
+                iy1= yaxis.transform( yy[rip0+1] )
+                g.draw( Line2D.Double( ix0, iy0, ix1, iy1 ) )            
+            
+        
+dom.plots[0].controller.dasPlot.addRenderer( MyRenderer() )     
+
+from org.das2.datum.format import DefaultDatumFormatter
+# return Datum in seconds as HH:MM
+class HMSFormatter( DefaultDatumFormatter ):
+    def format( self, d ):
+        seconds= d.doubleValue( Units.seconds )
+        if ( seconds<0 ):
+            seconds= -seconds
+            hours= int(seconds/3600.)
+            minutes= (seconds-hours*3600) / 60.
+            return '-%02d:%02d' % ( hours, minutes )
+        else:
+            hours= int(seconds/3600.)
+            minutes= (seconds-hours*3600) / 60.     
+            return '+%02d:%02d' % ( hours, minutes )
+            
+hmsFormatter= HMSFormatter()
+    
+from org.das2.event import BoxSelectorMouseModule
+from org.das2.event import LabelDragRenderer
+from org.virbo.dataset import SemanticOps
+from org.das2.graph import Arrow
+from java.awt import Point
+
+class MyDragRenderer( LabelDragRenderer ):
+    def renderDrag( self, g2, p1, p2 ):
+        
+        xds= xx
+        yds= yy
+
+        datax= p.XAxis.invTransform(p2.x)
+        datay= p.YAxis.invTransform(p2.y)
+        
+        tds= tt
+        dist= ( xds-datax ) ** 2 + ( yds-datay )**2
+        i= imin( dist )
+            
+        g2.setColor( Color.BLUE )
+        closeX= datum(xds[i]) 
+        closeY= datum(yds[i])
+        closeT= datum(tds[i])
+        
+        evts= ''
+        for i in xrange(evt.length()):
+            if ( closeT.ge( datum(evt[i,0]) ) and closeT.lt( datum(evt[i,1]) ) ):
+                evts= evts + evt[i,3].toString() + '!C'
+        
+        ptarget= Point( int(p.XAxis.transform( closeX )), int(p.YAxis.transform( closeY ) ) )
+        Arrow.paintArrow( g2, ptarget, p2, 12.0, Arrow.HeadStyle.DRAFTING )
+        
+        #tpj=datum('2015-001T01:40Z')
+        #LabelDragRenderer.setLabel( self, 'PJ%s!C%s!C%s,%s!C%s' % ( hmsFormatter.format( datum(closeT-tpj) ), closeT, closeX, closeY, evts ) )
+        LabelDragRenderer.setLabel( self, '%s!C%s,%s!C%s' % ( closeT, closeX, closeY, evts ) )
+        LabelDragRenderer.renderDrag( self, g2, p1, p2 )
+
+p= dom.controller.getPlot().controller.dasPlot                
+mm= BoxSelectorMouseModule.create( p, 'Orbit Lookup' )
+mm.setDragEvents(True)
+        
+mm.setDragRenderer( MyDragRenderer(p) )
+
+p.dasMouseInputAdapter.primaryModule= mm
+
+
+
+
+
+
+
+
+
