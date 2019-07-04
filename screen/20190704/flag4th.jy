@@ -1,0 +1,12 @@
+ds= getDataSet('http://www.researchhistory.org/wp-content/uploads/2011/05/american-flag.jpg')
+
+x= randn(4000) *30  + ds.length()/2 
+y= randn(4000) *30  + ds.length(0)/2
+
+rr= interpolate( ds[:,:,0], x, y )
+gg= interpolate( ds[:,:,1], x, y )
+bb= interpolate( ds[:,:,2], x, y )
+
+plot( x, y, rgbColorDataset( rr, gg, bb ), symbolSize=10 )
+
+dom.plots[0].zaxis.visible=False # this is a bug, it should turn off for RGB colors.
