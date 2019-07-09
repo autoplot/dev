@@ -1,14 +1,12 @@
 tt1= linspace( '2000-01-01T00:00', '2000-01-02T00:00', 14400 )
 tt2= linspace( '2000-01-02T00:00', '2000-01-03T00:00', 20400 )
 tt= concatenate(tt1,tt2)
-tt.makeImmutable()  # Removing this changes result!!!! Fix this!!!!!
-#plot( tt )
 
 randomSeed(5334)
 
 wv= randn( tt.length() ) + sin( putProperty( convertUnitsTo( tt-tt[0], Units.seconds ),QDataSet.UNITS, Units.dimensionless)/10)
 wv= link( copy(tt), wv )
-#plot( 0, wv )
+
 spec= fftPower(wv,512,monitor)
 
 reset()
@@ -20,5 +18,5 @@ plot( 0, spec )
 specTrim= trim( 1, spec, dataset('0.01Hz'),dataset('0.04Hz') )
 print specTrim.property(QDataSet.QUBE)
 print '***'
-#print AutoRangeUtil.simpleRange( specTrim )
+
 plot( 1, specTrim )
