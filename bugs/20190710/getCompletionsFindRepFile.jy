@@ -1,7 +1,13 @@
+from org.das2.util import LoggerManager
+from java.util.logging import Level
+
+logger= LoggerManager.getLogger( 'das2.filesystem.http' )
+logger.setLevel(Level.FINER)
+
 # This never comes back:
 ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/$Y/$m/$d//rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
 
 # This works properly:
-#ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/$Y/$m/$d//rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
+ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/$Y/$m/$d/rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
 
 print ff
