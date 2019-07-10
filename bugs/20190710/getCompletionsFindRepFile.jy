@@ -1,0 +1,7 @@
+# This never comes back:
+ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/$Y/$m/$d//rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
+
+# This works properly:
+#ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/$Y/$m/$d//rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
+
+print ff

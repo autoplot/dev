@@ -1,0 +1,15 @@
+# when the // is used, then there's an extra query...
+
+from org.das2.util.filesystem import FileSystem
+
+fs= FileSystem.create( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/2019/06/' )
+files1j= "26/"
+childRegex= '(..)/'
+ff= fs.listDirectory( files1j, childRegex, monitor )
+
+print 'listing of %s matching %s:' % ( files1j, childRegex )
+for f in ff:
+    print f
+    
+print 'there should not be any...'    
+
