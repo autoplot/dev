@@ -1,0 +1,22 @@
+from org.das2.qds import QDataSet
+
+class MyNonQubeDataSet( QDataSet ):
+    def rank(self):
+        return 2
+    def length(self,i0=None):
+        if ( i0==None ): return 6
+        if ( i0<3 ): return 4 
+        else: return 5
+    def value(self,i0,i1):
+        return i0+i1
+    def property(self,name,i=None):
+        return None
+        
+ds= MyNonQubeDataSet()
+f= flatten(ds)
+for f1 in f:
+    print f1
+
+setLayoutOverplot(2)
+plot( ds, renderType='nnSpectrogram' )
+plot( 1, ds, renderType='digital' )
