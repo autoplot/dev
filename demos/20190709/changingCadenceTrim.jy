@@ -11,12 +11,8 @@ spec= fftPower(wv,512,monitor)
 
 reset()
 
-from org.autoplot import AutoRangeUtil 
 plot( 0, spec )
 
-
 specTrim= trim( 1, spec, dataset('0.01Hz'),dataset('0.04Hz') )
-print specTrim.property(QDataSet.QUBE)
-print '***'
 
 plot( 1, specTrim )
