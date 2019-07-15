@@ -1,0 +1,9 @@
+from org.das2.math import PoissonDistribution
+from java.util import Random
+
+r= Random(5334)
+
+dsb= DataSetBuilder(1,10000)
+for i in xrange(10000):
+    dsb.nextRecord( PoissonDistribution.poisson( 5,r ) )
+plot( dsb.getDataSet() )
