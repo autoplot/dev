@@ -1,0 +1,11 @@
+# loggers are be more effective than simply printing to the console, because you can 
+# turn them off when things are working and then on when debugging is needed.
+
+from org.das2.util import LoggerManager
+from java.util.logging import Level
+
+mylog= LoggerManager.getLogger('myscript')
+mylog.setLevel( Level.INFO )
+
+print 'debug message'
+mylog.fine('debug message sent to logger')
