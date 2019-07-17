@@ -1,0 +1,18 @@
+# draw graph paper for the canvas
+
+from org.das2.util import ColorUtil
+from org.das2.graph import Painter
+from java.awt import BasicStroke
+
+class GridPainter( Painter ):
+    def paint( self, g ):
+        w= dom.canvases[0].width
+        h= dom.canvases[0].height
+        g.color= ColorUtil.decodeColor('Thistle')
+        g.stroke= BasicStroke(0.5)
+        for i in xrange( 0, w, 10 ):
+            g.drawLine( i, 0, i, h )
+        for i in xrange( 0, h, 10 ):
+            g.drawLine( 0, i, w, i )
+
+dom.canvases[0].controller.dasCanvas.addBottomDecorator(GridPainter())
