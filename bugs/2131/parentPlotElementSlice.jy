@@ -1,9 +1,0 @@
-load( PWD + "20151221_2300_2315_rbspb_bxyz_mageis_ulf_fresh.vap" )
-
-# why can't we select the inactive parent node?
-
-for i in xrange(11):
-   dom.plotElements[0].component='|slice1(%d)' % i
-   waitUntilIdle()
-   sleep(300)
-   

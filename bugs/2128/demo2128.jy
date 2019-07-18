@@ -1,7 +1,0 @@
-while ( True ):
-    if ( dom.plots[0].yaxis.flipped ):
-        dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(0.001,0.999)
-    else:
-        dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(-0.001,1.001)
-    sleep(100)
-    

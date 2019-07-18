@@ -1,3 +1,0 @@
-ds= sin( linspace( 0, PI,16 ) ) + findgen(16) % 2 
-result= ds
-

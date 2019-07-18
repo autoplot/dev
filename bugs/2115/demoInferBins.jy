@@ -1,9 +1,0 @@
-ds= findgen(10)
-ds.putProperty( QDataSet.CADENCE, 10 )
-
-from org.das2.qds.DataSetUtil import inferBins
-
-bins= inferBins(ds)
-
-for bin in bins:
-    print bin

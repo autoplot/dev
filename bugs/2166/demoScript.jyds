@@ -1,6 +1,0 @@
-s= getParam( 's', 'x', 'string parameter' )
-f= getParam( 'f', 0.0, 'float parameter' )
-tr= getParam( 'timerange', '2014-01-09', 'timerange parameter' )
-print s, f, tr
-
-result= dataset( [1,2,3,4,5] )

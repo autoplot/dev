@@ -1,4 +1,0 @@
-# demo run batch for a group of files.
-url= getParam( 'u', URL('http://autoplot.org/data/autoplot.cdf'), 'file URL' )
-ff= getFile( url, monitor )
-print ff.length()
