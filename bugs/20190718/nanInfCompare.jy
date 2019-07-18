@@ -1,0 +1,30 @@
+# demo bug where NaN>Infinity.
+
+from java.lang import Double
+
+i= Units.dimensionless.createDatum( Double.POSITIVE_INFINITY )
+nan= Units.dimensionless.createDatum( Double.NaN )
+print 'datum i.gt(nan): ', i.gt(nan)
+print 'datum i.lt(nan): ', i.lt(nan)
+
+print 'Double.POSITIVE_INFINITY > Double.NaN: ', Double.POSITIVE_INFINITY > Double.NaN
+print 'Double.POSITIVE_INFINITY < Double.NaN: ', Double.POSITIVE_INFINITY < Double.NaN
+
+ni= Units.dimensionless.createDatum( Double.NEGATIVE_INFINITY )
+nan= Units.dimensionless.createDatum( Double.NaN )
+print 'datum ni.gt(nan): ', i.gt(nan)
+print 'datum ni.lt(nan): ', i.lt(nan)
+print 'Double.NEGATIVE_INFINITY > Double.NaN: ', Double.NEGATIVE_INFINITY > Double.NaN
+print 'Double.NEGATIVE_INFINITY < Double.NaN: ', Double.NEGATIVE_INFINITY < Double.NaN
+
+pi= Units.dimensionless.createDatum( Double.POSITIVE_INFINITY )
+ni= Units.dimensionless.createDatum( Double.NEGATIVE_INFINITY )
+print 'pi.gt(ni): ', pi.gt(ni)
+print 'pi.lt(ni): ', pi.lt(ni)
+
+pi= Units.dimensionless.createDatum( Double.POSITIVE_INFINITY )
+ni= Units.dimensionless.createDatum( Double.NEGATIVE_INFINITY )
+print 'pi.gt(datum(0)): ', pi.gt(datum(0))
+print 'ni.lt(datum(0)): ', ni.lt(datum(0))
+print 'ni.lt(datum(Double.NEGATIVE_INFINITY)): ', ni.lt(datum(Double.NEGATIVE_INFINITY))
+print 'Double.NEGATIVE_INFINITY==Double.NEGATIVE_INFINITY: ', Double.NEGATIVE_INFINITY==Double.NEGATIVE_INFINITY
