@@ -1,0 +1,11 @@
+ds1= indgen(2,10)
+ds2= indgen(0,10) # this will cause a bug.
+ds3= indgen(1,10)
+
+ds= join( join( ds1, ds2 ), ds3 )
+
+from org.das2.qds import QubeDataSetIterator
+it= QubeDataSetIterator( ds )
+while ( it.hasNext() ):
+    it.next()
+    print '%2d %s' % ( it.getValue(ds), it )

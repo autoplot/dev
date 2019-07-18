@@ -1,0 +1,27 @@
+from org.das2.graph import Renderer
+from java.awt.geom import Line2D,Point2D
+
+reset()
+
+from org.das2.graph import Arrow,GraphUtil
+
+ix= 340
+iy= 350
+
+xx= randn(1000)
+yy= randn(1000)
+
+class MyRenderer(Renderer):
+    def render( self, g, xaxis, yaxis, monitor=None ):
+        p0= Point2D.Double( ix, iy )
+        for i in xrange(len(xx)):
+            p= Point2D.Double( xaxis.transform( xx[i] ), 
+                               yaxis.transform( yy[i] ) )
+            L= Line2D.Double( p, p0 )
+            L2= GraphUtil.shortenLine( L, 30, 30 )
+            Arrow.paintArrow( g, L2.p1, L2.p2, 10, Arrow.HeadStyle.DRAFTING )
+        
+
+myRenderer= MyRenderer()
+
+plot( None, renderer=MyRenderer() )

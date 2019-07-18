@@ -1,0 +1,13 @@
+lookup= getDataSet( 'https://www.untamedscience.com/science/wp-content/uploads/2013/10/fall-leaf.jpg' )
+
+t1= outerProduct( indgen(20)+400, ones(21) )
+t2= outerProduct( ones(20), indgen(21)+300 )
+
+z= lookup[t1,t2,0]
+
+print z
+for i in range(t1.length()):
+    for j in range(t1.length(i)):
+        print z[i,j],
+    print ''
+plot( z )

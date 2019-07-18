@@ -1,0 +1,17 @@
+# see ../20190715 (or so).
+
+from org.das2.util import LoggerManager
+from java.util.logging import Level
+
+logger= LoggerManager.getLogger( 'das2.filesystem.http' )
+logger.setLevel(Level.FINER)
+
+# This never comes back:
+ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/2019/06/$(d,Y=2019,m=06)//rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
+
+# This works properly:
+#ff= getCompletions( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/2019/06/$(d,Y=2019,m=06)/rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_$Y$m$dT$H_v$(v,sep).cdf?' )
+
+for f in ff:
+    print f
+    

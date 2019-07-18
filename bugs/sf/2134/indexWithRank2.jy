@@ -1,0 +1,8 @@
+lookup= dataset( [.1,.2,.3,.4,.5,.4,.3,.2,.1] )
+t1= dataset( [[3,4,5,6],[4,5,6,7]] )
+z= lookup[t1]
+print z
+for i in range(t1.length()):
+    for j in range(t1.length(i)):
+        print z[i,j],
+    print ''

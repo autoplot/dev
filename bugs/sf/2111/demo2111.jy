@@ -1,0 +1,12 @@
+# Run the script, then zoom in and out.
+
+N=1000000
+ds1= randn(N)+sin(linspace(2,4,N))*10
+ds1= putProperty( ds1, QDataSet.UNITS, Units.hertz )
+ds2= randn(N)+sin(linspace(3,6,N))*10
+ds2= putProperty( ds2, QDataSet.UNITS, Units.dimensionless )
+
+setLayoutOverplot(2)
+plot( 0, ds1, color='saddleBrown', renderType='series' )
+plot( 1, ds2, color='steelBlue', renderType='series' )
+

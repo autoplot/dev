@@ -1,0 +1,4 @@
+mag_z= getDataSet('http://cdaweb.gsfc.nasa.gov/istp_public/data/barrel/l2/2o/magn/$Y/bar_2o_l2_magn_$Y$m$d_v$v.cdf?MAG_Z_uncalibrated&timerange=2014-01-27')
+formatDataSet( mag_z,'/tmp/zmag.cdf')
+mag_z= getDataSet( '/tmp/zmag.cdf?MAG_Z_uncalibrated' )
+print mag_z.property( QDataSet.DESCRIPTION )

@@ -1,0 +1,12 @@
+# This demonstrates how Autoplot will not make the binding between the xaxis and dom.timeRange if
+# no data is returned.
+reset()
+pf= getParam( 'pf', 'fail', 'pass or fail', ['pass','fail'] )
+
+if ( pf=='fail' ):
+    tr= '1999+Dec+01'
+else:
+    tr= '1999+Dec+31'
+    
+load( 'http://autoplot.org/data/agg/efi/$Y/po_k0_efi_$Y$m$d_v$v.cdf?POTENT&timerange='+tr )
+print dom.controller.findBindings( dom, 'timeRange', dom.plots[0].xaxis, 'range' )
