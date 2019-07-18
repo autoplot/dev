@@ -1,0 +1,18 @@
+# JFormatterTextField ensures the new value will be of the same type.
+
+from java.util import Date
+from javax.swing import JFormattedTextField,JPanel,BoxLayout
+jfnum= JFormattedTextField(3.15)
+jfdate= JFormattedTextField(Date())
+
+panel= JPanel()
+panel.setLayout( BoxLayout( panel,BoxLayout.Y_AXIS ) )
+
+panel.add( jfnum )
+panel.add( jfdate )
+
+from javax.swing import JOptionPane
+JOptionPane.showMessageDialog( getViewWindow(), panel )
+
+print jfnum.value
+print jfdate.value

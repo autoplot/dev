@@ -1,0 +1,17 @@
+# maybe we want the console output to go to a file as well.
+
+from org.das2.util import LoggerManager
+from java.util.logging import Level,SimpleFormatter,StreamHandler
+from java.io import FileOutputStream
+
+fout= FileOutputStream( '/tmp/loggingToFile.log' )
+
+sh= StreamHandler( fout, SimpleFormatter()  )
+globalLog= LoggerManager.getLogger('')
+globalLog.addHandler( sh )
+
+print 'debug message'
+
+globalLog.removeHandler( sh )
+sh.flush()
+
