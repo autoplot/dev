@@ -1,0 +1,20 @@
+from org.apache.commons.net.ftp import FTPClient,FTPReply
+
+ftp= FTPClient()
+ftp.connect('speedtest.tele2.net')
+reply = ftp.getReplyCode()
+
+if ( not FTPReply.isPositiveCompletion(reply)):
+     ftp.disconnect()
+     print "FTP server refused connection."
+
+ftp.login('anonymous','faden_j@cottagesystems.com')
+
+engine = ftp.initiateListParsing('')
+while ( engine.hasNext() ):
+    files = engine.getNext(10)
+    for f in files:
+        print f.getName(), f.getSize()
+    print '---'
+ftp.logout()
+ftp.disconnect()

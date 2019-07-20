@@ -1,0 +1,26 @@
+# attempt to read data using new version of NetCDF library.  The old library, netcdf-4.1.jar, shows a bug which
+# prevents the GOLD o2den file from reading the timetags.  This script should be run with an Autoplot in a debugging
+# environment where the old NetCDF has been removed from the search path.
+
+import sys
+addToSearchPath(sys.path,'http://artifacts.unidata.ucar.edu/content/repositories/unidata-releases/edu/ucar/netcdfAll/4.6.13/netcdfAll-4.6.13.jar',monitor.getSubtaskMonitor('jar1'))
+
+import ucar.ma2.Array as Array
+import ucar.nc2.Variable as Variable
+import ucar.nc2.NetcdfFile as NetcdfFile
+from ucar.nc2.dataset import NetcdfDataset
+
+# matlab.mat was created by making variables, then issuing save command.
+f= getFile( 'https://cdaweb.gsfc.nasa.gov/pub/data/gold/level2/o2den/2018/gold_l2_o2den_2018_301_v01_r01_c01.nc', monitor.getSubtaskMonitor('nc data'))
+ds= NetcdfDataset( NetcdfFile.open( str(f) ) )
+#print dataset
+
+print ds.variables
+
+vv= ds.findVariable( 'time_utc' )
+print vv
+tt = vv.read()
+ja= tt.copyToNDJavaArray()
+for a in ja:
+    print a
+

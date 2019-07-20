@@ -1,0 +1,28 @@
+from org.apache.commons.net.ftp import FTPSClient,FTPClient,FTPReply
+
+client= getParam('client', 'ftp', 'ftp or ftps client', ['ftp','ftps'] )
+
+if ( client=='ftp' ):
+    print 'using ftp.'
+    ftp= FTPClient()
+elif ( client=='ftps' ):
+    print 'using ftps to connect.'
+    ftp= FTPSClient()
+
+ftp.connect('cdaweb.gsfc.nasa.gov')
+reply = ftp.getReplyCode()
+
+if ( not FTPReply.isPositiveCompletion(reply)):
+     ftp.disconnect()
+     print "FTP server refused connection."
+
+ftp.login('anonymous','testing@cottagesystems.com')
+
+engine = ftp.initiateListParsing()
+while ( engine.hasNext() ):
+    files = engine.getNext(10)
+    for f in files:
+        print f.getName(), f.getSize()
+    print '---'
+ftp.logout()
+ftp.disconnect()
