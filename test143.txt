@@ -7,3 +7,6 @@ http://autoplot.org/data/sst.mnmean.nc?sst
 
 # jyds internal plug-ins.  These are jyds scripts which have been associated with file extensions.
 vap+wdc:ftp://ftp.ngdc.noaa.gov/STP/GEOMAGNETIC_DATA/INDICES/KP_AP/$Y?apkp=kp&timerange=1940+through+1942
+
+# error bars
+https://github.com/autoplot/vap/errorBarsRPI.vap
