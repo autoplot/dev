@@ -1,0 +1,50 @@
+# demo file listeners.  Suppose the script must be rerun if one of two files
+# changes, this reruns the script when something changes.
+
+# 20180730: this works great!
+
+# this will only work at U. Iowa.  TODO: make demo for any machine
+#
+from java.nio.file import WatchService, FileSystems, Path, Paths
+from java.nio.file.StandardWatchEventKinds import ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY
+
+watcher= FileSystems.getDefault().newWatchService()
+
+parent= Paths.get(URI(PWD))
+parent.register( watcher, [ ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY ] )
+
+setLayout( 1, 2 )
+plot( 0, None )
+plot( 0, PWD + 'satden.jyds?size=100' )
+plot( 1, None )
+plot( 1, PWD + 'satden.jyds?size=100&species=W' )
+
+def giggle(pce):
+    print 'giggle'
+    print 'do update'
+    from org.autoplot.AutoplotUtil import reloadAll
+    reloadAll(dom)
+
+from org.autoplot.util import TickleTimer
+tt= TickleTimer( 100, None, propertyChange=giggle )
+
+def update():
+    tt.tickle()
+    
+update()
+    
+while ( True ):
+    print '---'
+    key= watcher.take()
+    for e in key.pollEvents():
+        fil= str( e.context() )
+        if ( fil=='NewAnisotropyValues.txt' ):
+            update()
+        elif ( fil=='summary_final1_19_July_2018.txt' ):
+            update()    
+        elif ( fil=='potentials.d2s' ):
+            update() 
+        elif ( fil=='satden.jyds' ): 
+            update()  
+    key.reset()
+

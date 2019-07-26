@@ -1,0 +1,22 @@
+from java.util.concurrent.atomic import AtomicInteger
+a= AtomicInteger(0)
+
+nThread=100
+countsPerThread=100000
+doneCount=AtomicInteger(0)
+
+from java.lang import Runnable,Thread
+
+class MyRun( Runnable ):
+    def run( self ):
+        for i in xrange(countsPerThread):
+             a.incrementAndGet()
+        doneCount.incrementAndGet()
+        
+for i in xrange(nThread):
+    Thread(MyRun()).start()
+
+while ( doneCount.intValue()<nThread ):
+    sleep(10)
+
+print a
