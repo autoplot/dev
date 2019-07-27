@@ -5,7 +5,8 @@ dds= sin(linspace(PI/8,7*PI/8,N))
 ds.putProperty( QDataSet.DELTA_PLUS, dds )
 ds.putProperty( QDataSet.DELTA_MINUS, dds )
 
-plot( ds, renderType='series', fillColor=Color.LIGHT_GRAY, symbol=None, lineStyle=None )
+plot( ds, renderType='series', fillColor=Color.LIGHT_GRAY, 
+      symbol=None, lineStyle=None )
 
 from org.das2.graph import ErrorBarType
 dom.plotElements[0].controller.renderer.errorBarType= ErrorBarType.SHADE
