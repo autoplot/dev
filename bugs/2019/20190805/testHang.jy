@@ -1,0 +1,10 @@
+def hang():
+    sleep(15000)
+    
+from java.lang import Runnable
+class HangRun( Runnable ):
+    def run( self ):
+        hang()
+        
+from javax.swing import SwingUtilities
+SwingUtilities.invokeLater( HangRun() )
