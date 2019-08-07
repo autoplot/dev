@@ -9,6 +9,9 @@ monitor.started()
 randomSeed(5334)
 
 data= zeros( s, t ) - 99
+data[-1,-1]= -3
+data[-1,0]= -3
+
 data.putProperty( QDataSet.FILL_VALUE, -99 )
 
 for i in xrange(s):
