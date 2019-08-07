@@ -3,7 +3,7 @@ sc= getParam( 'sc', 'a', 'spacecraft', [ 'a', 'b', 'c', 'd', 'e' ] )
 s= getParam( 's', 100, 'param 1' )
 t= getParam( 't', 7, 'param 2' )
 
-monitor.setTaskSize(100)
+monitor.setTaskSize(s)
 monitor.started()
 
 randomSeed(5334)
