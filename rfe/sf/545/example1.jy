@@ -8,7 +8,7 @@ monitor.started()
 
 randomSeed(5334)
 
-data= zeroes( s, t )
+data= zeros( s, t )
 for i in xrange(100):
     sleep(100)
     monitor.setTaskProgress(i)
