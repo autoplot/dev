@@ -18,4 +18,7 @@ for i in xrange(s):
         break
     data[i]= randn(t)
 
+if ( monitor.cancelled ):
+    print 'monitor is cancelled, stopped at %d.' % i
+    
 plot( data )
