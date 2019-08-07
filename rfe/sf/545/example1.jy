@@ -1,15 +1,19 @@
 # simulate a slow batch process
 sc= getParam( 'sc', 'a', 'spacecraft', [ 'a', 'b', 'c', 'd', 'e' ] )
 s= getParam( 's', 10, 'param 1' )
-t= getParam( 's', 3, 'param 2' )
+t= getParam( 't', 7, 'param 2' )
 
 monitor.setTaskSize(100)
 monitor.started()
 
+randomSeed(5334)
+
+data= zeroes( s, t )
 for i in xrange(100):
     sleep(100)
     monitor.setTaskProgress(i)
     if ( monitor.cancelled ):
         break
+    data[i]= randn(t)
 
-plot( randn( s, t ) )
+plot( data )
