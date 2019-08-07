@@ -9,8 +9,8 @@ monitor.started()
 randomSeed(5334)
 
 data= zeros( s, t ) - 99
-data[-3:-1,-3:-1]= -3
-data[-3:-1,0:3]= -3
+data[-4:-1,-3:-1]= -3
+data[-4:-1, 0:2]= -3
 
 data.putProperty( QDataSet.FILL_VALUE, -99 )
 
