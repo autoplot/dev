@@ -8,7 +8,9 @@ monitor.started()
 
 randomSeed(5334)
 
-data= zeros( s, t )
+data= zeros( s, t ) - 99
+data.putProperty( QDataSet.FILL_VALUE, -99 )
+
 for i in xrange(s):
     sleep(123)
     monitor.setTaskProgress(i)
