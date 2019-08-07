@@ -1,0 +1,15 @@
+# simulate a slow batch process
+sc= getParam( 'sc', 'a', 'spacecraft', [ 'a', 'b', 'c', 'd', 'e' ] )
+s= getParam( 's', 10, 'param 1' )
+t= getParam( 's', 3, 'param 2' )
+
+monitor.setTaskSize(100)
+monitor.started()
+
+for i in xrange(100):
+    sleep(100)
+    monitor.setTaskProgress(i)
+    if ( monitor.cancelled ):
+        break
+
+plot( randn( s, t ) )
