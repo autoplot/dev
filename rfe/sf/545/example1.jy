@@ -14,6 +14,7 @@ for i in xrange(100):
     monitor.setTaskProgress(i)
     if ( monitor.cancelled ):
         break
+    print data[i]
     data[i]= randn(t)
 
 plot( data )
