@@ -1,0 +1,25 @@
+from org.das2.datum import Datum
+
+u= Units.milliseconds2
+print u.isConvertibleTo(Units.seconds)
+d= u.createDatum(1)
+print d.doubleValue( Units.seconds )
+print Datum.create(1).divide(d)
+
+u= Units.minutes
+print u.isConvertibleTo(Units.seconds)
+d= u.createDatum(5)
+print d.doubleValue( Units.seconds )
+print Datum.create(1).divide(d)
+
+u= Units.hours
+print u.isConvertibleTo(Units.seconds)
+d= u.createDatum(1)
+print d.doubleValue( Units.seconds )
+print Datum.create(1).divide(d)
+
+u= Units.hours
+print u.isConvertibleTo(Units.seconds)
+d= u.createDatum(1)
+print d.doubleValue( Units.seconds )
+print Datum.create(1).multiply(d)

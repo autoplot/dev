@@ -1,0 +1,6 @@
+plot( 'vap+inline:linspace(1,10,100)**-1*mod(findgen(100),2)', legendLabel='XXX' )
+dom.options.drawGrid= True
+from org.das2.graph import LegendPosition
+dom.plots[0].legendPosition= LegendPosition.OutsideNE
+
+annotation( text= 'Good Thing We\'re Testing', pointAt= '105,0.6', anchorOffset='1em,1em'  )
