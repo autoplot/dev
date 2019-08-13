@@ -1,0 +1,14 @@
+plot( [1,2,3,4,3,4,5], color= 'saddleBrown', lineThick=3 )
+ds= dataset( [1,2,3,4,3,4,5] )
+ds.putProperty( QDataSet.RENDER_TYPE, 'series>color=red' )
+
+plot( 1, ds )
+
+ds= ripplesVectorTimeSeries(20)
+bds= ds.property(QDataSet.BUNDLE_1)
+bds.putProperty( QDataSet.RENDER_TYPE, 0, 'series>color=blue' )
+bds.putProperty( QDataSet.RENDER_TYPE, 1, 'series>color=green' )
+bds.putProperty( QDataSet.RENDER_TYPE, 2, 'series>color=purple' )
+ds.putProperty( QDataSet.BUNDLE_1, bds )
+
+plot( 2, ds )
