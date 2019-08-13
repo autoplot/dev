@@ -1,5 +1,6 @@
 plot( [1,2,3,4,3,4,5], color= 'saddleBrown', lineThick=3 )
 
+# or the color can be attached to a dataset, in the RENDER_TYPE property.  
 ds= dataset( [1,2,3,4,3,4,5] )
 ds.putProperty( QDataSet.RENDER_TYPE, 'series>color=red' )
 plot( 1, ds )
