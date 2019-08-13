@@ -1,3 +1,4 @@
+# the plot command has a color keyword.
 plot( [1,2,3,4,3,4,5], color= 'saddleBrown', lineThick=3 )
 
 # or the color can be attached to a dataset, in the RENDER_TYPE property.  
