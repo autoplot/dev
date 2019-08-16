@@ -1,0 +1,7 @@
+from java.lang import Double
+from org.autoplot import AutoRangeUtil
+
+zds= indgen(10)
+zds[2]= Double.NEGATIVE_INFINITY
+
+print AutoRangeUtil.autoRange( zds, None, False )
