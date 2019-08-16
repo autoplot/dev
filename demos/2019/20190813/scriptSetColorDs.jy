@@ -1,9 +1,16 @@
+# the plot command has a color keyword.
 plot( [1,2,3,4,3,4,5], color= 'saddleBrown', lineThick=3 )
 
 prop= { 'user':'Jeremy', 'sciContact':'Bill', 'version':1.3 }
 ds= dataset( [1,2,3,4,3,4,5], renderType='series>color=red', cacheTag='2019-01-01 @ 60s', userProperties=prop )
+plot( 0, ds )
+
+# or the color can be attached to a dataset, in the RENDER_TYPE property.  
+ds= dataset( [1,2,3,4,3,4,5] )
+ds.putProperty( QDataSet.RENDER_TYPE, 'series>color=red' )
 plot( 1, ds )
 
+# the following shows how bundled datasets could have their colors set, but this doesn't work, presently.
 ds= ripplesVectorTimeSeries(20)
 bds= ds.property(QDataSet.BUNDLE_1)
 bds.putProperty( QDataSet.RENDER_TYPE, 0, 'series>color=blue' )

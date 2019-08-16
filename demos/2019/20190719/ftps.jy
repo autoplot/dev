@@ -1,6 +1,6 @@
 from org.apache.commons.net.ftp import FTPSClient,FTPClient,FTPReply
 
-client= getParam('client', 'ftp', 'ftp or ftps client', ['ftp','ftps'] )
+client= getParam('client', 'ftps', 'ftp or ftps client', ['ftp','ftps'] )
 
 if ( client=='ftp' ):
     print 'using ftp.'
