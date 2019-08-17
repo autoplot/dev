@@ -4,4 +4,13 @@ from org.autoplot import AutoRangeUtil
 zds= indgen(10)
 zds[2]= Double.NEGATIVE_INFINITY
 
+print '****'
 print AutoRangeUtil.autoRange( zds, None, False )
+print '****'
+
+zds= indgen(10,12)
+zds[2]= Double.NEGATIVE_INFINITY
+
+print '****'
+print AutoRangeUtil.autoRange( zds, None, False )
+print '****'
