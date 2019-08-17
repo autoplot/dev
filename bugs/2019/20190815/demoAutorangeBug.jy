@@ -1,3 +1,5 @@
+# testagator shows things broke between 20190420a and 20190427a.
+
 from java.lang import Double
 from org.autoplot import AutoRangeUtil
 
