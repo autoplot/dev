@@ -1,0 +1,12 @@
+# This demos how to get focus events from a JSpinner.
+
+from javax.swing import JSpinner
+js= JSpinner()
+
+getApplication().setBottomPanel(js)
+
+def f(evt):
+    print 'JSpinner value: ', js.value
+    
+js.editor.textField.focusGained= f
+js.editor.textField.focusLost= f
