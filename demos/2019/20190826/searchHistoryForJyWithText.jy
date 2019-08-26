@@ -11,9 +11,13 @@ historyFile= open( autoplotData + '/bookmarks/history.txt' )
 alreadyDone= {}
 
 from org.autoplot.datasource import URISplit
+from org.das2.util import FileUtil
+from java.io import File
 
 i= 0
-monitor.setTaskSize(6323)
+n= FileUtil.lineCount( File( autoplotData + '/bookmarks/history.txt' ) )
+
+monitor.setTaskSize(n)
 monitor.started()
 
 for line in historyFile:
