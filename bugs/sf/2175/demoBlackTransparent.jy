@@ -1,0 +1,16 @@
+# demo bug where 
+from org.autoplot.state import ColorSerializeDelegate
+
+transparent= Color( 0,0,0,0 )
+black= Color( 0,0,0 ) 
+
+print 'transparent: ', ColorSerializeDelegate().format( transparent )
+print 'black: ', ColorSerializeDelegate().format( black )
+
+from org.das2.util import ColorUtil
+print 'encode color transparent: ', ColorUtil.encodeColor( transparent )
+print 'encode color black: ', ColorUtil.encodeColor( black )
+
+print 'Note #00000000 doesn''t result in transparent:'
+print 'decode alpha: ', ColorUtil.decodeColor('0x00000000').alpha
+print 'transparent alpha: ', transparent.alpha
