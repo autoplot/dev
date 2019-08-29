@@ -1,0 +1,46 @@
+# grep all Jython scripts for string
+
+search= getParam('search', 'servers.json', 'string to search for' )
+
+from org.autoplot.datasource import AutoplotSettings
+
+autoplotData= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_AUTOPLOTDATA)
+
+historyFile= open( autoplotData + '/bookmarks/history.txt' )
+
+alreadyDone= {}
+
+from org.autoplot.datasource import URISplit
+from org.das2.util import FileUtil
+from java.io import File
+
+i= 0
+n= FileUtil.lineCount( File( autoplotData + '/bookmarks/history.txt' ) )
+
+monitor.setTaskSize(n)
+monitor.started()
+
+for line in historyFile:
+    
+    if monitor.isCancelled(): break
+    i=i+1
+    monitor.setTaskProgress(i)
+    if ( line.endswith('.jy\n') ):
+        jythonFile= line[25:]
+        if ( jythonFile.startswith('script:') ):
+            jythonFile= jythonFile[7:]
+        if ( alreadyDone.has_key(str(jythonFile)) ):
+            continue
+        try:
+            ff= downloadResourceAsTempFile( URL(jythonFile),3600, monitor.getSubtaskMonitor( jythonFile ) )
+        except:
+            #print 'unable to download: ', jythonFile
+            continue
+        if ( ff.exists() ):
+           jythonLines= open( str(ff) )
+           for j in jythonLines:
+               if ( j.find( search )>-1 ):
+                  print '%s: %s' % ( ff, j )
+        alreadyDone[jythonFile]= 'T'
+           
+           
