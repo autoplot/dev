@@ -1,0 +1,10 @@
+from java.awt import Toolkit,GraphicsEnvironment
+print Toolkit.getDefaultToolkit().getScreenResolution()
+print Toolkit.getDefaultToolkit().getScreenSize()
+
+gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
+print gd.getDisplayMode().getWidth()
+
+#96
+#java.awt.Dimension[width=1280,height=720]
+#1920
