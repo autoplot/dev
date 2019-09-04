@@ -5,6 +5,7 @@ print Toolkit.getDefaultToolkit().getScreenSize()
 gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 print gd.getDisplayMode().getWidth()
 
+# Here is the output on my Windows model:
 #96
 #java.awt.Dimension[width=1280,height=720]
 #1920
