@@ -46,7 +46,7 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+inline:randomn(5334,200)/10+cos(linspace(0,PI,200))"/>
+                <property default="" name="uri" type="String" value="vap+inline:randomn(5334,200)/10+sin(linspace(0,PI,200))"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_1">
