@@ -9,3 +9,8 @@ print gd.getDisplayMode().getWidth()
 #96
 #java.awt.Dimension[width=1280,height=720]
 #1920
+
+# Here is the output on Linux (no scaling):
+#96
+#java.awt.Dimension[width=3840,height=1080]
+#3840
