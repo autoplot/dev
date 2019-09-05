@@ -5,7 +5,7 @@ print Toolkit.getDefaultToolkit().getScreenSize()
 gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
 print gd.getDisplayMode().getWidth()
 
-# Here is the output on my Windows model:
+# Here is the output on my Windows model (150% scaling):
 #96
 #java.awt.Dimension[width=1280,height=720]
 #1920
@@ -14,3 +14,8 @@ print gd.getDisplayMode().getWidth()
 #96
 #java.awt.Dimension[width=3840,height=1080]
 #3840
+
+# windows with scaling turned off.
+#96
+#java.awt.Dimension[width=1920,height=1080]
+#1920
