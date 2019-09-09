@@ -1,0 +1,9 @@
+from org.das2.datum import TimeUtil
+
+url= URL('https://github.com/autoplot/dev/blob/master/bugs/sf/2122/demoResolutionWindows.jy')
+
+for i in xrange(60):
+    sleep(1000)
+    f= downloadResourceAsTempFile(url,3600,None )
+    print TimeUtil.now(), f.length()
+    
