@@ -1,6 +1,8 @@
 # There's a latency that is problemmatic with github, and this is an 
 # attempt to measure it.  It may be as bad as 4 minutes...
-# demo again insert
+# What happens is github says max-age=300, so it is telling that it will
+# use the same file with a 304 response for 300 seconds. Source-Age specifies
+# the actual age.
 
 from org.das2.datum import TimeUtil
 
