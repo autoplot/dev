@@ -1,6 +1,6 @@
 # There's a latency that is problemmatic with github, and this is an 
 # attempt to measure it.  It may be as bad as 4 minutes...
-# demo insert
+# demo again insert
 
 from org.das2.datum import TimeUtil
 
