@@ -1,6 +1,6 @@
 from org.das2.datum import TimeUtil
 
-url= URL('https://github.com/autoplot/dev/blob/master/bugs/sf/2122/demoResolutionWindows.jy')
+url= URL('https://raw.githubusercontent.com/autoplot/dev/master/bugs/sf/2122/demoResolutionWindows.jy')
 
 for i in xrange(60):
     sleep(1000)
