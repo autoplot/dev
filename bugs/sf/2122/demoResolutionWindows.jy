@@ -1,6 +1,10 @@
 # This is a study of how to handle scaling on Windows.  It seems that we can
 # calculate the scaling by looking at a couple of Java graphics environment
 # queries.
+#
+#
+#
+#
 
 from java.awt import Toolkit,GraphicsEnvironment
 print '%d dpi' % Toolkit.getDefaultToolkit().getScreenResolution() 
