@@ -1,9 +1,17 @@
+# There's a latency that is problemmatic with github, and this is an 
+# attempt to measure it.  It may be as bad as 4 minutes...
+
 from org.das2.datum import TimeUtil
 
-url= URL('https://raw.githubusercontent.com/autoplot/dev/master/bugs/sf/2122/demoResolutionWindows.jy')
+url= URL('https://github.com/autoplot/dev/blob/master/bugs/sf/2122/')
 
-for i in xrange(60):
+from org.das2.util.filesystem import FileSystem
+
+ghfs= FileSystem.create(url)
+ff= ghfs.getFileObject('demoResolutionWindows.jy')
+
+for i in xrange(600):
     sleep(1000)
-    f= downloadResourceAsTempFile(url,3600,None )
+    f= ff.getFile()
     print TimeUtil.now(), f.length()
     
