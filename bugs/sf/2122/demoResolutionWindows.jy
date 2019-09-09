@@ -13,7 +13,7 @@ for d in devices:
     print '  %s %d x %d' % ( d.getIDstring(), dm.width, dm.height )
 
 if ( len(devices)==1 ):
-    print 'this is a laptop with scaling=%.1f%' % ( 100 * dim.width / gd.displayMode.width )
+    print 'this is a laptop with scaling=%.1f%%' % ( 100 * dim.width / gd.displayMode.width )
 else:
     print 'this has multiple displays, no scaling support...'
         
