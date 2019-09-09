@@ -16,7 +16,8 @@ if ( len(devices)==1 ):
     print 'this is a laptop with scaling=%.1f%%' % ( 100 * gd.displayMode.width / dim.width )
 else:
     print 'this has multiple displays, no scaling support...'
-        
+
+# The following output was created with an early version of this script.        
 # Here is the output on my Windows model (150% scaling):
 #96
 #java.awt.Dimension[width=1280,height=720]
