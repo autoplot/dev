@@ -1,3 +1,4 @@
 # Content to change length: 1234567890
 randomSeed(0)
 result= mod(accum(randu(1001)),20)
+result= putProperty( result, QDataSet.TITLE, 'random data' )
