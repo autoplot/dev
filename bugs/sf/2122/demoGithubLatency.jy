@@ -3,7 +3,9 @@
 # What happens is github says max-age=300, so it is telling that it will
 # use the same file with a 304 response for 300 seconds. Source-Age specifies
 # the actual age.
-
+#
+# See also https://github.com/autoplot/dev/blob/master/bugs/sf/2203/ .
+#
 from org.das2.datum import TimeUtil
 
 url= URL('https://github.com/autoplot/dev/blob/master/bugs/sf/2122/')
