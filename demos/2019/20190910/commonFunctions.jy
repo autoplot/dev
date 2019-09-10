@@ -1,3 +1,12 @@
+'''This demonstrates how one can create a set of common functions used in several routines.
+Import this with the following code:
+
+ff= getFile( 'https://github.com/autoplot/dev/demos/2019/20190910/commonFunctions.jy',monitor.getSubtaskMonitor('import'))
+execfile( ff.toString() )
+
+This is intended for demonstration purposes only.
+
+'''
 def dotp( a, b ):
    'return the dot product of 3-element vectors a and b'
    return a[0]*b[0] + a[1]*b[1] + a[2]*b[2]
