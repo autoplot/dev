@@ -1,0 +1,9 @@
+# demonstrate how createEvent can be used to create an events list for plotting.
+
+x= None
+x= createEvent( x, datumRange('2019-09-10'), Color.BLACK.getRGB(), 'event1' )
+x= createEvent( x, datumRange('2019-09-14'), Color.BLUE.getRGB(), 'event2' )
+x= createEvent( x, datumRange('2019-09-15'), Color.RED.getRGB(), 'event3' )
+x= createEvent( x, datumRange('2019-09-17'), Color.BLACK.getRGB(), 'event1' )
+plot(x)
+
