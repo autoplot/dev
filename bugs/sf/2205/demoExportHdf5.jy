@@ -1,0 +1,16 @@
+# this demos how export to HDF5 doesn't support append properly.
+
+randomSeed(5334)
+
+dsR2= ripples(100,100)+randn(100,100)+mod(findgen(100,100),100)/10
+dsR1= ripples(100)+ cos( linspace(0,PI,100)  )+ randn(100)/20
+tt= linspace( '2019-01-01T00:00', '2019-01-31T24:00', 100 )
+
+plot( 0, tt, dsR2 )
+plot( 1, tt, dsR1 )
+
+formatDataSet( tt, PWD + 'temp.h5?name=Epoch' )
+formatDataSet( dsR2, PWD + 'temp.h5?append=T&name=dsR2' )
+formatDataSet( dsR1, PWD + 'temp.h5?append=T&name=dsR1' )
+
+# trivial change
