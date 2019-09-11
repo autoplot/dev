@@ -10,5 +10,6 @@ plot( 0, tt, dsR2 )
 plot( 1, tt, dsR1 )
 
 formatDataSet( tt, PWD + 'temp.h5?name=Epoch' )
-formatDataSet( dsR2[:,0], PWD + 'temp.h5?append=T&name=dsR2' )
+formatDataSet( dsR2, PWD + 'temp.h5?append=T&name=dsR2' )
 formatDataSet( dsR1, PWD + 'temp.h5?append=T&name=dsR1' )
+
