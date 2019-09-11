@@ -1,0 +1,6 @@
+from org.das2.graph.SpectrogramRenderer import RebinnerEnum
+vv= RebinnerEnum.values()
+for v in vv:
+    print v
+    
+print RebinnerEnum.valueOf( 'binXinterpY' )
