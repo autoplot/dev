@@ -9,16 +9,22 @@
 from java.awt import Toolkit,GraphicsEnvironment
 print '%d dpi' % Toolkit.getDefaultToolkit().getScreenResolution() 
 dim= Toolkit.getDefaultToolkit().getScreenSize() 
-print '%d x %d (scaled)' % ( dim.width, dim.height ) 
+print '%d x %d (this can be scaled)' % ( dim.width, dim.height ) 
 
 env= GraphicsEnvironment.getLocalGraphicsEnvironment()
 gd = env.defaultScreenDevice
 print '%d x %d ' % ( gd.displayMode.width,  gd.displayMode.height )
 
 devices = env.screenDevices
+setLayoutOverplot( len(devices) )
+
+i=0
 for d in devices:
     dm= d.displayMode
-    print '  %s %d x %d' % ( d.getIDstring(), dm.width, dm.height )
+    print '  %s %d x %d %s' % ( d.getIDstring(), dm.width, dm.height, d.defaultConfiguration.bounds.toString()[18:] )
+    rr= d.defaultConfiguration.bounds
+    plot( i, dataset([ 0,0,1,1,0 ]) * rr.width + rr.x, dataset([ 0,1,1,0,0 ]) * rr.height + rr.y )
+    i=i+1
 
 if ( len(devices)==1 ):
     print 'this is a laptop with scaling=%.1f%%' % ( 100 * gd.displayMode.width / dim.width )
