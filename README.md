@@ -14,3 +14,4 @@ fixed and never described in SourceForge.
 Note scripts can be run directly in Autoplot directly (that's new, see 2019a branch) using https://github.com/autoplot/dev/blob/master/bugs/20190212/demoWhereNot.jy or https://github.com/autoplot/dev/bugs/20190212/demoWhereNot.jy
 
 
+<test>
