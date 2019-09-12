@@ -54,13 +54,13 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:https://github.com/autoplot/dev/demos/2019/20190912/times.txt?column=field0&amp;time=field0&amp;timeFormat=$Y/$m/$d+$H:$M:$S"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}/times.txt?column=field0&amp;time=field0&amp;timeFormat=$Y/$m/$d+$H:$M:$S"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_1">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:https://github.com/autoplot/dev/demos/2019/20190912/times.txt?column=field0&amp;time=field0&amp;timeFormat=$Y/$m/$d+$H:$M:$S"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}/times.txt?column=field0&amp;time=field0&amp;timeFormat=$Y/$m/$d+$H:$M:$S"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
