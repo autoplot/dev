@@ -1,0 +1,37 @@
+from java.awt.geom import Point2D, Rectangle2D
+from org.das2.graph import GraphUtil
+
+rr= Rectangle2D.Double( 0, 0, 100, 100 )
+p0= Point2D.Double( 50, -50 )
+p1= Point2D.Double( 50, 50 )
+line1= GraphUtil.lineRectangleMask( p0, p1, rr )
+
+p0= Point2D.Double( 60, -50 )
+p1= Point2D.Double( 60, 150 )
+line2= GraphUtil.lineRectangleMask( p0, p1, rr )
+
+p1= Point2D.Double( 40, -50 )
+p0= Point2D.Double( 40, 150 )
+line3= GraphUtil.lineRectangleMask( p0, p1, rr )
+
+p0= Point2D.Double( -20, 40 )
+p1= Point2D.Double( 40, -20 )
+line4= GraphUtil.lineRectangleMask( p0, p1, rr )
+
+from org.das2.graph import Painter 
+
+class MyPainter( Painter ):
+    def paint(self,g):
+        g.translate( 200,200 )
+        g.draw( rr )
+        g.color= Color.RED
+        g.draw(line1)
+        g.color= Color.GRAY
+        g.draw(line2)
+        g.color= Color.BLUE
+        g.draw(line3)
+        g.color= Color.GREEN
+        g.draw(line4)
+        
+reset()
+dom.canvases[0].controller.dasCanvas.addTopDecorator( MyPainter() )
