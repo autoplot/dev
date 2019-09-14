@@ -18,7 +18,23 @@ p0= Point2D.Double( -20, 40 )
 p1= Point2D.Double( 40, -20 )
 line4= GraphUtil.lineRectangleMask( p0, p1, rr )
 
+p0= Point2D.Double( -20, 20 )
+p1= Point2D.Double( 20, -20 )
+line5= GraphUtil.lineRectangleMask( p0, p1, rr )
+
+p0= Point2D.Double( 0, 0 )
+p1= Point2D.Double( 100, 0 )
+line6= GraphUtil.lineRectangleMask( p0, p1, rr )
+print line6
+
+p0= Point2D.Double( 0, -10 )
+p1= Point2D.Double( 100, -10 )
+line7= GraphUtil.lineRectangleMask( p0, p1, rr )
+print line7
+
 from org.das2.graph import Painter 
+from java.awt.geom import Ellipse2D
+from org.das2.util import ColorUtil
 
 class MyPainter( Painter ):
     def paint(self,g):
@@ -26,12 +42,31 @@ class MyPainter( Painter ):
         g.draw( rr )
         g.color= Color.RED
         g.draw(line1)
+        g.fill( Ellipse2D.Double( line1.p2.x-2, line1.p2.y-2, 5, 5 ) )
         g.color= Color.GRAY
         g.draw(line2)
+        g.fill( Ellipse2D.Double( line2.p2.x-2, line2.p2.y-2, 5, 5 ) )
         g.color= Color.BLUE
         g.draw(line3)
-        g.color= Color.GREEN
+        g.fill( Ellipse2D.Double( line3.p2.x-2, line3.p2.y-2, 5, 5 ) )
+        g.color= ColorUtil.decodeColor('DarkGreen')
         g.draw(line4)
+        g.fill( Ellipse2D.Double( line4.p2.x-2, line4.p2.y-2, 5, 5 ) )
+
+        g.color= ColorUtil.decodeColor('Brown')
+        g.draw(line5)
+        g.fill( Ellipse2D.Double( line5.p2.x-2, line5.p2.y-2, 5, 5 ) )        
+
+        g.color= ColorUtil.decodeColor('#8B0000')
+        g.draw(line6)
+        g.fill( Ellipse2D.Double( line6.p2.x-2, line6.p2.y-2, 5, 5 ) ) 
+
+        g.color= ColorUtil.decodeColor('Gold')
+        if ( line7!=None ):
+            g.draw(line7)
+            g.fill( Ellipse2D.Double( line7.p2.x-2, line7.p2.y-2, 5, 5 ) ) 
+        else:
+            g.drawString( 0, 300, 'line7 does not intersect' )
         
 reset()
 dom.canvases[0].controller.dasCanvas.addTopDecorator( MyPainter() )
