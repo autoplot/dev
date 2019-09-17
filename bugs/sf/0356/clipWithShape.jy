@@ -1,0 +1,37 @@
+from java.awt.geom import Rectangle2D, GeneralPath
+from java.awt import BasicStroke,Rectangle
+
+reset()
+
+r2= Rectangle2D.Double( 100,100,400,400 )
+
+path= GeneralPath( )
+path.moveTo(0,0)
+path.lineTo( 150,150 )
+path.lineTo( 400,150 )
+path.lineTo( 600,600 )
+path.lineTo( 0, 300 )
+path.closePath()
+
+from org.das2.util import ColorUtil
+c= ColorUtil.decodeColor('saddleBrown')
+cClip= ColorUtil.decodeColor('LightGreen')
+
+from org.das2.graph import Painter, GraphUtil
+
+rectangle= Rectangle( int(r2.getX()), int(r2.getY()), int(r2.getWidth()), int(r2.getHeight()) )
+
+class MyPainter( Painter ):
+    def paint( self, g ):
+        g.color= c
+        g.stroke= BasicStroke( 3 )
+        g.draw( r2 )
+        g.draw( path )
+        
+        path2= GeneralPath( )
+        GraphUtil.clipPath( path.getPathIterator(None), path2, rectangle )
+        
+        g.color= cClip
+        g.draw( path2 )
+        
+dom.canvases[0].controller.dasCanvas.addTopDecorator(MyPainter())
