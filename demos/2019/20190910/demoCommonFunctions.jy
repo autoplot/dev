@@ -1,0 +1,4 @@
+ff= getFile( 'https://github.com/autoplot/dev/demos/2019/20190910/commonFunctions.jy',monitor.getSubtaskMonitor('import'))
+execfile( ff.toString() )
+
+print dotp( [0,2,3],[0,3,-2] )
