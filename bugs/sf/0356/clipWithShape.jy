@@ -11,6 +11,7 @@ path.lineTo( 150,150 )
 path.lineTo( 400,150 )
 path.lineTo( 600,600 )
 path.lineTo( 0, 300 )
+path.lineTo( 50, 300 )
 path.closePath()
 
 from org.das2.util import ColorUtil
