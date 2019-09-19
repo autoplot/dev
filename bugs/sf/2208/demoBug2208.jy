@@ -1,0 +1,14 @@
+# Note resolution allows scripts to use server-side data reduction.
+dsNew= getDataSet( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?--v2spike=on --v2trough=on --chan=1.00khz&dataset=Voyager/2/PWS/SpecAnalyzer-4s-Efield&useOldD2sParser=F&resolution=1440','2019-01-23/2019-03-06')
+dsOld= getDataSet( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?--v2spike=on --v2trough=on --chan=1.00khz&dataset=Voyager/2/PWS/SpecAnalyzer-4s-Efield&useOldD2sParser=T&resolution=1440','2019-01-23/2019-03-06')
+
+print '=one channel='
+print dsNew
+print dsOld
+
+dsNew= getDataSet( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/2/PWS/SpecAnalyzer-4s-Efield&useOldD2sParser=F&resolution=1440','2019-01-23/2019-03-06')
+dsOld= getDataSet( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/2/PWS/SpecAnalyzer-4s-Efield&useOldD2sParser=T&resolution=1440','2019-01-23/2019-03-06')
+
+print '=all channels='
+print dsNew
+print dsOld
