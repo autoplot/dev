@@ -1,0 +1,24 @@
+# Find the sequence in the dataset.  For example, in case 1, we 
+# look to see where the string "Magnetic" is found within a cdf
+# file on autoplot.org.
+
+case= getParam( 'case', 0, 'case number', [0,1] )
+
+if ( case==0 ):
+    instr= dataset( map( ord, 'AC/MAG Magnetic field' ) )
+    find= dataset( map( ord, 'Magnetic' ) )
+elif ( case==1 ):
+    instr= getDataSet( 'vap+bin:http://autoplot.org/data/autoplot.cdf' )
+    find= dataset( map( ord, 'Magnetic' ) )
+
+r= where( instr.eq( find[0] ) )
+n=1
+while ( n<find.length() ):
+   r1= where( instr[r+n].eq( find[n] ) )
+   r= r[r1]
+   if ( r.length()==0 ):
+       break
+   n=n+1
+
+for r1 in r:
+    print r1
