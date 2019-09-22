@@ -1,3 +1,6 @@
+# Demonstration of how different parameters are used to create a plot.  This is of
+# fake data, showing enumerations and continous parameters.
+
 nc= getParam( 'nc', 3, 'number of centers', [ 1,2,3,4,5 ] )
 noise= getParam( 'noise', 1.0, 'noise level' )
 size= getParam( 'size', 400, 'number of cells', [ 100,400 ] )
