@@ -6,7 +6,7 @@ noise= getParam( 'noise', 1.0, 'noise level' )
 size= getParam( 'size', 400, 'number of cells', [ 100,400 ] )
 interference= getParam( 'interference', 'T', 'add interference line', ['T','F'] )
 sc= getParam( 'sc', 'Z1', 'the spacecraft name', ['Z1','Z2','Z3'] )
-font= getParam( 'font', 'xkcd Script', 'font to use', ['xkcd Script','sans'] )
+font= getParam( 'font', 'xkcd Script', 'font to use', ['xkcd Script','sans','Scheme Bk', 'Roboto' ] )
 
 dom.options.canvasFont= font + '-16'
 
