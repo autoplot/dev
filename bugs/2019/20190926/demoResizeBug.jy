@@ -1,4 +1,5 @@
 reset()
 setCanvasSize(600,600)
+print dom.canvases[0].width, 'x', dom.canvases[0].height
 sleep(3000)
 load('https://github.com/autoplot/vap/errorBarsRPI.vap')
