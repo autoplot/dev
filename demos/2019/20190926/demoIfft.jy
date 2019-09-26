@@ -1,0 +1,21 @@
+signal= getDataSet( PWD + 'cow.wav' )
+tt= signal.property(QDataSet.DEPEND_0)
+
+interf= 4000*sin(((tt-tt[0])*'440Hz')*TAU)
+
+signal= signal + interf
+
+plot( signal )
+
+ff= fft( signal, ones(512), 1, monitor.getSubtaskMonitor('forward fft') )
+plot ( ff )
+
+freq= ff.property(QDataSet.DEPEND_1)
+
+r= where( abs( (abs(freq)-'440Hz') ).lt('10Hz') )
+
+ff[:,r,:]= 0.0
+newSignal= ifft( ff, ones(512), 1, monitor.getSubtaskMonitor('inverse fft') )
+
+formatDataSet( signal, '/tmp/cow.interf.wav' )
+formatDataSet( newSignal[:,:,0], '/tmp/cow.nointerf.wav' )
