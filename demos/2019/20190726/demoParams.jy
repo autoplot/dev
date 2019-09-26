@@ -8,7 +8,9 @@ interference= getParam( 'interference', 'F', 'add interference line', ['T','F'] 
 sc= getParam( 'sc', 'Z1', 'the spacecraft name', ['Z1','Z2','Z3'] )
 font= getParam( 'font', 'xkcd Script', 'font to use', ['xkcd Script','sans','Scheme Bk', 'Roboto' ] )
 
+reset()
 dom.options.canvasFont= font + '-16'
+setCanvasSize(800,600)
 
 if ( sc=='Z1' ):
     randomSeed(0)
