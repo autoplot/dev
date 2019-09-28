@@ -1,0 +1,26 @@
+from org.das2.util.filesystem import GitHubFileSystem
+ghfs= GitHubFileSystem.createGitHubFileSystem(URI('https://github.com/autoplot/vap/'))
+fo= ghfs.getFileObject('errorBarsRPI.vap')
+print fo.exists()
+
+iss= fo.getInputStream()
+
+l=0
+c= iss.read()
+while ( c>-1 ):
+    l=l+1
+    c= iss.read()
+
+iss.close()
+print 'length=', l
+
+from org.autoplot.datasource import DataSetURI
+iss= DataSetURI.getInputStream(  URI('https://github.com/autoplot/vap/errorBarsRPI.vap'), monitor )
+l=0
+c= iss.read()
+while ( c>-1 ):
+    l=l+1
+    c= iss.read()
+
+iss.close()
+print 'length=', l
