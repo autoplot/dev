@@ -1,5 +1,11 @@
+anchorType= getParam( 'anchorType', 'data', 'anchor type', ['data','canvas'] )
+pointAtOffset= getParam( 'pointAtOffset', '0.5em', 'offset from point to arrow head', ['','0.5em','1.0em' ] )
+anchorOffset= getParam( 'anchorOffset', '4em,4em', 'offset from target to annotation edge', ['4em,4em','4em,0em' ] )
+count= getParam( 'count', 8, 'number of annotations', [ 4,8 ] )
+
+reset()
 Positions= 'N,NE,E,SE,S,SW,W,NW'.split(',')
-for i in xrange(8):
-    annotation( i, pointAt="50,50", text='ann%s'%Positions[i], anchorType='data',
-                anchorPosition=Positions[i], pointAtOffset='0.5em', anchorOffset='4em,4em',
+for i in xrange(0,count):
+    annotation( i, pointAt="50,50", text='ann%s'%Positions[i], anchorType=anchorType,
+                anchorPosition=Positions[i], pointAtOffset=pointAtOffset, anchorOffset=anchorOffset,
                 background=None )
