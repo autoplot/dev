@@ -1,0 +1,5 @@
+Positions= 'N,NE,E,SE,S,SW,W,NW'.split(',')
+for i in xrange(8):
+    annotation( i, pointAt="50,50", text='ann%s'%Positions[i], anchorType='data',
+                anchorPosition=Positions[i], pointAtOffset='0.5em', anchorOffset='4em,4em',
+                background=None )
