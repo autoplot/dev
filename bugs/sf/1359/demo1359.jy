@@ -1,0 +1,3 @@
+ds= getDataSet( 'https://emfisis.physics.uiowa.edu/Flight/RBSP-A/L2/2014/04/01/rbsp-a_WFR-waveform-continuous-burst_emfisis-L2_20140401T04_v1.3.5.cdf?BuSamples', monitor )
+plot( ds )
+dom.plots[0].xaxis.range= DatumRangeUtil.parseTimeRange('2014-04-01 4:39 to 4:40')
