@@ -1,0 +1,17 @@
+nplots= getParam( 'nplots', 3, 'Number of Plots' )
+timerange= getParam( 'timerange', 'P1D/now', 'timerange to plot' )
+
+param1= getParam( 'uri1', 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=0B000800408DD710' )
+if ( nplots>1 ):
+    param2= getParam( 'uri2', 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=610008002FE00410' )
+if ( nplots>2 ):    
+    param3= getParam( 'uri3', 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=610008002FE00410' )
+
+
+setLayout( nplots )
+plot( 0, param1 )
+if ( nplots>1 ):
+    plot( 1, param2 )
+if ( nplots>2 ):
+    plot( 2, param3 )
+
