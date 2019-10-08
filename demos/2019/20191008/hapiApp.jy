@@ -1,5 +1,5 @@
 nplots= getParam( 'nplots', 3, 'Number of Plots' )
-timerange= getParam( 'timerange', 'P1D/now', 'timerange to plot' )
+timerange= getParam( 'timerange', '2019-07-01', 'timerange to plot' )
 
 param1= getParam( 'uri1', 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=0B000800408DD710' )
 if ( nplots>1 ):
