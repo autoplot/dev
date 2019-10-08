@@ -1,11 +1,11 @@
 nplots= getParam( 'nplots', 3, 'Number of Plots' )
 timerange= getParam( 'timerange', '2019-07-01', 'timerange to plot' )
 
-sens1= getParam( 'sens1', '0B000800408DD710' )
+sens1= getParam( 'sens1', '0B000800408DD710', 'sensor in top plot', [ '0B000800408DD710','8500080044259C10','610008002FE00410']  )
 if ( nplots>1 ):
-    sens2= getParam( 'sens2', '8500080044259C10' )
+    sens2= getParam( 'sens2', '8500080044259C10', 'sensor in second plot', [ '0B000800408DD710','8500080044259C10','610008002FE00410']  )
 if ( nplots>2 ):    
-    sens3= getParam( 'sens3', '610008002FE00410' )
+    sens3= getParam( 'sens3', '610008002FE00410', 'sensor in third plot', [ '0B000800408DD710','8500080044259C10','610008002FE00410']  )
 
 
 setLayout( nplots )
