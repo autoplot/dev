@@ -1,17 +1,17 @@
 nplots= getParam( 'nplots', 3, 'Number of Plots' )
 timerange= getParam( 'timerange', '2019-07-01', 'timerange to plot' )
 
-param1= getParam( 'uri1', '0B000800408DD710' )
+sens1= getParam( 'sens1', '0B000800408DD710' )
 if ( nplots>1 ):
-    param2= getParam( 'uri2', '8500080044259C10' )
+    sens2= getParam( 'sens2', '8500080044259C10' )
 if ( nplots>2 ):    
-    param3= getParam( 'uri3', '610008002FE00410' )
+    sens3= getParam( 'sens3', '610008002FE00410' )
 
 
 setLayout( nplots )
-plot( 0, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + param1+'&timerange='+timerange )
+plot( 0, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens1 + '&timerange=' + timerange )
 if ( nplots>1 ):
-    plot( 1, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + param2+'&timerange='+timerange )
+    plot( 1, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens2 + '&timerange=' + timerange )
 if ( nplots>2 ):
-    plot( 2,  'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' +param3+'&timerange='+timerange )
+    plot( 2, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens3 + '&timerange=' + timerange )
 
