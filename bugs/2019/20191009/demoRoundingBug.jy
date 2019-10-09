@@ -12,3 +12,6 @@ i=0x666600FF
 print i
 i= int(float(i))
 print i, '(so there is no rounding bug, and double can be used to represent any ARGB color)'
+
+c4= Color(0x666600FF,True)
+print c4.getAlpha(), 'Color(int,True) works as well'
