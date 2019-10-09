@@ -1,0 +1,13 @@
+# this shows a bug where createEvents thinks a datumRange is a two-element dataset.
+
+reset()
+
+plot( 0, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=0B000800408DD710&timerange=2019-07-01' )
+plot( 1, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=0B000800408DD710&timerange=2019-07-01' )
+
+tr = '2019-07-01 06:00 to 08:00'
+event0 = createEvents(dataset(datumRange(tr)),Color(0x666600FF))
+event1 = createEvent( None,datumRange(tr),Color(0x666600FF).getRGB(),'Selected Spectrum')
+
+plot(addPlotElement(0),event0)
+plot(addPlotElement(1),event1)
