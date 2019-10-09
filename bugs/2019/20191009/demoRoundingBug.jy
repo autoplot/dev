@@ -1,0 +1,14 @@
+c1= Color(0x666600FF)
+print c1.getAlpha(), '(note Color(int) only uses low 24 bits for RRGGBB color)'
+
+c2= Color( 0.4, 0.0, 1.0, 0.4 )
+print c2.getAlpha(), 'this works'
+
+from org.das2.util import ColorUtil
+c3= ColorUtil.decodeColor('0x666600FF')
+print c3.getAlpha(), 'ColorUtil.decodeColor works as well'
+
+i=0x666600FF
+print i
+i= int(float(i))
+print i, '(so there is no rounding bug, and double can be used to represent any ARGB color)'
