@@ -1,0 +1,12 @@
+setScriptTitle( 'Batch Master Demo' )
+setScriptDescription( '''This demonstrates how parameters are added to scripts, and how 
+   documentation for the script is built.''')
+setScriptLabel( 'BMD' )
+
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+sc= getParam( 'sc', 'A', 'Spacecraft', { 'enum':['A','B'], 'labels':['RBSP-A','RBSP-B'] } )
+
+if ( sc=='A' ):
+    result= 10 - abs(linspace(-10,10,100))
+elif ( sc=='B' ):
+    result= abs(sin(linspace(0,TAU,100)))
