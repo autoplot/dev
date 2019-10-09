@@ -1,0 +1,10 @@
+setScriptTitle( 'Batch Master Demo' )
+setScriptDescription( '''This demonstrates how parameters are added to scripts, and how 
+    documentation for the script is built.''')
+setScriptLabel( 'BMD' )
+
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+sc= getParam( 'sc', 'A', 'Spacecraft', { 'enum':['A','B'], 'labels':['RBSP-A','RBSP-B'] } )
+
+a= annotation( 0, text= tr + sc )
+
