@@ -10,3 +10,4 @@ at the exact values.
 
 The size command returns an array giving the dimensions (number of rows and columns) of the data.
 
+[image](20191010_153810.png)
