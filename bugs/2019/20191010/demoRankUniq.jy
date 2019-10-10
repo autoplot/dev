@@ -1,0 +1,5 @@
+randomSeed(5334)
+ds= floor(randn(5,4)*10)
+s= sort( ds )
+u= uniq( ds,s )
+print u
