@@ -1,0 +1,5 @@
+rr= ripples(20,20)
+print 'extent shows the minimum and maximum values found in datasets'
+print extent(rr), (extent(rr)).property(QDataSet.BINS_0)
+print 'reduceMin and reduceMax reduce along a dimension'
+print reduceMin(reduceMin(rr,0),0), 'to', reduceMax(reduceMax(rr,0),0)
