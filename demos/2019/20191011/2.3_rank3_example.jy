@@ -1,0 +1,4 @@
+scPos= getDataSet( 'http://autoplot.org/data/somedata.cdf?doDep=no&SC_pos_GSE' )
+print 'scPos should have rank 2: ', scPos.rank()
+print 'slice of data: ', scPos.slice(0)
+print 'and one measurement: ', scPos.slice(0).slice(0)

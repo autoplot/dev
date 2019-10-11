@@ -1,0 +1,26 @@
+ds= getDataSet( 'vap+hapi:https://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&timerange=2019-09-01/2019-09-11' )
+plot( unbundle(ds,'Humidity') )
+
+bds= ds.property( QDataSet.BUNDLE_1 )
+print bds.property( QDataSet.TITLE, 1 )   #  'Wind Speed'  
+print bds.property( QDataSet.LABEL, 2 )   #  'DewPoint'
+print bds.property( QDataSet.UNITS, 2 )   #  'deg F'
+print bds.property( QDataSet.NAME, 3 )    #  'Humidity'
+print bds.property( QDataSet.UNITS, 3 )   #  'percent'
+
+print ds.rank()                                 #   '2'
+bds= ds.property( QDataSet.BUNDLE_1 )  
+print bds.property( QDataSet.FILL_VALUE, 4 )    #  -1e31
+print bds.property( QDataSet.LABEL, 4 )         #  'WindChill'
+ 
+dep0= ds.property( QDataSet.DEPEND_0 )
+for i in range(3):
+    print dep0[i].svalue(),
+    for j in range(ds.length(0)):
+        print ds[i,j].value(),
+    print ''
+    
+ds.slice(0)                               #   results in the tuple of individual measurements
+
+print unbundle( ds, 2 )           # results in the dew point column
+print unbundle( ds, 'Humidity' )  # results in the dataset with this name.

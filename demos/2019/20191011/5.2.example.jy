@@ -1,0 +1,14 @@
+ds= getDataSet( 'https://cdaweb.gsfc.nasa.gov/istp_public/data/polar/hydra/hyd_h0/2000/po_h0_hyd_20000101_v01.cdf?ELECTRON_DIFFERENTIAL_ENERGY_FLUX' )
+print ds.rank()                          # 2
+print ds.property( QDataSet.DEPEND_0 )   # EPOCH
+print ds.property( QDataSet.DEPEND_1 )   # ENERGY_ELE
+ 
+from org.das2.qds import DataSetUtil
+print DataSetUtil.isQube(ds) # 1 (True)
+ 
+dep0= ds.property( QDataSet.DEPEND_0 )
+print dep0.property( QDataSet.UNITS )
+ 
+dep1=  ds.property( QDataSet.DEPEND_1 )
+print dep1.property( QDataSet.UNITS )
+print dep1.property( QDataSet.SCALE_TYPE )  # log

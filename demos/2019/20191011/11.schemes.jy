@@ -1,0 +1,3 @@
+from org.das2.qds.examples import Schemes
+plot( 0, Schemes.simpleSpectrogram())
+plot( 1, Schemes.rank2Waveform())

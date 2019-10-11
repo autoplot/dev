@@ -1,0 +1,4 @@
+ds= randomn(5334,10000)
+tt= timegen('2011-01-01T00:00', '1 days', 10000 )
+plot( 0, tt, ds )
+plot( 1, tt, smooth(ds,101) )
