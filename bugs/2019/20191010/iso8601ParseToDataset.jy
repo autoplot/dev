@@ -1,0 +1,16 @@
+# Connor at Iowa run into a strange problem where his script would run
+# interactively but failed in batch mode.
+
+tr= getParam( 'timerange', '2014-01-09T00:00/PT1H', 'timerange to load' )
+
+print '---string to datumRange to dataset--'
+ds= dataset(datumRange(tr))
+print ds.rank()
+print ds.property(QDataSet.UNITS) 
+print datumRange(ds).width()
+
+print '---string to dataset---'
+ds= dataset(tr)
+print ds.rank()
+print ds.property(QDataSet.UNITS) 
+print datumRange(ds).width()
