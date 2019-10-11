@@ -1,0 +1,9 @@
+
+ds= getDataSet( 'vap+cdaweb:ds=OMNI_HRO2_5MIN&filter=omni&id=proton_density&timerange=2018-10-01' )
+print ds.property( QDataSet.LABEL )     # "Proton Density (n/cc)"
+print ds.property( QDataSet.UNITS )     # "n/cc"
+ 
+epoch= ds.property( QDataSet.DEPEND_0 ) 
+print epoch.property( QDataSet.UNITS )  # "cdfEpoch"
+ 
+ 

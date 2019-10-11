@@ -1,0 +1,6 @@
+reset()
+ds= getDataSet( 'http://autoplot.org/data/wav/chickadeesong.wav' )   # rank 1 dataset
+print ds.property( QDataSet.DEPEND_0 ).property( QDataSet.UNITS )    # seconds
+ps= fftPower( ds, 1024, 2, 'Hanning', monitor )          # returns rank 2 power spectrum
+print ps.property(QDataSet.DEPEND_1)                     # 'dataset[511] (Hz)'
+plot( ps )

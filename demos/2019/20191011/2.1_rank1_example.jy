@@ -1,0 +1,3 @@
+# read in rank 1 dataset from CDAWeb
+ds= getDataSet('http://autoplot.org/data/somedata.cdf?Magnitude&doDep=no')
+print ds  # 'Magnitude[24] (nT)'

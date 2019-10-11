@@ -1,0 +1,11 @@
+seed=5334
+x = randomn(seed,10,5)
+print '%5.2f' % x[0,0]
+(nrow,ncol)= size(x)     # this would raise an exception if the data is not a Qube.
+for i in xrange(nrow):
+   for j in xrange(ncol):
+      print  '%5.2f' % x[i,j],      # trailing comma suppresses the newline
+   print ''
+ 
+scPos= getDataSet( 'http://autoplot.org/data/somedata.cdf?doDep=no&SC_pos_GSE' )
+print 'scPos should have rank 2: ', scPos.rank()

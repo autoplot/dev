@@ -1,0 +1,11 @@
+from org.das2.qds.examples.Schemes import complexBundleDataSet2
+ds= complexBundleDataSet2()
+v= unbundle( ds, 'V' )
+plot(v)
+
+bds= ds.property( QDataSet.BUNDLE_1 )
+print bds.property( QDataSet.NAME, 4 )
+print bds.property( QDataSet.START_INDEX, 4 )   # 2, because Vx is at 2.
+istart= bds.property( QDataSet.START_INDEX, 4 )
+print bds.property( QDataSet.ELEMENT_NAME, istart )        # "V"
+print bds.property( QDataSet.ELEMENT_DIMENSIONS, istart )  # "[3]"

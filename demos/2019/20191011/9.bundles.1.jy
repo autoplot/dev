@@ -1,0 +1,8 @@
+ll= labels( ['data-x','data-y','data-z'] )
+ds= zeros(201,3)
+ds[:,0]= sin( linspace(0,6*PI,201) )
+ds[:,1]= sin( PI/3+linspace(0,6*PI,201) )
+ds[:,2]= sin( 2*PI/3+linspace(0,6*PI,201) )
+ds.putProperty( QDataSet.DEPEND_0, linspace( '2019-10-10T00:30', '2019-10-10T19:30', 201 ) )
+ds.putProperty( QDataSet.DEPEND_1, ll )
+plot(ds)
