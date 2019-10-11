@@ -1,0 +1,16 @@
+randomSeed(5334)
+ds= floor(randu(5,4)*10)
+
+ds1= flatten( ds )
+print ds1
+ds1= ds1[:,-1]
+s= sort( ds1 )
+u= uniq( ds1,s )
+ds1= ds1[u]
+for ds11 in ds1:
+    print ds11,
+print ''
+
+s= sort( ds )
+u= uniq( ds,s )
+print u
