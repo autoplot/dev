@@ -1,0 +1,5 @@
+# setting up git to use public/private keys
+* Set up public/private keys with github.  This needs to be documented.
+* Once keys are set up, simply "git clone git@github.com:autoplot/dev.git"
+
+
