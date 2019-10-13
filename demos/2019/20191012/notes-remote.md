@@ -4,6 +4,7 @@
 
 See also https://help.github.com/en/articles/changing-a-remotes-url
 
+# Resetting URL of existing clone
 ~~~~~
 unix> git remote set-url origin git@github.com:autoplot/dev.git
 unix> more .git/config
