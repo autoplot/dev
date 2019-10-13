@@ -1,0 +1,15 @@
+# write script to run every script on github.
+
+root= 'https://github.com/autoplot/dev/demos/'
+
+def doDirectory( s ):
+    ff= listDirectory(s)
+    for f in ff:
+        if ( f.endswith('/') ):
+            doDirectory( s + f )
+        else:
+            print 'java -jar autoplot.jar --script=' + s + f
+
+doDirectory( root )
+
+
