@@ -1,5 +1,5 @@
 # setting up git to use public/private keys
-* Set up public/private keys with github, see https://github.com/settings/ssh.
+* Set up public/private keys with github, see https://github.com/settings/ssh after logging in.
 * to verify the fingerprint of a public key, use on linux: "ssh-keygen -lf ~/.ssh/id_rsa.pub"
 * Once keys are set up, simply "git clone git@github.com:autoplot/dev.git"
 
