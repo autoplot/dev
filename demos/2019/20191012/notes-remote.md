@@ -2,4 +2,9 @@
 * Set up public/private keys with github.  This needs to be documented.
 * Once keys are set up, simply "git clone git@github.com:autoplot/dev.git"
 
+See also https://help.github.com/en/articles/changing-a-remotes-url
 
+~~~~~
+unix> git remote set-url origin git@github.com:autoplot/dev.git
+unix> more .git/config
+~~~~~
