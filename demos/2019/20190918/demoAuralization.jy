@@ -1,1 +1,44 @@
+submon= monitor.getSubtaskMonitor
 
+t=[1,2,3,4,5]
+f=[440,480,880,220,440]
+tt= linspace( 0,6, 6*80000+1 )
+
+ds= zeros( tt.length() )
+for i in xrange(5):
+    ds= ds + sin( f[i] * 2 * TAU * tt ) * exp( -1 * ( 3*(tt-t[i]) )**2 )
+
+tt.putProperty( QDataSet.UNITS, Units.seconds )
+ds= link( tt, ds )
+
+setLayout(2)
+plot( ds )
+plot( 1, fftPower( ds, 2048,  submon('fft Power') ), zrange=[1e-5,1e-3], yrange=[0,2000] )
+
+currentPosition=None
+
+from org.das2.graph import Painter
+
+class MyPainter( Painter ):
+    def paint(self,g):
+        global currentPosition
+        print 'currentPosition=', currentPosition
+        if ( currentPosition==None ): return
+        ix= dom.plots[0].xaxis.controller.dasAxis.invTransform(currentPosition)
+        g.drawLine( ix, 0, ix, 1000 )
+        
+        
+def updatePosition( evt ):
+    global currentPosition
+    currentPosition= evt.newValue
+    dom.canvases[0].controller.dasCanvas.repaint()
+
+dom.plots[0].controller.dasPlot.setTopDecorator(MyPainter())
+dom.plots[1].controller.dasPlot.setTopDecorator(MyPainter())
+
+from org.das2.graph import Auralizor
+a= Auralizor(ds,propertyChange=updatePosition)
+a.scale= True
+print 'playing sound'
+a.playSound()
+print 'done playing sound'
