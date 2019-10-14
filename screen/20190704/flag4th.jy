@@ -1,6 +1,6 @@
 # download image to dataset, then interpolate red, green, and blue channels at
 # random points.  rgbColorDataset creates a special dataset encoding rgb values to
-# use for each point.
+# use for each point.  20191014
 
 ds= getDataSet( PWD+'american-flag.jpg')
 
