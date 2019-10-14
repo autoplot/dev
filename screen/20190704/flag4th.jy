@@ -2,7 +2,7 @@
 # random points.  rgbColorDataset creates a special dataset encoding rgb values to
 # use for each point.
 
-ds= getDataSet('http://www.researchhistory.org/wp-content/uploads/2011/05/american-flag.jpg')
+ds= getDataSet( PWD+'american-flag.jpg')
 
 x= randn(4000) *30  + ds.length()/2 
 y= randn(4000) *30  + ds.length(0)/2
