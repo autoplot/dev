@@ -9,6 +9,7 @@ if ( nplots>2 ):
 
 
 setLayout( nplots )
+waitUntilIdle()
 plot( 0, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens1 + '&timerange=' + timerange )
 if ( nplots>1 ):
     plot( 1, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens2 + '&timerange=' + timerange )
