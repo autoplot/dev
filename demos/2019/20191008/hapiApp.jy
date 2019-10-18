@@ -16,4 +16,4 @@ if ( nplots>1 ):
 if ( nplots>2 ):
     plot( 2, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens3 + '&timerange=' + timerange )
 
-annotation(text='number of rows: '+len(dom.canvas.rows))
+annotation(text='number of rows: '+len(dom.canvases[0].rows))
