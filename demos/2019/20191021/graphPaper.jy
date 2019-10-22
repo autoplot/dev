@@ -2,8 +2,8 @@ setScriptTitle('Grid Maker')
 setScriptDescription('draws graph paper')
 
 s= getParam( 's', 0.25, 'grid size in inches' )
-#c= getParam( 'c', 0xD0D0D0, 'color', { 'values':[  0xD0D0D0, 0xF0D0F0, 0x000000 ], 'labels':[ 'light grey', 'light purple', 'black' ] } )
-c= getParam( 'c', 0xD0D0D0, 'color', [  0xD0D0D0, 0xF0D0F0, 0x000000 ] )
+c= getParam( 'c', 0xD0D0D0, 'color', { 'enum':[  0xD0D0D0, 0xF0D0F0, 0x000000 ], 'labels':[ 'light grey', 'light purple', 'black' ] } )
+#c= getParam( 'c', 0xD0D0D0, 'color', [  0xD0D0D0, 0xF0D0F0, 0x000000 ] )
 hs= getParam( 'hs', 'hexagon', 'cell shape', [ 'square', 'hexagon' ] )
 
 if ( PWD.startswith('file:') ):
