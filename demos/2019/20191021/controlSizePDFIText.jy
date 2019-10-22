@@ -1,0 +1,40 @@
+from com.itextpdf.text import Document,Rectangle,Paragraph
+from com.itextpdf.awt import PdfGraphics2D
+from com.itextpdf.text import PageSize
+from com.itextpdf.text.pdf import PdfWriter
+from com.itextpdf.text.pdf import PdfContentByte
+from java.io import FileOutputStream
+
+pagesize = PageSize.LETTER;
+
+document = Document( Rectangle(8.5*72,11*72), 0,0,0,0 )
+
+if ( PWD.startswith('file:') ):
+    filename= PWD[5:]+'graphPaper.pdf'
+else:
+    filename= '/tmp/autoplot/graphPaper.pdf'
+    mkdir('/tmp/autoplot/')
+
+out= FileOutputStream(filename)
+writer= PdfWriter.getInstance( document, out );
+
+document.open()
+
+print pagesize.width
+
+canvas = writer.getDirectContent()
+x=0
+y=0
+while ( x < pagesize.width ):
+    while ( y < pagesize.height ):
+        canvas.circle(x, y, 1)
+        y += 72
+        print x,y
+    y= 0
+    x += 72
+
+canvas.fill();
+
+document.close()
+out.close()
+print 'wrote '+filename
