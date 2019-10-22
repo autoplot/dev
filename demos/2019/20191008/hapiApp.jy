@@ -9,9 +9,11 @@ if ( nplots>2 ):
 
 
 setLayout( nplots )
+waitUntilIdle()
 plot( 0, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens1 + '&timerange=' + timerange )
 if ( nplots>1 ):
     plot( 1, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens2 + '&timerange=' + timerange )
 if ( nplots>2 ):
     plot( 2, 'vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=' + sens3 + '&timerange=' + timerange )
 
+annotation(text='number of rows: '+str(len(dom.canvases[0].rows)) )
