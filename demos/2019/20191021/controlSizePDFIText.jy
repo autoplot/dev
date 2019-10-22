@@ -1,3 +1,5 @@
+# Use itext library to make page with points at every inch.
+
 from com.itextpdf.text import Document,Rectangle,Paragraph
 from com.itextpdf.awt import PdfGraphics2D
 from com.itextpdf.text import PageSize
