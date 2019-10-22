@@ -1,0 +1,84 @@
+setScriptTitle('Grid Maker')
+setScriptDescription('draws graph paper')
+
+s= getParam( 's', 0.25, 'grid size in inches' )
+#c= getParam( 'c', 0xD0D0D0, 'color', { 'values':[  0xD0D0D0, 0xF0D0F0, 0x000000 ], 'labels':[ 'light grey', 'light purple', 'black' ] } )
+c= getParam( 'c', 0xD0D0D0, 'color', [  0xD0D0D0, 0xF0D0F0, 0x000000 ] )
+hs= getParam( 'hs', 'hexagon', 'cell shape', [ 'square', 'hexagon' ] )
+
+if ( PWD.startswith('file:') ):
+    filename= PWD[5:]+'graphPaper.pdf'
+else:
+    filename= '/tmp/autoplot/graphPaper.pdf'
+    mkdir('/tmp/autoplot/')
+filename= getParam( 'filename', filename )
+
+pt= int(s*72)
+w= int(8.5*72)
+h= int(11.0*72)
+
+from org.das2.graph import Painter
+from java.awt.geom import Line2D,GeneralPath
+
+class SquarePainter( Painter ):
+    def paint( self, g ):
+        g.color= Color(c)
+        pt= int(s*72)
+        for i in xrange( 0, w, pt ):
+            g.drawLine( i, 0, i, h )
+        for j in xrange( 0, h, pt ):
+            g.drawLine( 0, j, w, j )
+
+class HexPainter( Painter ):
+    def paint( self, g ):
+        g.color= Color(c)
+        nx= w/pt
+        ny= h/int(pt*sqrt(3)/2)
+        for i in range( 0, nx ):
+            evenodd=0
+            for j in range( 0, ny ):
+                evenodd= evenodd+1
+                xx= i*pt*3 + pt*3./2. * (evenodd%2)
+                yy= j*pt*sqrt(3)/2. 
+                gp= GeneralPath()
+                for iside in xrange(0,7):
+                    x1= xx + cos(iside*TAU/6) * pt
+                    y1= yy + sin(iside*TAU/6) * pt
+                    if ( iside==0 ):
+                        gp.moveTo( x1, y1 )
+                    else:
+                        gp.lineTo( x1, y1 )
+                g.draw(gp)
+                
+
+# now write PDF
+from com.itextpdf.text import Document,Rectangle,Paragraph
+from com.itextpdf.awt import PdfGraphics2D
+from com.itextpdf.text import PageSize
+from com.itextpdf.text.pdf import PdfWriter
+from com.itextpdf.text.pdf import PdfContentByte
+from java.io import FileOutputStream
+
+document = Document( Rectangle(8.5*72,11*72), 0,0,0,0 )
+
+out= FileOutputStream(filename)
+
+writer= PdfWriter.getInstance( document, out );
+
+document.open()
+
+cb = writer.getDirectContent()
+cb.saveState()
+g= PdfGraphics2D( cb, w, h, True)
+
+if ( hs=='hexagon' ):
+    HexPainter().paint( g )
+else:
+    SquarePainter().paint(g)
+
+g.dispose()
+cb.restoreState()
+
+document.close()
+
+setStatus( 'wrote to '+filename )
