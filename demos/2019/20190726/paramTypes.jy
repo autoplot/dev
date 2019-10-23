@@ -18,6 +18,7 @@ print 'i=', type(i), i
 print 'fe=', type(fe), fe
 print 'f=', type(f), f
 print 'sc=', type(sc), sc
+print 'sc2=', type(sc2), sc2
 print 'tr=', type(tr), tr
 print 'resourceURI=', type(resourceURI), resourceURI
 
