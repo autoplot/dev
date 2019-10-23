@@ -1,8 +1,28 @@
 from org.das2.util import ColorUtil
 from java.awt import Color
 
-color= getParam( 'color1', Color.RED, 'line color', [ Color.BLUE, Color.RED, ColorUtil.decode('saddle brown') ] )
-sides= getParam( 'sides', 4, 'number of sides', { 'values':[ 3,4,6], 'labels':['triangles','squares','hexagons'] } )
+color1= getParam( 'color1', Color.RED )
+color2= getParam( 'color2', Color.RED, 'line color', [ Color.BLUE, Color.RED, ColorUtil.decodeColor('saddle brown') ] )
+sides= getParam( 'sides', 4, 'number of sides', { 'values':[ 3,4,6], 'labels':['triangle','square','hexagon'] } )
 
 print params
 
+from org.das2.graph import Painter
+from java.awt.geom import GeneralPath
+class MyPainter( Painter ):
+    def paint( self, g ):
+        gp= GeneralPath()
+        cx= 100
+        cy= 100
+        r= 50
+        
+        gp.moveTo( cx+r, cy )
+        for i in xrange(1,sides+1):
+            gp.lineTo( cx + r * cos( TAU * i / sides ), cy - r * sin( TAU * i / sides ) )
+        
+        g.color= color1
+        g.fill( gp )
+        g.color= color2
+        g.draw( gp )
+
+dom.canvases[0].controller.dasCanvas.addTopDecorator(MyPainter())
