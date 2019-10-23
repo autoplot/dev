@@ -9,7 +9,7 @@ f= getParam( 'f', 3.0, 'float parameter (0-10.0)' )
 sc= getParam( 'sc', 'c1', 'the spacecraft name', ['c1','c2','c3','c4'] )
 tr= getParam( 'timerange', '2012-04-18', 'timerange to load' )
 resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/rainfall_KIOW_20120522_0252.html', 'example file to load' )
-sc= getParam( 'sc', 1, 'int parameter with labels', { values:[1,2], labels:['RBSP-A','RBSP-B'] } )
+sc= getParam( 'sc', 1, 'int parameter with labels', { 'values':[1,2], 'labels':['RBSP-A','RBSP-B'] } )
 
 print params
 print 'filt=', type(filt), filt
