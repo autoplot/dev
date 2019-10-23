@@ -1,4 +1,5 @@
 from org.das2.util import ColorUtil
+from java.awt import Color
 
 color= getParam( 'color1', Color.RED, 'line color', [ Color.BLUE, Color.RED, ColorUtil.decode('saddle brown') ] )
 sides= getParam( 'sides', 4, 'number of sides', { 'values':[ 3,4,6], 'labels':['triangles','squares','hexagons'] } )
