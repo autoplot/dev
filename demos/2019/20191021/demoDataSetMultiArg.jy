@@ -10,7 +10,7 @@ plot( 1, dataset( xx, zz ) )
 plot( 2, dataset( zz, title='my data 2' ) )
 plot( 3, dataset( xx, yy, yy, randn( 40,40,40 ), title='my data 3' ) )
 
-ds= dataset( [1,2,3,4], Units.MeV )
+ds= dataset( [1,2,3,4], units=Units.MeV )
 print ds
 
 annotation(0, anchorPosition='NW',anchorOffset='-1em,0',
