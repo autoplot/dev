@@ -1,0 +1,23 @@
+setScriptDescription('''
+GitHub shows a strange bug where Autoplot doesn't see changes on the site because Java is doing some strange
+caching.  Run this to see the ETags returned, and you can compare these against the ETag found by wget.  On
+2019-10-24, these are different.  Note two other GitLabs instances, https://git.uiowa.edu and 
+https://abbith.physics.uiowa.edu/ do not show this problem.
+''')
+
+from org.das2.util import LoggerManager
+from java.util.logging import Level
+
+logger= LoggerManager.getLogger('das2.filesystem.http.util')
+logger.level= Level.FINE
+from org.das2.util.filesystem import FileSystem
+fs= FileSystem.create('https://github.com/autoplot/dev/demos/2019/20191023/')
+f= fs.getFileObject('updates.jy')
+
+p= fs.getProtocol()  # hack Autoplot to make this public (next release will make this public)
+m= p.getMetadata( f )
+from org.das2.util.filesystem import WebProtocol
+print m.get( WebProtocol.META_ETAG )
+print f.getFile(), f.getFile().length()
+
+# wget -O - --save-headers https://github.com/autoplot/dev/raw/master/demos/2019/20191023/updates.jy 2> /dev/null | grep ETag
