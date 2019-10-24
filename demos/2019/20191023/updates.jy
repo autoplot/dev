@@ -3,4 +3,4 @@ s= randomSeed(155)
 ds= accum(randn(100))
 plot( ds-mean(ds) )
 
-#123456789
+#123456
