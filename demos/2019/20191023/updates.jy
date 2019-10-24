@@ -1,5 +1,5 @@
 # change the value passed into randomSeed and see if Autoplot detects the change.
-s= randomSeed(5441)
+s= randomSeed(5444)
 ds= accum(randn(100))
 plot( ds-mean(ds) )
 
