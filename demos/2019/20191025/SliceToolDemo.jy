@@ -31,6 +31,7 @@ def mouse( evt ):
    print ds
    col= collapse0( ds )
    plot( 1, col, title='FESA!c'+str(evt.getXRange()) )
+   plot( 2, None )
    invokeLater( doFit, col )
    
 addMouseModule( dom.plots[0], "doFit", mouse )
