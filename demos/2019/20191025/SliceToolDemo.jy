@@ -1,4 +1,4 @@
-loadVap( PWD + 'layout.vap' )
+load( PWD + 'layout.vap' )
 
 from org.das2.qds.util import LinFit
 plot( 'vap+cdaweb:ds=RBSPA_REL04_ECT-HOPE-SCI-L2SA&filter=rbsp&id=FESA&timerange=2019-01-01&where=HOPE_ENERGY_Ele.eq(mode)' )
