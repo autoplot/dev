@@ -1,3 +1,10 @@
+setScriptTitle('Slice Tool Demo')
+setScriptDescription('''
+This demonstrates how a script can be used to create a digitizing app.  Data is loaded in
+the top panel, and the scientist draws a box to select a time range in the top panel.  
+This will run a model on the time-averaged of the data in the interval.
+''')
+
 load( PWD + 'layout.vap' )
 
 from org.das2.qds.util import LinFit
