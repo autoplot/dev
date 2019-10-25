@@ -11,6 +11,14 @@ load( PWD + 'layout.vap?timerange='+tr )
 
 from org.das2.qds.util import LinFit
 
+def updateFit( logx, A, B ):
+    xx= exp(logx)
+    xx= putProperty( xx, QDataSet.UNITS, Units.lookupUnits('eV') )
+    yy= A + logx * B
+    yy= exp(yy) 
+    yy= putProperty( yy, QDataSet.UNITS, Units.lookupUnits('s!E-1!Ncm!E-2!Nster!E-1!NkeV!E-1!N') )
+    plot( 2, xx, yy, color=Color.RED )
+    
 def doFit( ds ):
     sleep(1000)
     print 'do fit'
@@ -18,13 +26,7 @@ def doFit( ds ):
     lx= log(x)
     ly= log(ds)
     fit= LinFit(lx,ly)
-    xx= lx
-    xx= exp(xx)
-    xx= putProperty( xx, QDataSet.UNITS, Units.lookupUnits('eV') )
-    yy= fit.a + lx * fit.b
-    yy= exp(yy) 
-    yy= putProperty( yy, QDataSet.UNITS, Units.lookupUnits('s!E-1!Ncm!E-2!Nster!E-1!NkeV!E-1!N') )
-    plot( 2, xx, yy, color=Color.RED )
+    updateFit( lx, fit.a, fit.b )
     
 def mouse( evt ):
    ds= dom.plotElements[0].controller.dataSet
