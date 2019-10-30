@@ -1,0 +1,37 @@
+# title: disable SSH Key verification
+# label: disable SSH Key verification
+# This turns off certificate checking.  
+# Note this makes the Java process volnerable to a "man-in-the-middle" 
+# attack because you are no longer checking authenticity, use at your own risk!
+
+from javax.net.ssl import TrustManager,X509TrustManager
+
+class MyTrustManager( X509TrustManager ):
+    def getAcceptedIssuers(self):
+        return None
+    def checkClientTrusted(self,certs,authType):
+        #print 'checkClientTrusted'
+        pass
+    def checkServerTrusted(self,certs,authType):
+        #print 'checkServerTrusted'
+        pass
+
+from javax.net.ssl import SSLContext
+from java.security import SecureRandom
+sc = SSLContext.getInstance("SSL")
+
+sc.init( None, [MyTrustManager()], SecureRandom())
+
+from javax.net.ssl import HttpsURLConnection
+HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory())
+    
+from javax.net.ssl import HostnameVerifier
+class MyHostnameVerifier( HostnameVerifier ):
+    def verify(self,hostname,session):
+        #print 'verify hostname ', hostname
+        return True
+                
+HttpsURLConnection.setDefaultHostnameVerifier(MyHostnameVerifier())
+
+from javax.swing import JOptionPane
+JOptionPane.showMessageDialog( getViewWindow(), 'SSL verification disabled')
