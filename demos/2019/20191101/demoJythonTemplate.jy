@@ -1,0 +1,8 @@
+reset()
+ann= annotation()
+
+def doTemplate( d ):
+    t= 'Name: %(name)s, Age: %(age).2f' % d
+    ann.text= t
+
+doTemplate( { "name":"Jeremy", "age":47.9 } )
