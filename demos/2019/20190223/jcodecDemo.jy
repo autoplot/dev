@@ -1,5 +1,8 @@
 import sys
-    
+
+reset()
+setCanvasSize(800,600)
+
 addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec-javase/0.2.2/jcodec-javase-0.2.2.jar',monitor.getSubtaskMonitor('jar1'))
 addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec/0.2.2/jcodec-0.2.2.jar',monitor.getSubtaskMonitor('jar2'))
 
