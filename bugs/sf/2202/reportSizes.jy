@@ -1,15 +1,33 @@
 from javax.swing import JPanel, JLabel,Timer
-from java.awt.event import ActionListener
+from java.awt.event import ActionListener,ComponentAdapter
+import java.lang.Exception
+
 j= JPanel()
 l= JLabel('data will go here')
 j.add( l )
 
 getApplication().setBottomPanel(j)
 
-class MyActionListener(ActionListener):
-    def actionPerformed(self,evt):
-        ac= dom.canvases[0]
-        dc= dom.canvases[0].controller.dasCanvas
-        l.text= '%dx%d    %dx%d' % ( ac.width, ac.height, dc.width, dc.height )
-    
-Timer(1000,MyActionListener()).start()
+def checkSame():
+    ac= dom.canvases[0]
+    dc= dom.canvases[0].controller.dasCanvas
+    ico= ''
+    if ( ac.width!=dc.width or ac.height!=dc.height ):
+        peekAt( ac )
+        l.foreground= Color.ORANGE
+    else:
+        l.foreground= None
+    l.text= '%dx%d    %dx%d' % ( ac.width, ac.height, dc.width, dc.height )
+
+#class MyActionListener(ActionListener):
+#    def actionPerformed(self,evt):
+#        #checkSame()
+#
+#Timer(1000,MyActionListener()).start()
+
+class MyComponentAdapter( ComponentAdapter ):
+    def componentResized( self, evt ):
+        print evt, '***'
+        checkSame()
+        
+dom.canvases[0].controller.dasCanvas.addComponentListener(MyComponentAdapter())

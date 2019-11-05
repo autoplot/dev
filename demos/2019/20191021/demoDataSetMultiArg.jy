@@ -1,0 +1,20 @@
+zz= distance(40,40,12,14,5,5)
+#zz.makeImmutable() # The dataset command should probably make its data immutable
+xx= linspace(30,69,40)
+yy= linspace(20,59,40)
+
+setLayout( 2,2 )
+randomSeed(5443)
+plot( 0, dataset( xx, yy, zz, title='my data 0' ) )
+plot( 1, dataset( xx, zz ) )
+plot( 2, dataset( zz, title='my data 2' ) )
+plot( 3, dataset( xx, yy, yy, randn( 40,40,40 ), title='my data 3' ) )
+
+ds= dataset( [1,2,3,4], units=Units.MeV )
+print ds
+
+annotation(0, anchorPosition='NW',anchorOffset='-1em,0',
+    text='Note zz is mutable so dataset command modifies', 
+    rowId='', columnId='marginColumn_0',
+    background=None )
+

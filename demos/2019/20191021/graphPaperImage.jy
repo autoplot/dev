@@ -1,0 +1,77 @@
+setScriptTitle('Grid Maker')
+setScriptDescription('draws graph paper')
+
+s= getParam( 's', 1.0, 'grid size in inches' )
+c= getParam( 'c', 0xF0D0F0, 'color', { 'enum':[  0xD0D0D0, 0xF0D0F0, 0x000000 ], 'labels':[ 'light grey', 'light purple', 'black' ] } )
+bk= getParam( 'bk', 0xFFFFFF, 'color', [ 0x000000, 0x808080, 0x202020, 0xFFFFFF, 0xE0E0E0 ] )
+#c= getParam( 'c', 0xD0D0D0, 'color', [  0xD0D0D0, 0xF0D0F0, 0x000000 ] )
+hs= getParam( 'hs', 'square', 'cell shape', [ 'square', 'hexagon' ] )
+h= getParam( 'h', 1200, 'image height' )
+w= getParam( 'w', 1920, 'image width' )
+pixelPitch= getParam( 'pixelPitch', 0.270, 'width of pixels in mm' )
+dpi= getParam( 'dpi', -1, 'dots per inch' )
+
+if ( dpi==-1 ):
+   dpi= 25.4/pixelPitch
+    
+if ( PWD.startswith('file:') ):
+    filename= PWD[5:]+'graphPaper.png'
+else:
+    filename= '/tmp/autoplot/graphPaper.png'
+    mkdir('/tmp/autoplot/')
+filename= getParam( 'filename', filename )
+
+pt= int(s*dpi)
+
+from java.awt.image import BufferedImage
+image= BufferedImage(w,h,BufferedImage.TYPE_INT_RGB )
+
+from org.das2.graph import Painter
+from java.awt.geom import Line2D,GeneralPath
+
+class SquarePainter( Painter ):
+    def paint( self, g ):
+        pt= int(s*72)
+        for i in xrange( 0, w, pt ):
+            g.drawLine( i, 0, i, h )
+        for j in xrange( 0, h, pt ):
+            g.drawLine( 0, j, w, j )
+
+class HexPainter( Painter ):
+    def paint( self, g ):
+        nx= w/pt
+        ny= h/int(pt*sqrt(3)/2)
+        for i in range( 0, nx ):
+            evenodd=0
+            for j in range( 0, ny ):
+                evenodd= evenodd+1
+                xx= i*pt*3 + pt*3./2. * (evenodd%2)
+                yy= j*pt*sqrt(3)/2. 
+                gp= GeneralPath()
+                for iside in xrange(0,7):
+                    x1= xx + cos(iside*TAU/6) * pt
+                    y1= yy + sin(iside*TAU/6) * pt
+                    if ( iside==0 ):
+                        gp.moveTo( x1, y1 )
+                    else:
+                        gp.lineTo( x1, y1 )
+                g.draw(gp)
+                
+
+# now write PNG
+from java.io import FileOutputStream
+
+g= image.getGraphics()
+g.color= Color(bk)
+g.fillRect( 0, 0, w, h )
+g.color= Color(c)
+if ( hs=='hexagon' ):
+    HexPainter().paint( g )
+else:
+    SquarePainter().paint(g)
+
+g.dispose()
+
+writeToPng( image, filename, None )
+print 'wrote to '+filename 
+setStatus( 'wrote to '+filename )

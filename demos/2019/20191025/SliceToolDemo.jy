@@ -1,0 +1,37 @@
+setScriptTitle('Slice Tool Demo')
+setScriptDescription('''
+This demonstrates how a script can be used to create a digitizing app.  Data is loaded in
+the top panel, and the scientist draws a box to select a time range in the top panel.  
+This will run a model on the time-averaged of the data in the interval.
+''')
+
+load( PWD + 'layout.vap' )
+
+from org.das2.qds.util import LinFit
+plot( 0, 'vap+cdaweb:ds=RBSPA_REL04_ECT-HOPE-SCI-L2SA&filter=rbsp&id=FESA&timerange=2019-01-01&where=HOPE_ENERGY_Ele.eq(mode)' )
+
+def doFit( ds ):
+    sleep(1000)
+    print 'do fit'
+    x= ds.property( QDataSet.DEPEND_0 )
+    lx= log(x)
+    ly= log(ds)
+    fit= LinFit(lx,ly)
+    xx= lx
+    xx= exp(xx)
+    xx= putProperty( xx, QDataSet.UNITS, Units.lookupUnits('eV') )
+    yy= fit.a + lx * fit.b
+    yy= exp(yy) 
+    yy= putProperty( yy, QDataSet.UNITS, Units.lookupUnits('s!E-1!Ncm!E-2!Nster!E-1!NkeV!E-1!N') )
+    plot( 2, xx, yy, color=Color.RED )
+    
+def mouse( evt ):
+   ds= dom.plotElements[0].controller.dataSet
+   ds= trim( ds, evt.getXRange() )
+   print ds
+   col= collapse0( ds )
+   plot( 1, col, title='FESA!c'+str(evt.getXRange()) )
+   plot( 2, None )
+   invokeLater( doFit, col )
+   
+addMouseModule( dom.plots[0], "doFit", mouse )

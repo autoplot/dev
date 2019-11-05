@@ -1,8 +1,8 @@
 # This demonstrates how the GUI created for the resourceURI is broken.
 
-resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/agg/efi/1999/po_k0_efi_19991230_v01.cdf', 'example file to load' )
-uri= getParam( 'ui', URI('http://autoplot.org/data/agg/efi/1999/po_k0_efi_19991230_v01.cdf'), 'example file to load' )
-url= getParam( 'ul', URL('http://autoplot.org/data/agg/efi/1999/po_k0_efi_19991230_v01.cdf'), 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/agg/efi/1999/po_k0_efi_19991230_v01.cdf', 'Resource URI will use script= modifier' )
+uri= getParam( 'ui', URI('http://autoplot.org/data/agg/efi/1999/po_k0_efi_19991230_v01.cdf'), 'URI parameter' )
+url= getParam( 'ul', URL('http://autoplot.org/data/agg/efi/1999/po_k0_efi_19991230_v01.cdf'), 'URL parameter' )
 
 ff= getFile( resourceURI, monitor )
 

@@ -1,5 +1,6 @@
-# title: demo parameter types
-# label: parameter types
+setScriptTitle('demo parameter types')
+setScriptLabel('parameter types')
+
 filt= getParam( 'filter', 'F', 'filter data', ['T','F'] )
 ie= getParam( 'ie', 1, 'int parameter from enum', [1,2,3] )
 i= getParam( 'i', 1, 'int parameter' )
@@ -8,6 +9,7 @@ f= getParam( 'f', 3.0, 'float parameter (0-10.0)' )
 sc= getParam( 'sc', 'c1', 'the spacecraft name', ['c1','c2','c3','c4'] )
 tr= getParam( 'timerange', '2012-04-18', 'timerange to load' )
 resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/rainfall_KIOW_20120522_0252.html', 'example file to load' )
+sc2= getParam( 'sc2', 1, 'int parameter with labels', { 'values':[1,2], 'labels':['RBSP-A','RBSP-B'] } )
 
 print params
 print 'filt=', type(filt), filt
@@ -16,6 +18,7 @@ print 'i=', type(i), i
 print 'fe=', type(fe), fe
 print 'f=', type(f), f
 print 'sc=', type(sc), sc
+print 'sc2=', type(sc2), sc2
 print 'tr=', type(tr), tr
 print 'resourceURI=', type(resourceURI), resourceURI
 

@@ -1,0 +1,13 @@
+setScriptTitle('Jython Template')
+setScriptDescription('Jython strings allow named fields, which can make for more manageable code.  Use %%(fieldname).2f instead of just %%.2f')
+reset()
+ann= annotation()
+
+def doTemplate( d ):
+    t= 'Name: %(name)s, Age: %(age).2f' % d
+    ann.text= t
+
+data= {  }
+data['name']= 'Jeremy'
+data['age']= 47.8
+doTemplate( data )

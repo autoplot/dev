@@ -1,0 +1,50 @@
+# title: Demonstrate precise control of itext by writing graph paper
+# label: graph paper
+
+from com.itextpdf.text import Document,Rectangle,Paragraph
+from com.itextpdf.awt import PdfGraphics2D
+from com.itextpdf.text import PageSize
+from com.itextpdf.text.pdf import PdfWriter
+from com.itextpdf.text.pdf import PdfContentByte
+from java.io import FileOutputStream
+
+pagesize = PageSize.LETTER;
+
+document = Document( Rectangle(8.5*72,11*72), 0,0,0,0 )
+document.addCreator("controlSizePDFITextDirectGraphics.jy");
+document.addCreationDate();
+
+if ( PWD.startswith('file:') ):
+    filename= PWD[5:]+'graphPaperDirectGraphics.pdf'
+else:
+    filename= '/tmp/autoplot/graphPaperDirectGraphics.pdf'
+    mkdir('/tmp/autoplot/')
+
+out= FileOutputStream(filename)
+writer= PdfWriter.getInstance( document, out );
+
+document.open()
+
+print pagesize.width
+
+cb = writer.getDirectContent()
+cb.saveState()
+
+g= PdfGraphics2D(cb,pagesize.width, pagesize.height,True)
+
+x=0
+while ( x < pagesize.width ):
+    g.drawLine( x,0,x,int(pagesize.height))
+    x += 72
+    
+y=0
+while ( y < pagesize.height ):
+    g.drawLine( 0,y,int(pagesize.width),y )
+    y += 72
+
+g.dispose()
+cb.restoreState()
+
+document.close()
+out.close()
+print 'wrote '+filename
