@@ -1,0 +1,11 @@
+from org.das2.util.filesystem import FileSystem
+from org.das2.fsm import FileStorageModel
+
+fs= FileSystem.create( 'http://autoplot.org/jnlp/' )
+spec='v2018.*/screen.png'
+fsm= FileStorageModel.create( fs, spec );
+ss= fs.listDirectoryDeep( "/", spec );
+
+print 'Number of Files Found: %d' % (len(ss) ) 
+for s in ss:
+    print s
