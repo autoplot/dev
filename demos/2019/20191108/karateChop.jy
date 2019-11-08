@@ -1,0 +1,21 @@
+# karate chop
+
+from org.autoplot.dom import DomUtil
+
+cols= dom.canvases[0].controller.addColumns(2)
+
+rang= dom.plots[0].xaxis.range
+
+pp= dom.plots
+for p in pp:
+    p.columnId= cols[0].id
+    p.xaxis.range= rang.rescale(0,0.5)
+
+    row= DomUtil.getElementById( dom, p.rowId )
+    pright= dom.controller.addPlot( row,cols[1] )
+    pright.syncTo( p, ['columnId'] )
+    
+    pes0= p.controller.getPlotElement() # this is a dumb routine and really should not be used.    
+    peright=  dom.controller.addPlotElement(pright,None)
+    peright.syncTo( pes0, ['plotId'] )
+    pright.xaxis.range= rang.rescale(0.5,1.0)
