@@ -1,0 +1,9 @@
+from javax.swing import UIManager
+#print UIManager.getLookAndFeelDefaults()
+from java.awt import Font
+f= Font.decode('Scheme Bk-19')
+#f= Font.decode('sans-19')
+print f
+
+UIManager.put("Button.font", f);
+showMessageDialog('Press Here')
