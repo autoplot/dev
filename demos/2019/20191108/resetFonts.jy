@@ -1,3 +1,7 @@
+# many of the scientists have high-resolution laptop displays which are not using
+# system preferences when setting the fonts.  This is an experiment to 
+# see if this can be controlled easily.
+
 from javax.swing import UIManager
 #print UIManager.getLookAndFeelDefaults()
 from java.awt import Font
