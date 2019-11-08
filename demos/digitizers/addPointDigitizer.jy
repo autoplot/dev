@@ -1,7 +1,6 @@
 # title: Add Point Digitizer
 # label: Point Digitizer
-# Click events are registered on the tab "dpr." If the data is a spectrogram,
-# report the Z value as well.  Note this will not work with the pitch angle distribution.
+# Click events are registered on the tab "digitizer." 
 # This also provides feedback showing the digitized data and the data points selected in the 
 # dpr tab.
 
@@ -61,5 +60,5 @@ def pointClicked( evt ):
 addMouseModule( dom.plots[0], 'digitize', pointClicked )
 
 import javax
-javax.swing.JOptionPane.showMessageDialog( getViewWindow(),'Click on the plot, and it will be recorded on the dpr tab')
+javax.swing.JOptionPane.showMessageDialog( getViewWindow(),'Click on the plot, and the x,y position will be recorded on the digitizer tab')
 
