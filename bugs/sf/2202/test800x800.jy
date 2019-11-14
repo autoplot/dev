@@ -1,0 +1,9 @@
+load( PWD + 'vap800x800.vap' )
+c= dom.canvases[0].controller.dasCanvas
+width= c.getWidth()
+height= c.getHeight()
+print 'write canvas to image: w,h=%d,%d' % ( width,height )
+
+print 'okay'
+
+writeToPng( PWD + 'test800x800.png')
