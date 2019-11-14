@@ -1,0 +1,22 @@
+# using a star args will bring any number of arguments into a tuple.
+def foo_1( *args ):
+    for a in args:
+        print a
+        
+foo_1( 'a', 'b', ['c'] )
+
+# using it for named keyword arguments uses a double-star
+def foo_2( **kwargs ):
+    for a in kwargs:
+        print a, kwargs[a] 
+
+foo_2( name='one', age=27 )
+
+def foo_3( kind, *args, **kwargs):
+   print kind
+   for a in args:
+        print a
+   for a in kwargs:
+        print a, kwargs[a] 
+
+foo_3( 'rhino', 'c','d', e=5 )
