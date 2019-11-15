@@ -1,0 +1,46 @@
+tr= getParam('timerange','2019-11-01','initial timerange')  # P2D last two days
+sc= getParam('sc',2,'Voyager Spacecraft',[1,2])
+
+reset()
+
+c= dom.canvases[0].controller.dasCanvas
+thelock= c.mutatorLock()  # There's a weird bug where sometimes all but the label axis is hidden, and stays that way.
+thelock.lock()
+
+dom.options.autolayout= False
+
+addPlots( 1,1,'below')
+
+setCanvasSize( 1000,650 )
+
+dom.canvases[0].font= 'Scheme Bk-17'
+
+dom.canvases[0].rows[0].top= '0%'
+dom.canvases[0].rows[0].bottom= '90%'
+
+dom.canvases[0].rows[1].top= '90%+1em'
+dom.canvases[0].rows[1].bottom= '90%+2em'
+
+dom.canvases[0].marginColumn.left= '+7.0em'
+dom.canvases[0].marginColumn.right= '100%-7.0em'
+
+dom.plots[0].xaxis.drawTickLabels= False
+dom.plots[1].yaxis.visible= False
+
+plot( 0, 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/1/PWS/SpecAnalyzer-4s-Efield&timerange=%s' % tr)
+plot( 1, 'vap+dat:http://www-pw.physics.uiowa.edu/voyager/local1/DATA/ANCILLARY/EVENTS1/VG1_EVENTS_$Y.TAB?timerange=%s' % tr )
+
+d= dataset([ 10., 17.8, 31.1, 56.2, 100.0, 178.0, 311.0, 562.0, 1000.0, 1780.0, 3110.0, 5620.0, 10000.0, 17800.0, 31100.0, 56200.0 ] )
+d= dataset(d,label='Frequency (s!A-1!n)',units='Hz')
+
+from org.das2.graph import DasLabelAxis
+la= DasLabelAxis( d, DasLabelAxis.LEFT )
+la.setRow( dom.plots[0].controller.dasPlot.row )
+la.setColumn( dom.plots[0].controller.dasPlot.column )
+la.setLabel(d.property(QDataSet.LABEL))
+
+dom.plots[0].controller.dasPlot.setYAxis( la )
+
+dom.timeRange= datumRange(tr)
+
+thelock.unlock()  
