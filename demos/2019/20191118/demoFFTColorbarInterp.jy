@@ -1,0 +1,11 @@
+# demo how to:
+#    do a spectrogram with fftPower
+#    use different colorbar
+#    reset interpolation type
+#  This is almost impossible to figure out if you don't know already...
+
+from org.das2.graph import SpectrogramRenderer
+ds= getDataSet('http://autoplot.org/data/wav/chickadeesong.wav')
+sp= fftPower( ds, 512, monitor )
+plot( sp, renderType='spectrogram>colorTable=gsfc_rp_special&rebin=binXinterpY' ) 
+dom.plotElements[0].controller.renderer.rebinner= SpectrogramRenderer.RebinnerEnum.binXinterpY
