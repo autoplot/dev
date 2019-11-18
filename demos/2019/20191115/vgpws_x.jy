@@ -43,4 +43,6 @@ dom.plots[0].controller.dasPlot.setYAxis( la )
 
 dom.timeRange= datumRange(tr)
 
+getApplication().basicMode()
+
 thelock.unlock()  
