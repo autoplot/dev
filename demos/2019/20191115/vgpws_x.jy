@@ -11,7 +11,7 @@ dom.options.autolayout= False
 
 addPlots( 1,1,'below')
 
-setCanvasSize( 1000,650 )
+setCanvasSize( 800,500 )
 
 dom.canvases[0].font= 'Roboto-17'
 
