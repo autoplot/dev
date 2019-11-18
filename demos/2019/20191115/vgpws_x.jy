@@ -13,7 +13,7 @@ addPlots( 1,1,'below')
 
 setCanvasSize( 1000,650 )
 
-dom.canvases[0].font= 'Scheme Bk-17'
+dom.canvases[0].font= 'Roboto-17'
 
 dom.canvases[0].rows[0].top= '0%'
 dom.canvases[0].rows[0].bottom= '90%'
@@ -27,8 +27,8 @@ dom.canvases[0].marginColumn.right= '100%-7.0em'
 dom.plots[0].xaxis.drawTickLabels= False
 dom.plots[1].yaxis.visible= False
 
-plot( 0, 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/1/PWS/SpecAnalyzer-4s-Efield&timerange=%s' % tr)
-plot( 1, 'vap+dat:http://www-pw.physics.uiowa.edu/voyager/local1/DATA/ANCILLARY/EVENTS1/VG1_EVENTS_$Y.TAB?timerange=%s' % tr )
+plot( 0, 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/%s/PWS/SpecAnalyzer-4s-Efield&timerange=%s' % (sc,tr))
+plot( 1, 'vap+dat:http://www-pw.physics.uiowa.edu/voyager/local1/DATA/ANCILLARY/EVENTS%s/VG%s_EVENTS_$Y.TAB?timerange=%s' % (sc,sc,tr) )
 
 d= dataset([ 10., 17.8, 31.1, 56.2, 100.0, 178.0, 311.0, 562.0, 1000.0, 1780.0, 3110.0, 5620.0, 10000.0, 17800.0, 31100.0, 56200.0 ] )
 d= dataset(d,label='Frequency (s!A-1!n)',units='Hz')
