@@ -10,6 +10,10 @@ dom.canvases[0].controller.dasCanvas.registerPendingChange('script' , lockObject
 dom.controller.performingChange( 'script' , lockObject )
 dom.canvases[0].controller.dasCanvas.performingChange( 'script' , lockObject )
 
+c= dom.canvases[0].controller.dasCanvas
+thelock= c.mutatorLock()  
+thelock.lock()
+
 try:
     from org.autoplot.dom import DomUtil
             
@@ -51,4 +55,4 @@ try:
 finally:
         dom.controller.changePerformed( 'script' , lockObject )  
         dom.canvases[0].controller.dasCanvas.changePerformed( 'script' , lockObject )  
-        
+        thelock.unlock()  
