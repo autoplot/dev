@@ -1,0 +1,28 @@
+# Create Demo Dataset with Metadata to explore macros in titles and labels.
+# See:
+#  http://sourceforge.net/p/autoplot/feature-requests/309/
+#  http://sourceforge.net/p/autoplot/feature-requests/49/
+#  http://sourceforge.net/p/autoplot/bugs/533/
+
+en= linspace(20.,2000.,20)
+en.putProperty(QDataSet.UNITS,Units.eV)
+
+#ds= rand(400,30) + outerProduct( ones(400), -1* exp(((en-200)/1000)**2) )
+from org.das2.qds.demos import PlasmaModel
+pm= PlasmaModel()  # Note plasma model is not working
+ds= pm.getRank2()
+tt= timegen( '2015-001T00:00', '60s', ds.length() )
+
+#en= putProperty( en, QDataSet.TITLE, 'Energy %{UNITS}' )
+#en= putProperty( en, QDataSet.LABEL, '%{UNITS}' )
+
+result= link( tt, en, ds )
+
+#result= putProperty( result, QDataSet.TITLE, 'Flux %{TIMERANGE}' )
+userProperties= {}
+userProperties['VERSION']=1.0
+userProperties['SC']=3
+userProperties['EnergyVersion']='20191127'
+userProperties['Calibration Version']=2.7
+
+result= putProperty( result, QDataSet.USER_PROPERTIES, userProperties )
