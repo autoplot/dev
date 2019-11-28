@@ -1,0 +1,7 @@
+# magnitude on the last index of rank 3 dataset is very slow.
+
+randomSeed(0)
+a= randn(1000000,30,3)
+ds= accum(a)
+ds= magnitude(ds,2)
+plot( ds )
