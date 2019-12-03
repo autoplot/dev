@@ -9,4 +9,9 @@ if ( nonMonoX=='T' ):
     ds= ds[ii]
     aa= aa[ii]
     
-plot( aa, rr, ds, renderType='pitchAngleDistribution', zlog=True )
+setLayout(2,2)
+
+plot( 0, aa, rr, ds, renderType='pitchAngleDistribution', zlog=True )
+plot( 1, aa, rr, log(ds), renderType='contour>levels=+5' )
+plot( 3, aa, rr, ds )
+plot( 2, aa, ds[:,5] )
