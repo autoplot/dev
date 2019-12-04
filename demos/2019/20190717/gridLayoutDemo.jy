@@ -2,7 +2,7 @@ setScriptTitle('GUI Example Grid')
 setScriptDescription('example code showing how to create a grid GUI')
 
 from java.awt import GridLayout
-from javax.swing import JPanel, JLabel, JTextField
+from javax.swing import JPanel, JLabel, JTextField, JFormattedTextField
 
 gl= GridLayout( 4, 2 )
 gl.vgap= 10
@@ -15,7 +15,7 @@ ntf=JTextField('')
 panel.add( ntf )
 
 panel.add( JLabel('Age:') )
-atf=JTextField('')
+atf=JFormattedTextField(48)
 panel.add( atf )
 
 panel.add( JLabel('Rank:') )
