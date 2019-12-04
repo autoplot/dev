@@ -1,0 +1,18 @@
+reset()
+
+randomSeed(0)
+n= 100
+ds= zeros(n,3)
+ds.putProperty( QDataSet.DEPEND_0, linspace( '2019-11-28T00:00', '2019-11-29T00:00', n ) )
+ds.putProperty( QDataSet.TITLE, 'demo data' )
+
+ds[:,0]= sin( linspace(0,10*TAU,n) )
+ds[:,1]= sin( linspace(0,10*TAU,n)+TAU/3 )
+ds[:,2]= sin( linspace(0,10*TAU,n)+2*TAU/3 )
+ds= ds + randn(n,3)/10.
+
+ds[13,:]= -1e31
+ds.putProperty( QDataSet.FILL_VALUE, -1e31 )
+
+plot( ds )
+plot( 1, magnitude(ds) )

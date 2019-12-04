@@ -1,0 +1,15 @@
+# magnitude on the last index of rank 3 dataset is very slow.
+
+randomSeed(0)
+n=100000
+a= randn(n,30,3)
+ds= zeros(n,30,3)
+for i in range(30):
+    ds[:,i,0]= accum(a[:,i,0])
+    ds[:,i,1]= accum(a[:,i,1])
+    ds[:,i,2]= accum(a[:,i,2])
+from java.lang import System
+t0= System.currentTimeMillis()
+ds= magnitude(ds)
+print 'magnitude (ms): ', System.currentTimeMillis()-t0
+plot( ds )
