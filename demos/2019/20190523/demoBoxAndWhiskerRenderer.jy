@@ -1,0 +1,74 @@
+# See http://autoplot.org//CustomRenderers#Adding_Custom_Renderers
+reset()
+
+data= getDataSet('http://jfaden.net/~jbf/1wire/data/2016/02/04/610008002FE00410.20160204.d2s')
+data= putProperty( data, QDataSet.FILL_VALUE, 0.0 )
+
+t= data.property( QDataSet.DEPEND_0 )
+
+setLayoutOverplot(1)
+
+plot( 0, data )
+
+result= zeros(24,5)
+tresult= zeros(24)
+def quartiles( d ):
+    s= sort(d)
+    N= len(s)
+    qq= [ s[0], s[N/4], s[N/2], 
+          s[3*N/4], s[N-1] ]
+    return d[qq]
+
+tt= timegen('2016-02-04','1hr',24)
+for i in xrange(len(tt)):
+    ti= tt[i]
+    r= where( within( t, ti+['0hr','1hr'] ) )
+    result[i,:]= quartiles( data[r] )
+    tresult[i]= ti+'30min'
+
+ds= link( tresult, result )
+
+import org.das2.graph.Renderer
+from org.virbo.dataset import SemanticOps
+from org.das2.util import ColorUtil
+class BoxNWhisker( org.das2.graph.Renderer ):
+    "'Box and Whisker plot where data is ds[n,5].  A line is drawn from ds[i,0] to ds[i,4].  A box is drawn from ds[i,1] to ds[i,3].  A line is drawn at ds[i,2]."
+    def render( self, g, xAxis, yAxis, mon=None ):
+        xx= ds.property( QDataSet.DEPEND_0 )
+        yy= ds
+        w= ( xx[1]-xx[0] ) * 0.50
+        xunits= SemanticOps.getUnits(xx)
+        yunits= SemanticOps.getUnits(yy)
+        sfillColor= self.getControl('fillColor','blue')
+        from org.das2.util import ColorUtil
+        fillColor= ColorUtil.decodeColor(sfillColor)
+        scolor= self.getControl('color','black')
+        colr= ColorUtil.decodeColor(scolor)
+        for i in xrange( 0,xx.length() ):
+            x= xx[i]
+            m0= yy[i,0]
+            m1= yy[i,1]
+            m2= yy[i,2]
+            m3= yy[i,3]
+            m4= yy[i,4]
+            xmid= int( xAxis.transform( x, xunits ) )
+            xmin= int( xAxis.transform( x-w/2, xunits ) )
+            xmax= int( xAxis.transform( x+w/2, xunits ) )
+            g.drawLine( xmid, int(yAxis.transform(m0,yunits)),
+                        xmid, int(yAxis.transform(m4,yunits)) )
+            ymin= int(yAxis.transform(m1,yunits))
+            ymax= int(yAxis.transform(m3,yunits))
+
+            g.setColor( fillColor )
+            g.fillRect( xmin, ymax,
+                        xmax-xmin, ymin-ymax )
+            g.setColor( colr )
+            g.drawRect( xmin, ymax,
+                        xmax-xmin, ymin-ymax )
+            ymid= int(yAxis.transform(m2,yunits))
+            g.drawLine( xmin, ymid, xmax, ymid )
+
+dom.plotElements[0].controller.dasPlot.addRenderer(BoxNWhisker())
+
+plot( ds, renderer=BoxNWhisker(), renderType='internal>fillColor=pink&color=red'  )
+#dom.controller.addRenderType( 'BoxAndWhisker', BoxNWhisker )

@@ -1,0 +1,33 @@
+setScriptTitle('GUI Example Grid')
+setScriptDescription('example code showing how to create a grid GUI')
+
+from java.awt import GridLayout
+from javax.swing import JPanel, JLabel, JTextField, JFormattedTextField
+
+gl= GridLayout( 4, 2 )
+gl.vgap= 10
+
+panel= JPanel()
+panel.setLayout( gl )
+
+panel.add( JLabel('Name:') )
+ntf=JTextField('')
+panel.add( ntf )
+
+panel.add( JLabel('Age:') )
+atf=JFormattedTextField(48)
+panel.add( atf )
+
+panel.add( JLabel('Rank:') )
+rtf= JTextField('')
+panel.add( rtf )
+
+panel.add( JLabel('Number:') )
+nutf= JTextField('')
+panel.add( nutf )
+
+from javax.swing import JOptionPane
+if JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getViewWindow(), panel, 'Enter Options', JOptionPane.OK_CANCEL_OPTION ):
+     JOptionPane.showMessageDialog( getViewWindow(), '%s is %d' % ( ntf.text, atf.text ) )
+else:
+     pass
