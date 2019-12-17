@@ -37,13 +37,17 @@ print( '-------' )
 
 if ( xlog=='F' ):
     if ( ylog=='F' ):
+        print( 'yy = %.1f * xds + %.1f' % ( lf.slope, lf.intercept ) )
         ymodel= lf.slope * xds + lf.intercept
     else:
+        print( 'yy = exp( %.1f * xds + %.1f )' % ( lf.slope, lf.intercept ) )
         ymodel= exp( lf.slope * xds + lf.intercept )
 else:
     if ( ylog=='F' ):
+        print( 'yy = %.1f * log(xds) + %.1f' % ( lf.slope, lf.intercept ) )
         ymodel= lf.slope * xds1 + lf.intercept
     else:
+        print( 'yy = exp( %.1f * log(xds) + %.1f )' % ( lf.slope, lf.intercept ) )
         ymodel= exp( lf.slope * xds1 + lf.intercept )    
 
 plot( 1, xds, ymodel, color='Red' )
