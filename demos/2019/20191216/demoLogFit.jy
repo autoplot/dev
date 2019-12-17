@@ -8,16 +8,16 @@ randomSeed(5334)
 if xlog=='T':
     xds= logspace(1,100.,101)
 else:
-    xds= linspace(0,100.,101)
+    xds= indgen(101)
     
 if ylog=='T':
     yds= logspace(1,10000.,101)
     yds= yds * (1+randn(101)/10)
 else:
-    yds= linspace(0,10000.,101)
-    yds= yds + (10*randn(101))
+    yds= indgen(101)*1000.
+    yds= yds + (10*randn(101)) + 3000
 
-plot( xds, yds, xlog=xlog=='T', ylog=ylog=='T' )
+plot( xds, yds, xlog=xlog=='T', ylog=ylog=='T', xtitle='xds', ytitle='yy' )
 
 if xlog=='T':
     xds1= log(xds)
@@ -31,19 +31,21 @@ else:
 
 from org.das2.qds.util import LinFit
 lf= LinFit(xds1,yds1)
-print( '-------' )
-print( 'yy = %.1f * xds1 + %.1f' % ( lf.slope, lf.intercept ) )
-print( '-------' )
 
 if ( xlog=='F' ):
     if ( ylog=='F' ):
-        ymodel= lf.slope * xds + lf.intercept
+        mstr = 'yy = %.1f * xds + %.1f' % ( lf.slope, lf.intercept ) 
+        yy= lf.slope * xds + lf.intercept
     else:
-        ymodel= exp( lf.slope * xds + lf.intercept )
+        mstr = 'yy = exp( %.1f * xds + %.1f )' % ( lf.slope, lf.intercept ) 
+        yy= exp( lf.slope * xds + lf.intercept )
 else:
     if ( ylog=='F' ):
-        ymodel= lf.slope * xds1 + lf.intercept
+        mstr = 'yy = %.1f * log(xds) + %.1f' % ( lf.slope, lf.intercept ) 
+        yy= lf.slope * xds1 + lf.intercept
     else:
-        ymodel= exp( lf.slope * xds1 + lf.intercept )    
+        mstr = 'yy = exp( %.1f * log(xds) + %.1f )' % ( lf.slope, lf.intercept ) 
+        yy= exp( lf.slope * xds1 + lf.intercept )    
 
-plot( 1, xds, ymodel, color='Red' )
+annotation( anchorPosition='NW', text=mstr )
+plot( 1, xds, yy, color='Red' )
