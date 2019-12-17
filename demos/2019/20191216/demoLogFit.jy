@@ -14,8 +14,8 @@ if ylog=='T':
     yds= logspace(1,10000.,101)
     yds= yds * (1+randn(101)/10)
 else:
-    yds= indgen(101)*1000.
-    yds= yds + (10*randn(101)) + 3000
+    yds= indgen(101)*1000. + 3000
+    yds= yds + (1000*randn(101))
 
 plot( xds, yds, xlog=xlog=='T', ylog=ylog=='T', xtitle='xds', ytitle='yy' )
 
