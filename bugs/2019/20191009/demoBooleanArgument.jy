@@ -1,0 +1,25 @@
+filt= getParam( 'filter', False, 'Run filter', [ True, False ] )
+
+setScriptDescription( '''This demonstrates support for boolean argument, which was finally added in 2019.''')
+setScriptLabel( 'BMD' )
+
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+sc= getParam( 'sc', 'A', 'Spacecraft', { 'enum':['A','B'], 'labels':['RBSP-A','RBSP-B'] } )
+
+tt= linspace( 0, TAU*100, 100000 )
+ds= sin( tt ) + randn(100000)
+ds= dataset( tt, ds )
+ds= fftPower(ds,512,monitor)
+ds[:,200]= ds[:,200] + 40
+
+if ( filt ):
+    ds[:,200]= ( ds[:,199] + ds[:,201] ) / 2 
+    
+plot( ds )
+
+# Jython 2.5 would support boolean Ternary operator, but Autoplot is stuck at 2.2
+#a= annotation( 0, text= 'filt: '+ ( 'True' if ( filt ) else 'False') )
+
+if ( filt ): a= annotation( 0, text= 'filt: True' )
+else: a= annotation( 0, text= 'filt: False' )
+
