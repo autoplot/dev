@@ -5,3 +5,5 @@ These are codes which are used to test completions.  One should be able to trigg
 
 If you right-click in the autoplot script editor, then developer->"Show simplified script", you can see the script 
 it uses to implement completions.
+
+See https://sourceforge.net/p/autoplot/bugs/1687/.
