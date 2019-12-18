@@ -1,0 +1,18 @@
+for i in xrange(10):
+    print i
+    
+if ( i==9 ):
+    print 'it''s 9'
+else:
+    print 'it''s not 9'
+
+def foo(s):
+    print( len(s) )
+    return len(s)
+
+print( foo('help') )
+
+if True:
+    d= getDataSet('vap+inline:tt=linspace(0,4*TAU,10000)&sawtooth(tt)')
+    f= getDataSet('vap+cdf:http://autoplot.org/data/autoplot.cdf?Magnitude')
+    
