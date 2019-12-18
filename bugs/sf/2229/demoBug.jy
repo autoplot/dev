@@ -10,6 +10,9 @@ pe.style.rebinMethod= RebinnerEnum.lanlNearestNeighbor
 
 plot(  PWD + 'data.qds', overplotOf=p, renderType='digital>format=%d' )
 
-writeToPng( PWD + 'bug2229_1.png')
+if PWD.startswith('file:'):
+    writeToPng( PWD + 'bug2229_1.png')
+else:
+    writeToPng( '/tmp/ap/bug2229_1.png')
 # Bug: colorbar disappears!
 
