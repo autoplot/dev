@@ -1,4 +1,4 @@
-# demo how to create times
+# demo one way to create time tags
 
 a= findgen(100)
 a= putProperty( a, QDataSet.UNITS, Units.seconds )
