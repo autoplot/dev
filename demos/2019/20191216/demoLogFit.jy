@@ -1,0 +1,51 @@
+xlog = getParam( 'xlog', 'T', 'use x-log for model', [ 'T','F' ] )
+ylog = getParam( 'ylog', 'T', 'use y-log for model', [ 'T','F' ] )
+
+setLayoutOverplot(2)
+
+randomSeed(5334)
+
+if xlog=='T':
+    xds= logspace(1,100.,101)
+else:
+    xds= indgen(101)
+    
+if ylog=='T':
+    yds= logspace(1,10000.,101)
+    yds= yds * (1+randn(101)/10)
+else:
+    yds= indgen(101)*1000. + 3000
+    yds= yds + (1000*randn(101))
+
+plot( xds, yds, xlog=xlog=='T', ylog=ylog=='T', xtitle='xds', ytitle='yy' )
+
+if xlog=='T':
+    xds1= log(xds)
+else:
+    xds1= xds
+
+if ylog=='T':
+    yds1= log(yds)
+else:
+    yds1= yds
+
+from org.das2.qds.util import LinFit
+lf= LinFit(xds1,yds1)
+
+if ( xlog=='F' ):
+    if ( ylog=='F' ):
+        mstr = 'yy = %.1f * xds + %.1f' % ( lf.slope, lf.intercept ) 
+        yy= lf.slope * xds + lf.intercept
+    else:
+        mstr = 'yy = exp( %.1f * xds + %.1f )' % ( lf.slope, lf.intercept ) 
+        yy= exp( lf.slope * xds + lf.intercept )
+else:
+    if ( ylog=='F' ):
+        mstr = 'yy = %.1f * log(xds) + %.1f' % ( lf.slope, lf.intercept ) 
+        yy= lf.slope * xds1 + lf.intercept
+    else:
+        mstr = 'yy = exp( %.1f * log(xds) + %.1f )' % ( lf.slope, lf.intercept ) 
+        yy= exp( lf.slope * xds1 + lf.intercept )    
+
+annotation( anchorPosition='NW', text=mstr )
+plot( 1, xds, yy, color='Red' )

@@ -1,0 +1,18 @@
+reset()
+
+from org.autoplot import RenderType
+from org.das2.graph.SpectrogramRenderer import RebinnerEnum
+p,pe=plot( PWD + 'data.qds', renderType='spectrogram>rebin=lanlNearestNeighbor&colorTable=blue_white_red', xrange='2018-01-01T00:00Z/2018-06-01' )
+
+# Bug: why isn't rebin respected?
+
+pe.style.rebinMethod= RebinnerEnum.lanlNearestNeighbor
+
+plot(  PWD + 'data.qds', overplotOf=p, renderType='digital>format=%d' )
+
+if PWD.startswith('file:'):
+    writeToPng( PWD + 'bug2229_1.png')
+else:
+    writeToPng( '/tmp/ap/bug2229_1.png')
+# Bug: colorbar disappears!
+
