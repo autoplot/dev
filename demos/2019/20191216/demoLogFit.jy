@@ -1,5 +1,5 @@
-xlog = getParam( 'xlog', 'T', 'use x-log for model', [ 'T','F' ] )
-ylog = getParam( 'ylog', 'T', 'use y-log for model', [ 'T','F' ] )
+xlog = getParam( 'xlog', 'F', 'use x-log for model', [ 'T','F' ] )
+ylog = getParam( 'ylog', 'F', 'use y-log for model', [ 'T','F' ] )
 
 setLayoutOverplot(2)
 

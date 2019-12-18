@@ -1,0 +1,6 @@
+# demo one way to create time tags
+
+a= findgen(100)
+a= putProperty( a, QDataSet.UNITS, Units.seconds )
+time = a + datum('2000-01-01T00:00Z')
+plot( time )
