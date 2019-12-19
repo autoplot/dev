@@ -1,0 +1,4 @@
+scAB='A'
+annotation( 0, text='VAN ALLEN PROBES '+scAB, fontSize='1.4em', 
+            anchorOffset='+7em,60%+2em', anchorPosition='NW', 
+            columnId='', rowId='' )  # completion here 

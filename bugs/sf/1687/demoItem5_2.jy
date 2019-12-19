@@ -1,0 +1,18 @@
+DtoR= PI/180.0
+
+ds= ripples(160,360)
+ds0= ds
+ds= transpose(ds)
+nn=size(ds)
+tot= nn[0]*nn[1]
+f= dindgen(tot)
+ii= floor(f/nn[1])
+jj= (f-ii) % nn[1]
+lon= ii + 90.0
+lat= 90.0 - (jj - 90.0)
+x = 2.0*lat*cos(lon*DtoR) + 180.0 
+y = 2.0*lat*sin(lon*DtoR) + 180.0 
+
+rr= sqrt( x**2 + y**2 )
+aa= atan2( y, x )
+#interpol<c>

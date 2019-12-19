@@ -1,0 +1,15 @@
+# simplify should work here
+iData=0
+sPJ= ['PJ4 North', 'PJ4 South', 'PJ5 North', 'PJ5 South', 'PJ6 North', 'PJ6 South']
+
+sFdir= PWD
+
+sFname=['s1', 's2', 's3', 's4', 's5', 's6']
+
+sFile= sFdir+sFname[iData]+".hdf5"
+
+print(sFile)  # completions don't see sFile
+
+dslon= 360.0-getDataSet(sFile+'?longitude_map') 
+
+print(sFile) # completions fail

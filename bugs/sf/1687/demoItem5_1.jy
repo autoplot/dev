@@ -1,0 +1,8 @@
+size= getParam( 'size', 2, 'radius of the semicircle', [1,2,4,8] )
+tr= getParam( 'timerange', '2000-01-01', 'timerange to load' )
+tr= DatumRangeUtil.parseTimeRange(tr)
+hr= dataset( '3600 s' )
+nt= int( ( dataset(tr.width()) / hr ).value() ) * 60
+
+# <C> here shows it is trying to eval line 5.
+ 
