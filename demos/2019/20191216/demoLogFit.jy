@@ -1,3 +1,8 @@
+setScriptTitle('Log/Lin Fit Demo')
+setScriptDescription('This demos how LinFit can be used to do log fits as well, by trasforming '
+   'the data into the linear space and then back')
+setScriptIcon(PWD+'demoLogFit.png')
+
 xlog = getParam( 'xlog', 'F', 'use x-log for model', [ 'T','F' ] )
 ylog = getParam( 'ylog', 'F', 'use y-log for model', [ 'T','F' ] )
 
