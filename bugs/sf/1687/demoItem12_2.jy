@@ -1,0 +1,18 @@
+# demo JGit library
+
+import sys
+addToSearchPath(sys.path,
+    'https://repo.eclipse.org/content/groups/releases//org/eclipse/jgit/org.eclipse.jgit/5.2.1.201812262042-r/org.eclipse.jgit-5.2.1.201812262042-r.jar',
+    monitor )
+    
+from org.eclipse.jgit.api import Git
+from java.io import File
+
+from org.das2.util import FileUtil
+FileUtil.deleteFileTree(File('/tmp/ap/dev.g'))
+git= Git.cloneRepository()   \
+   .setURI('https://github.com/autoplot/dev.git')    \
+   .setDirectory(File('/tmp/ap/dev.g'))   \
+   .call()
+
+#head = git.resolve("HEAD")

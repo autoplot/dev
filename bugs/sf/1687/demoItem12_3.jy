@@ -1,0 +1,22 @@
+
+# demo JGit library
+
+class Pop:
+    def ruff( self ):
+        'print a ruff sound' 
+        print 'ruff '
+        return self
+    
+    def bark( self ):
+        'print a bark sound'
+        print 'bark '
+        return self
+
+x= Pop()
+x.bark().ruff().bark()    \
+   .bark()
+
+x.ruff().ruff()
+
+   
+
