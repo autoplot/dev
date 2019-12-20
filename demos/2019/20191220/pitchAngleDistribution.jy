@@ -1,0 +1,14 @@
+# demo pitchAngleDistribution mode.  Note polarPlot is similar.
+
+aa= randu( 10000 ) * 360
+rr= randu( 10000 ) * 90
+zz= cos(toRadians(aa))*rr
+
+plot( 0, aa, rr, zz )
+
+bins= zeros( 18,  12 )
+
+xyz= bundle( aa, rr, zz )
+bins= binAverage(  xyz, linspace( 10,  350, 18 ),  linspace( 5, 85, 9 ) )
+
+plot( 1, bins, renderType='pitchAngleDistribution' )
