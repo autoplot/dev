@@ -3,9 +3,17 @@ setScriptDescription('Test script which takes a while to compute, useful for tes
 
 nstep= getParam('nstep',60)
 
+monitor.setTaskSize(nstep)
+monitor.started()
+
 result= randn(300,300)
 for i in range(nstep):
+    if ( monitor.isCancelled() ): break
+    monitor.setTaskProgress(i)
     result= smooth2d( result, 3,3 )  
     result= result + randn(300,300)/2
 
+monitor.finished()
+
 plot( result, zrange=[-3,3] )
+annotation( 0, text='nsteps: %d'%(i+1), background=None  )
