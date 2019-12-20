@@ -1,5 +1,5 @@
 setScriptTitle('Checkbox Check')
-setScriptDescription('There''s a bug where the ScriptServlet doesn't handle booleans where default is checked.')
+setScriptDescription('There''s a bug where the ScriptServlet doesn''t handle booleans where default is checked.')
 
 bars= getParam('bars','T','add bars')
 
