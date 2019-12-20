@@ -1,14 +1,14 @@
 setScriptTitle('Checkbox Check')
 setScriptDescription('There''s a bug where the ScriptServlet doesn''t handle booleans where default is checked.')
 
-bars= getParam('bars','T','add bars')
+bars= getParam('bars','T','add bars',['T','F'])
 
-nstep=100
+nstep=10
 
 result= randn(30,30)
 if bars=='T':
-    result[:,10]= 1.
-    result[10,:]= 1.
+    result[:,10]= 10.
+    result[10,:]= 10.
     
 for i in range(nstep):
     result= smooth2d( result, 3,3 )  
