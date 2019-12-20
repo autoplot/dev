@@ -1,11 +1,11 @@
 setScriptTitle('Monitored Process')
 setScriptDescription('Test script which takes a while to compute, useful for testing progress monitor')
 
-nstep= getParam('nstep',30)
+nstep= getParam('nstep',60)
 
 result= randn(300,300)
 for i in range(nstep):
-    result= smooth( result, 3 )        
-    result= result + randn(300,300)
+    result= smooth2d( result, 3,3 )  
+    result= result + randn(300,300)/2
 
-plot( result )
+plot( result, zrange=[-3,3] )
