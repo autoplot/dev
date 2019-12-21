@@ -74,25 +74,25 @@
             <DataSourceFilter id="data_1">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:%{PWD}/ww.txt?column=field1&amp;depend0=field0"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}ww.txt?column=field1&amp;depend0=field0"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_2">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:%{PWD}/ww.txt?column=field1&amp;depend0=field0"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}ww.txt?column=field1&amp;depend0=field0"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_6">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:%{PWD}/ww.txt?column=field1&amp;depend0=field0"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}ww.txt?column=field1&amp;depend0=field0"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_7">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:%{PWD}/ww.txt?column=field1&amp;depend0=field0"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}ww.txt?column=field1&amp;depend0=field0"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
