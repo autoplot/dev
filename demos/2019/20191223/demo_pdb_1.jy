@@ -1,0 +1,9 @@
+# from the autoplot console, do:
+# from java.lang import System
+# System.setProperty("jythonDebugger","true")
+
+import pdb 
+pdb.set_trace()
+aa= [1,2,3,4,5]
+for a1 in aa:
+    print a1
