@@ -5,7 +5,7 @@ a= findgen(10)
 b= copy( a )
 c= a
 
-b[2]= 1
 a[2]= -1
 
+print 'prints: -1 2 -1'
 print a[2], b[2], c[2]
