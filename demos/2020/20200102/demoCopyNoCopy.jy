@@ -1,0 +1,11 @@
+# In IDL, saying A=B will make a copy of A and assign the copy to B.  This is not
+# the case in Python and Autoplot's Jython.
+
+a= findgen(10)
+b= copy( a )
+c= a
+
+b[2]= 1
+a[2]= -1
+
+print a[2], b[2], c[2]
