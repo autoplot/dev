@@ -1,0 +1,39 @@
+dd='https://jfaden.net/~jbf/examplePics/'
+ff= listDirectory(dd+'*.jpg')
+curr= 0
+
+tt= replicate(0,len(ff))
+# create an array of times
+tp= TimeParser.create('$Y$m$dT$H$M$S.jpg')
+for i in xrange(len(ff)):
+   tt[i]= tp.parse( str(ff[i]) ).getTimeDatum()
+
+plot(0,dataset(tt),renderType='eventsBar')
+
+def loadOne(i):
+    ds= getDataSet( dd+ff[i] )
+    ds.putProperty( QDataSet.CONTEXT_0, dataset(tt[i]) )
+    plot(1,ds)
+
+def prev(evt):
+    global curr
+    if ( curr>0 ):
+        curr= curr-1
+        loadOne(curr)
+
+def next(evt):
+    global curr
+    if ( curr<len(ff)-1 ):
+        curr= curr+1
+        loadOne(curr)
+
+
+from javax.swing import JPanel,JButton
+from java.awt import FlowLayout
+controlPanel= JPanel()
+controlPanel.setLayout( FlowLayout() )
+controlPanel.add( JButton("Prev",actionPerformed=prev) )
+controlPanel.add( JButton("Next",actionPerformed=next) )
+
+getApplication().setBottomPanel(controlPanel)
+
