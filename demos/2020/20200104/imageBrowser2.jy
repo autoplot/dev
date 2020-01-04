@@ -1,3 +1,5 @@
+reset()
+
 dd='https://jfaden.net/~jbf/examplePics/'
 ff= listDirectory(dd+'*.jpg')
 curr= 0
@@ -36,4 +38,12 @@ controlPanel.add( JButton("Prev",actionPerformed=prev) )
 controlPanel.add( JButton("Next",actionPerformed=next) )
 
 getApplication().setBottomPanel(controlPanel)
+
+loadOne(curr)
+
+dom.canvases[0].rows[0].bottom='20%'
+dom.canvases[0].rows[1].top='20%+5em'
+dom.controller.addConnector( dom.plots[0], dom.plots[1] )
+
+
 
