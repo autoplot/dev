@@ -1,0 +1,19 @@
+# demo using Python Debugging pdb.
+# See also nudnik.physics.uiowa.edu:/home/jbf/project/autoplot/rfe/381/second.jy
+#
+a= 1
+
+import pdb
+pdb.set_trace()
+
+print 'aaa'
+print 'bbb'
+
+def oofa():
+    a= a+1
+    a= a*2
+    
+while (a<10):
+    oofa()
+    
+print 'The final result is ', a
