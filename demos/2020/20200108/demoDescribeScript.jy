@@ -1,0 +1,19 @@
+script='''setScriptTitle('Jello')
+setScriptDescription('Jello Mold')
+s= getParam('shape','star','shape for the mold',['star','circle'])
+b= getParam('hole',True,'include hole',[True,False])
+print s,b
+'''
+
+from java.util import HashMap
+params= HashMap()
+params.put('s','circle')
+
+from org.autoplot.jythonsupport import JythonUtil
+ds= JythonUtil.describeScript(script,params)
+
+print ds.title
+print ds.description
+for p in ds.params:
+    print p
+
