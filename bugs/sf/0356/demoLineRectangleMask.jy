@@ -65,7 +65,7 @@ class MyPainter( Painter ):
             g.draw(line7)
             g.fill( Ellipse2D.Double( line7.p2.x-2, line7.p2.y-2, 5, 5 ) ) 
         else:
-            g.drawString( 0, 300, 'line7 does not intersect' )
+            g.drawString( 'line7 does not intersect', 0, 300 )
         
 reset()
 dom.canvases[0].controller.dasCanvas.addTopDecorator( MyPainter() )
