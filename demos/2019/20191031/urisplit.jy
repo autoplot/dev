@@ -1,0 +1,12 @@
+uri= getParam( 'uri', URI('vap+bin:http://autoplot.org/data/autoplot.cdf?format=c&rank2=:&recLength=20'), 'URI to parse' )
+#uri= getParam( 'uri', URI('vap+bin:http://autoplot.org/data/autoplot.cdf?recLength=20'), 'URI to parse' )
+from org.autoplot.datasource import URISplit
+
+split= URISplit.parse(uri)
+
+print uri, 'decomposes to: '
+print 'vapScheme:', split.vapScheme, '\t(which autoplot uses to identify the data source)'
+print 'scheme: ', split.scheme, '\t(which is used as part of the path)'
+print 'path:', split.path, '\t(which das2''s filesystem uses to download the resource)'
+print 'ext: ', split.ext, '\t(which is used to implicitly identify the data source)'
+print 'params: ', split.params, '\t(which the data source uses for controls)'

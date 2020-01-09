@@ -1,0 +1,8 @@
+reset()
+
+from org.autoplot import RenderType
+from org.das2.graph.SpectrogramRenderer import RebinnerEnum
+p,pe=plot( PWD + 'data.qds', renderType='spectrogram>rebin=lanlNearestNeighbor&colorTable=blue_white_red' )
+dom.plotElements[0].style.rebinMethod= RebinnerEnum.lanlNearestNeighbor
+
+plot(  PWD + 'data.qds', overplotOf=p, renderType='digital>format=%d' )

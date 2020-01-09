@@ -1,0 +1,2 @@
+ds= ripplesVectorTimeSeries(100)
+plot( magnitude(ds) )

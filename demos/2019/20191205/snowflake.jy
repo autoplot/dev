@@ -1,0 +1,21 @@
+x= 500
+y= 500
+r= 100
+
+from java.awt import BasicStroke
+s= BasicStroke(20,BasicStroke.CAP_ROUND,BasicStroke.JOIN_BEVEL)
+
+from org.das2.graph import Painter
+class MyPainter( Painter ):
+    def paint( self, g ):
+        g.color= Color.BLACK
+        g.stroke= s
+        for i in range(6):
+            a= toRadians( i * 60 ) 
+            dx= int(r*cos(a))
+            dy= int(r.sin(a))
+            g.drawLine( x, y, x + dx, y + dy )
+            g.drawLine( x + dx/2, y + dy/2, x + dx, y + dy )
+
+print('hello')
+dom.plots[0].controller.dasPlot.setTopDecorator(MyPainter())
