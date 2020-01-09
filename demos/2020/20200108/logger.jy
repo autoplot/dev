@@ -1,0 +1,9 @@
+from java.util.logging import Logger,Level
+from org.das2.util import LoggerManager
+logger= Logger.getLogger('myScript')
+
+logger.setLevel(Level.FINE) # Normally this is set to INFO, meaning only informational messages are printed.
+
+logger.info('loading data')  # the script invoker is interested in these messages
+for i in xrange(10):
+    logger.fine('reading record '+i)  # only the developer is interested in this fine detail.
