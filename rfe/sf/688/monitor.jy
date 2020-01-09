@@ -1,0 +1,11 @@
+monitor.setTaskSize(200)                     # the number of steps (arbitrary units)
+monitor.started()                            # the task is started  
+
+d=getFile('http://autoplot.org/data/14MB.qds',monitor.getSubtaskMonitor(0,100,'load file'))
+for i in xrange(100):                        # xrange(200) iterates through 0,1,...,198,199
+   if ( monitor.isCancelled() ): break       # check to see if the task has been cancelled.
+   monitor.setProgressMessage('at %d' % i)   # this describes actions done to perform the task.  
+   monitor.setTaskProgress(i+100)
+   sleep(100)                                # sleep for 100 milliseconds
+
+monitor.finished()     # indicate the task is complete
