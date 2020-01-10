@@ -1,0 +1,30 @@
+# Stress-Test time parser to make sure it gives good feedback
+#
+# An RTE was received with in an IndexOutOfBounds exception.
+#
+#
+import java.lang.Exception
+
+TimeParser.create('$')
+
+inps= [ '$Y-$m-$dT$H:$M:$S' ]
+
+from org.das2.datum import TimeParser
+
+for inp in inps:
+    for j in xrange(10):
+        ii= inp
+        ii= ii[0:j]+' '+ii[j+1:]
+        try:
+            print( TimeParser.create(ii) )
+        except java.lang.Exception, e:
+            print( '*** ' + str(e) )
+            
+    for j in xrange(1,len(inp)):
+        ii= inp
+        ii= ii[0:j]
+        try:
+            print( TimeParser.create(ii) )
+        except java.lang.Exception, e:
+            print( '*** ' + str(e) )
+print TimeParser.create('a$bc') 

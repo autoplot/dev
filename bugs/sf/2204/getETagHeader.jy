@@ -1,21 +1,27 @@
 # Edit the GitHub file https://github.com/autoplot/dev/blob/master/demos/2019/20191023/updates.jy, and 
 # see if those are detected within Java.
 
+#useCaches= getParam( 'useCaches', 'F', 'set/clear uses caches flag', ['T','F'] )
+
 import time
 t0= time.time()
 
 def getETag( ):
     url= URL( 'https://raw.githubusercontent.com/autoplot/dev/master/demos/2019/20191023/updates.jy' )
     connect = url.openConnection()
+    connect.setUseCaches( False )
+    connect.setDefaultUseCaches( False )
+    
     connect.setRequestMethod("HEAD")
+    
     connect.connect()
     
     m= connect.getHeaderFields()
     
     print '%5.1f: ETag: %s' % ( time.time()-t0, m.get('ETag')[0] )
     
-for i in xrange(300):
+for i in xrange(60):
     getETag();
-    sleep(1000)
+    sleep(5000)
     
 # wget -O - --save-headers https://raw.githubusercontent.com/autoplot/dev/master/demos/2019/20191023/updates.jy 2> /dev/null | grep ETag

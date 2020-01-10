@@ -1,3 +1,7 @@
+setScriptTitle( 'Voyager Lowrate Browser' )
+setScriptDescription( '''Browser for the 16-channel lowrate voyager data, replacing the old vgpws app.
+This loads data from the Das2Server, and has replaced the Y axis with a descrete DasLabelAxis.''' )
+
 tr= getParam('timerange','2019-11-01','initial timerange')  # P2D last two days
 sc= getParam('sc',2,'Voyager Spacecraft',[1,2])
 

@@ -1,0 +1,20 @@
+
+oldURI = 'vap+cdaweb:'
+
+import javax
+import org
+import java
+from org.autoplot.datasource import WindowManager
+
+JOptionPane = javax.swing.JOptionPane
+DataSourceEditorPanelUtil = org.autoplot.datasource.DataSourceEditorPanelUtil
+
+parent= javax.swing.JPanel()
+parent.setLayout( java.awt.BorderLayout() )
+
+p = DataSourceEditorPanelUtil.getDataSourceEditorPanel(parent,oldURI)
+
+if WindowManager.OK_OPTION == WindowManager.showConfirmDialog(
+    None, p, "Editing URI", WindowManager.OK_CANCEL_OPTION ):
+                                                          
+    print( p.getURI() )
