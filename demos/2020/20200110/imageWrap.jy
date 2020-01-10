@@ -1,0 +1,3 @@
+ds= getDataSet( 'https://planetary.s3.amazonaws.com/assets/images/5-jupiter/2018/jupiter_map_css_plus_juno_bj.png' )
+
+# I will show how to get jupiter image at  any lon and lat.
