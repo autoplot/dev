@@ -1,4 +1,4 @@
-ds= getDataSet( 'https://jfaden.net/git/jbfaden/public/blob/master/u/jeremy/2020/20200105/Screenshot_20200101.png' )
+ds= getDataSet( PWD + 'Screenshot_20200101.png' )
 print ds[188,192]
 
 randomSeed(5334)
