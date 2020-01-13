@@ -1,3 +1,32 @@
-ds= getDataSet( 'https://planetary.s3.amazonaws.com/assets/images/5-jupiter/2018/jupiter_map_css_plus_juno_bj.png' )
+ds= getDataSet( PWD + 'jupiterCartoon.png' )
+#ds= getDataSet( 'https://planetary.s3.amazonaws.com/assets/images/5-jupiter/2018/jupiter_map_css_plus_juno_bj.png' )
+
+centery= 0
+centerx= 90 
+
+imagex= outerProduct( linspace( centerx-90, centerx+90, 180 ), ones( 180 ) )
+imagey= outerProduct( ones(180), linspace( centery-90, centery+90, 180 ) )
+
+lon=  cos( imagex ) * sin( imagey )
+lat=  sin( imagey ) 
+
+lat= 2 * ( lat/PI * 180 + 180 )
+lon= 2 * ( lon/PI * 180 + 90)
+
+r= where( lon.gt(720) )
+lon[r]= lon[r]-720
+
+r= where( lat.gt(360) )
+lat[r]= lat[r]-360
+
+result= intarr( 180,180,3 )
+result[:,:,0]= interpolate( ds[:,:,0], lat, lon )
+result[:,:,1]= interpolate( ds[:,:,1], lat, lon )
+result[:,:,2]= interpolate( ds[:,:,2], lat, lon )
+
+result.putProperty( QDataSet.DEPEND_2, labels( [ 'red','green','blue' ] ) )
+
+plot( result )
+#plot(ds)
 
 # I will show how to get jupiter image at  any lon and lat.
