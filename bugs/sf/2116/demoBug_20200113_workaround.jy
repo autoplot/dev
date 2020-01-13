@@ -14,5 +14,5 @@ dsnew.putProperty( QDataSet.DEPEND_2, ds.property( QDataSet.DEPEND_2 ) )
 dsnew.putProperty( QDataSet.RENDER_TYPE, 'image' )
 plot( dsnew )
 
-plot( ds[i1,i2,:] )
+#plot( ds[i1,i2,:] )
 
