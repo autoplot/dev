@@ -3,7 +3,7 @@ print jarf
 import sys
 addToSearchPath(sys.path,jarf.toString(),None)
 
-f= getFile('file:///home/jbf/data/gardenhouse/camera/2019/04/14/20190414T001102.jpg',None)
+f= getFile('https://jfaden.net/~jbf/examplePics/20190304T150101.jpg',monitor)
 from javax.imageio import ImageIO
 image= ImageIO.read(f)
 
