@@ -1,0 +1,2 @@
+ds=getDataSet('http://autoplot.org/data/autoplot.dat?column=field1')
+formatDataSet(ds,'file:///tmp/ap/foo.txt?format=18.7E&tformat=Nanosecond')
