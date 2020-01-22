@@ -2,7 +2,7 @@ setScriptDescription('Demos how soundings can be displayed on a map')
 
 setLayoutOverplot(2)
 
-ds= getDataSet('vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/davenport-e?script=file:/tmp/autoplot_data/fscache/https/github.com/autoplot/dev/blob/9c1e520bc81c9924b223d7922d7008d5d189ba09/demos/2019/20190529/readUsgsDem.jyds')
+ds= getDataSet('vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/davenport-e?script=https://github.com/autoplot/dev/blob/master/demos/2019/20190529/readUsgsDem.jyds')
 plot( 0, ds, xrange=[-90.70,-90.35], yrange=[41.30,41.67] )
 
 shoreElev= 594
