@@ -1,0 +1,13 @@
+reset()
+
+randomSeed(0)
+
+xx= accum( rand(280)*100 )
+yy= accum( sin(linspace(0,4*TAU,280)) + randn(280)/10 )
+zz= yy + xx/1000
+xx= dataset( xx, units='XX' )
+yy= dataset( yy, units='YY' )
+zz= dataset( zz, units='ZZ' )
+
+plot( bundle(xx,yy) )
+plot( 1, bundle(xx,yy,zz) )
