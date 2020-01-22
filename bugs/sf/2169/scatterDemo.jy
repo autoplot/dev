@@ -1,0 +1,9 @@
+setLayout(2,2)
+
+from org.das2.qds.examples import Schemes
+
+ds= Schemes.legacyXYZScatter()
+plot( 0, ds )
+
+ds= Schemes.xyzScatter()
+plot( 1, ds )
