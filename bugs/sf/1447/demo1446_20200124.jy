@@ -1,0 +1,30 @@
+# demonstrates shortcomings with Autoranging, which are 
+# caused by the expectation that only the day's data will 
+# be considered when autoranging, and this is often not 
+# the case.
+
+def pause():
+    waitUntilIdle()
+    sleep(600)
+
+plot( 'vap+dat:https://pds-ppi.igpp.ucla.edu/data/CO-E_SW_J_S-MAG-4-SUMM-1MINAVG-V2.0/DATA/$Y/$Y_FGM_KSO_1M.TAB?bundle=field1-field4&depend0=field0&timerange=2004-07-04&units=nT')
+setStatus('expect time range to be 2004-07-04, properly autoranged.')
+
+dom.timeRange = datumRange('2004-09-15')
+setStatus('some have proposed that this would reset the zoom in Y.')
+pause()
+
+#setStatus('trigger a reset zoom Y by toggling the autoRange flag.')
+#dom.plots[0].yaxis.autoRange= False
+#pause()
+
+#dom.plots[0].yaxis.autoRange= True
+#pause()
+
+setStatus('programmatically call plotController.resetZoom, which is the typical route')
+dom.plots[0].controller.resetZoom(False,True,True)
+pause()
+
+setStatus('simulate [yaxis-context-click]->"Reset Zoom."')
+from org.autoplot import AutoplotUtil
+AutoplotUtil.resetZoomY( dom, dom.plots[0] )
