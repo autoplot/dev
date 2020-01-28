@@ -4,7 +4,9 @@ print System.getProperty('os.name'), 'defaultCharset: ', Charset.defaultCharset(
 
 from org.das2.util import Entities
 thetaSymbol= Entities.decode('&Theta;')
-dom.plots[0].title= thetaSymbol
+dom.plots[0].title=  thetaSymbol
+dom.plots[0].xaxis.label= 'Theta >> ' + thetaSymbol + '<<'
+save('printCharset.vap')
 
 from javax.xml.parsers import DocumentBuilderFactory
 document = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument()
@@ -15,7 +17,7 @@ document.appendChild( element )
 
 
 from java.io import FileOutputStream, File
-f= File( 'foo.xml' )
+f= File( 'printCharset.xml')
 out= FileOutputStream( f )
 
 impl = document.getImplementation()
