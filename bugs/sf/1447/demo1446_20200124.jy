@@ -1,4 +1,4 @@
-# demonstrates shortcomings with Autoranging, which are 
+# demonstrates shortcomings with autoranging, which are 
 # caused by the expectation that only the day's data will 
 # be considered when autoranging, and this is often not 
 # the case.
