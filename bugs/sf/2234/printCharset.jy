@@ -1,3 +1,5 @@
+reset()
+
 from java.nio.charset import Charset
 from java.lang import System
 print System.getProperty('os.name'), 'defaultCharset: ', Charset.defaultCharset()
@@ -15,7 +17,7 @@ element = document.createElement('testNode')
 element.setAttribute( 'Theta', thetaSymbol )
 document.appendChild( element )
 
-from java.io import ByteArrayOutputStream, File
+from java.io import ByteArrayOutputStream
 out= ByteArrayOutputStream( 1000 )
 
 impl = document.getImplementation()
@@ -37,3 +39,16 @@ for b in bytes:
     else:
         print( '%3d: %3d %s' % ( i, ib, chr(b)) )
     i=i+1
+    
+from java.io import ByteArrayInputStream,InputStreamReader
+from org.xml.sax import InputSource
+ins= ByteArrayInputStream( bytes )
+
+builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+isr= InputStreamReader( ins )
+source = InputSource(isr)
+document = builder.parse(source)
+
+thetaSymbol2= document.getDocumentElement().getAttribute('Theta')
+dom.plots[0].title= thetaSymbol2
+dom.plots[0].yaxis.label= 'Read Theta >> ' + thetaSymbol + '<<'
