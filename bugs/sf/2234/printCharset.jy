@@ -15,10 +15,8 @@ element = document.createElement('testNode')
 element.setAttribute( 'Theta', thetaSymbol )
 document.appendChild( element )
 
-
-from java.io import FileOutputStream, File
-f= File( 'printCharset.xml')
-out= FileOutputStream( f )
+from java.io import ByteArrayOutputStream, File
+out= ByteArrayOutputStream( 1000 )
 
 impl = document.getImplementation()
 ls = impl.getFeature("LS", "3.0")
@@ -30,4 +28,12 @@ output.setByteStream(out)
 serializer.write(document, output)
 out.close()
 
-print( 'wrote '+f.getAbsolutePath() )
+bytes= out.toByteArray()
+i=0
+for b in bytes:
+    ib= b & 0xFF        
+    if ( b<33 or b>127 ):
+        print( '%3d: %3d %s' % ( i, ib, '*' ) )
+    else:
+        print( '%3d: %3d %s' % ( i, ib, chr(b)) )
+    i=i+1
