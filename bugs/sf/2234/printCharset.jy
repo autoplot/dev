@@ -13,8 +13,10 @@ element = document.createElement('testNode')
 element.setAttribute( 'Theta', thetaSymbol )
 document.appendChild( element )
 
-from java.io import FileOutputStream
-out= FileOutputStream( '/tmp/foo.xml' )
+
+from java.io import FileOutputStream, File
+f= File( 'foo.xml' )
+out= FileOutputStream( f )
 
 impl = document.getImplementation()
 ls = impl.getFeature("LS", "3.0")
@@ -25,3 +27,5 @@ output.setByteStream(out)
 
 serializer.write(document, output)
 out.close()
+
+print( 'wrote '+f.getAbsolutePath() )
