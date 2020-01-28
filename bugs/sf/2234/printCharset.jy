@@ -45,7 +45,7 @@ from org.xml.sax import InputSource
 ins= ByteArrayInputStream( bytes )
 
 builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-isr= InputStreamReader( ins )
+isr= InputStreamReader( ins, 'UTF-8' )
 source = InputSource(isr)
 document = builder.parse(source)
 
