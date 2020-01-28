@@ -1,6 +1,6 @@
 setScriptDescription('Demos how soundings can be displayed on a map')
 
-setLayoutOverplot(2)
+setLayoutOverplot(3)
 
 ds= getDataSet('vap+jyds:https://dds.cr.usgs.gov/pub/data/DEM/250/D/davenport-e?script=https://github.com/autoplot/dev/blob/master/demos/2019/20190529/readUsgsDem.jyds')
 plot( 0, ds, xrange=[-90.70,-90.35], yrange=[41.30,41.67] )
@@ -11,5 +11,5 @@ yy= dataset( [ 41.4853, 41.4924, 41.50, 41.515, 41.51], units=Units.degrees )
 
 zz= interpolate( ds, findex(ds.property(QDataSet.DEPEND_0),xx), findex( ds.property(QDataSet.DEPEND_1),yy ) )
 
-plot( 1, bundle( xx, yy, zz-shoreElev ) )
-
+plot( 1, bundle( xx, yy, zz-shoreElev ), renderType='digital>color=lightGrey&align=NW' )
+plot( 2, bundle( xx, yy ), renderType='scatter>symbolSize=8&color=lightGrey' )
