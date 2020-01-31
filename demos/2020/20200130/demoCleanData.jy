@@ -1,0 +1,9 @@
+dst1800= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=Oct+2016')
+plot(dst1800,ytitle='raw')
+
+c= cleanData(dst1800,-1)
+plot( 1, c, ytitle='entire' )
+
+c= cleanData(dst1800,21)
+plot( 2, c, ytitle='boxcar len=21')
+
