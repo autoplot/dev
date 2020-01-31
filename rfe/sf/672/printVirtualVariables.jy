@@ -4,24 +4,36 @@ setScriptDescription('Show all the virtual variable functions used')
 d= {}  # location of example
 count= {}  # number of times used
 
-r= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdawlib/0MASTERS/'
-ll= listDirectory( r )
+from org.autoplot.cdaweb import CDAWebDB
+cdaweb= CDAWebDB.getInstance()
+cdaweb.refresh( monitor.getSubtaskMonitor('refresh CDAWeb index') )
+ids= cdaweb.getServiceProviderIds()
 
-monitor.setTaskSize(len(ll))
+monitor.setTaskSize(len(ids))
 monitor.started()
 
-for l in ll:
+from org.das2.components import DasProgressPanel
+
+for id in ids:
     monitor.setTaskProgress(monitor.getTaskProgress()+1)
     if monitor.cancelled: break
     
-    monitor.setProgressMessage(l)
+    monitor.setProgressMessage(id)
     
-    print '--- ' + l + ' ---'
-    ss= l
     try:
-        cc= getCompletions( r + ss + '?' )
+        mon1= DasProgressPanel.createFramed(id)
+        f= cdaweb.getMasterFile( id, mon1 )
     except:
-        print 'except line 9 '+l
+        print '!unable to get sample file: '+id
+        continue
+
+    print '--- ' + id + ' ---'
+    ss= id
+    try:
+        print f + '?'
+        cc= getCompletions( f + '?' )
+    except:
+        print 'except line 9 '+id
         continue
     for c in cc:
         v= c
