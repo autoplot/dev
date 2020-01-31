@@ -1,0 +1,48 @@
+setScriptTitle('VVar Function Search')
+setScriptDescription('Show all the virtual variable functions used')
+
+d= {}  # location of example
+count= {}  # number of times used
+
+r= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdawlib/0MASTERS/'
+ll= listDirectory( r )
+
+monitor.setTaskSize(len(ll))
+monitor.started()
+
+for l in ll:
+    monitor.setTaskProgress(monitor.getTaskProgress()+1)
+    if monitor.cancelled: break
+    
+    monitor.setProgressMessage(l)
+    
+    print '--- ' + l + ' ---'
+    ss= l
+    try:
+        cc= getCompletions( r + ss + '?' )
+    except:
+        print 'except line 9 '+l
+        continue
+    for c in cc:
+        v= c
+        if ( not v.endswith('=') ):
+            try:
+                mm= getMetadata( v, None )
+                s= mm.get('FUNCT')
+                if ( s==None ): s=mm.get('FUNCTION')
+                if ( s!=None ):
+                    s= s.lower()
+                    print v, s
+                    if not d.has_key(s):
+                        d[s]= v
+                        count[s]= 1
+                    else:
+                        count[s]= count[s]+1
+            except:
+                print 'except, '+v
+    print d
+
+print '---'
+for s in d.keys():
+    print '|', s, '\t|', count[s], '\t|', d[s], '|'
+    
