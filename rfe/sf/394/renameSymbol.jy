@@ -1,4 +1,7 @@
-from javax.swing import JOptionPane
+setScriptLabel('Rename Variable')
+setScriptDescription('Rename a variable in the script editor.')
+
+from javax.swing import JOptionPane,BoxLayout
 from javax.swing import JPanel,JLabel,JTextField,BoxLayout
 from java.awt import FlowLayout,GridLayout,BorderLayout
 from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
@@ -17,6 +20,8 @@ panel1.setLayout( FlowLayout() )
 panel= JPanel()
 gl= GridLayout(2,2)
 panel.setLayout( gl )
+panel1.setLayout( BoxLayout( panel1,BoxLayout.Y_AXIS ) )
+
 panel1.add( JLabel('Replace each instance where the name is used with the new name.  Global/Local context is not supported.') )
 
 panel.add( JLabel('Old Symbol:') )
