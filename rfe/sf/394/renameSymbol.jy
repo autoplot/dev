@@ -61,6 +61,6 @@ if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(), pan
     print 'var:', var, len(var)
     print 'new:', newn, len(newn)
     script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
-    print script1
+    editor.setText( script1 )
     
     
