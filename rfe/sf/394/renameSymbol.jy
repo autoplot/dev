@@ -15,7 +15,6 @@ panel1= JPanel()
 panel1.setLayout( FlowLayout() )
 
 panel= JPanel()
-panel.setLayout( BoxLayout() )
 gl= GridLayout(2,2)
 panel.setLayout( gl )
 panel1.add( JLabel('Replace each instance where the name is used with the new name.  Global/Local context is not supported.') )
