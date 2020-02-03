@@ -1,23 +1,25 @@
 from javax.swing import JOptionPane
-editor= getApplication().getScriptPanel()
+from javax.swing import JPanel,JLabel,JTextField,BoxLayout
+from java.awt import FlowLayout,GridLayout,BorderLayout
+from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
 
-print dir(editor)
-print editor.getText()
-print editor.getCaret()
+editor= getApplication().getScriptPanel()
 
 script= editor.getText()
 var= editor.getSelectedText()
 
-from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
 if var==None or var.length()==0:
     var= EditorAnnotationsSupport.getSymbolAt( editor, editor.getCaretPosition() )
     
-from javax.swing import JPanel,JLabel,JTextField
-from java.awt import FlowLayout,GridLayout
+panel1= JPanel()
+panel1.setLayout( FlowLayout() )
 
 panel= JPanel()
+panel.setLayout( BoxLayout() )
 gl= GridLayout(2,2)
 panel.setLayout( gl )
+panel1.add( JLabel('Replace each instance where the name is used with the new name.  Global/Local context is not supported.') )
+
 panel.add( JLabel('Old Symbol:') )
 oldtf= JTextField(text=var)
 oldtf.editable=False
@@ -25,24 +27,40 @@ panel.add( oldtf )
 panel.add( JLabel('New Symbol:') )
 newtf= JTextField(text=var)
 panel.add( newtf )
-
-JOptionPane.OK_CANCEL_OPTION
+panel1.add( panel )
 
 def refactorVarRename( script, i, old, new ):
+    oldLen= len(old)
     import org.python.core.parser
+    from org.python.parser.ast import VisitorBase
     n= org.python.core.parser.parse(script, 'exec')
-    class Vb( VisitorBase ):
+    nodes= []
+    class VB( VisitorBase ):
         def traverse(self,sn):
-            print sn
             sn.traverse(self);
         def unhandled_node(self,sn):
             return sn
+        def visitName(self,n):
+            if ( n.id==old ):
+                nodes.append(n)
     vb= VB()
     for st in n.body:
         st.traverse(vb)
+    for n in nodes[::-1]:
+        root= editor.document.defaultRootElement
+        if n.beginLine>0:
+            i0= root.getElement(n.beginLine-1).startOffset
+        else:
+            i0= 0            
+        i0= i0 + (n.beginColumn-1)
+        script= script[0:i0] + new + script[(i0+oldLen):]
+    return script
     
-if ( JOptionPane.showConfirmDialog( getApplication(), panel, 'rename variable', JOptionPane.OK_CANCEL_OPTION ) ):
+if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(), panel1, 'rename variable', JOptionPane.OK_CANCEL_OPTION ) ):
     newn= newtf.text
-    refactorVarRename( script, editor.getCaretPosition(), vat, newn )
-    print newn
+    print 'var:', var, len(var)
+    print 'new:', newn, len(newn)
+    script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
+    print script1
+    
     
