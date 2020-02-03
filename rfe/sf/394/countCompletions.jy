@@ -1,0 +1,14 @@
+editor= getApplication().getScriptPanel()
+
+print dir(editor)
+print editor.getText()
+print editor.getCaret()
+
+script= editor.getText()
+var= editor.getSelectedText()
+
+from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
+if var==None or var.length()==0:
+    var= EditorAnnotationsSupport.getSymbolAt( editor, editor.getCaretPosition() )
+    
+print var

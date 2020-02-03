@@ -1,0 +1,48 @@
+from javax.swing import JOptionPane
+editor= getApplication().getScriptPanel()
+
+print dir(editor)
+print editor.getText()
+print editor.getCaret()
+
+script= editor.getText()
+var= editor.getSelectedText()
+
+from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
+if var==None or var.length()==0:
+    var= EditorAnnotationsSupport.getSymbolAt( editor, editor.getCaretPosition() )
+    
+from javax.swing import JPanel,JLabel,JTextField
+from java.awt import FlowLayout,GridLayout
+
+panel= JPanel()
+gl= GridLayout(2,2)
+panel.setLayout( gl )
+panel.add( JLabel('Old Symbol:') )
+oldtf= JTextField(text=var)
+oldtf.editable=False
+panel.add( oldtf )
+panel.add( JLabel('New Symbol:') )
+newtf= JTextField(text=var)
+panel.add( newtf )
+
+JOptionPane.OK_CANCEL_OPTION
+
+def refactorVarRename( script, i, old, new ):
+    import org.python.core.parser
+    n= org.python.core.parser.parse(script, 'exec')
+    class Vb( VisitorBase ):
+        def traverse(self,sn):
+            print sn
+            sn.traverse(self);
+        def unhandled_node(self,sn):
+            return sn
+    vb= VB()
+    for st in n.body:
+        st.traverse(vb)
+    
+if ( JOptionPane.showConfirmDialog( getApplication(), panel, 'rename variable', JOptionPane.OK_CANCEL_OPTION ) ):
+    newn= newtf.text
+    refactorVarRename( script, editor.getCaretPosition(), vat, newn )
+    print newn
+    
