@@ -1,0 +1,6 @@
+from org.autoplot.bookmarks import BookmarksManager
+
+bm= BookmarksManager(getApplication(),True,'editor')
+bm.setPrefNode('editor')
+bm.setVisible(True)
+
