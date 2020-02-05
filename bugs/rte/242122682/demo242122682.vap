@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<vap appVersionTag="v2020a_1" domVersion="1.08">
+<vap appVersionTag="(dev)" domVersion="1.08">
     <Application id="app_0">
         <property class="Annotation" length="0" name="annotations"/>
         <property class="BindingModel" length="2" name="bindings">
             <property default="null" type="propertyBinding" value="plot_0.colortable to style_0.colortable  (plot_0)"/>
-            <property default="null" type="propertyBinding" value="app_0.timeRange to plot_0.context  (app_0)"/>
+            <property default="null" type="propertyBinding" value="app_0.timeRange to xaxis_0.range  (app_0)"/>
         </property>
         <property class="Canvas" length="1" name="canvases">
             <Canvas id="canvas_0">
                 <property class="Column" length="0" name="columns"/>
                 <property name="fitted" type="Boolean" value="true"/>
-                <property default="sans-10" name="font" type="String" value="Scheme Bk-16"/>
+                <property default="sans-10" name="font" type="String" value="Roboto-16"/>
                 <property default="480" name="height" type="Integer" value="546"/>
                 <property name="marginColumn" type="DomNode">
                     <Column id="marginColumn_0">
@@ -58,7 +58,7 @@
                 <property name="autoranging" type="Boolean" value="true"/>
                 <property name="background" type="color" value="White"/>
                 <property default="sans-12" name="canvasFont"
-                    type="String" value="Scheme Bk-16"/>
+                    type="String" value="Roboto-16"/>
                 <property name="color" type="color" value="Black"/>
                 <property name="colortable"
                     type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
@@ -103,14 +103,13 @@
                     type="Boolean" value="true"/>
                 <property default="false" name="autoLabel"
                     type="Boolean" value="true"/>
-                <property default="false" name="autoRenderType"
-                    type="Boolean" value="true"/>
+                <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
                 <property default="" name="dataSourceFilterId"
                     type="String" value="data_0"/>
                 <property name="displayLegend" type="Boolean" value="false"/>
-                <property default="" name="legendLabel" type="String" value="FPDU (#/cm^2/s/sr/MeV)"/>
+                <property default="" name="legendLabel" type="String" value="58 MeV (#/cm^2/s/sr/MeV)"/>
                 <property name="parent" type="String" value=""/>
                 <property name="plotDefaults" type="DomNode">
                     <Plot id="plot_defaults_0">
@@ -155,7 +154,7 @@
                                 </property>
                                 <property name="reference" type="String" value=""/>
                                 <property default="0.1 (dimensionless)"
-                                    name="scale" type="datum" value="microseconds: 1.46480E8"/>
+                                    name="scale" type="datum" value="microseconds: 1.40850E8"/>
                                 <property name="tickValues"
                                     type="String" value=""/>
                                 <property name="visible" type="Boolean" value="true"/>
@@ -175,12 +174,12 @@
                                 <property name="fontSize" type="String" value="1em"/>
                                 <property name="id" type="String" value=""/>
                                 <property default="" name="label"
-                                    type="String" value="FPDU Energy (MeV)"/>
+                                    type="String" value="58 MeV (#/cm^2/s/sr/MeV)"/>
                                 <property default="false" name="log"
                                     type="Boolean" value="true"/>
                                 <property name="opposite" type="Boolean" value="false"/>
                                 <property name="range" type="datumRange">
-                                    <datumRange units="MeV" value="35.0 to 2000.0 MeV"/>
+                                    <datumRange units="#/cm^2/s/sr/MeV" value="0.30000000000000004 to 400.0"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
                                 <property default="0.1 (dimensionless)"
@@ -194,8 +193,8 @@
                             <Axis>
                                 <property default="false"
                                     name="autoLabel" type="Boolean" value="true"/>
-                                <property default="false"
-                                    name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRange"
+                                    type="Boolean" value="false"/>
                                 <property name="autoRangeHints"
                                     type="String" value=""/>
                                 <property name="drawTickLabels"
@@ -203,8 +202,7 @@
                                 <property name="flipped" type="Boolean" value="false"/>
                                 <property name="fontSize" type="String" value="1em"/>
                                 <property name="id" type="String" value=""/>
-                                <property default="" name="label"
-                                    type="String" value="FPDU (#/cm^2/s/sr/MeV)"/>
+                                <property name="label" type="String" value=""/>
                                 <property default="false" name="log"
                                     type="Boolean" value="true"/>
                                 <property name="opposite" type="Boolean" value="false"/>
@@ -213,17 +211,18 @@
                                 </property>
                                 <property name="reference" type="String" value=""/>
                                 <property default="0.1 (dimensionless)"
-                                    name="scale" type="datum" value="log10Ratio: 0.0082115"/>
+                                    name="scale" type="datum" value="log10Ratio: 0.012000"/>
                                 <property name="tickValues"
                                     type="String" value=""/>
-                                <property name="visible" type="Boolean" value="true"/>
+                                <property default="true" name="visible"
+                                    type="Boolean" value="false"/>
                             </Axis>
                         </property>
                     </Plot>
                 </property>
                 <property default="" name="plotId" type="String" value="plot_0"/>
                 <property name="renderControl" type="String" value=""/>
-                <property default="series" name="renderType"
+                <property name="renderType"
                     type="enum:org.virbo.autoplot.RenderType" value="series"/>
                 <property name="style" type="DomNode">
                     <PlotElementStyle id="style_0">
@@ -236,8 +235,8 @@
                         <property name="fillDirection" type="String" value="both"/>
                         <property name="fillToReference" type="Boolean" value="false"/>
                         <property name="lineWidth" type="Double" value="1.0"/>
-                        <property name="plotSymbol"
-                            type="enum:org.das2.graph.DefaultPlotSymbol" value="circles"/>
+                        <property default="circles" name="plotSymbol"
+                            type="enum:org.das2.graph.DefaultPlotSymbol" value="none"/>
                         <property default="binAverage"
                             name="rebinMethod"
                             type="enum:org.das2.graph.SpectrogramRenderer$RebinnerEnum" value="nearestNeighbor"/>
@@ -252,8 +251,7 @@
         </property>
         <property class="Plot" length="1" name="plots">
             <Plot id="plot_0">
-                <property default="false" name="autoBinding"
-                    type="Boolean" value="true"/>
+                <property name="autoBinding" type="Boolean" value="false"/>
                 <property default="false" name="autoLabel"
                     type="Boolean" value="true"/>
                 <property name="background" type="color" value="#00000000"/>
@@ -261,7 +259,7 @@
                     type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
                 <property default="" name="columnId" type="String" value="marginColumn_0"/>
                 <property name="context" type="datumRange">
-                    <datumRange units="us2000" value="2019-10-13 23:00 to 2019-10-15 01:00"/>
+                    <datumRange units="us2000" value="2015-06-16 23:00 to 2015-06-18 00:00"/>
                 </property>
                 <property name="displayLegend" type="Boolean" value="true"/>
                 <property name="displayTitle" type="Boolean" value="true"/>
@@ -306,16 +304,16 @@
                         <property name="drawTickLabels" type="Boolean" value="true"/>
                         <property name="flipped" type="Boolean" value="false"/>
                         <property name="fontSize" type="String" value="1em"/>
-                        <property default="" name="label" type="String" value="FPDU Energy (MeV)"/>
+                        <property default="" name="label" type="String" value="58 MeV (#/cm^2/s/sr/MeV)"/>
                         <property default="false" name="log"
                             type="Boolean" value="true"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="MeV" value="35.0 to 2000.0 MeV"/>
+                            <datumRange units="#/cm^2/s/sr/MeV" value="0.30000000000000004 to 400.0"/>
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="log10Ratio: 0.0043706"/>
+                            name="scale" type="datum" value="log10Ratio: 0.0077735"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -330,7 +328,7 @@
                         <property name="drawTickLabels" type="Boolean" value="true"/>
                         <property name="flipped" type="Boolean" value="false"/>
                         <property name="fontSize" type="String" value="1em"/>
-                        <property default="" name="label" type="String" value="FPDU (#/cm^2/s/sr/MeV)"/>
+                        <property name="label" type="String" value=""/>
                         <property default="false" name="log"
                             type="Boolean" value="true"/>
                         <property name="opposite" type="Boolean" value="false"/>
@@ -341,13 +339,14 @@
                         <property default="0.1 (dimensionless)"
                             name="scale" type="datum" value="log10Ratio: 0.012000"/>
                         <property name="tickValues" type="String" value=""/>
-                        <property name="visible" type="Boolean" value="true"/>
+                        <property default="true" name="visible"
+                            type="Boolean" value="false"/>
                     </Axis>
                 </property>
             </Plot>
         </property>
         <property name="timeRange" type="datumRange">
-            <datumRange units="us2000" value="2019-10-13 23:00 to 2019-10-15 01:00"/>
+            <datumRange units="us2000" value="2015-06-16 23:00 to 2015-06-18 00:00"/>
         </property>
     </Application>
 </vap>
