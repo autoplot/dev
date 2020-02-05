@@ -224,7 +224,7 @@
                 <property default="" name="plotId" type="String" value="plot_0"/>
                 <property name="renderControl" type="String" value=""/>
                 <property default="series" name="renderType"
-                    type="enum:org.virbo.autoplot.RenderType" value="nnSpectrogram"/>
+                    type="enum:org.virbo.autoplot.RenderType" value="series"/>
                 <property name="style" type="DomNode">
                     <PlotElementStyle id="style_0">
                         <property name="antiAliased" type="Boolean" value="true"/>
