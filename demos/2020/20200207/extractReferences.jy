@@ -1,0 +1,31 @@
+setScriptTitle('extract all references from text version of paper')
+setScriptDescription('''Scan through a text version of a paper, extracting
+any parts containing [] and .* et al [yyyy]. 
+This assumes last names do not contain spaces.''')
+
+p= getParam( 'paper','/home/jbf/project/rbsp/u/kris/20200207/grepableVersion.txt' )
+
+from java.util.regex import Pattern
+reLine= Pattern.compile('^(\d+)')
+re= Pattern.compile('(\[.* et al.*\])')
+re2= Pattern.compile('([a-zA-Z]+ et al.*\[\d\d\d\d\])')
+
+lastl= ''
+for l in open(p):
+    m= reLine.matcher(l)
+    if m.find():
+        linenum= m.group(1)
+    else:
+        linenum= ''
+    ll= lastl + l  # references may span linefeed
+    
+    iend=len(lastl)
+    m= re.matcher(ll)
+    while m.find():
+        iend= m.end()
+        print '%5s %s' % ( linenum, m.group(1) )
+    m= re2.matcher(ll)
+    while m.find():
+        iend= m.end()
+        print '%5s %s' % ( linenum, m.group(1) )
+    lastl= l[(iend-len(lastl)):]
