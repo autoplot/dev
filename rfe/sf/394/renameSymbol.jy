@@ -1,12 +1,13 @@
 setScriptLabel('Rename Variable')
 setScriptDescription('Rename a variable in the script editor.')
 
+print '==== v0728 ===='
 from javax.swing import JOptionPane,BoxLayout
 from javax.swing import JPanel,JLabel,JTextField,BoxLayout
 from java.awt import FlowLayout,GridLayout,BorderLayout
 from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
 
-editor= getApplication().getScriptPanel()
+editor= getApplication().getScriptPanel().getEditorPanel()
 
 script= editor.getText()
 var= editor.getSelectedText()
@@ -41,12 +42,18 @@ def refactorVarRename( script, i, old, new ):
     nodes= []
     class VB( VisitorBase ):
         def traverse(self,sn):
+            print '%04d: %s' % ( sn.beginLine, sn )
             sn.traverse(self);
         def unhandled_node(self,sn):
             return sn
         def visitName(self,n):
             if ( n.id==old ):
                 nodes.append(n)
+        def visitModule(self,n):
+            print '%04d: %s MODULE' % ( n.beginLine, n )
+        def visitFunctionDef(self,n):
+            print '%04d: %s FUNCTIONDEF' % ( n.beginLine, n )
+            
     vb= VB()
     for st in n.body:
         st.traverse(vb)
@@ -62,9 +69,8 @@ def refactorVarRename( script, i, old, new ):
     
 if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(), panel1, 'rename variable', JOptionPane.OK_CANCEL_OPTION ) ):
     newn= newtf.text
-    print 'var:', var, len(var)
-    print 'new:', newn, len(newn)
     script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
-    editor.setText( script1 )
+    if var!=newn:
+        editor.setText( script1 )
     
     
