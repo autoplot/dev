@@ -1,5 +1,5 @@
 setScriptLabel('Rename Variable')
-setScriptDescription('Rename a variable in the script editor.')
+setScriptDescription('Rename a variable in the script editor.  Note this misses some in classes, and gets some it should not!')
 
 print '==== v0728 ===='
 from javax.swing import JOptionPane,BoxLayout
