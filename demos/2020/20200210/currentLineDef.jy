@@ -1,0 +1,9 @@
+# Verified with Java 8.
+from java.lang import System
+print System.getProperty('java.version')
+
+def aproc():
+    print currentLine()
+
+print currentLine()
+aproc()
