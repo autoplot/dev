@@ -1,10 +1,10 @@
 setScriptTitle('Update Autoplot')
 setScriptDescription('''Download and install a new version of the Autoplot single-jar release''')
 
-version= getParam( 'version', 'devel', 'Autoplot version number', { examples:[ 'latest', 'devel', '20200202a' ] } )
+version= getParam( 'version', 'devel', 'Autoplot version number', { 'examples':[ 'latest', 'devel', '20200202a' ] } )
 
 # find the physical Jar file for Autoplot
-from org.virbo.autoplot import AutoplotUI
+from org.autoplot import AutoplotUI
 r1= AutoplotUI.getClassLoader().getResource("org/autoplot/AutoplotUI.class")
 if ( r1==None ):
     r1= AutoplotUI.getClassLoader().getResource("org/virbo/autoplot/AutoplotUI.class")
@@ -15,7 +15,26 @@ if ( resource.startswith('jar:file:') ) :
     print 'current jar file: ' + jarfile
 else:
     raise Exception('unable to update jar file, autoplot.jar not found.')
-    
+
+from java.awt import GridLayout
+from javax.swing import JPanel, JLabel, JTextField, JFormattedTextField
+
+gl= GridLayout( 2, 2 )
+gl.vgap= 10
+
+panel= JPanel()
+panel.setLayout( gl )
+
+panel.add( JLabel('Current Jar:') )
+ntf=JTextField(jarfile)
+ntf.setEditable(False)
+panel.add( ntf )
+
+panel.add( JLabel('Download:') )
+ntf=JTextField('http://autoplot.org/jnlp/'+version+'/autoplot.jar')
+ntf.setEditable(False)
+panel.add( ntf )
+
 from java.io import File
 from java.nio.file import Files, FileSystems,Paths    
 from javax.swing import JOptionPane
@@ -23,38 +42,22 @@ from javax.swing import JOptionPane
 new=''
 if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
     
-    if ( not jarfile.endswith('autoplot.jar') ):
-        i= jarfile.find( 'autoplot.jar' )
-        jarfile= jarfile[0:i+12]
-
-    response= JOptionPane.showConfirmDialog(getViewWindow(),'replace '+jarfile+
-       (' with http://autoplot.org/jnlp/%s/autoplot.jar?' % version),'update',JOptionPane.OK_CANCEL_OPTION )
+    response= JOptionPane.showConfirmDialog(getViewWindow(), panel, 'update Autoplot', JOptionPane.OK_CANCEL_OPTION )
     print 'response=', response
     if ( response==JOptionPane.OK_OPTION ):
-                          
-        print 'replacing single jar version of autoplot in ' + jarfile
+
+        newjarfile= File(jarfile).getParent() + 'autoplot.jar.'+version
+        
         new= downloadResourceAsTempFile(URL('http://autoplot.org/jnlp/%s/autoplot.jar' % version ),3600,monitor)
         new= new.toString()
         
-        if ( File(jarfile).exists() ):
-            print 'jarfile '+jarfile+' exists.'
-            if Files.isSymbolicLink( File(jarfile).toPath() ):
-                print 'removing symbolic link '+jarfile
-                File(jarfile).delete()
-            elif ( jarfile.endswith('autoplot.jar') ):
-                print 'renaming ' + jarfile + ' to ' + jarfile+'.t'
-                r= File(jarfile).renameTo(File(jarfile+'.t'))
-                if ( r!=0 ):
-                    raise Exception('cannot mv ' + jarfile + ' ' + jarfile+'.old' )
-                print 'deleting '+jarfile
-                if ( not File(jarfile).delete() ):
-                    raise Exception('cannot rm '+jarfile )
+        if ( not File(new).renameTo( File(newjarfile) ) ):
+            error='Unable to move downloaded file to '+newjarfile
         else:
-            print 'jarfile '+jarfile + ' does not exist.  Deleting anyway because it might be symlink'            
-            File(jarfile).delete()
-        print 'renaming downloaded file to '+jarfile+'.'+version
-        File( new ).renameTo( File( jarfile+'.'+version ) )
-        Files.createSymbolicLink( Paths.get(jarfile,[]),Paths.get(jarfile+'.'+version,[]),[])
+            if not File(jarfile).renameTo(File(jarfile+'.deleteme')):
+                error='Unable to move current file '+jarfile
+            else:
+                Files.createSymbolicLink( Paths.get(jarfile,[]),Paths.get( newjarfile,[]),[])
     else:
         new= 'abort'
         
