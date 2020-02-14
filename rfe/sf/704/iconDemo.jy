@@ -1,0 +1,6 @@
+setScriptTitle('Buy Flowers')
+setScriptIcon(PWD+'2020-02-14T16-48-50.png')
+setScriptDescription('Contact Florist and buy flowers')
+
+setStatus('Where are my keys?')
+
