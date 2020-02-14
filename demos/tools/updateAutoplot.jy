@@ -19,7 +19,27 @@ else:
 from java.awt import GridLayout
 from javax.swing import JPanel, JLabel, JTextField, JFormattedTextField
 
-gl= GridLayout( 2, 2 )
+# we need to identify the original file which links to the jar we are using.
+from java.nio.file import Path,Paths,Files
+from java.io import File
+autoplotDir= File(jarfile).getParentFile()
+
+ff= autoplotDir.listFiles()
+jarlink= jarfile
+print 'autoplotdir: '+str(autoplotDir)
+for f in ff:
+    p= Paths.get(f.toURI())
+    print "f,p", f, p
+    if ( Files.isSymbolicLink(p) ):
+        rp= p.toRealPath([])
+        print 'realpath: '+str(rp) + " =? " + str( File(jarfile) )
+        if ( rp.toFile().equals(File(jarfile)) ):
+            print 'found it: '+str(f)+' links to ' +jarfile
+            jarlink= f.toString()
+    else:
+        print 'not symlink:' + str(f)
+
+gl= GridLayout( 3, 2 )
 gl.vgap= 10
 
 panel= JPanel()
@@ -35,35 +55,42 @@ ntf=JTextField('http://autoplot.org/jnlp/'+version+'/autoplot.jar')
 ntf.setEditable(False)
 panel.add( ntf )
 
+panel.add( JLabel('Update Link:') )
+ntf=JTextField(jarlink)
+ntf.setEditable(False)
+panel.add( ntf )
+
 from java.io import File
 from java.nio.file import Files, FileSystems,Paths    
 from javax.swing import JOptionPane
 
-new=''
 if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
     
     response= JOptionPane.showConfirmDialog(getViewWindow(), panel, 'update Autoplot', JOptionPane.OK_CANCEL_OPTION )
-    print 'response=', response
+
     if ( response==JOptionPane.OK_OPTION ):
 
-        newjarfile= File(jarfile).getParent() + 'autoplot.jar.'+version
+        newjarfile= File( autoplotDir, 'autoplot.jar.'+version )
         
-        new= downloadResourceAsTempFile(URL('http://autoplot.org/jnlp/%s/autoplot.jar' % version ),3600,monitor)
-        new= new.toString()
+        tempfile= downloadResourceAsTempFile(URL('http://autoplot.org/jnlp/%s/autoplot.jar' % version ),3600,monitor)
         
-        if ( not File(new).renameTo( File(newjarfile) ) ):
+        if ( not tempfile.renameTo( newjarfile ) ):
             error='Unable to move downloaded file to '+newjarfile
         else:
-            if not File(jarfile).renameTo(File(jarfile+'.deleteme')):
-                error='Unable to move current file '+jarfile
+            if ( not newjarfile.setExecutable(True,False) ):
+                error= 'Cannot set executable: '+newjarfile
             else:
-                Files.createSymbolicLink( Paths.get(jarfile,[]),Paths.get( newjarfile,[]),[])
+                if ( not File(jarlink).delete() ):
+                    error='Unable to delete link: '+jarlink
+                else:
+                    Files.createSymbolicLink( Paths.get(jarlink,[]),Paths.get( newjarfile.toURI() ),[])
+                    error= ''
     else:
-        new= 'abort'
+        error= 'abort'
         
-if ( new=='' ):
-    JOptionPane.showMessageDialog(getViewWindow(),'unable to update','update failed, unable to find autoplot.jar.',JOptionPane.WARNING_MESSAGE)
-elif ( new=='abort' ):
+if ( error!='' ):
+    JOptionPane.showMessageDialog(getViewWindow(),'unable to update','update failed, '+error+'.',JOptionPane.WARNING_MESSAGE)
+elif ( error=='abort' ):
     pass
 else:            
     JOptionPane.showMessageDialog(getViewWindow(),'updated to '+version+'. Restart Autoplot.','update',JOptionPane.INFORMATION_MESSAGE)
