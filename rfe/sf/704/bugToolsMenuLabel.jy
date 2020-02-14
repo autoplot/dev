@@ -1,6 +1,5 @@
 setScriptTitle('bugToolsMenu')
-setScriptDescription('this demos how the description is not used in the tools menu')
-
+setScriptDescription('this demos how the label or title is not used in the tools menu')
 
 from java.io import BufferedReader,FileReader
 ff= BufferedReader(FileReader('/home/jbf/ct/autoplot/git/dev/demos/tools/updateAutoplot.jy'))
