@@ -39,6 +39,9 @@ jLabel2.setText("Peak 1 Center:")
 jLabel3.setText("Peak 1 Width:")
 
 jTextField1.setText("jTextField1")
+
+jTextField2.setText("jTextField2")
+
 jTextField3.setText("jTextField3")
 
 jLabel4.setText("<html>The goal is to figure out what code  is needed to implement a FreeLayout to make a nice GUI in a Jython code. ")
