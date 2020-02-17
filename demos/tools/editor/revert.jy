@@ -9,7 +9,7 @@ script= getApplication().getScriptPanel().getFilename()
 exe= 'git checkout -- '+script
 
 from javax.swing import JOptionPane
-s='Revert local modifications and commits, reverting to the upstream version?'
+s='<html>Revert local modifications and commits, reverting to the upstream version?<br>'+exe
 if JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog( getApplication(), s, "git revert", JOptionPane.OK_CANCEL_OPTION ):
 
     setStatus( "busy: executing pull" )
