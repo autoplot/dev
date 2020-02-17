@@ -2,8 +2,9 @@ setScriptTitle('Git Revert')
 setScriptDescription('Run the git checkout -- command.  This assumes that the git commands are available at the command line.')
 
 script= getApplication().getScriptPanel().getFilename()
+parentFile= File( script ).parentFile
 
-exe= 'git checkout -- '+script 
+exe= 'git checkout -- '+script[len(parentFile.toString())+1:]
 
 from javax.swing import JOptionPane
 s='<html>Revert local modifications and commits, reverting to the upstream version?<br>'+exe
@@ -15,7 +16,7 @@ if JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog( getApplication(), s, 
     from java.io import File
     
     pb= ProcessBuilder(exe.split(' '))
-    pb.directory( File( script ).parentFile )
+    pb.directory( parentFile )
 
     from java.io import File
     from org.autoplot.datasource import AutoplotSettings
@@ -29,10 +30,6 @@ if JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog( getApplication(), s, 
 
     p= pb.start()
     p.waitFor()
-
-    from org.das2.util import FileUtil
-    msg= FileUtil.readFileToString( log )
-    showMessageDialog(msg)
 
     setStatus( "Revert complete, see " + str(log) )
     getApplication().getScriptPanel().loadExampleUri(script)
