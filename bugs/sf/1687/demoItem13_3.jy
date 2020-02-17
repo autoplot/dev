@@ -1,0 +1,6 @@
+# when you have a simple assignment, the assignment should be performed.
+# This is similar, and may be a necessary step to getting item 13.
+d= 'http://autoplot.org/data/pngwalk/'
+import org.autoplot.pngwalk.PngWalkTool
+c1= org.autoplot.pngwalk.PngWalkTool.start
+#c1.<C>
