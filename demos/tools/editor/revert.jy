@@ -35,4 +35,5 @@ if JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog( getApplication(), s, 
     showMessageDialog(msg)
 
     setStatus( "Revert complete, see " + str(log) )
-
+    getApplication().getScriptPanel().loadExampleUri(script)
+    
