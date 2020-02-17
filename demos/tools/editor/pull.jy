@@ -1,5 +1,5 @@
 setScriptTitle('Git Pull')
-setScriptDescription('Run the git pull command')
+setScriptDescription('Run the git pull command.  This assumes that the git commands are available at the command line.')
 
 print '****'
 print 'This is pull.jy, an editor action.'
