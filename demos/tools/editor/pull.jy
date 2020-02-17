@@ -1,0 +1,36 @@
+setScriptTitle('Git Pull')
+setScriptDescription('Run the git pull command')
+
+print '****'
+print 'This is pull.jy, an editor action.'
+
+script= getApplication().getScriptPanel().getFilename()
+
+from java.io import File
+from org.autoplot.datasource import AutoplotSettings
+autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
+
+exe= 'git pull'
+
+setStatus( "busy: executing pull" )
+
+from java.lang import ProcessBuilder
+
+pb= ProcessBuilder(exe.split(' '))
+pb.directory( File( script ).parentFile )
+
+log= File( autoplotData, 'log' )
+log= File( log, 'editor.pull.txt' )
+
+pb.redirectErrorStream(True)
+pb.redirectOutput( ProcessBuilder.Redirect.appendTo(log) )
+
+p= pb.start()
+p.waitFor()
+
+from org.das2.util import FileUtil
+msg= FileUtil.readFileToString( log )
+showMessageDialog(msg)
+
+setStatus( "Pull complete, see " + str(log) )
+
