@@ -3,6 +3,9 @@ setScriptDescription('''Download and install a new version of the Autoplot singl
 
 version= getParam( 'version', 'devel', 'Autoplot version number', { 'examples':[ 'latest', 'devel', '20200202a' ] } )
 
+from java.lang import System
+isWindows= System.getProperty( 'os.name' ).startswith('Windows')
+
 # find the physical Jar file for Autoplot
 from org.autoplot import AutoplotUI
 r1= AutoplotUI.getClassLoader().getResource("org/autoplot/AutoplotUI.class")
@@ -83,7 +86,10 @@ if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
                 if ( not File(jarlink).delete() ):
                     error='Unable to delete link: '+jarlink
                 else:
-                    Files.createSymbolicLink( Paths.get(jarlink,[]),Paths.get( newjarfile.toURI() ),[])
+                    if ( isWindows ):
+                        Files.createLink( Paths.get(jarlink,[]),Paths.get( newjarfile.toURI() ) )
+                    else:
+                        Files.createSymbolicLink( Paths.get(jarlink,[]),Paths.get( newjarfile.toURI() ),[])
                     error= ''
     else:
         error= 'abort'
