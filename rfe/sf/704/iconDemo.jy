@@ -1,0 +1,6 @@
+setScriptTitle('Buy Flowers')
+setScriptIcon('https://github.com/autoplot/dev/raw/master/rfe/sf/704/2020-02-14T16-48-50.png') # PWD doesn't work here...
+setScriptDescription('Contact Florist and buy flowers')
+
+setStatus('Where are my keys?')
+

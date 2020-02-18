@@ -1,0 +1,10 @@
+setScriptTitle('Test Link')
+setScriptDescription('''The new autoplot update script relies on links.  The Filesystem API allows for making links, but does this work on Windows?''')
+
+from java.nio.file import Files, FileSystems,Paths
+
+target= getParam('target', '/tmp/foo.txt' )
+lnk= getParam('link', '/tmp/foo.txt.link' )
+
+print Files.createSymbolicLink( Paths.get(lnk,[]),Paths.get(target,[]),[] )
+

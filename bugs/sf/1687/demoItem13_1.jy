@@ -1,0 +1,4 @@
+d= 'http://autoplot.org/data/pngwalk/'
+from org.autoplot.pngwalk import PngWalkTool
+p1= PngWalkTool.start(d+'product_$Y$m$d.png',getApplication())
+#p1.<C>

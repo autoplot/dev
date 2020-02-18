@@ -1,0 +1,49 @@
+nsamp=100
+
+N= 10000
+
+a= floor( 10 * randu(N) )
+b= floor( 10 * randu(N) )
+
+setLayout(3,2)
+
+from java.lang import System
+ctm= System.currentTimeMillis
+
+result= zeros(nsamp)
+for i in xrange(nsamp):
+    t0= ctm()
+    c= eq( a,b )
+    result[i]= ctm()-t0
+
+plot( 0, result, ytitle='Current Production!cExecution Time, ms' )
+plot( 1, c )
+
+from org.das2.qds.ops import OpsParl
+result= zeros(nsamp)
+for i in xrange(nsamp):
+    t0= ctm()
+    c= OpsParl.eq_noiter( a,b ) # This won't work without OpsParl object
+    result[i]= ctm()-t0
+
+plot( 2, result, ytitle='No Iterator!cExecution Time, ms' )
+plot( 3, c )
+
+dom.plots[0].yaxis.autoRangeHints='includeZero=T'
+bind( dom.plots[1].yaxis, 'range',  dom.plots[3].yaxis, 'range' )
+
+# multi-threaded version
+result= zeros(nsamp)
+for i in xrange(nsamp):
+    t0= ctm()
+    c= OpsParl.eq_parl( a,b ) # This won't work without OpsParl object
+    result[i]= ctm()-t0
+
+plot( 4, result, ytitle='Multi-Thread!cExecution Time, ms' )
+plot( 5, c )
+
+dom.plots[0].yaxis.autoRangeHints='includeZero=T'
+bind( dom.plots[1].yaxis, 'range',  dom.plots[5].yaxis, 'range' )
+
+from org.autoplot import AutoplotUtil
+AutoplotUtil.resetZoomY( dom, dom.plots[1] )   # this one minds the binding

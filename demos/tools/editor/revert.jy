@@ -1,0 +1,36 @@
+setScriptTitle('Git Revert')
+setScriptDescription('Run the git checkout -- command.  This assumes that the git commands are available at the command line.')
+
+from java.io import File
+script= getApplication().getScriptPanel().getFilename()
+parentFile= File( script ).parentFile
+
+exe= 'git checkout -- '+script[len(parentFile.toString())+1:]
+
+from javax.swing import JOptionPane
+s='<html>Revert local modifications and commits, reverting to the upstream version?<br>'+exe
+if JOptionPane.OK_OPTION == JOptionPane.showConfirmDialog( getApplication(), s, "git revert", JOptionPane.OK_CANCEL_OPTION ):
+
+    setStatus( "busy: executing git checkout --" )
+
+    from java.lang import ProcessBuilder
+    
+    pb= ProcessBuilder(exe.split(' '))
+    pb.directory( parentFile )
+
+    from java.io import File
+    from org.autoplot.datasource import AutoplotSettings
+    autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
+
+    log= File( autoplotData, 'log' )
+    log= File( log, 'editor.revert.txt' )
+
+    pb.redirectErrorStream(True)
+    pb.redirectOutput( ProcessBuilder.Redirect.appendTo(log) )
+
+    p= pb.start()
+    p.waitFor()
+
+    setStatus( "Revert complete, see " + str(log) )
+    getApplication().getScriptPanel().loadExampleUri(script)
+    
