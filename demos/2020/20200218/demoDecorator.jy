@@ -1,0 +1,35 @@
+reset()
+
+from org.das2.graph import Painter
+from java.awt.geom import RoundRectangle2D,Line2D,Area
+from java.awt import RenderingHints as RH
+from java.awt import BasicStroke
+
+class Washer( Painter ):
+    def paint( self, g ):
+        g.setRenderingHint(RH.KEY_ANTIALIASING,RH.VALUE_ANTIALIAS_ON)
+        xaxis= dom.plots[0].xaxis.controller.dasAxis
+        yaxis= dom.plots[0].yaxis.controller.dasAxis
+        x=  xaxis.transform( 20, Units.dimensionless ) 
+        y=  yaxis.transform( 40, Units.dimensionless ) 
+
+        clip= dom.plots[0].controller.dasPlot.getAxisClip()
+                
+        s= RoundRectangle2D.Double(x-30,y-30,60,60,10,10)
+        a= Area(s)
+        a.intersect( Area(clip) )
+        
+        g.setClip(a)
+        g.setStroke( BasicStroke(0.3) )
+        
+        for i in xrange(15):
+            l= Line2D.Double(x - 50 + i*7, y-30, x -20 + i*7 ,y+30 )
+            g.draw(l)
+        g.setClip(clip)
+        g.draw(s)
+        
+        
+
+w= Washer()
+dom.canvases[0].controller.dasCanvas.addBottomDecorator(w)
+    
