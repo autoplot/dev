@@ -1,0 +1,25 @@
+setScriptTitle('getParam Demo')
+setScriptDescription('''Autoplot provides a quick way to create GUIs, 
+where the getParam calls are used to create GUI elements.''')
+
+# 'timerange' is a special variable to control the span
+t= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+
+u= getParam( 'u', URI('vap+inline:1,2,3,4,5,6,7,5,6,7,8,9') )
+
+d= getParam( 'd', datum('5 Hz'), 'a datum is a number and a unit' )
+dr= getParam( 'dr', datumRange('5 to 10 Hz'), 'a datum range spans an interval.' )
+
+b1= getParam( 'b', False, 'use filter', [True,False] )
+b2= getParam( 'b2', 'F', 'older scripts use T or F', [ 'T','F'] )
+
+onezero= getParam( 'onezero', 0, 'to get zero or one', { 'values':[0,1], 'labels':['0','1'] } )
+
+ab= getParam( 'ab', 'a', 'one of a or b', ['a','b'] )
+if ab=='a':
+    alevel= getParam( 'alevel', 5.0 )
+else:
+    blevel= getParam( 'blevel', 1.0 )
+    bdir= getParam( 'bdir', 'Up', 'direction', ['Up','Dn'] )
+        
+result= getDataSet(u)

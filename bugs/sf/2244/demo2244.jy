@@ -1,0 +1,5 @@
+setScriptDescription('this shows how the BUNDLE_0 property is lost in the join operation')
+b= bundle( dataset(4.5), dataset(5.6) )
+print b.property( QDataSet.BUNDLE_0 )
+j= join( None, b )
+print j.property( QDataSet.BUNDLE_1 )
