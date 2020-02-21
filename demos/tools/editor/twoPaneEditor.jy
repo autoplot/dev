@@ -1,0 +1,16 @@
+setScriptTitle('NOT DONE--add second text editor which follows')
+
+from javax.swing import JSplitPane,JOptionPane
+from java.awt import BorderLayout
+from org.autoplot.jythonsupport.ui import EditorTextPane
+
+fl= getApplication().getScriptPanel().getFilename()
+
+edit1= EditorTextPane()
+edit2= EditorTextPane()
+jsp= JSplitPane()
+jsp.setLeftComponent(edit1)
+jsp.setRightComponent(edit2)
+jsp.setDividerLocation(600)
+
+addTab( 'editor2', jsp )
