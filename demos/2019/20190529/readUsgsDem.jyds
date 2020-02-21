@@ -1,6 +1,6 @@
-# read DEM data
-# See https://en.wikipedia.org/wiki/USGS_DEM
-#
+setScriptTitle('Read USGS DEM Data')
+setScriptDescription('Read USGS Digital Elevation Model data files.  See https://en.wikipedia.org/wiki/USGS_DEM')
+
 # TODO:
 #   The map can be rotated, so rows and columns need not correspond to East and South
 #   directions.  The QDataSet data model has never represented such data as a grid.
