@@ -9,15 +9,15 @@ fl= getApplication().getScriptPanel().getFilename()
 edit1= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
 edit2= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
 
-bind( edit1, 'filename', edit2, 'filename' ) # this doesn't properly.
+bind( edit1, 'filename', edit2, 'filename' ) # this doesn't update properly.
+
+bind( edit1.getEditorPanel(), 'font', edit2.editorPanel, 'font' )
 
 vsb1= edit1.getScrollPane().getVerticalScrollBar()
 vsb2= edit2.getScrollPane().getVerticalScrollBar()
 
 def d(evt):
     h= edit1.getScrollPane().viewport.height
-    print 'adjustment: ', evt.value
-    print 'height: ', h
     vsb2.value= evt.value+h
     
 vsb1.adjustmentValueChanged= d
