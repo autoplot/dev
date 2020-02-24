@@ -1,4 +1,5 @@
-setScriptTitle('NOT DONE--add second text editor which follows')
+setScriptTitle('Two-Page Editor')
+setScriptDescription('add a new tab with two editors linked together so that two pages of code are visible')
 
 from javax.swing import JSplitPane,JOptionPane
 from java.awt import BorderLayout
@@ -9,8 +10,14 @@ fl= getApplication().getScriptPanel().getFilename()
 edit1= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
 edit2= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
 
-bind( edit1, 'filename', edit2, 'filename' ) # this doesn't update properly.
+#from java.beans import PropertyChangeListener
+#class MyPCL(PropertyChangeListener):
+#    def propertyChange( self, evt ):
+#        from java.io import File
+#        edit2.loadFile( File( edit1.getFilename() ) )
+#edit1.addPropertyChangeListener('filename',MyPCL())
 
+bind( edit1, 'filename', edit2, 'filename' ) # this requires Autoplot 20200224a.
 bind( edit1.getEditorPanel(), 'font', edit2.editorPanel, 'font' )
 
 vsb1= edit1.getScrollPane().getVerticalScrollBar()
@@ -23,9 +30,9 @@ def d(evt):
 vsb1.adjustmentValueChanged= d
 
 jsp= JSplitPane()
+jsp.setResizeWeight(0.5)
 jsp.setLeftComponent(edit1)
 jsp.setRightComponent(edit2)
-jsp.setDividerLocation(600)
+#jsp.setDividerLocation(600)
 
-
-addTab( 'editor3', jsp )
+addTab( 'script2', jsp )
