@@ -1,0 +1,7 @@
+ds= ripplesWaveformTimeSeries(10)
+plot( ds )
+
+plot( 1, fftPower( ds,256,2,'Hann',None ) )
+annotation(0,plotId=dom.plots[1].id,
+           pointAt='2012-10-02T12:03:00.9,1000',text='EOR!cBreak',
+           anchorPosition='SW')
