@@ -1,16 +1,31 @@
-setScriptTitle('NOT DONE--add second text editor which follows')
+setScriptTitle('Two-Page Editor')
+setScriptDescription('add a new tab with two editors linked together so that two pages of code are visible')
 
 from javax.swing import JSplitPane,JOptionPane
 from java.awt import BorderLayout
 from org.autoplot.jythonsupport.ui import EditorTextPane
-
+from org.autoplot.scriptconsole import JythonScriptPanel
 fl= getApplication().getScriptPanel().getFilename()
 
-edit1= EditorTextPane()
-edit2= EditorTextPane()
+edit1= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
+edit2= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
+
+bind( edit1.getEditorPanel(), 'document', edit2.editorPanel, 'document' )
+bind( edit1.getEditorPanel(), 'font', edit2.editorPanel, 'font' )
+
+vsb1= edit1.getScrollPane().getVerticalScrollBar()
+vsb2= edit2.getScrollPane().getVerticalScrollBar()
+
+def d(evt):
+    h= edit1.getScrollPane().viewport.height
+    vsb2.value= evt.value+h
+    
+vsb1.adjustmentValueChanged= d
+
 jsp= JSplitPane()
+jsp.setResizeWeight(0.5)
 jsp.setLeftComponent(edit1)
 jsp.setRightComponent(edit2)
-jsp.setDividerLocation(600)
+#jsp.setDividerLocation(600)
 
-addTab( 'editor2', jsp )
+addTab( 'script2', jsp )
