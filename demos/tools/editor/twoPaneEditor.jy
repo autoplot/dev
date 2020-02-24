@@ -10,14 +10,7 @@ fl= getApplication().getScriptPanel().getFilename()
 edit1= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
 edit2= JythonScriptPanel(getApplication(),getApplication().getDataSetSelector())
 
-#from java.beans import PropertyChangeListener
-#class MyPCL(PropertyChangeListener):
-#    def propertyChange( self, evt ):
-#        from java.io import File
-#        edit2.loadFile( File( edit1.getFilename() ) )
-#edit1.addPropertyChangeListener('filename',MyPCL())
-
-bind( edit1, 'filename', edit2, 'filename' ) # this requires Autoplot 20200224a.
+bind( edit1.getEditorPanel(), 'document', edit2.editorPanel, 'document' )
 bind( edit1.getEditorPanel(), 'font', edit2.editorPanel, 'font' )
 
 vsb1= edit1.getScrollPane().getVerticalScrollBar()
