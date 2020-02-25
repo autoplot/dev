@@ -1,0 +1,4 @@
+reset()
+ds= ripplesWaveformTimeSeries(100)
+plot(0,ds)
+plot(1,fftPower(ds,ones(128),4,monitor))
