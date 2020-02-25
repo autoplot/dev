@@ -1,3 +1,8 @@
+setScriptTitle('Testagator')
+setScriptDescription('''Given the name of a script and the Autoplot version to 
+run against, download and run the script.  This is typically run with the 'Run Batch'
+tool, to sweep through a set of versions to see where a bug was introduced.''')
+
 # It's the Testagator.  Run the script against each version of Autoplot.
 
 from java.lang import ProcessBuilder
