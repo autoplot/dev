@@ -1,0 +1,14 @@
+from org.das2.util import FileUtil
+vapfile= getFile( 'https://github.com/autoplot/dev/blob/master/bugs/sf/2249/testCopyPaste2.vap',monitor)
+vapstr= FileUtil.readFileToString(vapfile)
+
+from java.awt import Toolkit
+clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
+
+from java.awt.datatransfer import StringSelection
+selection= StringSelection(vapstr)
+
+clipboard.setContents( selection, selection )
+from org.autoplot import GuiSupport
+GuiSupport.pasteClipboardIntoPlot( 
+    getApplication(),dom.controller,dom.plots[0] )
