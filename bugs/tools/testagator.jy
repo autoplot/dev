@@ -8,14 +8,6 @@ tool, to sweep through a set of versions to see where a bug was introduced.''')
 from java.lang import ProcessBuilder
 from java.io import BufferedReader, InputStreamReader
 
-ll= listDirectory('http://autoplot.org/jnlp/v2019_*') 
-ll=ll[-2:]
-
-#ll= __builtin__.sort( ll, key=lambda x: int(x[7:]))
-#
-#for l in ll:
-#    print l
-
 script= getParam( 'scriptName', 'demoAutorangeBug.jy' )
 apv= getParam( 'apv', 'v2019a_5', 'autoplot version' )
 
