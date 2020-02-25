@@ -1,0 +1,54 @@
+# It's the Testagator.  Run the script against each version of Autoplot.
+
+from java.lang import ProcessBuilder
+from java.io import BufferedReader, InputStreamReader
+
+ll= listDirectory('http://autoplot.org/jnlp/v2019_*') 
+ll=ll[-2:]
+
+#ll= __builtin__.sort( ll, key=lambda x: int(x[7:]))
+#
+#for l in ll:
+#    print l
+
+script= getParam( 'scriptName', 'demoAutorangeBug.jy' )
+apv= getParam( 'apv', 'v2019a_5', 'autoplot version' )
+
+if ( script.find('/')==-1 ):
+    script= PWD + script
+    
+l= apv
+print '=== ' +l + ' ==='
+url= 'http://autoplot.org/jnlp/'+l+'/autoplot.jar'
+jar= downloadResourceAsTempFile(URL(url),3600,monitor.getSubtaskMonitor(url))
+exe= 'java -Djava.awt.headless=true -cp '+jar.toString()+' org.autoplot.AutoplotUI  --script='+script
+print exe
+pb= ProcessBuilder(exe.split(' '))
+p= pb.start()
+
+mkdir( '/tmp/out/' )
+ins= BufferedReader( InputStreamReader( p.getInputStream() ) )
+out= open( '/tmp/out/'+l+'.txt', 'w' )
+
+#b= StringBuilder()
+line= ins.readLine()
+while( line!=None ):
+    print line
+    out.write(line)
+    out.write('\n')
+    #b.append(line)
+    line= ins.readLine()
+ins.close()        
+out.close()
+result= p.waitFor() 
+
+if ( result!=0 ):
+    from java.io import BufferedReader,InputStreamReader
+    errs= BufferedReader( InputStreamReader( p.getErrorStream() ) )
+    s= errs.readLine()
+    while ( s!=None ):
+        print s
+        s= errs.readLine()
+    raise Exception('something went wrong: %d ' % result)
+else:
+    print 'done'
