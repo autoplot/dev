@@ -42,7 +42,9 @@ for f in ff:
     else:
         print 'not symlink:' + str(f)
 
-gl= GridLayout( 3, 2 )
+newjarfile= File( autoplotDir, 'autoplot.jar.'+version )
+
+gl= GridLayout( 4, 2 )
 gl.vgap= 10
 
 panel= JPanel()
@@ -55,6 +57,11 @@ panel.add( ntf )
 
 panel.add( JLabel('Download:') )
 ntf=JTextField('http://autoplot.org/jnlp/'+version+'/autoplot.jar')
+ntf.setEditable(False)
+panel.add( ntf )
+
+panel.add( JLabel('New Jar:') )
+ntf=JTextField(newjarfile)
 ntf.setEditable(False)
 panel.add( ntf )
 
@@ -72,8 +79,6 @@ if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
     response= JOptionPane.showConfirmDialog(getViewWindow(), panel, 'update Autoplot', JOptionPane.OK_CANCEL_OPTION )
 
     if ( response==JOptionPane.OK_OPTION ):
-
-        newjarfile= File( autoplotDir, 'autoplot.jar.'+version )
         
         tempfile= downloadResourceAsTempFile(URL('http://autoplot.org/jnlp/%s/autoplot.jar' % version ),3600,monitor)
         
