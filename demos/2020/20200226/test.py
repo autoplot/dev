@@ -5,4 +5,3 @@ i=0
 while i<10:
    print 'current value of i is ', i
    i=i+1
-
