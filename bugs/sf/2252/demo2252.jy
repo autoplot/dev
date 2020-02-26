@@ -1,4 +1,7 @@
 reset()
-ds= ripplesWaveformTimeSeries(100)
+ds= ripplesWaveformTimeSeries(100)  # ds[100,512]
 plot(0,ds)
-plot(1,fftPower(ds,ones(128),4,monitor))
+plot(1,fftPower(ds,ones(256),2,monitor))
+
+# We should get 3 per record, with 1 record gaps.
+# The goal is to get 4 per record, looking at the next record as well.
