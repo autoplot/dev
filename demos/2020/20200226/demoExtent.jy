@@ -1,0 +1,14 @@
+setScriptTitle('demo extent')
+setScriptDescription('''the extent function shows where a dataset
+is within a range.  extent returns a two-element dataset showing
+the min and max values.  within shows where a dataset is within
+this range.''')
+
+dd= dataset( [1,2,3,4,5,6] )
+ee= dataset( [4,5,6,7] )
+
+print extent(dd)
+for w in within(ee,extent(dd)):
+    print w
+    
+
