@@ -1,4 +1,4 @@
-editor= getApplication().getScriptPanel()
+editor= getApplication().getScriptPanel().getEditorPanel()
 
 print dir(editor)
 print editor.getText()
