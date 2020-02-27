@@ -1,0 +1,13 @@
+# Test to see if gaps are handled properly
+
+ds= ripplesWaveformTimeSeries(14)
+ds[0:4]= reform( sin( linspace('0ms','500ms',4*512) ), [4,512] )
+ds[4:10]=  reform( sin( linspace('0ms','2000ms',6*512) ), [6,512] )
+ds[10:14]=  reform( -1 * sin( linspace('0ms','500ms',4*512) ), [4,512] )
+ds[1::2]= ds[1::2]+0.2
+tt= ds.property(QDataSet.DEPEND_0)
+tt[4:]= tt[4:] + '100ms'
+ds.putProperty( QDataSet.DEPEND_0, tt )
+plot( ds )
+plot( 1, fftPower( ds,256,1,'Hann',None ), zlog=False, renderType='nnSpectrogram>rebin=noInterpolate' )
+plot( 2, fftPower( ds,256,2,'Hann',None ), zlog=False, renderType='nnSpectrogram>rebin=noInterpolate' )
