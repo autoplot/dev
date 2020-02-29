@@ -64,13 +64,13 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+wav:%{PWD}recording%20605001750.wav"/>
+                <property default="" name="uri" type="String" value="vap+wav:http://jfaden.net/~jbf/autoplot/data.backup/spaces/recording 605001750.wav"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_1">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+wav:%{PWD}recording%20605001750.wav"/>
+                <property default="" name="uri" type="String" value="vap+wav:http://jfaden.net/~jbf/autoplot/data.backup/spaces/recording 605001750.wav"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
