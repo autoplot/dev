@@ -1,0 +1,20 @@
+setScriptTitle('Bind Two Pngwalks')
+setScriptDescription('''Bind two pngwalks together to compare images.
+The binding can be done on time range, or on the filenames
+when an aggregation cannot be formed.''')
+
+p1= getParam('pngwalk1',URI('http://autoplot.org/data/pngwalk/product.pngwalk'))
+p2= getParam('pngwalk2',URI('http://autoplot.org/data/pngwalk/product.pngwalk'))
+
+ft= getParam('bind','timeRange','Bind type',['filename','timeRange'])
+
+app= getApplication()
+from org.autoplot.pngwalk import PngWalkTool
+
+pngwalk1= PngWalkTool.start(str(p1),app)
+pngwalk2= PngWalkTool.start(str(p2),app)
+
+if ( ft=='timeRange' ):
+    bind( pngwalk1, 'timeRange', pngwalk2, 'timeRange' )
+else:
+    bind( pngwalk1, 'selectedName', pngwalk2, 'selectedName' )

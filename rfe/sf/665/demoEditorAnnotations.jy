@@ -1,5 +1,5 @@
 app= getApplication()
-sp= app.getScriptPanel()
+sp= app.getScriptEditor()
 eas= sp.getEditorAnnotationsSupport()
 
 for i in xrange(1,8):

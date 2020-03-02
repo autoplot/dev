@@ -1,0 +1,14 @@
+def paintDots(g):
+    g.color= Color(0xc0c0c0)
+    for i in xrange(0,1000,10):
+        for j in xrange(0,1000,10):
+            g.fillOval(i,j,3,3)
+addBottomDecoration(dom.plots[0],paintDots)
+
+from java.awt import Font
+def paintProvisional(g):
+    g.color= Color(0xffc0c0)
+    g.setFont(Font.decode('sans-80'))
+    g.rotate(-30*TAU/360.)
+    g.drawString('Provisional',-150,300)
+addTopDecoration(dom.canvases[0],paintProvisional)

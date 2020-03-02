@@ -1,0 +1,6 @@
+# add a second metadata tab
+
+from org.autoplot import MetadataPanel
+mt= MetadataPanel(getApplicationModel())
+
+addTab( 'metadata2', mt )

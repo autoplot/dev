@@ -61,7 +61,7 @@ ntf.setEditable(False)
 panel.add( ntf )
 
 panel.add( JLabel('New Jar:') )
-ntf=JTextField(newjarfile)
+ntf=JTextField(str(newjarfile))
 ntf.setEditable(False)
 panel.add( ntf )
 

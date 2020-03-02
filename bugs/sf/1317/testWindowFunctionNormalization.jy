@@ -1,0 +1,15 @@
+# demo poor autoranging after fftPower function.
+t=  linspace(0,10,10000).setUnits(Units.seconds)
+mag= link( t, sin( 2*PI*t*'300Hz' ) )
+from org.virbo.dsops.Ops import FFTFilterType
+
+window1= ones(256)
+window2= ones(256)*4
+
+spec= fftPower(mag,window1,2,monitor)
+plot(0, spec)
+
+spec= fftPower(mag,window2,2,monitor)
+plot(1, spec)
+
+# this implies that normization is NOT done.
