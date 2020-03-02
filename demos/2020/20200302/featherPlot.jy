@@ -19,23 +19,14 @@ print mag
 
 (mag,x,y)= synchronize(t2,(mag,x,y))
 
-#plot( 1, mag )
-#plot( 2, x )
-#plot( 3,y )
-
 dx= putProperty( mag[:,0], QDataSet.UNITS, Units.dimensionless )
 dy= putProperty( mag[:,1], QDataSet.UNITS, Units.dimensionless )
 featherDs= bundle( x, y, dx, dy )
 featherDs= link( t2, featherDs )
 
-# the following two lines make it so that we can complete on "g"
-
 from org.das2.graph import Renderer
 from java.awt.image import BufferedImage
 from java.awt import Point
-
-bi= BufferedImage(640,480,BufferedImage.TYPE_INT_ARGB)
-g= bi.getGraphics()
 
 class FeatherRenderer( Renderer ):
     def __init__(self,scale=1):
