@@ -1,3 +1,7 @@
+setScriptTitle('Feather Plot Demo')
+setScriptDescription('''Shows a custom renderer which plots arrows of lengths dx,dy at points x,y.  In this demo
+ACE magnetometer data is positioned on fake orbit data.''')
+
 reset()
 
 from org.das2.graph import Arrow
