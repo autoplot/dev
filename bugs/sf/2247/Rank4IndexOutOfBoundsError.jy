@@ -1,0 +1,4 @@
+d= findgen(20,3,4,5)
+formatDataSet(d,'/tmp/ap/rank4.cdf?data')
+e= getDataSet('/tmp/ap/rank4.cdf?data')
+print e[-1,-1,-1,-1]
