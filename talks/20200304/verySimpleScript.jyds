@@ -1,5 +1,0 @@
-tr= getParam( 'timerange', '2012-11-15', 'timerange to load' )
-
-mag= getDataSet('vap+cdf:http://emfisis.physics.uiowa.edu/Flight/RBSP-A/L3/$Y/$m/$d/rbsp-a_magnetometer_4sec-gei_emfisis-L3_$Y$m$d_v$(v,sep).cdf?timerange=%s&Magnitude' % tr,monitor )
-
-result= mag*28
