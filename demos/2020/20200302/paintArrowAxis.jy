@@ -1,0 +1,10 @@
+from org.das2.graph import Arrow
+from java.awt.geom import Point2D
+def drawArrows(g):
+    xa= dom.plots[0].xaxis.controller.dasAxis
+    ya= dom.plots[0].yaxis.controller.dasAxis
+    ptail= Point2D.Double(xa.transform(datum(0)),ya.transform(datum(0)))
+    phead= Point2D.Double(xa.transform(datum(5)),ya.transform(datum(5)))
+    Arrow.paintArrow( g,phead,ptail,5.,Arrow.HeadStyle.THIN_TRIANGLE )
+
+addTopDecoration( dom.plots[0],drawArrows )
