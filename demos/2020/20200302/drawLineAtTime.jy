@@ -1,0 +1,10 @@
+reset()
+plot( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=Oct+2016' )
+
+t0= datum( '2016-10-12T00:00' )
+
+def drawLine(g):
+    i= int(dom.plots[0].xaxis.controller.dasAxis.transform(t0))
+    g.drawLine( i,0,i, dom.canvases[0].height )
+
+addTopDecoration( dom.canvases[0], drawLine )
