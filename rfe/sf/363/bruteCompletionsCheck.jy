@@ -39,9 +39,11 @@ for i in xrange( len(ss) ):
    except:
        dsb.nextRecord([irow,icol,-1])
 
-newApplication('completions')
+old= getApplication()
+setApplication( newApplication('completions') )
 reset()
 plot( grid( dsb.getDataSet() ), renderType='digital>fontSize=0.5em&format=%d&fillLabel=' )
+setApplication(old)
 
  #   tc.setCaretPosition(i)
   # ci.startPopup(tc)
