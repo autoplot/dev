@@ -1,0 +1,49 @@
+# brute force test of editor completions.  Load in the script and attempt to get the completions at every point.
+
+from org.virbo.jythonsupport import JythonUtil
+from java.io import FileReader
+from javax.swing import JTextArea,JPanel,JFrame
+from java.awt import Dimension
+
+ss= getApplication().getScriptEditor().getText()
+
+tc= JTextArea()
+tc.minimumSize= Dimension( 500,500 )
+tc.preferredSize= Dimension( 500,500 )
+
+jf= JFrame(  )
+jf.getContentPane().add(tc)
+jf.pack()
+jf.setVisible(True)
+
+from org.das2.jythoncompletion import JythonCompletionTask, CompletionSupport
+from org.das2.jythoncompletion.ui import CompletionImpl
+from org.das2.jythoncompletion.support import CompletionProvider
+tc.setText( ss )
+
+jct= JythonCompletionTask(tc)
+rs= CompletionImpl.get().createTestResultSet(None,0)
+
+dsb= DataSetBuilder(2,100,3)
+
+for i in xrange( len(ss) ):
+   tc.setCaretPosition(i)
+   irow= tc.getLineOfOffset(i)
+   i0= tc.getLineStartOffset(irow)
+   icol= i-i0
+   try:
+      cc = CompletionSupport.getCompletionContext(tc)
+      if ( cc!=None ):
+         count= jct.doQuery( cc,rs.getResultSet() ) 
+         dsb.nextRecord([irow,icol,count])
+   except:
+       dsb.nextRecord([irow,icol,-1])
+
+newApplication('completions')
+reset()
+plot( grid( dsb.getDataSet() ), renderType='digital>fontSize=0.5em&format=%d&fillLabel=' )
+
+ #   tc.setCaretPosition(i)
+  # ci.startPopup(tc)
+    #JythonCompletionTask(tc).
+    
