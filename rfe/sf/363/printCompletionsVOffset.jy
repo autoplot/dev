@@ -1,0 +1,9 @@
+editor=getApplication().getScriptEditor()
+s= editor.getText()
+
+from org.das2.jythoncompletion import CompletionSupport,JythonCompletionTask, MyCompletionResultSetImpl
+for i in xrange(len(s)):
+    editor.setCarotPosition(i)
+    cc= CompletionSupport.getCompletionContext(editor)
+    arg0= MyCompletionResultSetImpl()
+    JythonCompletionTask(editor).doQuery( cc, arg0 )

@@ -1,0 +1,14 @@
+def foo(): 
+    print 'foo'
+    
+class Fooc:
+    def __init__(self,name):
+        'initialize the class'
+        print 'new one '
+        self.name= name
+    def do(self):
+        'print the name with "do" suffix.'
+        print self.name + 'do'
+        
+d= Fooc('Jeremy')
+d.do()
