@@ -1,0 +1,41 @@
+from org.das2.graph import Renderer
+class PieRenderer( Renderer ):
+    def doAutorange( self, ds ):
+        xr= dataset( [ -1, 1 ] )
+        yr= dataset( [ -1, 1 ] )
+        bds= join(rescaleRange(xr,-0.1,1.1),rescaleRange(yr,-0.1,1.1))
+        return bds
+        
+    def render( self, g, xaxis, yaxis ):
+        ds= self.getDataSet()
+        if ( ds==None ):
+            raise Exception('ds is None')
+        print 'ds=', ds
+        if ( ds.rank()!=2 ):
+            raise Exception('ds.rank() should be 2')
+        if ( ds.length()==0 ):
+            raise Exception('ds have at least one element')
+        if ( ds.length(0)!=2 and ds.length(0)!=3 ):
+            raise Exception('ds should be ds[n,2] where each record is size,color,label')
+        angle0=0
+        ix= int( xaxis.transform(datum(0)) )
+        iy= int( yaxis.transform(datum(0)) )
+        ix10= int( xaxis.transform(datum(1)) )
+        rx= ix10-ix
+        print 'ds=', ds
+        tot= total( ds[:,0] )
+        print 'total=',tot
+        for i in xrange(ds.length()):
+            angle1= angle0 + int( round( ds[i,0]/tot * 360 ) )
+            print angle1
+            g.setColor( Color( int( ds[i,1] ) ) )
+            g.fillArc( ix-rx, iy-rx, rx*2, rx*2, angle0, angle1-angle0 )
+            angle0= angle1
+
+testdata= dataset( [ 1,1,2,2,3,2 ] )
+colors= dataset( [ Color.RED.getRGB(), Color.BLUE.getRGB(), Color.PINK.getRGB(), Color.ORANGE.getRGB(), Color.GREEN.getRGB(), Color.MAGENTA.getRGB() ] )
+#labls= labelsDataset( [ 'one', 'two', 'tree', 'for', 'five', 'tex' ] )
+#testdata= bundle( testdata, colors, labls )
+testdata= bundle( testdata, colors )
+
+plot( testdata, renderer=PieRenderer() )
