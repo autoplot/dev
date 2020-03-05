@@ -1,6 +1,6 @@
 # brute force test of editor completions.  Load in the script and attempt to get the completions at every point.
 
-from org.virbo.jythonsupport import JythonUtil
+from org.autoplot.jythonsupport import JythonUtil
 from java.io import FileReader
 from javax.swing import JTextArea,JPanel,JFrame
 from java.awt import Dimension
