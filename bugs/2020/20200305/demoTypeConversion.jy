@@ -1,0 +1,20 @@
+setScriptDescription('''Ideally, Jython would know how to
+convert a rank 0 dataset to a double, automatically.
+''')
+
+reset()
+
+from java.awt.geom import Arc2D
+
+a1= datum(45)
+da= datum(22.5)
+
+def p(g):
+    a= Arc2D.Double(200,200,400,400,
+                    a1.value(),da.value(),Arc2D.PIE)
+    g.color= Color.GRAY
+    g.fill(a)
+    g.color= Color.BLACK
+    g.draw(a)
+
+addTopDecoration(dom.canvases[0],p)
