@@ -40,7 +40,6 @@ class PieRenderer( Renderer ):
         
         for i in xrange(ds.length()):
             angle1= angle0 + ds[i,0]/tot * 360
-            print angle1
             g.setColor( Color( int( colors[i] ) ) )
             arc= Arc2D.Double( ix-rx, iy-ry, rx*2, ry*2, float(angle0), float(angle1-angle0), Arc2D.PIE )
             g.fill( arc )
