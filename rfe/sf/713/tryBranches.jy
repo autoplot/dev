@@ -2,14 +2,14 @@ from org.das2.util.filesystem import FileSystem
 FileSystem.reset()
 
 def test1(f):
-    getFile(f,monitor.getSubtaskMonitor('subtask')).length()
+    print getFile(f,monitor.getSubtaskMonitor('subtask')).length()
     
 m= monitor.getSubtaskMonitor
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/-/raw/test-branch/u/jeremy/2020/20200228/example_001.jy')
+test1('https://jfaden.net/git/jbfaden/public/blob/master/u/jeremy/2019/20191116/vgpws_x.jy')
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/-/blob/test-branch/u/jeremy/2020/20200228/example_001.jy')
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/-/tree/test-branch/u/jeremy/2020/20200228/example_001.jy')
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/test-branch/u/jeremy/2020/20200228/example_001.jy')
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/-/blob/test-branch/u/jeremy/2020/20200228/inc.jy')
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/-/blob/master/u/jeremy/2020/20200228/example_001.jy')
 test1('https://abbith.physics.uiowa.edu/jbf/autoplot/u/jeremy/2020/20200228/example_001.jy')
-test1('https://jfaden.net/git/jbfaden/public/blob/master/u/jeremy/2019/20191116/vgpws_x.jy')

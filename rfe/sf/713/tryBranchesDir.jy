@@ -1,0 +1,11 @@
+from org.das2.util.filesystem import FileSystem
+FileSystem.reset()
+
+from org.das2.util.filesystem import FileSystem
+fs= FileSystem.create('https://jfaden.net/git/jbfaden/public/')
+ll= fs.listDirectory( 'u/jeremy/2019/' )
+print ll
+
+fs= FileSystem.create('https://abbith.physics.uiowa.edu/jbf/autoplot/-/raw/test-branch/u/jeremy/')
+ll= fs.listDirectory( '2020/20200228/' )
+print ll
