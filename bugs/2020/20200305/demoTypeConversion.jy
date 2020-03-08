@@ -1,5 +1,6 @@
 setScriptDescription('''Ideally, Jython would know how to
 convert a rank 0 dataset to a double, automatically.
+However, value() must be called to get the double value.
 ''')
 
 reset()
