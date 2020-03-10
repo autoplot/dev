@@ -1,0 +1,38 @@
+fff='''
+data/1991-080/mpa/20140101_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140102_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140103_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140104_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140105_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140106_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140107_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140108_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140109_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140112_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140113_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140114_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140115_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140116_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140117_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140118_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140119_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140120_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140121_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140122_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140123_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140124_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140125_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140126_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140127_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140128_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140129_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140130_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+data/1991-080/mpa/20140131_1991-080_MPA_MOMENTS_1Cycle_json_v1.1.0.txt
+'''
+
+ff= fff.split()
+
+from org.autoplot.datasource import DataSourceUtil
+
+print DataSourceUtil.makeAggregationForGroup( None, ff )
+        
