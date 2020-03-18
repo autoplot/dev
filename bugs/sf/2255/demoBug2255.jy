@@ -1,0 +1,5 @@
+plot( 'https://rbsp-ect.newmexicoconsortium.org/data_pub/rbspa/hope/level3/pitchangle/$Y/rbspa_$x_ect-hope-PA-L3_$Y$m$d_v$(v,sep).cdf?FEDU&timerange=2012-11-01+04:55+to+2012-11-04+06:10' )
+from org.das2.util import AboutUtil
+print AboutUtil.getReleaseTag()
+
+writeToPng( '/tmp/ap.'+AboutUtil.getReleaseTag()+'.png' )
