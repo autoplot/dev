@@ -6,4 +6,7 @@ plot( uri )
 from org.das2.util import AboutUtil
 print AboutUtil.getReleaseTag()
 
-writeToPng( '/tmp/ap.'+AboutUtil.getReleaseTag()+'.png' )
+ds= dom.dataSourceFilters[0].controller.dataSet
+print 'line10: ', ds
+print 'line11: ', ds[1,1,1]
+print 'line12: ', ds.property(QDataSet.DEPEND_2)[1,1]
