@@ -1,0 +1,35 @@
+setScriptTitle('Construct CDF file with type 2 waveform data')
+setScriptDescription('''This creates a CDF file with rank 2 waveform data, but 
+instead of offsets, absolute times are used for each measurement.  Instruments on
+ParkerSolarProbe will use this form.
+''')
+
+signal= getDataSet( 'https://github.com/autoplot/dev/blob/master/demos/2019/20190926/cow.wav' )
+tt= signal.property(QDataSet.DEPEND_0)
+tt= datum('2020-03-27T07:13')+tt
+
+n1= signal.length()/1000
+n2= 1000
+
+wav1= reform( signal[0:n1*n2], [ n1, n2 ] )
+wav1.putProperty( QDataSet.NAME, 'WAV1' )
+
+T= tt[::n2]
+T.putProperty( QDataSet.NAME, 'T' )
+r2wav1= dataset( T, tt[0:n2]-tt[0], wav1 )
+r2wav1.putProperty( QDataSet.NAME, 'WAV1' )
+
+wav2= copy(wav1)
+wav2.putProperty( QDataSet.NAME, 'WAV2' )
+T2= reform( tt,[n1,n2] )
+T2.putProperty( QDataSet.NAME, 'T2' )
+TR2= reform( tt,[n1,n2] )
+TR2.putProperty( QDataSet.NAME, 'TR2' )
+r2wav2= dataset( T, TR2, wav2 )
+r2wav2.putProperty( QDataSet.NAME, 'WAV2' )
+
+plot( 0, r2wav1 )
+plot( 1, r2wav2 )
+
+formatDataSet( r2wav1, '/tmp/cow.cdf' )
+formatDataSet( r2wav2, '/tmp/cow.cdf?append=T' )
