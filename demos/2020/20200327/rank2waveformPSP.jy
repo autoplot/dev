@@ -4,6 +4,9 @@ instead of offsets, absolute times are used for each measurement.  Instruments o
 ParkerSolarProbe will use this form.
 ''')
 
+# Expect that this should output two waveform plots which look the same,
+# and a CDF file with two variables that when plotted look the same.
+
 signal= getDataSet( 'https://github.com/autoplot/dev/blob/master/demos/2019/20190926/cow.wav' )
 tt= signal.property(QDataSet.DEPEND_0)
 tt= datum('2020-03-27T07:13')+tt
