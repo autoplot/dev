@@ -1,0 +1,11 @@
+# make csv datasets for testing vap+dat.  This one uses semicolon delimiter.
+n=20
+t= timegen('2019-01-01T18:00','60s',n)
+d= sawtooth(linspace(0,4*PI,n))
+e= exp10(linspace(0,5,n))
+
+w= open( PWD[7:] + 'csv3.csv', 'w' )
+w.write( 'time;saw;exp\n' )
+for i in indgen(20):
+    w.write( '%s;%f;%e\n' % ( t[int(i)], d[int(i)], e[i] ) )
+w.close()
