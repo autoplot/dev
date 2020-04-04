@@ -1,0 +1,10 @@
+ds= getDataSet( 'vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?bundle=:' )
+
+county= getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=county' )
+state=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=state' )
+deaths=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=deaths' )
+date=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=date' )
+r= where( county.eq('Cook') )
+print 'number Cook: ', r
+r= where( county.eq('Cook').and( state.eq('Illinois') ) )
+plot( deaths[r] )

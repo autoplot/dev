@@ -1,0 +1,6 @@
+# There needs to be a script to verify that a new .zip file will be
+# downloaded. 
+
+# 2020-04-03: This has not been done!
+
+f= getFile( 'http://autoplot.org/data/sampex.zip/sampex.dat' )

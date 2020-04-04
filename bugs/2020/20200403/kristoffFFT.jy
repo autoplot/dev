@@ -1,0 +1,8 @@
+ds = getDataSet('http://research.ssl.berkeley.edu/data/psp/data/sci/fields/l2/mag_SC/2018/11/psp_fld_l2_mag_SC_2018110400_v01.cdf?psp_fld_l2_mag_SC&slice1=0')
+time = ds.property(QDataSet.DEPEND_0)
+ds.putProperty( QDataSet.CONTEXT_0, None )
+
+print time
+
+ds_fft = fftPower(ds,2048,8,'Hanning',None)
+plot(ds_fft)
