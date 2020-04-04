@@ -5,7 +5,7 @@ d= sawtooth(linspace(0,4*PI,n))
 s= ['operations normal','operations normal\nshutdown','c1', 'c 2' ]
 
 w= open( PWD[7:] + 'csv2.csv', 'w' )
-w.write( 'time, rand, mode\n' )
+w.write( 'time, saw, mode\n' )
 for i in indgen(20):
     w.write( '%s, %f, "%s"\n' % ( t[int(i)], d[int(i)], s[int(i)%4] ) )
 w.close()
