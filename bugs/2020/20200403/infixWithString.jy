@@ -1,10 +1,20 @@
+constraints= { 'examples':
+    ['Cook,Illinois',
+     'Orange,California',
+     'Santa Clara,California',
+     'New York City,New York'] }
+countyState= getParam( 'County', 'Cook,Illinois', 'County', constraints )
+
+ss= countyState.split(',')
+
 ds= getDataSet( 'vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?bundle=:' )
 
 county= getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=county' )
 state=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=state' )
 deaths=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=deaths' )
+cases=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=cases' )
 date=  getDataSet('vap+dat:https://github.com/nytimes/covid-19-data/blob/master/us-counties.csv?column=date' )
-r= where( county.eq('Cook') )
-print 'number Cook: ', r
-r= where( county.eq('Cook').and( state.eq('Illinois') ) )
-plot( deaths[r] )
+
+r= where( county.eq(ss[0]).and( state.eq(ss[1]) ) )
+plot( 0, deaths[r], ytitle='Deaths in '+countyState, ylog=True )
+plot( 1, cases[r], ytitle='Cases in '+countyState, ylog=True )
