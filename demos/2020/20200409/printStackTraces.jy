@@ -1,0 +1,23 @@
+# It just occurred to me it would be easy to monitor a
+# running Jython processes from Java.  
+
+setScriptTitle('dump threads')
+
+from java.lang import Thread
+
+sts= Thread.currentThread().getAllStackTraces()
+
+Thread.currentThread().getStackTrace()
+
+for st in sts:
+    stes= st.getStackTrace()
+    foundSomething= False
+    for ste in stes:
+        sste= str(ste)
+        if ( sste.find('org.python.pycode')==0 ):
+           print ste
+           foundSomething= True
+    if foundSomething: 
+        print '-------'
+    
+    
