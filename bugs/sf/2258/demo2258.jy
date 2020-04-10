@@ -1,0 +1,10 @@
+setScriptTitle('Demo 12 PM bug')
+setScriptDescription('see https://sourceforge.net/p/autoplot/bugs/2258/')
+
+bugfixed=True
+s= 'Nov 15 2017 12:10:01 PM'
+tp= TimeParser.create('$b $d $Y $H:$M:$S $p')
+if bugfixed:
+    print tp.parse(s).getTimeDatum(), ' used to be 2017-11-16T00:10:01.000Z'
+else:
+    print tp.parse(s).getTimeDatum(), ' 2017-11-16T00:10:01.000Z'
