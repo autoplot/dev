@@ -1,3 +1,8 @@
+# demo how bundle=T can be used to format a CDF in one call,
+# making the process safer for production environments.  Kristoff pointed
+# there is an issue with writing with append, where in some cases 
+# the old data is lost and zeros replace.
+
 vz= getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&id=Vz&timerange=Mar+2020')
 ae= getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&id=AE_INDEX&timerange=Mar+2020')
 beta= getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&id=Beta&timerange=Mar+2020')
