@@ -1,0 +1,14 @@
+vz= getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&id=Vz&timerange=Mar+2020')
+ae= getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&id=AE_INDEX&timerange=Mar+2020')
+beta= getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&id=Beta&timerange=Mar+2020')
+
+vz.putProperty( QDataSet.NAME, 'Vz' )
+ae.putProperty( QDataSet.NAME, 'ae' )
+beta.putProperty( QDataSet.NAME, 'beta' )
+
+ds= bundle( vz, ae, beta )
+ds.putProperty( QDataSet.DEPEND_0, vz.property(QDataSet.DEPEND_0) )
+
+print ds.property( QDataSet.BUNDLE_1 ).property( QDataSet.NAME, 1 )
+ 
+formatDataSet( ds, '/tmp/foo.cdf?bundle=T' )
