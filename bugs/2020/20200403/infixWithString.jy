@@ -3,7 +3,7 @@ constraints= { 'examples':
      'Orange,California',
      'Santa Clara,California',
      'New York City,New York'] }
-countyState= getParam( 'County', 'Cook,Illinois', 'County', constraints )
+countyState= getParam( 'CountyState', 'Cook,Illinois', 'County and State', constraints )
 
 ss= countyState.split(',')
 
