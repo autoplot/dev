@@ -1,3 +1,6 @@
+setScriptTitle('Covid Reports')
+setScriptDescription('Reads county data from N.Y. Times github site, plotting Covid-19 cases county-by-county.')
+
 constraints= { 'examples':
     ['Cook,Illinois',
      'Orange,California',
