@@ -1,0 +1,18 @@
+# Kristoff had this one, where you couldn't bundle rank 2 datasets 
+# and export them as CDF.  He prefers to bundle and export all at
+# once because there's some strange google drive/windows 
+# interaction.
+
+ds1 = 1*ones(15,32)
+ds2 = 2*ones(15,32)
+ds3 = 3*ones(15,32)
+time = timegen(str(TimeUtil.now()),'60sec',len(ds1))
+
+ds1.putProperty(QDataSet.NAME,'ds1')
+ds2.putProperty(QDataSet.NAME,'ds2')
+ds3.putProperty(QDataSet.NAME,'ds3')
+
+bindle = bundle(ds1,ds2,ds3)
+bindle.putProperty(QDataSet.DEPEND_0,time)
+
+formatDataSet(bindle,'/tmp/TEMP.cdf'+'?bundle=T') 
