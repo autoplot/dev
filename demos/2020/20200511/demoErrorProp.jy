@@ -1,0 +1,49 @@
+randomSeed(0)
+
+n= getParam('n',8640,'number of points')
+factor= getParam('factor',10,'multiplier to verify that units of Y do not matter' )
+base= getParam('base',100.0,'shift to verify that shifts in Y do not matter' )
+avg= getParam('binsize','2min','width of the window')
+
+model= ones(n)*factor + base
+
+tt= linspace('2000-02-02','2000-02-03',n+1)[0:-1]
+
+noise= randn(n)*factor
+ds= model+noise
+unc= ones(n) * factor
+
+ds.putProperty( QDataSet.DEPEND_0, tt )
+unc.putProperty( QDataSet.DEPEND_0, tt )
+model.putProperty( QDataSet.DEPEND_0, tt )
+
+ds.putProperty( QDataSet.DELTA_PLUS, unc )
+ds.putProperty( QDataSet.DELTA_MINUS, unc )
+
+r= where( tt.ge('2000-02-02T03:30').and(tt.lt('2000-02-02T03:50')) )
+ds[r]= -999
+ds.putProperty( QDataSet.VALID_MIN, -998 )
+
+reset()
+
+plot( 0, ds, title='Original data with model and error bars' )
+plot( addPlotElement(0), model, color='red' )
+plot( addPlotElement(0), model+unc, color='red', lineStyle='dots' )
+plot( addPlotElement(0), model-unc, color='red', lineStyle='dots' )
+
+# calculate reduced data and errors
+binsize= dataset(avg)
+from org.das2.qds.util import Reduction
+dsr= Reduction.reducex( ds,binsize )
+dsr.putProperty( QDataSet.DELTA_PLUS, None )
+dsr.putProperty( QDataSet.DELTA_MINUS, None )
+uncr= Reduction.reducex( unc**2,binsize )
+modelr= Reduction.reducex( model,binsize )
+bincount= uncr.property( QDataSet.WEIGHTS )
+uncr= sqrt(uncr) / bincount
+
+nplot=4
+plot( nplot, dsr, title='Reduced data should improve certainty' )
+plot( addPlotElement(nplot), modelr, color='red' )
+plot( addPlotElement(nplot), modelr+uncr, color='red', lineStyle='dots' )
+plot( addPlotElement(nplot), modelr-uncr, color='red', lineStyle='dots' )
