@@ -1,3 +1,9 @@
+setScriptTitle('demo error prop')
+setScriptDescription('''This script creates fake data from a model of constant value and uniform errors.  
+The data is drawn with model and error bounds on the top plot.  The data is run through reducex, and code 
+to calculate the errors propagated through the reducex function is used to draw errors in the output.  
+These propagated errors and data are displayed on the bottom plot.''')
+
 randomSeed(0)
 
 n= getParam('n',8640,'number of points')
