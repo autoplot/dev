@@ -1,0 +1,43 @@
+setScriptTitle('Demo Keypress Mouse Module')
+setScriptDescription('''This shows how a mouse module can accept key presses.  This is way to hard, 
+but it can be done''')
+
+p= dom.plots[0].controller.dasPlot
+
+from org.das2.event import LabelDragRenderer,BoxSelectorMouseModule
+
+from java.awt.geom import Ellipse2D
+class MyDragRenderer( LabelDragRenderer ):
+    def renderDrag( self, g2, p1, p2 ):
+        setStatus("p2="+str(p2))
+        g2.fill( Ellipse2D.Double( p2.x-15, p2.y-15, 30, 30 ) )
+
+class MyBoxMouseModule( BoxSelectorMouseModule ):
+    def __init__( self, p, label ):
+        BoxSelectorMouseModule.__init__(self,
+            p,
+            p.getXAxis(),
+            p.getYAxis(),
+            None,
+            MyDragRenderer(p),
+            label )
+    def keyPressed( self, ke ):
+        print 'ke', ke
+        
+mm= MyBoxMouseModule( p, 'Custom Drag Renderer' )
+mm.setDragEvents(True)
+mm.setKeyEvents(True)
+
+dragRenderer= MyDragRenderer(p)
+
+mm.setDragRenderer( dragRenderer )
+
+from org.das2.event import BoxSelectionListener
+class MyBoxSelectionListener(BoxSelectionListener):
+    def boxSelected(self,evt):
+        print evt, '*****'
+        setStatus("boxSelected")
+    
+mm.addBoxSelectionListener(MyBoxSelectionListener())
+
+p.dasMouseInputAdapter.primaryModule= mm
