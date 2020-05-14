@@ -6,12 +6,24 @@ p= dom.plots[0].controller.dasPlot
 
 from org.das2.event import LabelDragRenderer,BoxSelectorMouseModule
 
+key=''
+
+def paint( g, x, y ):
+    from java.awt import RenderingHints
+    g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON )
+    global key
+    if ( key=='' ):
+        g.fill( Ellipse2D.Double( x-15, y-15, 30, 30 ) )
+    else:
+        g.draw( Ellipse2D.Double( x-15, y-15, 30, 30 ) )
+        g.drawString( key, x, y )
+    
 from java.awt.geom import Ellipse2D
 class MyDragRenderer( LabelDragRenderer ):
-    def renderDrag( self, g2, p1, p2 ):
+    def renderDrag( self, g, p1, p2 ):
         setStatus("p2="+str(p2))
-        g2.fill( Ellipse2D.Double( p2.x-15, p2.y-15, 30, 30 ) )
-
+        paint( g, p2.x, p2.y )
+        
 class MyBoxMouseModule( BoxSelectorMouseModule ):
     def __init__( self, p, label ):
         BoxSelectorMouseModule.__init__(self,
@@ -22,11 +34,12 @@ class MyBoxMouseModule( BoxSelectorMouseModule ):
             MyDragRenderer(p),
             label )
     def keyPressed( self, ke ):
-        print 'ke', ke
+        setStatus("keypress "+ke.getKeyChar() )
+        global key
+        key= ke.getKeyChar()
+        p.repaint()
         
 mm= MyBoxMouseModule( p, 'Custom Drag Renderer' )
-mm.setDragEvents(True)
-mm.setKeyEvents(True)
 
 dragRenderer= MyDragRenderer(p)
 
