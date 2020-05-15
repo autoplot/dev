@@ -16,11 +16,15 @@ bind( edit1.getEditorPanel(), 'font', edit2.editorPanel, 'font' )
 vsb1= edit1.getScrollPane().getVerticalScrollBar()
 vsb2= edit2.getScrollPane().getVerticalScrollBar()
 
-def d(evt):
+def d1(evt):
     h= edit1.getScrollPane().viewport.height
-    vsb2.value= evt.value+h
-    
-vsb1.adjustmentValueChanged= d
+    vsb2.value= evt.value+h    
+vsb1.adjustmentValueChanged= d1
+
+def d2(evt):
+    h= edit2.getScrollPane().viewport.height
+    vsb1.value= evt.value-h
+vsb2.adjustmentValueChanged= d2
 
 jsp= JSplitPane()
 jsp.setResizeWeight(0.5)
