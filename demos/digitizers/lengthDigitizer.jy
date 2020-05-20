@@ -14,13 +14,11 @@ class FeedbackPainter( Painter ):
      def paint( self, g ):
          ds= dpr.getDataPoints()
          if ( ds!=None ):
-             print 'xxx'
              for d in ds:
                  x1= dom.plots[0].controller.dasPlot.getXAxis().transform( d[0] )
                  y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
                  x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
                  y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
-                 print 'xxxxxx'
                  gtr= GrannyTextRenderer()
                  s4= "%.1f"%d[4]
                  print s4
