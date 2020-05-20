@@ -10,7 +10,6 @@ addTab( 'digitizer', dpr )
 
 class FeedbackPainter( Painter ):
      def paint( self, g ):
-         print 'xxx'
          ds= dpr.getDataPoints()
          if ( ds!=None ): 
              for d in ds:
@@ -18,9 +17,7 @@ class FeedbackPainter( Painter ):
                  y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
                  x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
                  y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
-                 print 'ttt'
                  s4= "%.1f"%d[4]
-                 print 'yyy'
                  p1= Point2D.Double( x1, y1 )
                  p2= Point2D.Double( x2, y2 )
                  g.color= Color.GRAY
@@ -46,7 +43,7 @@ class FeedbackPainter( Painter ):
                  g.color= Color.GRAY
                  Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
                  g.drawString(s4,p1.x,p1.y)
-dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
 from org.das2.dataset import DataSetUpdateListener
@@ -62,8 +59,7 @@ def lineSelected( ev ):
                  dataset(ev.finishY,name='Y2') )
     length= sqrt(ev.getXRange().width()**2+ev.getYRange().width()**2) 
     length= dataset(length,name='len')
-    rec= bundle( rec,
-                 length )
+    rec= bundle( rec,length )
                   
     dpr.addDataPoint( rec )
 
