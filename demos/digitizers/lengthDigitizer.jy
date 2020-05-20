@@ -1,3 +1,6 @@
+setScriptTitle('length digitizer')
+setScriptDescription('Demo of how a digitizer which measures length is created.  Click and drag to add a directed line segment to the digitizer tab.')
+
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
 from org.das2.graph import Arrow
