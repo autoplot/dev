@@ -1,0 +1,6 @@
+dt= datum('5min')
+for i in indgen(200):
+    print '%s,%d,%.2f' % ( datum('2020-04-02T00:00')+i*dt, 
+                           i, 
+                           (100-abs(100-i))* sin(i/10.) )
+                           

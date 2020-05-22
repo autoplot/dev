@@ -1,0 +1,3 @@
+ds= getDataSet('http://jfaden.net/~jbf/autoplot/data/dat/dates.dat?time=field0&timeFormat=$b%20$d+$Y%20$H:$M:$S%20$p')
+print ds[0]
+plot(ds)

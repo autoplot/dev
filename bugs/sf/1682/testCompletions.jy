@@ -1,0 +1,7 @@
+from org.autoplot.ascii import AsciiTableDataSourceFactory
+
+uri= '/home/jbf/ct/hudson/data/csv/OES_080119.csv'
+ff= AsciiTableDataSourceFactory.getFieldNames(uri,monitor)
+for f in ff:
+    print f
+    
