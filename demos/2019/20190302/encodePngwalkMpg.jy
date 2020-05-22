@@ -41,15 +41,24 @@ if ( qc!=None ):
    captionsSbv= File(outf+'.sbv')
    captionsSbvOut= PrintWriter(captionsSbv)
 
-currentTime= im.getDatumRange().min()
+haveTimes= im.getDatumRange()!=None
+
+if ( haveTimes ):
+    currentTime= im.getDatumRange().min()
+else:
+    currentTime= datum('0s')
 firstTime= currentTime
 
 if ( seq.size()<2 ):
     raise Exception('must have two or more images')
 
 i=0
-nextT= seq.imageAt(i+1).getDatumRange().min()
 
+if ( haveTimes ):
+    nextT= seq.imageAt(i+1).getDatumRange().min()
+else:
+    nextT= currentTime+datum('.2s')
+    
 def formatTime( dsec1, dsec2 ):
     tp= TimeParser.create('$(H,Y=2000,m=1,d=1):$M:$S.$(subsec,places=2)')
     tf1= tp.format(Units.t2000.createDatum(dsec1.doubleValue(Units.seconds)))
@@ -72,7 +81,10 @@ while i < seq.size():
        if ( i==seq.size()-1 ):
            nextT= currentTime+'2s'
        else:
-           nextT= seq.imageAt(i+1).getDatumRange().min()
+           if ( haveTimes ):
+                nextT= seq.imageAt(i+1).getDatumRange().min()
+           else:
+                nextT= currentTime+datum('.2s')
        print 'index:%03d currentTime:%s nextRecordAt:%s' % ( i, currentTime, nextT )
    monitor.setTaskProgress( i )
    if ( newImage ):
