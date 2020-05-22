@@ -1,0 +1,40 @@
+f= open( '/home/jbf/ct/hudson/data/csv/bookmarks_csv.txt' )
+i=1
+for line in f.readlines():
+    i=i+1
+f.close()
+monitor.setTaskSize(i)
+monitor.started()
+
+from java.lang import System
+ctm=System.currentTimeMillis
+
+f= open( '/home/jbf/ct/hudson/data/csv/bookmarks_csv.txt' )
+i=1
+for line in f.readlines():
+    monitor.setTaskProgress(i)
+    setLayout(2)
+    line= line.strip()
+    if len(line)==0: continue
+    setStatus(line)
+    print '%3d: %s' % ( i, line )
+    plot( 0, 'vap+csv:'+line )
+    plot( 1, 'vap+dat:'+line )
+    t0= ctm()
+    ds= getDataSet('vap+csv:'+line)
+    tcsv= ctm()-t0
+    plot( addPlotElement(0), ds.length() )
+    try:
+        t0= ctm()
+        ds= getDataSet('vap+dat:'+line)
+        tdat= ctm()-t0
+        plot( addPlotElement(1), ds.length() )
+        print '%5.1f %5.1f' % ( tcsv, tdat )
+    except:
+        print '%5.1f *****' % ( tcsv )
+        
+    writeToPng('/tmp/ap/csv_%02d.png' % i )
+    i=i+1
+
+monitor.finished()
+f.close()
