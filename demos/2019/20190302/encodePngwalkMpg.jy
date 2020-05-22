@@ -1,5 +1,6 @@
-# script demonstrating write pngwalk to mp4, minding timetags.  The PNGWalkTool should be
-# running as the second application ( AppManager.getInstance().getApplication(1) )
+setScriptTitle('encode mpg movie')
+setScriptDescription( 'write pngwalk to mp4, minding timetags.  The PNGWalkTool should be running'+
+                      ' as the second application ( AppManager.getInstance().getApplication(1) )' )
 
 fps= getParam( 'fps', 15, 'frames per second', [ 15,30 ] )
 
