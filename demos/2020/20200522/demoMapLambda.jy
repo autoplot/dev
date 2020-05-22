@@ -1,0 +1,12 @@
+ll= labelsDataset(['oned','twod','threed'])
+
+# map runs the one-argument function over a list of object.
+# lambda is a method for creating a function at run time.
+# svalue is a zero-argument method of rank 0 datasets, so we
+# use lambda to turn it into a one-argument function which
+# takes a rank 0 dataset.
+
+ss= map( lambda x: x.svalue(), ll )
+for s in ss:
+    print s
+
