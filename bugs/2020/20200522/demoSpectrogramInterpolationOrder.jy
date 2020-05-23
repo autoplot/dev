@@ -1,0 +1,13 @@
+xx= linspace(5000,5100,1001)[0:1000]
+yy= xx % 5
+
+zz= 1 - sqrt( (yy-2.5)**2 )
+
+plot( 0, xx, yy, zz, renderType='spectrogram' )
+plot( 1, xx, yy, zz, 
+      renderType='spectrogram>rebinner=interpXThenInterpY' )
+
+z= grid( link( xx,yy,zz ) )
+print z.property(QDataSet.DEPEND_0).property(QDataSet.CADENCE)
+
+plot( 2, z )
