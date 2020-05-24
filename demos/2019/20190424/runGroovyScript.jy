@@ -1,0 +1,21 @@
+setScriptTitle( 'Groovy Adapter' )
+setScriptDescription( '''Run Groovy script like we would an Autoplot Jython script,
+with dom defined.
+''')
+
+script= getParam('script',PWD+'FirstAutoplot.groovy','groovy script to run')
+scriptFile= getFile(script,monitor)
+
+import sys
+addToSearchPath( sys.path,'https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.6.zip/groovy-2.5.6/lib/groovy-2.5.6.jar',monitor )
+
+from java.lang import Thread
+
+from groovy.lang import GroovyShell 
+from org.codehaus.groovy.control import CompilerConfiguration;
+from org.codehaus.groovy.control.customizers import ImportCustomizer;
+
+shell= GroovyShell()
+shell.setVariable('dom',dom)
+
+shell.run(scriptFile,[])
