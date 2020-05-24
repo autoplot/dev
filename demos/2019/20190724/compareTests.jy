@@ -1,0 +1,58 @@
+# make a table of test ids across, and then builds down.
+
+from java.util import TreeSet,HashSet,HashMap
+
+results= HashMap()
+
+lastTest= getParam( 'test', 12157 )
+ntest= getParam( 'ntests', 20, 'number of tests to show' )
+
+dirs= lastTest - indgen( ntest )
+dirs= map( int, dirs )
+dirs= map( str, dirs )
+
+templ= 'http://jfaden.net/jenkins/job/autoplot-test100/%s/artifact/'
+for d in dirs:
+    ff= listDirectory(templ % d )
+    m= HashSet()
+    for f in ff:
+        m.add(f)
+        if ( f.startswith('Test') ):
+            m.add('test100_'+f)
+    results.put( d, m )
+
+# get all the columns
+m= TreeSet()
+for r in results:
+    for k in results.get(r):
+        m.add(k)
+
+outf= open( '/tmp/compareTests.table.html', 'w' )
+
+outf.write( '<table>' )
+outf.write( '<tr>' )
+outf.write( '<th>Artifact</th>' )
+for d in dirs:
+    outf.write( '<th>'+d+'</th>' )
+outf.write(  '</tr>' )
+
+
+for k in m:
+    if ( k.startswith('Test') ):
+        continue
+    if ( k.startswith('#skip') ):
+        continue
+    outf.write( '<tr><td>'+k+'</td>' )
+    for d in dirs:
+        ff= results.get(d)
+        if ( ff.contains(k) ):
+            outf.write( '<td>yes</td>' )
+        else:
+            outf.write( '<td></td>' )
+    outf.write( '</tr>' )
+outf.write( '</table>' )
+outf.close()
+
+showMessageDialog('wrote results to /tmp/compareTests.table.html.')
+setStatus( 'Wrote to /tmp/compareTests.table.html.' )
+

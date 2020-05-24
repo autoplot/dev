@@ -1,0 +1,10 @@
+import sys
+addToSearchPath(sys.path,'https://dl.bintray.com/javaparser/JavaParser/com/github/javaparser/javaparser-core/3.13.8/javaparser-core-3.13.8.jar',monitor)
+
+from com.github.javaparser.ast import CompilationUnit
+
+from com.github.javaparser import StaticJavaParser
+
+compilationUnit= StaticJavaParser.parse('class A { public static void main( String[] args) { System.err.println("hello"); } }')
+
+# I wasn't able to get much further.
