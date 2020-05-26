@@ -81,5 +81,6 @@ except:
                                          map( int, ds[:,2]*255.99 ), 64,0,64 )
     myColortableType= DasColorBar.Type( 'testHsv4',tt )
 
-ds= atan2( outerProduct( ones(40), linspace(-1,1,40) ), outerProduct( linspace(-1,1,40), ones(40) ) )
-plot( ds, colorTable='testHsv4' )
+test= atan2( outerProduct( ones(40), linspace(-1,1,40) ), outerProduct( linspace(-1,1,40), ones(40) ) )
+plot( test, colorTable='testHsv4', renderType='nnSpectrogram', zrange=[-PI,PI] )
+
