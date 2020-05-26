@@ -1,3 +1,4 @@
+
 colors= """       1.00000   0.00000   0.00000
        1.00000   0.09375   0.00000
        1.00000   0.18750   0.00000
@@ -62,3 +63,23 @@ colors= """       1.00000   0.00000   0.00000
        1.00000   0.00000   0.28125
        1.00000   0.00000   0.18750
        1.00000   0.00000   0.09375"""
+
+from org.das2.qds.util import AsciiParser
+ap= AsciiParser()
+dp= ap.guessDelimParser("       1.00000   0.00000   0.18750")
+
+from java.io import ByteArrayInputStream, InputStreamReader
+ds= ap.readStream( InputStreamReader( ByteArrayInputStream(colors) ), monitor )
+
+from org.das2.graph import DasColorBar
+try:
+    myColortableType= DasColorBar.Type.parse( 'testHsv4' )
+except:
+    tt= DasColorBar.Type.makeColorTable( map( int, linspace(0,255,ds.length())),
+                                         map( int, ds[:,0]*255.99 ),
+                                         map( int, ds[:,1]*255.99 ),
+                                         map( int, ds[:,2]*255.99 ), 64,0,64 )
+    myColortableType= DasColorBar.Type( 'testHsv4',tt )
+
+ds= atan2( outerProduct( ones(40), linspace(-1,1,40) ), outerProduct( linspace(-1,1,40), ones(40) ) )
+plot( ds, colorTable='testHsv4' )
