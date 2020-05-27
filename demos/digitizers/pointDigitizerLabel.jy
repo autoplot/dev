@@ -35,7 +35,6 @@ def closest(color):
     return nam[im]
 
 from org.das2.event import LabelDragRenderer
-
 class ColorLabelDragRenderer( LabelDragRenderer ):
     def renderDrag( self, g2, p1, p2 ):
         p= self.getParent()
@@ -46,20 +45,6 @@ class ColorLabelDragRenderer( LabelDragRenderer ):
         cc= Color( int(cc) )
         self.setLabel( str(closest( cc )) ) 
         LabelDragRenderer.renderDrag( self, g2, p1, p2 )
-        #super( ColorLabelDragRenderer,self ).renderDrag( g2, p1, p2 )
 
-from org.das2.event import BoxSelectorMouseModule
-class ColorLookup(BoxSelectorMouseModule):
-    def __init__( self, p, label ):
-        BoxSelectorMouseModule.__init__(self,
-            p,
-            p.getXAxis(),
-            p.getYAxis(),
-            None,
-            ColorLabelDragRenderer(p),
-            label )
-
-from org.das2.event import CrossHairMouseModule
-mm= ColorLookup( dom.plots[0].controller.dasPlot,'colorAt' )
-dom.plots[0].controller.dasPlot.dasMouseInputAdapter.primaryModule= mm
-
+mm= addMouseModule( dom.plots[0], 'colorAt', None )
+mm.dragRenderer= ColorLabelDragRenderer(None)
