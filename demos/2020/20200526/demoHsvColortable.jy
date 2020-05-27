@@ -84,3 +84,10 @@ except:
 test= atan2( outerProduct( ones(40), linspace(-1,1,40) ), outerProduct( linspace(-1,1,40), ones(40) ) )
 plot( test, colorTable='testHsv4', renderType='nnSpectrogram', zrange=[-PI,PI] )
 
+def toJavaArray( ds ):
+    return ','.join(map(str,ds))
+    
+print 'int [] index= { ' + toJavaArray( map( int, round(linspace(0,255,ds.length())) ) ) + '}' 
+print 'int [] red= { ' + toJavaArray( map( int, ds[:,0]*255.99 ) ) + '}' 
+print 'int [] green= { ' + toJavaArray( map( int, ds[:,1]*255.99 ) ) + '}' 
+print 'int [] blue= { ' + toJavaArray( map( int, ds[:,2]*255.99 ) ) + '}' 
