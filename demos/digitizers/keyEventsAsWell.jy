@@ -1,0 +1,39 @@
+# Goal is to accept key events, and to mark where the key events were.
+setScriptTitle('demo key events')
+setScriptDescription('''This demos how key strokes can be caught by the mouse module, 
+firing off events to a different handler''')
+
+plt= dom.plots[0]
+
+key=None
+
+from org.das2.components import DataPointRecorder
+dpr= DataPointRecorder()
+addTab( 'digitizer', dpr )
+
+def boxSelected(evt):
+    x0= evt.getStartX()
+    y0= evt.getStartY()
+    x= evt.getFinishX()
+    y= evt.getFinishY()
+    # if the event was caused by a keypress, then keyChar will be non-None.
+    if ( evt.getPlane( 'keyChar' )!=None ):
+        setStatus( 'Keypressed: '+evt.getPlane('keyChar') )
+    else:
+        dpr.addDataPoint( bundle(dataset(x0),dataset(y0),dataset(x),dataset(y)) )
+        setStatus( 'Keypressed: ' )
+
+                
+from org.das2.event import AbstractDragRenderer,MouseBoxEvent
+class ColorLabelDragRenderer( AbstractDragRenderer ):
+    def renderDrag( self, g2, p1, p2 ):
+        from java.awt.geom import Line2D
+        g2.draw( Line2D.Double( p1, p2 ) )
+    def isUpdatingDragSelection(self):
+        return True
+        
+mm= addMouseModule(dom.plots[0],'wacom',boxSelected)
+mm.keyEvents= True
+mm.releaseEvents= True
+mm.dragRenderer= ColorLabelDragRenderer(None)
+
