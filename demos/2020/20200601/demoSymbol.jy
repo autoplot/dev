@@ -1,0 +1,52 @@
+setScriptTitle('Letter Rectangle')
+setScriptDescription('''Draw rounded rectangle with letter within, to make a plot symbol.  This is challenging because
+strings are drawn by the GrannyTextRenderer with a border and offsets.
+''')
+
+l= getParam('letter','','Additional letter to use' )
+
+# Need a demo showing symbol with "S" or "N" in a box.  
+
+from org.das2.graph import Renderer
+from org.das2.util import GrannyTextRenderer,ColorUtil
+from java.awt.geom import Line2D,Ellipse2D
+
+class BoxDigitRenderer( Renderer ):
+    def render( self, g, xaxis, yaxis ):
+        ds= self.getDataSet()
+        #g.font= g.font.deriveFont(2)
+        for i in xrange(ds.length()):
+            ix= xaxis.transform( ds[i,0] )
+            iy= yaxis.transform( ds[i,1] )
+            label= ds[i,2].svalue()
+            
+            gtr= GrannyTextRenderer()
+            gtr.setString(g,label)
+            
+            r= gtr.bounds
+            if r.width<r.height: r.width=r.height
+            
+            r.translate( int(ix)-r.width/2, int(iy)-int(gtr.descent)+int(gtr.height/2) )
+            g.color= Color.decode('#D0D0D0')
+            for j in xrange(2,r.height,2):
+                g.draw( Line2D.Double( r.x, r.y+j, r.x+r.width, r.y+j ) )
+            for j in xrange(2,r.width,2):
+                g.draw( Line2D.Double( r.x+j, r.y, r.x+j, r.y+r.height ) )
+            g.color= ColorUtil.decodeColor('black')
+            g.drawRoundRect( int(r.x), int(r.y), r.width, r.height, 6, 6 )
+            gtr.draw( g, r.x+int(round(r.width/2.))-int(round(gtr.width/2.)), r.y+int(gtr.height)-int(gtr.descent) )
+            #g.fill( Ellipse2D.Double( ix-3, iy-3, 6, 6 ) )
+
+labelz= strarr(20)
+labelz[:]='N'
+labelz[::2]='S'
+
+if len(l)>0:
+    labelz[4]= l
+    
+xx= indgen(20)
+yy= 5*floor(5*accum(randn(20)))
+yy[::2]= 0
+
+ds= bundle( xx, yy, labelz )
+plot( ds, renderer=BoxDigitRenderer(), xrange=[-2,22], yrange=[-100,100] )
