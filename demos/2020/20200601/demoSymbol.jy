@@ -9,7 +9,7 @@ l= getParam('letter','','Additional letter to use' )
 
 from org.das2.graph import Renderer
 from org.das2.util import GrannyTextRenderer,ColorUtil
-from java.awt.geom import Line2D,Ellipse2D
+from java.awt.geom import Line2D,Ellipse2D,RoundRectangle2D
 
 class BoxDigitRenderer( Renderer ):
     def render( self, g, xaxis, yaxis ):
@@ -25,18 +25,17 @@ class BoxDigitRenderer( Renderer ):
             gtr= GrannyTextRenderer()
             gtr.setString(g,label)
             gtr.setAlignment(GrannyTextRenderer.CENTER_ALIGNMENT)
-            r= gtr.bounds
+            r= gtr.bounds2D
             if r.width<r.height: r.width=r.height
-            
-            r.translate( int(ix)-r.width/2, int(iy)-int(gtr.descent)+int(gtr.height/2) )
+            r.setRect( ix-r.width/2, iy-gtr.descent+gtr.height/2, r.width, r.height )
             g.color= LIGHT_GREY
-            for j in xrange(2,r.height,2):
+            for j in xrange(2,int(r.height),2):
                 g.draw( Line2D.Double( r.x, r.y+j, r.x+r.width, r.y+j ) )
-            for j in xrange(2,r.width,2):
+            for j in xrange(2,int(r.width),2):
                 g.draw( Line2D.Double( r.x+j, r.y, r.x+j, r.y+r.height ) )
             g.color= BLACK
-            g.drawRoundRect( int(r.x), int(r.y), r.width, r.height, 6, 6 )
-            gtr.draw( g, r.x+int(round(r.width/2.))-int(round(gtr.width/2.)), r.y+int(gtr.height)-int(gtr.descent) )
+            g.draw( RoundRectangle2D.Double( r.x, r.y, r.width, r.height, 6, 6 ) )
+            gtr.draw( g, r.x+r.width/2.-gtr.width/2., r.y+gtr.height-gtr.descent )
 
 labelz= strarr(20)
 labelz[:]='N'
