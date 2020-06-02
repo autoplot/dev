@@ -14,7 +14,9 @@ from java.awt.geom import Line2D,Ellipse2D
 class BoxDigitRenderer( Renderer ):
     def render( self, g, xaxis, yaxis ):
         ds= self.getDataSet()
-        #g.font= g.font.deriveFont(2)
+        
+        BLACK= ColorUtil.decodeColor('black')
+        LIGHT_GREY= Color.decode('#D0D0D0')
         for i in xrange(ds.length()):
             ix= xaxis.transform( ds[i,0] )
             iy= yaxis.transform( ds[i,1] )
@@ -22,20 +24,19 @@ class BoxDigitRenderer( Renderer ):
             
             gtr= GrannyTextRenderer()
             gtr.setString(g,label)
-            
+            gtr.setAlignment(GrannyTextRenderer.CENTER_ALIGNMENT)
             r= gtr.bounds
             if r.width<r.height: r.width=r.height
             
             r.translate( int(ix)-r.width/2, int(iy)-int(gtr.descent)+int(gtr.height/2) )
-            g.color= Color.decode('#D0D0D0')
+            g.color= LIGHT_GREY
             for j in xrange(2,r.height,2):
                 g.draw( Line2D.Double( r.x, r.y+j, r.x+r.width, r.y+j ) )
             for j in xrange(2,r.width,2):
                 g.draw( Line2D.Double( r.x+j, r.y, r.x+j, r.y+r.height ) )
-            g.color= ColorUtil.decodeColor('black')
+            g.color= BLACK
             g.drawRoundRect( int(r.x), int(r.y), r.width, r.height, 6, 6 )
             gtr.draw( g, r.x+int(round(r.width/2.))-int(round(gtr.width/2.)), r.y+int(gtr.height)-int(gtr.descent) )
-            #g.fill( Ellipse2D.Double( ix-3, iy-3, 6, 6 ) )
 
 labelz= strarr(20)
 labelz[:]='N'
