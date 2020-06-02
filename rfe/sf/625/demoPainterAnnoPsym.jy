@@ -5,8 +5,6 @@ reset()
 setLayoutOverplot(2)
 
 s= 'Both the red symbol (!(painter;psym;0)) and ' + '!cthe blue (!(painter;psym;1)) are ' + '!cdrawn in this annotation.'
-#s= 'Cassini went to !(color;blue)saturn!(color) Saturn.'
-#s= 'Cassini went to saturn Saturn.'
 from org.das2.util import ColorUtil
 
 class PSymPainter( GrannyTextRenderer.Painter ):
