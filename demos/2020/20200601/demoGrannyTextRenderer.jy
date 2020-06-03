@@ -1,0 +1,49 @@
+setScriptTitle('demo GrannyTextRenderer geom')
+
+dom.options.canvasFont= 'Scheme-BK-40'
+
+from org.das2.util import GrannyTextRenderer
+
+from org.das2.graph import Painter
+
+from javax.swing import JPanel,BoxLayout,Box,JLabel,JTextField
+
+panel= JPanel()
+panel.setLayout( BoxLayout(panel,BoxLayout.X_AXIS) )
+panel.add( JLabel('Text:') )
+text= JTextField('First Line<br>Second Line<br>Longer Third Line')
+panel.add( text )
+
+panel.add( JLabel('Ascent:') )
+mheight= JTextField('xxxx')
+panel.add( mheight )
+
+panel.add( JLabel('Height:') )
+height= JTextField('xxxx')
+panel.add( height )
+
+getApplication().setBottomPanel(panel)
+
+class DemoGtrDecorator(Painter):
+    def paint(self,g):
+        factor= float(dom.plots[0].yaxis.scale)
+        fontSize= 24./factor
+        g.font= g.font.deriveFont( fontSize )
+        h= dom.canvases[0].controller.dasCanvas.height
+        w= dom.canvases[0].controller.dasCanvas.width
+        from java.awt.geom import Line2D
+        x0= dom.plots[0].xaxis.controller.dasAxis.transform(0,Units.dimensionless)
+        y0= dom.plots[0].yaxis.controller.dasAxis.transform(0,Units.dimensionless)
+        g.draw( Line2D.Double( 0, y0, w, y0 ) )
+        g.draw( Line2D.Double( x0, 0, x0, h ) )
+        gtr= GrannyTextRenderer()
+        gtr.setString( g, text.text )
+        gtr.draw( g, x0, y0 )
+        d= gtr.ascent
+        mheight.setText( '%.2f (%.2f)' % ( d*factor, gtr.ascent ) )
+        height.setText( '%.2f (%.2f)' % ( gtr.height*factor, gtr.height ) )
+        dom.plots[0].yaxis.reference='%.2f' % ( d*factor )
+        
+
+dom.plots[0].controller.dasPlot.setTopDecorator(DemoGtrDecorator())
+bind(dom.plots[0].xaxis,'scale',dom.plots[0].yaxis,'scale')
