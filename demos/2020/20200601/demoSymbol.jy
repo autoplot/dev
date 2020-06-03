@@ -29,9 +29,10 @@ class BoxDigitRenderer( Renderer ):
             if r.width<r.height: r.width=r.height
             r.setRect( ix-r.width/2, iy-gtr.descent+gtr.height/2, r.width, r.height )
             g.color= LIGHT_GREY
-            for j in xrange(2,int(r.height),2):
+            for j in irange(2,r.height,2):
+                print j, type(j), float(j)
                 g.draw( Line2D.Double( r.x, r.y+j, r.x+r.width, r.y+j ) )
-            for j in xrange(2,int(r.width),2):
+            for j in irange(2,r.width,2):
                 g.draw( Line2D.Double( r.x+j, r.y, r.x+j, r.y+r.height ) )
             g.color= BLACK
             g.draw( RoundRectangle2D.Double( r.x, r.y, r.width, r.height, 6, 6 ) )
