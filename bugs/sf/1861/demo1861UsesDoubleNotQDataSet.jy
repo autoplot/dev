@@ -8,4 +8,4 @@ print type(t), t
 
 d= dataset(5)
 t= tanh(d)
-print type(t), t(base) 
+print type(t), t
