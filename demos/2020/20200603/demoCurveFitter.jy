@@ -1,0 +1,51 @@
+# from kristoff/20160506
+
+time = linspace(0,100,1000)
+randomSeed(1)
+aa = rand().value()
+bb = rand().value()  #  *2 shows bug
+cc = rand().value()  #  *2 shows bug
+dd = rand().value()  
+val = aa*sin(time*bb+cc)+dd+rand(len(time))
+
+setLayoutOverplot(2)
+plot(0,time,val)
+
+from org.apache.commons.math.optimization.fitting import CurveFitter
+from org.apache.commons.math.optimization.fitting import ParametricRealFunction
+from org.apache.commons.math.optimization.general import LevenbergMarquardtOptimizer
+
+class Function(ParametricRealFunction):
+    def value(self, x, params):
+        a = params[0]
+        b = params[1]
+        c = params[2]
+        d = params[3]
+        return (a*sin(b*x+c)+d)
+    def gradient(self, x, params):
+        a = params[0]
+        b = params[1]
+        c = params[2]
+        d = params[3]
+        # return [ d/da, d/db, d/dc, d/dd ]
+        # This was handy: http://www.mathscoop.com/calculators/calculus-calculator-online.php
+        return [sin(b*x+c),(a*x*cos(b*x+c)),a*cos(b*x+c),1]  
+        
+f = Function()
+ftr = CurveFitter(LevenbergMarquardtOptimizer())
+
+for i in xrange(len(time)):
+    ftr.addObservedPoint(float(time[i]),float(val[i]))
+
+initial_guess_params = [0.5,0.5,0.5,0.5]
+
+result = ftr.fit(f,initial_guess_params)
+
+print 'result: ', result
+
+#yy= zeros( time.length() )
+#for i in xrange(time.length()):
+#    yy[i]= f.value(time[i],result)
+yy= map( lambda x : f.value( x, result ), time )
+
+plot( 1, time, yy, color=Color.RED, lineWidth=3 )
