@@ -2,7 +2,7 @@ setScriptTitle('Letter Rectangle')
 setScriptDescription('''Draw rounded rectangle with letter within, to make a plot symbol.  This is challenging because
 strings are drawn by the GrannyTextRenderer with a border and offsets.
 ''')
-setScriptRequires(apVersion='20200603a')
+# Script requires apVersion='20200603a'
 
 l= getParam('letter','','Additional letter to use' )
 
