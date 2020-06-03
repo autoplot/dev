@@ -1,0 +1,19 @@
+# why doesn't Jython automatically convert to double???
+r0= dataset(9)
+print r0+1
+
+from org.apache.commons.math.optimization.fitting import CurveFitter
+from org.apache.commons.math.optimization.fitting import ParametricRealFunction
+from org.apache.commons.math.optimization.general import LevenbergMarquardtOptimizer
+from org.apache.commons.math.stat.regression      import SimpleRegression
+
+xx= linspace(0,1,1000)
+yy= 3.4*xx**2 + 1.5*xx**1 + 3
+ 
+plot( xx, yy )
+
+fitter = CurveFitter(LevenbergMarquardtOptimizer())
+
+for i in irange(len(xx)):
+    #fitter.addObservedPoint( xx[i], yy[i] )  # it would be nice if this worked.
+    fitter.addObservedPoint( float(xx[i]), float(yy[i]) )
