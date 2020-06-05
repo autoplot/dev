@@ -1,9 +1,14 @@
 setScriptDescription('make one-record RBSP/Hope file to simulate file for rte_1731552573')
+uri='https://www.rbsp-ect.lanl.gov/data_pub/rbspa/hope/level3/pitchangle/2018/rbspa_rel04_ect-hope-PA-L3_20181201_v7.1.0.cdf?FEDO'
 
-fedo= getDataSet('https://www.rbsp-ect.lanl.gov/data_pub/rbspa/hope/level3/pitchangle/2018/rbspa_rel04_ect-hope-PA-L3_20181201_v7.1.0.cdf?FEDO')
+fedo= getDataSet(uri,monitor)
 fedo= fedo[0:1,:]
 
 formatDataSet(fedo,'/tmp/fedo.cdf')
 
 plot( '/tmp/fedo.cdf?FEDO' )
 # "dataset is all fill" on event thread...
+# 
+
+# plots as a spectogram, not the slice.  Axes look to be incorrect.
+plot( '/tmp/fedo.cdf?FEDO[0]' )
