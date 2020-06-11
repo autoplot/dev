@@ -1,5 +1,8 @@
 setScriptTitle('color boxes demo')
-setScriptDescription('shows how to get mouse events and key events to allow actions to be associated with key strokes')
+setScriptDescription('''shows how to get mouse events and key events 
+separately by installing a custom keylistener.  Press p to dump the list, 
+up arrow and down arrow to select.  Note running this multiple times
+will result in unpredictable results.''')
 
 reset()
 
