@@ -1,0 +1,42 @@
+setScriptTitle('color boxes demo')
+setScriptDescription('shows how to get mouse events and key events to allow actions to be associated with key strokes')
+
+bb= []
+
+def paint( g ):
+    from java.awt.geom import Rectangle2D
+    for b in bb:
+        c= b[2]
+        if c=='r':
+            g.color= Color.RED
+        elif c=='b':
+            g.color= Color.BLUE
+        else:
+            g.color= Color.BLACK
+        xx= [ dom.plots[0].xaxis.controller.dasAxis.transform( b[0].min() ), dom.plots[0].xaxis.controller.dasAxis.transform( b[0].max() ) ]
+        yy= [ dom.plots[0].yaxis.controller.dasAxis.transform( b[1].min() ), dom.plots[0].yaxis.controller.dasAxis.transform( b[1].max() ) ]
+        g.draw( Rectangle2D.Double( xx[0], yy[1], xx[1]-xx[0], yy[0]-yy[1] ) )
+    if len(bb)==0:
+        g.drawString('no selections made',int(300+randn()),int(300+randn()))
+        
+addTopDecoration( dom.canvases[0],paint )
+
+keyPress= None
+
+def doInterp( evt ):
+    global keyPress,bb
+    keyChar= evt.getPlane( 'keyChar' )
+    if ( keyChar!=None ):
+        setStatus( 'coloring box with key, press x to clear')
+        keyPress= keyChar 
+        return
+    else:
+        if ( keyPress=='x' ):
+            bb=[]
+        else:
+            bb.append( [ evt.getXRange(), evt.getYRange(), keyPress ] )
+        dom.canvases[0].controller.dasCanvas.repaint()
+    keyPress= None
+   
+mm= addMouseModule( dom.plots[0], 'colorBoxes', doInterp )
+
