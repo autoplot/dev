@@ -1,0 +1,32 @@
+# on a unix terminal, run:
+#    while [ 1 ]; do netstat -p | grep cdaweb; sleep 2; clear; done
+
+url= URL('https://cdaweb.sci.gsfc.nasa.gov/sp_phys/data/ace/cris/level_2_cdaweb/cris_h2/2011/ac_h2_cris_20111223_v06.cdf')
+urlc= url.openConnection()
+
+ins= urlc.getInputStream()
+length=0
+while ( ins.read()!=-1 ):
+    length= length+1
+    continue
+print 'read bytes: ', length
+
+ins= urlc.getErrorStream()
+if ( ins!=None ):
+    length=0
+    while ( ins.read()!=-1 ):
+        length= length+1
+        continue
+    print 'read error bytes: ', length
+#urlc.disconnect()
+
+
+url= URL('https://cdaweb.sci.gsfc.nasa.gov/sp_phys/data/ace/cris/level_2_cdaweb/cris_h3/2004/ac_h3_cris_20040101_v04.cdf')
+urlc= url.openConnection()
+
+ins= urlc.getInputStream()
+length=0
+while ( ins.read()!=-1 ):
+    length= length+1
+    continue
+print 'read bytes: ', length
