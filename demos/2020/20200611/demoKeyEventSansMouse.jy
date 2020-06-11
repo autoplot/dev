@@ -1,0 +1,54 @@
+setScriptTitle('color boxes demo')
+setScriptDescription('shows how to get mouse events and key events to allow actions to be associated with key strokes')
+
+reset()
+
+bb= []
+select=0
+
+def paint( g ):
+    from java.awt.geom import Rectangle2D
+    for b in bb:
+        xx= [ dom.plots[0].xaxis.controller.dasAxis.transform( b[0].min() ), dom.plots[0].xaxis.controller.dasAxis.transform( b[0].max() ) ]
+        yy= [ dom.plots[0].yaxis.controller.dasAxis.transform( b[1].min() ), dom.plots[0].yaxis.controller.dasAxis.transform( b[1].max() ) ]
+        g.draw( Rectangle2D.Double( xx[0], yy[1], xx[1]-xx[0], yy[0]-yy[1] ) )
+    if select<len(bb):
+        b= bb[select]
+        xx= [ dom.plots[0].xaxis.controller.dasAxis.transform( b[0].min() ), dom.plots[0].xaxis.controller.dasAxis.transform( b[0].max() ) ]
+        yy= [ dom.plots[0].yaxis.controller.dasAxis.transform( b[1].min() ), dom.plots[0].yaxis.controller.dasAxis.transform( b[1].max() ) ]
+        g.draw( Rectangle2D.Double( xx[0]-1, yy[1]-1, xx[1]-xx[0]+2, yy[0]+2-yy[1] ) )
+    if len(bb)==0:
+        g.drawString('no selections made, P dump to stdout',int(300+randn()),int(300+randn()))
+        
+addTopDecoration( dom.canvases[0],paint )
+
+def doInterp( evt ):
+    global bb
+    bb.append( [ evt.getXRange(), evt.getYRange() ] )
+    dom.canvases[0].controller.dasCanvas.repaint()
+   
+mm= addMouseModule( dom.plots[0], 'colorBoxes', doInterp )
+
+def reportAll():
+    for b in bb:
+        print b[0], b[1]
+        
+from java.awt.event import KeyAdapter,KeyEvent
+class AppKeyListener( KeyAdapter ):
+    def keyPressed( self, evt ):
+        global select
+        if ( evt.keyCode==KeyEvent.VK_P ):
+            reportAll()
+        elif ( evt.keyCode==KeyEvent.VK_UP ):
+            select= select+1
+            if select>=len(bb): select=len(bb)-1
+            dom.plots[0].controller.dasPlot.repaint()
+        elif ( evt.keyCode==KeyEvent.VK_DOWN ):
+            select= select-1
+            if select>=len(bb): select=len(bb)+1
+            dom.plots[0].controller.dasPlot.repaint()
+dasPlot= dom.plots[0].controller.dasPlot
+dasPlot.removeKeyListener( dasPlot.getDasMouseInputAdapter().getKeyAdapter() )  # one must disconnect it.
+dasPlot.addKeyListener( AppKeyListener() )
+
+
