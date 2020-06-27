@@ -1,0 +1,29 @@
+setLayoutOverplot(2)
+randomSeed(5334)
+
+def fThick(evt):
+    global slThick
+    dom.plotElements[1].controller.renderer.backgroundThick='100%%+%fpx' % (slThick.value/10.)
+
+def fConnect(evt):
+    global slConnect
+    dom.plotElements[1].controller.renderer.lineWidth= slConnect.value/10.
+    
+from javax.swing import JSlider,JPanel,BoxLayout
+slThick= JSlider( 5, 111, stateChanged=fThick )
+slConnect= JSlider( 5, 111, stateChanged=fConnect )
+
+jp= JPanel()
+jp.layout= BoxLayout(jp,BoxLayout.Y_AXIS)
+jp.add( slThick )
+jp.add( slConnect )
+
+getApplication().setBottomPanel(jp)
+
+plot( 0, randn(100,100), colorTable='inverse_white_blue_black' )
+plot( 1, 'vap+inline:r=linspace(20.,40.,50)&a=accum(randu(50))&x=50+r*cos(a)&y=50+r*sin(a)&x,y', lineThick=5.8 )
+
+dom.plotElements[1].controller.renderer.symSize= 20
+dom.plotElements[1].controller.renderer.backgroundThick='100%+5.8px'
+#dom.plotElements[1].controller.renderer.stampPsyms= False
+
