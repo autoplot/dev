@@ -9,13 +9,15 @@ def fConnect(evt):
     global slConnect
     dom.plotElements[1].controller.renderer.lineWidth= slConnect.value/10.
     
-from javax.swing import JSlider,JPanel,BoxLayout
+from javax.swing import JSlider,JPanel,BoxLayout, JLabel
 slThick= JSlider( 5, 111, stateChanged=fThick )
 slConnect= JSlider( 5, 111, stateChanged=fConnect )
 
 jp= JPanel()
 jp.layout= BoxLayout(jp,BoxLayout.Y_AXIS)
+jp.add( JLabel('Adjust Background Thickness:') )
 jp.add( slThick )
+jp.add( JLabel('Adjust Connector Thickness:') )
 jp.add( slConnect )
 
 getApplication().setBottomPanel(jp)
