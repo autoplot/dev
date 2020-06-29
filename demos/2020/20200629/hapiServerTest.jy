@@ -1,0 +1,58 @@
+from org.das2.util.monitor import NullProgressMonitor
+from java.lang import System
+from org.das2.util import FileUtil
+from java.lang import StringBuilder
+from java.io import BufferedReader,InputStreamReader
+from org.json import JSONObject
+
+summary= open('summary.txt','w')
+
+aa= getFile('https://github.com/hapi-server/servers/blob/master/all.txt',False,NullProgressMonitor())
+for line in open(str(aa)):
+    print line
+    line= line.strip()
+    
+    hapiurl= URL(line)
+    
+    tim= {} 
+    
+    t0= System.currentTimeMillis()
+    urlConnect= hapiurl.openConnection()
+    urlConnect.connect()
+    tim['connectMs']= System.currentTimeMillis()-t0
+    t0= System.currentTimeMillis()
+    
+    tim['responseCode']= urlConnect.responseCode
+    
+    content= BufferedReader( InputStreamReader( urlConnect.getContent() ) )
+    sb= StringBuilder()
+    s= content.readLine()
+    while s!=None:
+        sb.append(s)
+        s= content.readLine()
+    
+    tim['contentMs']= System.currentTimeMillis()-t0
+    if urlConnect.getContentLength()==-1:
+        tim['lengthBytes']= sb.length()
+    else:
+        tim['lengthBytes']= urlConnect.getContentLength()
+    urlConnect.disconnect()
+    
+    capabilitiesUrl= URL(line+'/capabilities')
+    content= BufferedReader( InputStreamReader( capabilitiesUrl.openStream() ) )
+    sb= StringBuilder()
+    s= content.readLine()
+    while s!=None:
+        sb.append(s)
+        s= content.readLine()
+    content.close()
+    
+    jo= JSONObject(sb.toString())
+    hapiVersion= jo.get('HAPI')
+    tim['hapiVersion']= hapiVersion
+    
+    summary.write( str(hapiurl) )
+    summary.write( str(tim) )
+    summary.write( '\n' )
+
+summary.close()
