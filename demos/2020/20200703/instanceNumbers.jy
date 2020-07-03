@@ -1,0 +1,12 @@
+class A:
+   x=5
+   y=6
+   z=7
+
+l= []
+l.append(A())
+l.append(A())
+l.append(A())
+
+print 'Note the instance numbers differ:'
+print l
