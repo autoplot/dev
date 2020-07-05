@@ -1,0 +1,42 @@
+setScriptLabel('crop image')
+setScriptDescription('''Drag out a box to make cropped image''')
+# Tool for writing cropped image
+
+from javax.swing import JPanel,JFileChooser,BoxLayout,JLabel,JTextField,JButton
+def pickFile(e):
+    from javax.swing.filechooser import FileNameExtensionFilter
+
+    chooser = JFileChooser()
+    filt = FileNameExtensionFilter(
+        "JPG, GIF, and PNG Images", ["jpg", "gif","png"])
+    chooser.setFileFilter(filt)
+    returnVal = chooser.showSaveDialog(getApplication())
+    global selectName
+    if returnVal == JFileChooser.APPROVE_OPTION:
+        selectName.setText( str(chooser.getSelectedFile()) )
+    
+global selectName
+selectName= JTextField()
+    
+def proposeCrop( evt ):
+    p= evt.source.parent  # 20200705a, before you would assume the plot
+    r= p.getRenderers()
+    img= r[0].dataSet
+    ix= evt.getXRange()
+    iy= evt.getYRange()
+    img= img[ int(ix.min()):int(ix.max()), int(iy.min()):int(iy.max()), : ]
+    
+    confirmPanel= JPanel()
+    confirmPanel.setLayout( BoxLayout(confirmPanel,BoxLayout.Y_AXIS ) )
+    
+    confirmPanel.add( JLabel('Filename:') )
+    confirmPanel.add( selectName )
+    confirmPanel.add( JButton( 'Pick', actionPerformed=pickFile ) )
+    
+    from javax.swing import JOptionPane
+    if  JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),confirmPanel, 'save crop', JOptionPane.OK_CANCEL_OPTION):
+        formatDataSet(img,selectName.getText())
+        setStatus( 'wrote to '+selectName.getText() )
+        print 'wrote to '+selectName.getText() )
+    
+addMouseModule( dom.plots[0], 'crop image', proposeCrop )
