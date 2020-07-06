@@ -1,5 +1,7 @@
 setScriptLabel('crop image')
-setScriptDescription('''Drag out a box to make cropped image''')
+setScriptDescription('''Drag out a box to make cropped image.  You will be 
+asked for the name of the file where the cropped image should be saved.''')
+
 # Tool for writing cropped image
 
 from javax.swing import JPanel,JFileChooser,BoxLayout,JLabel,JTextField,JButton
@@ -37,6 +39,6 @@ def proposeCrop( evt ):
     if  JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),confirmPanel, 'save crop', JOptionPane.OK_CANCEL_OPTION):
         formatDataSet(img,selectName.getText())
         setStatus( 'wrote to '+selectName.getText() )
-        print 'wrote to '+selectName.getText() )
+        print( 'wrote to '+selectName.getText() )
     
 addMouseModule( dom.plots[0], 'crop image', proposeCrop )
