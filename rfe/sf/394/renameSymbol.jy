@@ -12,7 +12,7 @@ editor= getApplication().getScriptPanel().getEditorPanel()
 script= editor.getText()
 var= editor.getSelectedText()
 
-if var==None or var.length()==0:
+if var==None or len(var)==0:
     var= EditorAnnotationsSupport.getSymbolAt( editor, editor.getCaretPosition() )
     
 import javax.swing.JLabel
