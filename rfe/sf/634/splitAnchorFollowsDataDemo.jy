@@ -1,0 +1,46 @@
+setLayoutOverplot(3)
+
+usecdaweb=False
+if usecdaweb:
+    plot( 0, 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BX_GSE1800&timerange=2016-10-12+through+2016-10-19' )
+    plot( 1, 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BY_GSE1800&timerange=2016-10-12+through+2016-10-19' )
+    plot( 2, 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BZ_GSE1800&timerange=2016-10-12+through+2016-10-19' )
+else:
+    plot( 0, 'vap+inline:ripplesTimeSeries(100)' )
+    plot( 1, 'vap+inline:ripplesTimeSeries(200)' )
+    plot( 2, 'vap+inline:ripplesTimeSeries(300)' )
+
+from org.das2.graph import AnchorType
+aa=[None,None,None]
+aa[0]= annotation( 0, text='B-x', anchorPosition='OutsideNE', anchorOffset='-3px,-1em', fontSize='1.6em', anchorType='CANVAS', background=None )
+aa[0].splitAnchorType=True
+aa[0].verticalAnchorType=AnchorType.DATA
+aa[1]= annotation( 1, text='B-y', anchorPosition='OutsideNE', anchorOffset='-3px,-1em', fontSize='1.6em', anchorType='CANVAS', background=None )
+aa[1].splitAnchorType=True
+aa[1].verticalAnchorType=AnchorType.DATA
+aa[2]= annotation( 2, text='B-z', anchorPosition='OutsideNE', anchorOffset='-3px,-1em', fontSize='1.6em', anchorType='CANVAS', background=None )
+aa[2].splitAnchorType=True
+aa[2].verticalAnchorType=AnchorType.DATA
+        
+def xaxisChanged(evt):
+        if evt!=None and evt.propertyName!='range': 
+            return
+        xrange= dom.plots[0].xaxis.range
+        
+        ds= dom.plotElements[0].controller.dataSet
+        r= where( within( xtags(ds), xrange ) )
+        y= ds[r[-1]]
+        aa[0].yrange= datumRange( [y,y] )
+        
+        ds= dom.plotElements[1].controller.dataSet
+        r= where( within( xtags(ds), xrange ) )
+        y= ds[r[-1]]
+        aa[1].yrange= datumRange( [y,y] )
+        
+        ds= dom.plotElements[2].controller.dataSet
+        r= where( within( xtags(ds), xrange ) )
+        y= ds[r[-1]]
+        aa[2].yrange= datumRange( [y,y] )
+            
+dom.plots[0].xaxis.propertyChange= xaxisChanged
+xaxisChanged( None )
