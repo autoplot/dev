@@ -1,6 +1,6 @@
 setScriptTitle('Initial Focus')
 setScriptDescription('''Initial focus will be on the text field.  This is 
-surprisingly difficult to do, with Java/Swing''')
+surprisingly difficult to do with Java/Swing''')
 
 # Solution 1 follows.  This is the more reliable way to do this.
 from java.awt.event import ActionListener
@@ -29,7 +29,7 @@ def requestFocusInWindowSoon(component):
         def actionPerformed( self, evt ):
             component.requestFocusInWindow()
     from javax.swing import Timer
-    t= Timer( 100, MyActionListener() )
+    t= Timer( 250, MyActionListener() )
     t.repeats=False
     t.start()
     
