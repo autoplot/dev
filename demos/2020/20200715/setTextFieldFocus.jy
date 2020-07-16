@@ -29,7 +29,7 @@ def requestFocusInWindowSoon(component):
         def actionPerformed( self, evt ):
             component.requestFocusInWindow()
     from javax.swing import Timer
-    t= Timer( 100, MyActionListener() )
+    t= Timer( 250, MyActionListener() )
     t.repeats=False
     t.start()
     
