@@ -1,0 +1,50 @@
+setScriptTitle('Initial Focus')
+setScriptDescription('''Initial focus will be on the text field.  This is 
+surprisingly difficult to do, with Java/Swing''')
+
+# Solution 1 follows.  This is the more reliable way to do this.
+from java.awt.event import ActionListener
+from javax.swing.event import AncestorListener
+class RequestFocusAncestorListener( AncestorListener ):
+    def __init__( self, removeListener=False ):
+        self.removeListener= removeListener
+    def ancestorAdded( self, evt ):
+        component = evt.getComponent()
+        class MyActionListener( ActionListener ):
+            def actionPerformed( self, evt ):
+                component.requestFocusInWindow()
+        from javax.swing import Timer
+        t= Timer( 100, MyActionListener() )
+        t.repeats=False
+        t.start()
+        if (self.removeListener):
+            component.removeAncestorListener( self );
+    def ancestorMoved( self, evt ): pass
+    def ancestorRemoved( self, evt ): pass
+    
+# Solution 2 is to just start a timer and request focus in 100 milliseconds.  This is
+# probably not reliable.
+def requestFocusInWindowSoon(component):
+    class MyActionListener( ActionListener ):
+        def actionPerformed( self, evt ):
+            component.requestFocusInWindow()
+    from javax.swing import Timer
+    t= Timer( 100, MyActionListener() )
+    t.repeats=False
+    t.start()
+    
+from javax.swing import JPanel,JTextField,JCheckBox,BoxLayout,JOptionPane
+dia= JPanel()
+dia.setLayout(BoxLayout(dia,BoxLayout.PAGE_AXIS))
+tf= JTextField('Name')
+tf.setCaretPosition(len(tf.text))
+#tf.addAncestorListener(  RequestFocusAncestorListener() )  # invoke Solution 1
+requestFocusInWindowSoon(tf) # invoke Solution 2
+
+dia.add( tf )
+cb= JCheckBox('Check Me')
+dia.add( cb )
+
+if JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(),dia,'My Dialog',JOptionPane.OK_CANCEL_OPTION ):
+    print 'tf.text=['+tf.text+']'
+    print 'cb.selected=['+str(cb.selected)+']'
