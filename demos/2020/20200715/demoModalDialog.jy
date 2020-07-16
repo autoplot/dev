@@ -1,0 +1,16 @@
+
+from javax.swing import JOptionPane
+result= JOptionPane.showConfirmDialog( getApplication(), "Hello", "First Dialog", JOptionPane.OK_CANCEL_OPTION )
+
+from javax.swing import JPanel,BoxLayout, JLabel, JButton
+dia= JPanel()
+dia.setLayout( BoxLayout(dia,BoxLayout.Y_AXIS) )
+dia.add( JLabel('Hello') )
+
+hdia= JPanel()
+hdia.setLayout( BoxLayout(hdia,BoxLayout.X_AXIS) )
+hdia.add( JButton("Button1") )
+hdia.add( JButton("Button2") )
+dia.add( hdia )
+
+result= JOptionPane.showConfirmDialog( getApplication(), dia, "First Dialog", JOptionPane.OK_CANCEL_OPTION )
