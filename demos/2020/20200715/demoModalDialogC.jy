@@ -1,0 +1,62 @@
+
+
+from javax.swing import JOptionPane
+from javax.swing import JPanel,BoxLayout, Box, JLabel, JButton, JTextField, JCheckBox, JComboBox,BorderFactory
+from java.awt import Font,Dimension
+
+flndia= JPanel()
+flnTF= JTextField('initial text')
+flnCB= JCheckBox('additional check')
+flndia.add( flnTF )
+flndia.add( flnCB )
+
+border= BorderFactory.createLineBorder(Color.RED) 
+
+dia= JPanel( border=border )
+
+dia.setLayout( BoxLayout(dia,BoxLayout.Y_AXIS) )
+
+jlabel= JLabel('--- Hello -----------------------------------', font=Font.decode( 'sans-18' ), alignmentX=0, border=border , name=currentLine() )
+dia.add( jlabel )
+
+def button1Action(evt):
+    JOptionPane.showMessageDialog( dia, flndia, 'More Options', JOptionPane.PLAIN_MESSAGE )
+    
+hdia= JPanel(border=border, name=currentLine() )
+hdia.setLayout( BoxLayout(hdia,BoxLayout.X_AXIS) )
+
+jcb= JComboBox( ['mode1', 'mode2', 'mode3'], border=border, name=currentLine(), maximumSize=Dimension(1000,20)  )
+hdia.add( jcb )
+hdia.add( JButton("More Options...", actionPerformed=button1Action, border=border, name=currentLine()  ) )
+
+dia.add( hdia )
+
+def updater(evt):
+    global js
+    jlabel.font= Font.decode(  'sans-%d' % ( js.value/5.+5. ) )
+    jslabel.text= 'sans-%d' % ( js.value/5.+5. )
+    jlabel.revalidate()
+
+def updater2(evt):
+    global js2,js2label
+    jlabel.alignmentX= js2.value/100.
+    js2label.text= str(js2.value/100.)
+    jlabel.revalidate()
+    
+from javax.swing import JSlider
+jslabel= JLabel('0',border=border)
+dia.add( jslabel )
+js= JSlider(stateChanged=updater)
+dia.add( js )
+js2label= JLabel('0',border=border)
+dia.add(js2label)
+js2= JSlider(stateChanged=updater2)
+dia.add( js2 )
+dia.add( Box.createVerticalGlue() )
+
+#addTab("whoa",dia)
+result= JOptionPane.showConfirmDialog( getApplication(), dia, "First Dialog", JOptionPane.OK_CANCEL_OPTION )
+
+print flnTF.text
+print flnCB.selected
+print jcb.selectedItem
