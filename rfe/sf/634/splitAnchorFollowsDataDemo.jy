@@ -1,9 +1,5 @@
 setLayoutOverplot(3)
 
-c= dom.canvases[0].controller.addColumn()
-c.left='50%'
-c.right='75%'
-
 usecdaweb=False
 if usecdaweb:
     plot( 0, 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BX_GSE1800&timerange=2016-10-12+through+2016-10-19' )
@@ -19,7 +15,6 @@ aa=[None,None,None]
 aa[0]= annotation( 0, text='B-x', anchorPosition='OutsideNE', anchorOffset='-3px,-1em', fontSize='1.6em', anchorType='CANVAS', background=None )
 aa[0].splitAnchorType=True
 aa[0].verticalAnchorType=AnchorType.DATA
-aa[0].columnId= c.id
 aa[1]= annotation( 1, text='B-y', anchorPosition='OutsideNE', anchorOffset='-3px,-1em', fontSize='1.6em', anchorType='CANVAS', background=None )
 aa[1].splitAnchorType=True
 aa[1].verticalAnchorType=AnchorType.DATA
