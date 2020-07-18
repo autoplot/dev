@@ -1,6 +1,6 @@
 setScriptTitle('Demo splitAnchor Follows Data')
-setScriptDemo('Demo where xrange range changes will reset '+
-   'the data location of the three annotations which split '+
+setScriptDescription('Demo where xrange range changes will reset '+
+   'the data location of the three annotations which use split '+
    'anchors to show the location of the last point of each component.')
 setLayoutOverplot(3)
 
