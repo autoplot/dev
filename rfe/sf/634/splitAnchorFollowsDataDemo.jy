@@ -1,3 +1,7 @@
+setScriptTitle('Demo splitAnchor Follows Data')
+setScriptDemo('Demo where xrange range changes will reset '+
+   'the data location of the three annotations which split '+
+   'anchors to show the location of the last point of each component.')
 setLayoutOverplot(3)
 
 usecdaweb=False
