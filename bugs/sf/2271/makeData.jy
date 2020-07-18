@@ -1,0 +1,8 @@
+xx= getDataSet( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BX_GSE1800&timerange=2016-10-12+through+2016-10-19' ) 
+yy= getDataSet( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BY_GSE1800&timerange=2016-10-12+through+2016-10-19' )
+zz= getDataSet( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=BZ_GSE1800&timerange=2016-10-12+through+2016-10-19' )
+
+ds= bundle( xx, yy, zz )
+ds.putProperty( QDataSet.DEPEND_0, xtags( xx ) )
+
+formatDataSet( ds, '/tmp/ap/threeColumn.dat?format=5.1f' )
