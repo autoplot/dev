@@ -1,0 +1,11 @@
+setScriptDescription('Demo where rapid mouse wheel events are mishandled on Linux')
+dsb= DataSetBuilder(2,200,2)
+
+from java.awt.event import MouseAdapter
+class MyMouseAdapter( MouseAdapter ):
+    def mouseWheelMoved(self,e):
+        print e
+        dsb.nextRecord( [ TimeUtil.now(), e.getPreciseWheelRotation() ] )
+        invokeLater( plot, dsb.getDataSet() )
+        
+dom.canvases[0].controller.dasCanvas.addMouseWheelListener(MyMouseAdapter())
