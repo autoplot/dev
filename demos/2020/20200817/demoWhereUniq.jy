@@ -1,0 +1,43 @@
+setScriptDescription( 'demo how data can be binned and sorted by one of two different parameters' )
+setScriptTitle('Where Uniq Demo')
+
+npoints= getParam( 'npoints', 100000, 'Number of Points Sampled', [10000,100000] )
+sortBy= getParam( 'sortBy', 'radius', 'sort by', ['mshell','radius'] )
+
+radius= randu(npoints) * 6 + 2 
+mshell= randu(npoints) * 30 + 2 
+density= 1/radius**2 + randn(npoints)/100
+
+if sortBy=='mshell':
+    originalvariable= mshell
+    sortvariable= mshell
+else:
+    originalvariable= radius
+    sortvariable= round( 10*(radius ) )/10
+
+s= sort( sortvariable )
+sortvariable= sortvariable[s]
+originalvariable= originalvariable[s] 
+radius= radius[s]
+density= density[s]
+mshell= mshell[s]
+ 
+dsb= DataSetBuilder( 2, 3, 100 )
+
+u= uniqValues( sortvariable,None )
+for i in xrange(len(u)):
+    rr= where( sortvariable.eq(u[i]) )
+    medianDensity= median( density[rr] )
+    stddevDensity= stddev( density[rr] )
+    print rr, rr[0], sortvariable[rr[0]], medianDensity, stddevDensity
+    dsb.nextRecord([ sortvariable[rr[0]], medianDensity, stddevDensity ] )
+     
+dss= dsb.getDataSet() 
+
+y= dss[:,1]
+y.putProperty( QDataSet.DELTA_PLUS, dss[:,2] )
+y.putProperty( QDataSet.DELTA_MINUS, dss[:,2] )
+
+reset()
+p,pe= plot(  originalvariable, density, color=Color.GRAY )
+plot( dss[:,0], y, color=Color.BLACK, overplotOf= p )
