@@ -1,0 +1,40 @@
+# copied from /home/jbf/project/autoplot/study/20190605 on klunk.physics.uiowa.edu
+from java.util import TreeMap
+from java.util.regex import Pattern
+
+p= Pattern.compile( 'from (.*) import (.*);?' )
+
+importLookup= TreeMap()
+for line in open('/home/jbf/project/autoplot/importLookup.txt','r'):
+    line= line.strip()
+    m= p.matcher(line)
+    if ( m.matches() ):
+        pkg= m.group(1)
+        cla= m.group(2)
+        clas= cla.split(',',-2)
+        for c in clas:
+            c= c.strip()
+            if ( c.find(' ')>-1 ):
+                print 'has spaces: '+c
+                continue
+            if ( c=='*' ): 
+                print 'skipping asterisk: '+c
+                continue
+            if ( c.endswith(';') ): c=c[:-1]
+            if ( pkg.find('virbo')>-1 ): 
+                print 'contains virbo: '+pkg
+                continue
+            try:
+                x= __import__(pkg+'.'+c)
+                importLookup.put( c, pkg )
+            except:
+                print 'package not available: ', pkg
+
+    
+w= open('/home/jbf/project/autoplot/autoplot-code/JythonSupport/src/importLookup.jy','w')
+w.write('# written automatically, see sftp://nudnik.physics.uiowa.edu/home/jbf/project/autoplot/study/20190605/importsTable.jy\n')
+for e in importLookup.entrySet():
+    if ( e.key=='*' ):
+        continue 
+    w.write( 'from %s import %s\n' % ( e.value, e.key ) )
+w.close()
