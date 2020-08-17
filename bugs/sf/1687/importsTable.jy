@@ -5,7 +5,9 @@ from java.util.regex import Pattern
 p= Pattern.compile( 'from (.*) import (.*);?' )
 
 importLookup= TreeMap()
-for line in open('/home/jbf/project/autoplot/importLookup.txt','r'):
+fil= getFile( PWD + 'importLookup.txt',monitor)
+
+for line in open(fil,'r'):
     line= line.strip()
     m= p.matcher(line)
     if ( m.matches() ):
