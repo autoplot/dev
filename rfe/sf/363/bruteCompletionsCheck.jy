@@ -1,3 +1,4 @@
+from org.das2.components import DasProgressPanel
 # brute force test of editor completions.  Load in the script and attempt to get the completions at every point.
 
 from org.autoplot.jythonsupport import JythonUtil
@@ -26,26 +27,37 @@ rs= CompletionImpl.get().createTestResultSet(None,0)
 
 dsb= DataSetBuilder(2,100,3)
 
-monitor.setTaskSize( len(ss) )
-monitor.started()
-for i in xrange( len(ss) ):
-   tc.setCaretPosition(i)
-   irow= tc.getLineOfOffset(i)
-   i0= tc.getLineStartOffset(irow)
-   icol= i-i0
-   try:
-      cc = CompletionSupport.getCompletionContext(tc)
-      if ( cc!=None ):
-         count= jct.doQuery( cc,rs.getResultSet() ) 
-         dsb.nextRecord([irow+1,icol,count])
-   except:
-       dsb.nextRecord([irow+1,icol,-1])
-   monitor.setTaskProgress(i)
-monitor.finished()
-old= getApplication()
-setApplication( newApplication('completions') )
-reset()
-plot( grid( dsb.getDataSet() ), renderType='digital>fontSize=0.5em&format=%d&fillLabel=', xtitle='Line Number', ytitle='column number', title='Completions' )
-setApplication(old)
+mon= DasProgressPanel.createFramed('checking completions')
 
+def runAsync():
+    for i in xrange( len(ss) ):
+       if mon.cancelled: break
+       tc.setCaretPosition(i)
+       irow= tc.getLineOfOffset(i)
+       i0= tc.getLineStartOffset(irow)
+       icol= i-i0
+       try:
+          cc = CompletionSupport.getCompletionContext(tc)
+          if ( cc!=None ):
+             count= jct.doQuery( cc,rs.getResultSet() ) 
+             dsb.nextRecord([irow+1,icol,count])
+       except:
+           import traceback
+           traceback.print_exc()
+           dsb.nextRecord([irow+1,icol,-1])
+       mon.setTaskProgress(i)
+       mon.label='Line %d' % (irow+1)
+    mon.finished()
+    jf.setVisible(False)
+    old= getApplication()
+    setApplication( newApplication('completions') )
+    reset()
+    plot( grid( dsb.getDataSet() ), renderType='digital>fontSize=0.5em&format=%d&fillLabel=' )
+    setApplication(old)
+
+mon.setTaskSize( len(ss) )
+mon.started()
+invokeLater( runAsync )
+while not monitor.isFinished():
+    sleep(200)
     
