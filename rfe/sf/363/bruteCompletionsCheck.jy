@@ -37,18 +37,15 @@ for i in xrange( len(ss) ):
       cc = CompletionSupport.getCompletionContext(tc)
       if ( cc!=None ):
          count= jct.doQuery( cc,rs.getResultSet() ) 
-         dsb.nextRecord([irow,icol,count])
+         dsb.nextRecord([irow+1,icol,count])
    except:
-       dsb.nextRecord([irow,icol,-1])
+       dsb.nextRecord([irow+1,icol,-1])
    monitor.setTaskProgress(i)
 monitor.finished()
 old= getApplication()
 setApplication( newApplication('completions') )
 reset()
-plot( grid( dsb.getDataSet() ), renderType='digital>fontSize=0.5em&format=%d&fillLabel=' )
+plot( grid( dsb.getDataSet() ), renderType='digital>fontSize=0.5em&format=%d&fillLabel=', xtitle='Line Number', ytitle='column number', title='Completions' )
 setApplication(old)
 
- #   tc.setCaretPosition(i)
-  # ci.startPopup(tc)
-    #JythonCompletionTask(tc).
     
