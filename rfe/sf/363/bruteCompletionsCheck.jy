@@ -11,7 +11,7 @@ tc= JTextArea()
 tc.minimumSize= Dimension( 500,500 )
 tc.preferredSize= Dimension( 500,500 )
 
-jf= JFrame(  )
+jf= JFrame( title='Temporarily Used To Count' )
 jf.getContentPane().add(tc)
 jf.pack()
 jf.setVisible(True)
