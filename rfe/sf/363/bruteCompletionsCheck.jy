@@ -26,6 +26,8 @@ rs= CompletionImpl.get().createTestResultSet(None,0)
 
 dsb= DataSetBuilder(2,100,3)
 
+monitor.setTaskSize( len(ss) )
+monitor.started()
 for i in xrange( len(ss) ):
    tc.setCaretPosition(i)
    irow= tc.getLineOfOffset(i)
@@ -38,7 +40,8 @@ for i in xrange( len(ss) ):
          dsb.nextRecord([irow,icol,count])
    except:
        dsb.nextRecord([irow,icol,-1])
-
+   monitor.setTaskProgress(i)
+monitor.finished()
 old= getApplication()
 setApplication( newApplication('completions') )
 reset()
