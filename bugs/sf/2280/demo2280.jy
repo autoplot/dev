@@ -1,0 +1,8 @@
+from javax.swing import JFileChooser
+ff= JFileChooser()
+print ff.isFileHidingEnabled()
+ff.setFileHidingEnabled(False)
+print ff.isFileHidingEnabled()
+#ff.showOpenDialog(None)
+if ( JFileChooser.APPROVE_OPTION==ff.showOpenDialog(None) ):
+    print ff.getSelectedFile()
