@@ -1,8 +1,21 @@
 from javax.swing import JFileChooser
 ff= JFileChooser()
+
+from javax.swing.filechooser import FileNameExtensionFilter
+ff.addChoosableFileFilter( FileNameExtensionFilter('JPEG Files', ['jpg'] ) )
+ff.addChoosableFileFilter( FileNameExtensionFilter('PNG Files', ['png'] ) )
+
+ff.setSelectedFile(File('/home/jbf/tmp/)
+
+# See if we can get George's request that the details view comes up first
+details= ff.getActionMap().get("viewTypeDetails")
+print details
+details.actionPerformed(None)
+
+# Macs don't hide filtered files.  Turn this on.
 print ff.isFileHidingEnabled()
-ff.setFileHidingEnabled(False)
-print ff.isFileHidingEnabled()
+ff.setFileHidingEnabled(True)
+
 #ff.showOpenDialog(None)
 if ( JFileChooser.APPROVE_OPTION==ff.showOpenDialog(None) ):
     print ff.getSelectedFile()
