@@ -1,0 +1,23 @@
+from java.io import File
+setScriptTitle('find empty directories')
+setScriptDescription('recurse through directories looking for empty ones which could be deleted')
+
+from java.lang import System
+root= getParam( 'root', System.getProperty( 'user.home' ) )
+depthLimit= getParam( 'depthLimit', 2, 'number of directories to decend')
+excludeDot= getParam( 'excludeDot', True, 'do not show dot directories which are hidden on Linux')
+
+def do( f0, depth ):
+    ff= f0.listFiles()
+    if ff==None: return
+    if len(ff)==0:
+        print 'rm -r ' +str(f0)
+    else:
+        if depth>0:
+            for f in ff:
+                if excludeDot and f.name.startswith('.'):
+                    continue
+                if f.isDirectory():
+                    do(f,depth-1)
+
+do( File( root ), depthLimit )
