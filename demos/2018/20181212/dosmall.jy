@@ -1,0 +1,3 @@
+ds= findgen(50)
+formatDataSet( ds, '/tmp/dosmall.csv' )
+
