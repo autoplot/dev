@@ -4,14 +4,14 @@ setScriptDescription('recurse through directories looking for empty ones which c
 
 from java.lang import System
 root= getParam( 'root', System.getProperty( 'user.home' ) )
-depthLimit= getParam( 'depthLimit', 2, 'number of directories to decend')
-excludeDot= getParam( 'excludeDot', True, 'do not show dot directories which are hidden on Linux')
+depthLimit= getParam( 'depthLimit', 2, 'number of directories to decend', [1,2,3,4,5,6,7,8])
+excludeDot= getParam( 'excludeDot', True, 'do not show dot directories which are hidden on Linux',[True,False])
 
 def do( f0, depth ):
     ff= f0.listFiles()
     if ff==None: return
     if len(ff)==0:
-        print 'rm -r ' +str(f0)
+        print 'rmdir ' +str(f0)
     else:
         if depth>0:
             for f in ff:
