@@ -1,0 +1,6 @@
+from org.autoplot.datasource import DataSourceRegistry
+cdff= DataSourceRegistry.getInstance().getSource('cdf')
+print cdff.isFileResource()
+
+cdff= DataSourceRegistry.getInstance().getSource('cdaweb')
+print cdff.isFileResource()
