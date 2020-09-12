@@ -1,0 +1,23 @@
+from java.io import ByteArrayOutputStream
+setScriptTitle('Dos2Unix and Unix2Dos')
+
+ff= getParam('resourceURI','/tmp/foo.txt','the file to convert')
+dout= getParam('dout','crlf','output delimiter', ['lf','cr','crlf'] )
+
+import struct
+if ( dout=='crlf' ): 
+    dd= struct.pack('2B', 13, 10 )
+elif ( dout=='cr' ):
+    dd= struct.pack('1B',13)
+elif ( dout=='lf' ):
+    dd= struct.pack('1B',10)
+else:
+    raise Exception('not supported')
+
+newfile= open( ff+'.bin', 'wb' )
+st= open(str(ff),'r')
+for line in st:
+    newfile.write( line.strip() )
+    newfile.write( dd )
+newfile.close()
+
