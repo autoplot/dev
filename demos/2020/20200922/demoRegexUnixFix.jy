@@ -1,9 +1,17 @@
 from java.util.regex import Pattern
 ff= listDirectory('/scratch/jbf/2020/kms/20200922_reformat/rbspb/*.txt')
-pattern= Pattern.compile('rbspb_bsm_xy_1024fft___(\d\d\d).txt')
+
+twoOrThree= getParam('twoOrThree',3,'number of digits to fix',[2,3] )
+
+if ( twoOrThree==3 ):
+   pattern= Pattern.compile('rbspb_bsm_xy_1024fft___(\d\d\d).txt')
+else:
+   pattern= Pattern.compile('rbspb_bsm_xy_1024fft____(\d\d).txt')
 
 for f in ff:
     m= pattern.matcher(f)
     if m.matches():
-        print 'mv '+f+' rbspb_bsm_xy_1024fft____'+m.group(1)+'.txt'
-        
+        if( twoOrThree==3 ):
+            print 'mv '+f+' rbspb_bsm_xy_1024fft____'+m.group(1)+'.txt'
+        else:
+            print 'mv '+f+' rbspb_bsm_xy_1024fft_____'+m.group(1)+'.txt'
