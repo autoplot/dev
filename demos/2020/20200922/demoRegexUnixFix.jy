@@ -5,5 +5,5 @@ pattern= Pattern.compile('rbspb_bsm_xy_1024fft___(\d\d\d).txt')
 for f in ff:
     m= pattern.matcher(f)
     if m.matches():
-        print 'mv '+f+'rbspb_bsm_xy_1024fft____'+m.group(1)+'.txt'
+        print 'mv '+f+' rbspb_bsm_xy_1024fft____'+m.group(1)+'.txt'
         
