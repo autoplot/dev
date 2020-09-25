@@ -4,6 +4,7 @@ from org.das2.util import FileUtil
 from org.apache.commons.codec.digest import DigestUtils
 
 setScriptLabel('pds label info')
+setScriptDescription('Print file stats in form for PDS label files')
 
 resourceURI= getParam( 'resourceURI', 'https://space.physics.uiowa.edu/voyager/data/voyager-1-pws-sa/document/FULL1_DS.TXT', 'example file to load' )
 comment= getParam('comment','')
