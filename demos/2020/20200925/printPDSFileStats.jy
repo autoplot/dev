@@ -1,0 +1,52 @@
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPath,XPathFactory
+from org.das2.util import FileUtil
+from org.apache.commons.codec.digest import DigestUtils
+
+setScriptLabel('pds label info')
+
+resourceURI= getParam( 'resourceURI', 'https://space.physics.uiowa.edu/voyager/data/voyager-1-pws-sa/document/FULL1_DS.TXT', 'example file to load' )
+comment= getParam('comment','')
+
+print resourceURI
+
+if ( resourceURI.endswith('xml') ):
+    print 'here stop'
+    xmlfile= getFile( resourceURI, monitor )
+    domFactory = DocumentBuilderFactory.newInstance()
+    domFactory.setNamespaceAware(True)
+    builder = domFactory.newDocumentBuilder();
+    doc = builder.parse(xmlfile);
+    xp= XPathFactory.newInstance().newXPath().compile('//Product_File_Text/File_Area_Text/File/file_name/text()')
+    fname= xp.evaluate( doc )
+    print '>>>', fname, '<<<<'
+    print 'this does not work!'
+else:
+    fil= getFile( resourceURI, monitor )
+    tmpplate= '''
+         <File>
+            <file_name>%(name)s</file_name>
+            <creation_date_time>%(time)s</creation_date_time>
+            <md5_checksum>%(md5sum)s</md5_checksum>
+            <comment>%(comment)s</comment>
+        </File>
+        <Stream_Text>
+            <name>%(name)s</name>
+            <offset unit="byte">0</offset>
+            <object_length unit="byte">%(length)d</object_length>
+            <parsing_standard_id>7-Bit ASCII Text</parsing_standard_id>
+            <description>%(comment)s</description>
+            <record_delimiter>Carriage-Return Line-Feed</record_delimiter>
+        </Stream_Text>
+        '''
+    s= FileUtil.readFileToString(fil)
+    hsh= DigestUtils.md5Hex(s)
+
+    ldd = {
+        'name': fil.name,
+        'time': str(Units.ms1970.createDatum(float(fil.lastModified()))),
+        'md5sum': hsh,
+        'comment': comment,
+        'length': fil.length()
+        }
+    print tmpplate % ldd
