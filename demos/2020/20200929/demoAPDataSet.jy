@@ -1,0 +1,16 @@
+setScriptTitle('Demo IDL/Matlab interface use within Autoplot')
+setScriptDescription('''The IDL/Matlab interface can be created within Jython codes, useful for testing.''')
+
+from org.autoplot.idlsupport import APDataSet
+apds= APDataSet()
+
+if 0!=apds.loadDataSet( 'vap+cdaweb:ds=DE1_6SEC_MAGAGMS&id=mlt&timerange=1991-02-18' ):
+    raise exception('load error')
+
+apds.setPreferredUnits('hours since 1991-02-18T00:00Z')
+vv= apds.values('mlt')
+tt= apds.values('Epoch')
+
+for i in xrange(len(tt)):
+    print tt[i], vv[i]
+    
