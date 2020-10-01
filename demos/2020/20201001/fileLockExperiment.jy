@@ -1,0 +1,24 @@
+from java.io import File,RandomAccessFile,FileInputStream
+from java.nio.channels import FileLock,FileChannel
+from java.nio.file import StandardOpenOption,Paths
+from java.lang import System
+from java.util import Date
+
+setScriptTitle('Demo File Lock')
+setScriptDescription('Demonstrates how multiple processes can coordinate using Unix file locking. ')
+f= getParam( 'lockf', '/tmp/autoplot.lock' ,'lock file' )
+# f= '/home/jbf/ct/tmp/autoplot.lock'  # this works with NFS as well, so multiple machines can play nice with each other.
+
+f= File( f ) 
+if not f.exists():
+    formatDataSet(zeros(10),'vap+bin:'+str(f)+'?type=ubyte')
+  
+p= Paths.get(URI('file:/home/jbf/ct/tmp/autoplot.lock'))
+fileChannel = FileChannel.open( p, [StandardOpenOption.WRITE] )
+print "ask for lock on lockfile "+str(f)+' ' +str(Date(System.currentTimeMillis()))
+lock = fileChannel.lock(0, 999999, False)
+print "got the lock "+str(Date(System.currentTimeMillis()))
+sleep(5000)
+print "release the lock "+str(Date(System.currentTimeMillis()))
+lock.release()
+fileChannel.close()
