@@ -16,7 +16,7 @@ if not f.exists():
 p= Paths.get(URI('file:/home/jbf/ct/tmp/autoplot.lock'))
 fileChannel = FileChannel.open( p, [StandardOpenOption.WRITE] )
 print "ask for lock on lockfile "+str(f)+' ' +str(Date(System.currentTimeMillis()))
-lock = fileChannel.lock(0, 999999, False)
+lock = fileChannel.lock()  # see tryLock as well.
 print "got the lock "+str(Date(System.currentTimeMillis()))
 sleep(5000)
 print "release the lock "+str(Date(System.currentTimeMillis()))
