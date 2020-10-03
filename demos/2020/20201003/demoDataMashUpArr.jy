@@ -1,0 +1,10 @@
+from org.autoplot.jythonsupport.ui import DataMashUp
+
+a= DataMashUp.insertElement( [0,1,2,3,4], 2, 9 )
+print DataMashUp.printPath( a )
+
+a= DataMashUp.insertElement( [0,1,2,3,4], 5, 5 )
+print DataMashUp.printPath( a )
+
+a= DataMashUp.insertElement( [0,1,2,3,4], 9, 9 )
+print DataMashUp.printPath( a )
