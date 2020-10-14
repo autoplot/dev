@@ -1,0 +1,12 @@
+from java.util.regex import Pattern
+from org.das2.util.filesystem import HtmlUtil
+
+p= Pattern.compile('http://autoplot.org/([a-zA-Z0-9\.]+)')
+
+ins= URL('http://autoplot.org/Special:Allpages').openStream()
+uu= HtmlUtil.getDirectoryListing(URL('http://autoplot.org/Special:Allpages'),ins,False)
+for u in uu:
+    m= p.matcher(str(u))
+    if m.matches():
+        print 'wget -O %s http://autoplot.org/wiki/index.php?title=%s&action=raw' % ( m.group(1), m.group(1) )
+    
