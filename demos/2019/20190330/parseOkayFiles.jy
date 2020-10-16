@@ -1,0 +1,32 @@
+setScriptTitle('Parse Okay Files')
+setScriptDescription('''read the data formed by pngwalk QC files.  Each .ok file should contain for the last comment comma-separated numbers on one line which will be prepended by the time stamp.  The corresponding image files must have names matching IMG_$Y$m$d_$H$M$S$x.jpg.  Data will be written to data.dat in this directory''')
+
+from java.io import FileInputStream,PrintWriter,FileWriter
+
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPath
+from javax.xml.xpath import XPathExpressionException
+from javax.xml.xpath import XPathFactory
+from javax.xml.xpath import XPathConstants
+from org.xml.sax import InputSource
+
+dr=  getParam( 'pngwalk','/home/jbf/fun/2019/radon/20190330/data/', 'Location of pngwalk containing .ok files' )
+outf= PrintWriter(FileWriter(dr+'data.dat'))
+
+outf.println('time,long,short,nday')
+tp= TimeParser.create('IMG_$Y$m$d_$H$M$S$x.jpg')
+ff= listDirectory( dr + '*.ok')
+for f in ff:
+    t= tp.parse(f).getTimeDatum()
+    qcFile= dr+f
+    myin= FileInputStream( qcFile )
+    builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+
+    source = InputSource( myin )
+    initialDocument = builder.parse(source)  
+    
+    factory= XPathFactory.newInstance()
+    xpath= factory.newXPath()
+    caption= xpath.evaluate( '/qualityControlRecord/reviewComment[last()]/text()', initialDocument, XPathConstants.STRING )
+    outf.println( '%s,%s' % ( t, caption ) )
+outf.close()
