@@ -1,0 +1,17 @@
+setScriptDescription('Load the HAPI front page and download any images, so that caches will be populated for impatient humans')
+setScriptTitle('do mirror hapi')
+
+from java.util.regex import Pattern
+from  org.das2.util.filesystem import HtmlUtil
+url=URL('https://jfaden.net/HapiServerDemo/hapi')
+ff= downloadResourceAsTempFile(url,monitor)
+
+p= Pattern.compile('\<img src=\'(.+)\'>')
+
+for l in open(str(ff)):
+    m= p.matcher(l)
+    while m.find():
+        u=m.group(1)
+        if len(u)<400:
+            print 'get '+u
+            ff= downloadResourceAsTempFile(URL(u),monitor.getSubtaskMonitor(u))
