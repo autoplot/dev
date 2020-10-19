@@ -10,3 +10,5 @@ The new(er) style is to use string.format, but this is not supported:
 ~~~~~
 'the name is {n}' % { n='Bond' }
 ~~~~~
+
+Other keywords I used while looking for examples were macros and string substitution.
