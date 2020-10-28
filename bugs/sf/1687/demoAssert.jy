@@ -1,0 +1,10 @@
+from org.autoplot.jythonsupport.ui import EditorTextPane
+from org.autoplot.scriptconsole import JythonScriptPanel
+from javax.swing import JPanel
+
+app= getApplication()
+sp= app.getTabs().getTabByTitle('script')
+assert isinstance( sp, JPanel )
+c= sp.getComponent(0)
+assert isinstance( c, JythonScriptPanel )
+t= c.getEditorPanel()
