@@ -1,4 +1,9 @@
-# why doesn't Jython automatically convert to double???
+# why doesn't Jython automatically convert to double??? 
+# Note that Jython complains about not getting a double, but the "float" function is called to convert the value.
+# So double and float are somewhat two words for the same thing in Jython.  (In Java, float is a 4-byte real
+# number varying up to 1e37 and having approximately 7 digits, while a double is 14 decimal places.
+# Everything in Jython is a double, having 14 digits.)
+
 r0= dataset(9)
 print r0+1
 
