@@ -1,0 +1,22 @@
+setScriptTitle('find zero crossing table')
+setScriptDescription('Find the zero crossing (or null or root) in the monotonic decreasing function')
+
+from org.apache.commons.math.analysis.solvers import BisectionSolver
+from org.apache.commons.math.analysis import UnivariateRealFunction
+
+#optimization.fitting import CurveFitter
+
+class MyUnivariateRealFunction(UnivariateRealFunction):
+    def value(self,xxx):
+        return -1*(xxx-3.345)**3
+murv= MyUnivariateRealFunction()
+        
+bs= BisectionSolver()
+rootx= bs.solve( murv, 0, 10 )
+    
+xxx= linspace(0,5,100)
+yyy= map( murv.value, xxx )
+plot( xxx,yyy )
+
+annotation(text='Zero at %f'%rootx,pointAt='%f,0'%rootx, anchorType='data', anchorPosition='sw')
+
