@@ -1,0 +1,35 @@
+setScriptTitle('find zero crossing table')
+setScriptDescription('Find the zero crossing (or null or root) in the monotonic decreasing function')
+
+from org.apache.commons.math.analysis.solvers import BisectionSolver
+#optimization.fitting import CurveFitter
+
+def findRoot( xxx, yyy ):
+    i0= 0
+    i2= len(yyy)-1
+    i1= i2/2
+    if ( yyy[i0]<0 ): raise Exception('first point must be positive')
+    if ( yyy[i2]>0 ): raise Exception('last point must be negative')
+    
+    while( i2-i0>1 ):
+        print i0, i1, i2
+        if ( yyy[i1]==0. ):
+            return xxx[i1]
+        if ( yyy[i0]*yyy[i1] < 0 ):
+            i2= i1
+            i1= (i0+i2)/2
+        else:
+            i0= i1
+            i1= (i0+i2)/2
+    alpha= 0-yyy[i1] / (yyy[i2]-yyy[i1])
+    return xxx[i1] + ( xxx[i2]-xxx[i1] ) * alpha
+    
+xxx= linspace(0,5,100)
+yyy= -1*(xxx-3.345)**3
+plot( xxx,yyy )
+
+rootx= findRoot( xxx, yyy )
+annotation(text='Zero at %f'%rootx,pointAt='%f,0'%rootx, anchorType='data', anchorPosition='sw')
+
+print findRoot( xxx, yyy )
+print '-----'
