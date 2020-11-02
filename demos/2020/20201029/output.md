@@ -1,4 +1,9 @@
-== Executing Script ==
+# Introduction
+CDF files were downloaded from 
+https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files
+and inspected to see if all the different features of CDF files
+are found.
+
 # Files Used
 a1_k0_mpa_20050804_v02.cdf<br>
 ac_h2_sis_20101105_v06.cdf<br>
