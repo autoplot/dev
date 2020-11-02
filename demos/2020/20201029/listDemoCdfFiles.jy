@@ -6,6 +6,10 @@ showLocations= getParam('showLocations',False,'Show location of each block',[Tru
 dr= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/'
 ff= listDirectory( dr + '*.cdf' )
 
+print '# Introduction'
+print '''CDF files were downloaded from https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files 
+and inspected to see if all the different features of CDF files are found.'''
+
 print '# Files Used'
 for f in ff:
     print f+'<br>'
@@ -19,6 +23,9 @@ def tally( m, n ):
     else:
         m[n]= 1
         
+def dimensionsStr( d ):
+    return str(d)[10:-2]
+        
 monitor.setTaskSize(len(ff))
 monitor.started()
 for f in ff:
@@ -28,20 +35,29 @@ for f in ff:
     
     cdff= CDFFactory.getCDF( str(fl) )
     
-    cdff.get
     vv= cdff.getVariableNames()
     
-    print '----------------'
-    print fl.name
-    print 'Byte Order: '+ str(cdff.getByteOrder())
-    
+    print '# '+ fl.name
+    print 'Byte Order: '+ str(cdff.getByteOrder()) + '<br>'
+    if cdff.rowMajority():
+        print 'Majority: row<br>'
+    else:
+        print 'Majority: column<br>'
+    print ' '
+    print '|name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |'
+    print '|-----|-----------|---------|-----|----------|-----|---|'
     for v in vv:
         var= cdff.getVariable(v)
         vdl= var.getLocator()
         
         if ( vdl!=None ):
             stype= CDFDataType.nameForType(var.type)
-            print var.name, '\t', var.dimensions, var.blockingFactor, stype, len(vdl.getLocations())
+            zOrR= var.isTypeR()
+            if var.isTypeR():
+                zOrR='R'
+            else:
+                zOrR='Z'    
+            print '|%s|%s|%d|%s|%d|%d|%s|' % ( var.name,                 dimensionsStr(var.dimensions),                 var.blockingFactor,                 stype,                 len(vdl.getLocations()),                 var.isCompressed(),                 zOrR )
             tally(types,stype)
                 
             if showLocations :
@@ -59,11 +75,11 @@ monitor.finished()
 
 print '# Summary'
 print '|Type |Count |'
-print '--------------'
+print '|-----|------|'
 for i in xrange(64):
     n= CDFDataType.nameForType(i)
     if n!='???':
         if types.has_key(n)==False:
-            print '|'+n+'no examples'+'|'
+            print '|'+n+'|no examples'+'|'
         else:
             print '|'+n+'|'+str(types.get(n))+'|'
