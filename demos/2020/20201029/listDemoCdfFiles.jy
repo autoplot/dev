@@ -6,11 +6,14 @@ showLocations= getParam('showLocations',False,'Show location of each block',[Tru
 dr= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/'
 ff= listDirectory( dr + '*.cdf' )
 
-print '# Introduction'
-print '''CDF files were downloaded from https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files 
-and inspected to see if all the different features of CDF files are found.'''
+outw= open( URI(PWD).path + 'output.md', 'w' )
 
-print '# Files Used'
+outw.write( '# Introduction\n' )
+outw.write( '''CDF files were downloaded from https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files 
+and inspected to see if all the different features of CDF files are found.
+''')
+
+outw.write( '# Files Used\n' )
 for f in ff:
     print f+'<br>'
     
@@ -37,15 +40,15 @@ for f in ff:
     
     vv= cdff.getVariableNames()
     
-    print '# '+ fl.name
-    print 'Byte Order: '+ str(cdff.getByteOrder()) + '<br>'
+    outw.write('# '+ fl.name + '<br>\n' )
+    outw.write( 'Byte Order: '+ str(cdff.getByteOrder()) + '<br>\n')
     if cdff.rowMajority():
-        print 'Majority: row<br>'
+        outw.write('Majority: row<br>\n')
     else:
-        print 'Majority: column<br>'
-    print ' '
-    print '|name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |'
-    print '|-----|-----------|---------|-----|----------|-----|---|'
+        outw.write('Majority: column<br>\n')
+    outw.write( '\n' ) 
+    outw.write( '|name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |\n' )
+    outw.write( '|-----|-----------|---------|-----|----------|-----|---|\n' )
     for v in vv:
         var= cdff.getVariable(v)
         vdl= var.getLocator()
@@ -57,7 +60,7 @@ for f in ff:
                 zOrR='R'
             else:
                 zOrR='Z'    
-            print '|%s|%s|%d|%s|%d|%d|%s|' % ( var.name,                 dimensionsStr(var.dimensions),                 var.blockingFactor,                 stype,                 len(vdl.getLocations()),                 var.isCompressed(),                 zOrR )
+            outw.write( '|%s|%s|%d|%s|%d|%d|%s|\n' % ( var.name, dimensionsStr(var.dimensions), var.blockingFactor, stype, len(vdl.getLocations()), var.isCompressed(), zOrR ) )
             tally(types,stype)
                 
             if showLocations :
@@ -65,21 +68,21 @@ for f in ff:
                 for i in xrange(len(vdls)):
                     vdl1= vdls[i]
                     if i<3:
-                        print '    %d-%d offset=%d' % ( vdl1[0], vdl1[1], vdl1[2] )
+                        outw.write( '    %d-%d offset=%d\n' % ( vdl1[0], vdl1[1], vdl1[2] ) )
                     elif i==4:
-                        print '    ... (%d locations)' % len(vdls)
+                        outw.write( '    ... (%d locations)\n' % len(vdls) )
         else:
             print 'no locator!'
             
 monitor.finished()
 
-print '# Summary'
-print '|Type |Count |'
-print '|-----|------|'
+outw.write( '# Summary\n' )
+outw.write( '|Type |Count |\n' )
+outw.write( '|-----|------|\n' )
 for i in xrange(64):
     n= CDFDataType.nameForType(i)
     if n!='???':
         if types.has_key(n)==False:
-            print '|'+n+'|no examples'+'|'
+            outw.write( '|'+n+'|no examples'+'|\n' )
         else:
-            print '|'+n+'|'+str(types.get(n))+'|'
+            outw.write( '|'+n+'|'+str(types.get(n))+'|\n' )

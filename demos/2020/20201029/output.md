@@ -2,36 +2,10 @@
 CDF files were downloaded from https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files 
 and inspected to see if all the different features of CDF files are found.
 # Files Used
-a1_k0_mpa_20050804_v02.cdf<br>
-ac_h2_sis_20101105_v06.cdf<br>
-ac_or_ssc_20031101_v01.cdf<br>
-ac_or_ssc_20040809_v01.cdf<br>
-bigcdf_compressed.cdf<br>
-c1_waveform_wbd_200202080940_v01.cdf<br>
-c1_waveform_wbd_200202080940_v01_subset.cdf<br>
-cl_jp_pgp_20031001_v52.cdf<br>
-cl_sp_edi_00000000_v01.cdf<br>
-cluster-2_cp3drl_2002052000000_v1.cdf<br>
-de_uv_sai_19910218_v01.cdf<br>
-ge_k0_cpi_19921231_v02.cdf<br>
-i1_av_ott_1983351130734_v01.cdf<br>
-im_k0_euv_20011231_v01.cdf<br>
-im_k0_rpi_20051218_v01.cdf<br>
-im_k1_rpi_20051217_v01.cdf<br>
-mms1_fpi_fast_sitl_20150801132440_v0.0.0.cdf<br>
-po_h4_pwi_19970901_v01.cdf<br>
-po_h9_pwi_1997010103_v01.cdf<br>
-po_k0_uvi_20051230_v02.cdf<br>
-tha_l2_fgm_20070729_v01.cdf<br>
-tha_l2_fgm_20101202_v01.cdf<br>
-tha_l2_scm_20160831_v01.cdf<br>
-timed_L1Cdisk_guvi_20060601005849_v01.cdf<br>
-twins1_l1_imager_2010102701_v01.cdf<br>
-ulysses.cdf<br>
-# a1_k0_mpa_20050804_v02.cdf
+# a1_k0_mpa_20050804_v02.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[2, 3]|0|CDF_EPOCH|16|0|R|
@@ -52,7 +26,6 @@ Majority: column<br>
 |sc_pot|[2, 3]|0|CDF_REAL4|8|0|R|
 |bkgd|[2, 3]|0|CDF_REAL4|8|0|R|
 |sc_pos_geo|[2, 3]|0|CDF_REAL4|24|0|R|
-no locator!
 |sc_pos_mag|[2, 3]|0|CDF_REAL4|24|0|R|
 |qual_flag|[2, 3]|0|CDF_INT4|8|0|R|
 |gap_flag|[2, 3]|0|CDF_INT4|8|0|R|
@@ -73,10 +46,10 @@ no locator!
 |label_vel|[2, 3]|0|CDF_CHAR|1|0|R|
 |Cartesian|[2, 3]|0|CDF_CHAR|1|0|R|
 |label_temp|[2, 3]|0|CDF_CHAR|1|0|R|
-# ac_h2_sis_20101105_v06.cdf
+# ac_h2_sis_20101105_v06.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|1|0|Z|
@@ -126,7 +99,6 @@ Majority: column<br>
 |label_ebands_cnt_Na|[8]|0|CDF_CHAR|1|0|Z|
 |cnt_Mg|[8]|0|CDF_REAL4|2|0|Z|
 |label_ebands_cnt_Mg|[8]|0|CDF_CHAR|1|0|Z|
-no locator!
 |label_ebands_cnt_Al|[8]|0|CDF_CHAR|1|0|Z|
 |cnt_Si|[8]|0|CDF_REAL4|2|0|Z|
 |label_ebands_cnt_Si|[8]|0|CDF_CHAR|1|0|Z|
@@ -140,10 +112,10 @@ no locator!
 |label_ebands_cnt_Fe|[8]|0|CDF_CHAR|1|0|Z|
 |cnt_Ni|[8]|0|CDF_REAL4|2|0|Z|
 |label_ebands_cnt_Ni|[8]|0|CDF_CHAR|1|0|Z|
-# ac_or_ssc_20031101_v01.cdf
+# ac_or_ssc_20031101_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |XYZ_GSE|[3]|0|CDF_DOUBLE|198|0|Z|
@@ -153,10 +125,10 @@ Majority: row<br>
 |GSE_LAT|[]|0|CDF_FLOAT|87|0|R|
 |GSE_LON|[]|0|CDF_FLOAT|87|0|R|
 |RADIUS|[]|0|CDF_DOUBLE|173|0|R|
-# ac_or_ssc_20040809_v01.cdf
+# ac_or_ssc_20040809_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|1|0|Z|
@@ -206,7 +178,6 @@ Majority: column<br>
 |label_ebands_cnt_Na|[8]|0|CDF_CHAR|1|0|Z|
 |cnt_Mg|[8]|0|CDF_REAL4|2|0|Z|
 |label_ebands_cnt_Mg|[8]|0|CDF_CHAR|1|0|Z|
-no locator!
 |label_ebands_cnt_Al|[8]|0|CDF_CHAR|1|0|Z|
 |cnt_Si|[8]|0|CDF_REAL4|2|0|Z|
 |label_ebands_cnt_Si|[8]|0|CDF_CHAR|1|0|Z|
@@ -220,17 +191,17 @@ no locator!
 |label_ebands_cnt_Fe|[8]|0|CDF_CHAR|1|0|Z|
 |cnt_Ni|[8]|0|CDF_REAL4|2|0|Z|
 |label_ebands_cnt_Ni|[8]|0|CDF_CHAR|1|0|Z|
-# bigcdf_compressed.cdf
+# bigcdf_compressed.cdf<br>
 Byte Order: LITTLE_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |temp|[1024, 768]|1|CDF_DOUBLE|400|1|Z|
-# c1_waveform_wbd_200202080940_v01.cdf
+# c1_waveform_wbd_200202080940_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[2]|512000|CDF_EPOCH16|33|1|Z|
@@ -246,10 +217,10 @@ Majority: row<br>
 |WBD_Elec|[]|512000|CDF_REAL4|33|1|Z|
 |WBD_Mag|[]|512000|CDF_REAL4|33|1|Z|
 |DATA_QUALITY|[]|512000|CDF_BYTE|33|1|Z|
-# c1_waveform_wbd_200202080940_v01_subset.cdf
+# c1_waveform_wbd_200202080940_v01_subset.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[2]|512000|CDF_EPOCH16|1|1|Z|
@@ -265,10 +236,10 @@ Majority: row<br>
 |WBD_Elec|[]|512000|CDF_REAL4|1|1|Z|
 |WBD_Mag|[]|512000|CDF_REAL4|1|1|Z|
 |DATA_QUALITY|[]|512000|CDF_BYTE|1|1|Z|
-# cl_jp_pgp_20031001_v52.cdf
+# cl_jp_pgp_20031001_v52.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |L_gse_xyz|[3]|0|CDF_CHAR|1|0|Z|
@@ -308,23 +279,21 @@ Majority: row<br>
 |L_geom_E_dir_gse__CL_JP_PGP|[3]|0|CDF_CHAR|1|0|Z|
 |sc_geom_P_nor_gse__CL_JP_PGP|[3]|0|CDF_REAL4|1|0|Z|
 |L_geom_P_nor_gse__CL_JP_PGP|[3]|0|CDF_CHAR|1|0|Z|
-# cl_sp_edi_00000000_v01.cdf
+# cl_sp_edi_00000000_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |L_gse_xyz|[3]|0|CDF_CHAR|1|0|Z|
 |Half_interval__CL_SP_EDI|[]|0|CDF_REAL8|1|0|Z|
-no locator!
 |Status__CL_SP_EDI|[7]|0|CDF_UINT1|1|0|Z|
 |L_Status_EDI_SP|[7]|0|CDF_CHAR|1|0|Z|
-no locator!
 |L_V_ed_xyz_gse__CL_SP_EDI|[3]|0|CDF_CHAR|1|0|Z|
-# cluster-2_cp3drl_2002052000000_v1.cdf
+# cluster-2_cp3drl_2002052000000_v1.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|226|0|Z|
@@ -367,10 +336,10 @@ Majority: row<br>
 |STOP_AZIMUTHAL6|[93]|0|CDF_FLOAT|7206|0|Z|
 |PITCH_ANGLE6|[93]|0|CDF_FLOAT|7206|0|Z|
 |MODE0_PEACE Mode|[]|0|CDF_FLOAT|113|0|Z|
-# de_uv_sai_19910218_v01.cdf
+# de_uv_sai_19910218_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|1|0|Z|
@@ -412,10 +381,10 @@ Majority: column<br>
 |unit_filter|[2]|1|CDF_CHAR|1|1|Z|
 |label_filter|[2]|1|CDF_CHAR|1|1|Z|
 |format_filter|[2]|1|CDF_CHAR|1|1|Z|
-# ge_k0_cpi_19921231_v02.cdf
+# ge_k0_cpi_19921231_v02.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[3, 2]|0|CDF_EPOCH|18|0|R|
@@ -443,10 +412,10 @@ Majority: column<br>
 |label_v3|[3, 2]|0|CDF_CHAR|1|0|R|
 |cartesian2|[3, 2]|0|CDF_CHAR|1|0|R|
 |cartesian3|[3, 2]|0|CDF_CHAR|1|0|R|
-# i1_av_ott_1983351130734_v01.cdf
+# i1_av_ott_1983351130734_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |satellite|[]|1|CDF_INT4|1|1|Z|
@@ -496,10 +465,10 @@ Majority: row<br>
 |Epoch|[]|0|CDF_EPOCH|1|0|Z|
 |ampl|[335]|1000|CDF_UINT1|1|1|Z|
 |freq|[]|1000|CDF_REAL8|1|1|Z|
-# im_k0_euv_20011231_v01.cdf
+# im_k0_euv_20011231_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|1|0|Z|
@@ -514,10 +483,10 @@ Majority: column<br>
 |Spin_Sect|[140]|0|CDF_CHAR|1|0|Z|
 |metavar0|[3]|0|CDF_CHAR|1|0|Z|
 |metavar1|[3]|0|CDF_CHAR|1|0|Z|
-# im_k0_rpi_20051218_v01.cdf
+# im_k0_rpi_20051218_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|3|0|Z|
@@ -545,10 +514,10 @@ Majority: row<br>
 |Zenith|[256, 128]|0|CDF_UINT1|189|0|Z|
 |DopplerNumber|[256, 128]|0|CDF_UINT1|189|0|Z|
 |DopplerTranslation|[256]|0|CDF_REAL4|189|0|Z|
-# im_k1_rpi_20051217_v01.cdf
+# im_k1_rpi_20051217_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|18|0|Z|
@@ -565,10 +534,10 @@ Majority: row<br>
 |Amplitude_Y|[256]|0|CDF_FLOAT|1118|0|Z|
 |Amplitude_Z|[256]|0|CDF_FLOAT|1118|0|Z|
 |Amplitude_XY|[256]|0|CDF_FLOAT|1118|0|Z|
-# mms1_fpi_fast_sitl_20150801132440_v0.0.0.cdf
+# mms1_fpi_fast_sitl_20150801132440_v0.0.0.cdf<br>
 Byte Order: LITTLE_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_TT2000|1|0|Z|
@@ -671,10 +640,10 @@ Majority: column<br>
 |mms1_fpi_Jplasma_X_DSC|[]|1280|CDF_REAL4|5|1|Z|
 |mms1_fpi_Jplasma_Y_DSC|[]|1280|CDF_REAL4|5|1|Z|
 |mms1_fpi_Jplasma_Z_DSC|[]|1280|CDF_REAL4|5|1|Z|
-# po_h4_pwi_19970901_v01.cdf
+# po_h4_pwi_19970901_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |DATA_QUALITY|[]|1000|CDF_INT4|447|1|Z|
@@ -694,10 +663,10 @@ Majority: row<br>
 |Delta_T|[]|1|CDF_REAL8|1|1|R|
 |FFT_SIZE|[]|1|CDF_INT4|1|1|R|
 |Num_Spec|[]|1|CDF_INT4|1|1|R|
-# po_h9_pwi_1997010103_v01.cdf
+# po_h9_pwi_1997010103_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[3984]|0|CDF_EPOCH|1|0|R|
@@ -712,14 +681,13 @@ Majority: row<br>
 |NumPoints|[3984]|1000|CDF_INT4|43|1|R|
 |DATA_QUALITY|[3984]|1000|CDF_BYTE|43|1|R|
 |WBR_Elec|[3984]|1000|CDF_REAL4|43|1|R|
-no locator!
 |Num_Snap|[3984]|1|CDF_INT4|1|1|R|
 |FFT_size|[3984]|1|CDF_INT4|1|1|R|
 |Data_No|[3984]|1|CDF_INT4|1|1|R|
-# po_k0_uvi_20051230_v02.cdf
+# po_k0_uvi_20051230_v02.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: column<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[3, 228, 200, 23, 20]|0|CDF_EPOCH|1|0|R|
@@ -753,10 +721,10 @@ Majority: column<br>
 |ptr_col|[3, 228, 200, 23, 20]|0|CDF_REAL4|1|0|R|
 |row|[3, 228, 200, 23, 20]|0|CDF_REAL4|1|0|R|
 |col|[3, 228, 200, 23, 20]|0|CDF_REAL4|1|0|R|
-# tha_l2_fgm_20070729_v01.cdf
+# tha_l2_fgm_20070729_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |tha_fge_ssl|[3]|0|CDF_FLOAT|1|0|Z|
@@ -767,7 +735,6 @@ Majority: row<br>
 |tha_fge_labl|[3]|0|CDF_CHAR|1|0|Z|
 |tha_fge_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fge_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_fgl_ssl|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgl_dsl|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgl_gse|[3]|0|CDF_FLOAT|1|0|Z|
@@ -775,7 +742,6 @@ no locator!
 |tha_fgl_compno|[3]|0|CDF_INT4|1|0|Z|
 |tha_fgl_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fgl_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_fgh_ssl|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgh_dsl|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgh_gse|[3]|0|CDF_FLOAT|1|0|Z|
@@ -783,23 +749,21 @@ no locator!
 |tha_fgh_compno|[3]|0|CDF_INT4|1|0|Z|
 |tha_fgh_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fgh_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_fgs_dsl|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgs_gse|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgs_gsm|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgs_compno|[3]|0|CDF_INT4|1|0|Z|
 |tha_fgs_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fgs_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |Rep_xyz|[3]|0|CDF_CHAR|1|0|Z|
 |range_epoch|[]|0|CDF_EPOCH|1|0|Z|
 |tha_fgl_labl|[3]|0|CDF_CHAR|1|0|Z|
 |tha_fgh_labl|[3]|0|CDF_CHAR|1|0|Z|
 |tha_fgs_labl|[3]|0|CDF_CHAR|1|0|Z|
-# tha_l2_fgm_20101202_v01.cdf
+# tha_l2_fgm_20101202_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |tha_fgs_btotal|[]|0|CDF_FLOAT|1|0|Z|
@@ -809,7 +773,6 @@ Majority: row<br>
 |tha_fgs_compno|[3]|0|CDF_INT4|1|0|Z|
 |tha_fgs_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fgs_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_fgl_btotal|[]|0|CDF_FLOAT|1|0|Z|
 |tha_fgl_gse|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgl_gsm|[3]|0|CDF_FLOAT|1|0|Z|
@@ -818,7 +781,6 @@ no locator!
 |tha_fgl_compno|[3]|0|CDF_INT4|1|0|Z|
 |tha_fgl_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fgl_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_fgh_btotal|[]|0|CDF_FLOAT|1|0|Z|
 |tha_fgh_gse|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fgh_gsm|[3]|0|CDF_FLOAT|1|0|Z|
@@ -827,7 +789,6 @@ no locator!
 |tha_fgh_compno|[3]|0|CDF_INT4|1|0|Z|
 |tha_fgh_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fgh_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_fge_btotal|[]|0|CDF_FLOAT|1|0|Z|
 |tha_fge_gse|[3]|0|CDF_FLOAT|1|0|Z|
 |tha_fge_gsm|[3]|0|CDF_FLOAT|1|0|Z|
@@ -837,19 +798,17 @@ no locator!
 |tha_fge_labl|[3]|0|CDF_CHAR|1|0|Z|
 |tha_fge_time|[]|0|CDF_DOUBLE|1|0|Z|
 |tha_fge_epoch0|[]|0|CDF_EPOCH|1|0|Z|
-no locator!
 |Rep_xyz|[3]|0|CDF_CHAR|1|0|Z|
 |range_epoch|[]|0|CDF_EPOCH|1|0|Z|
 |tha_fgl_labl|[3]|0|CDF_CHAR|1|0|Z|
 |tha_fgh_labl|[3]|0|CDF_CHAR|1|0|Z|
 |tha_fgs_labl|[3]|0|CDF_CHAR|1|0|Z|
-# tha_l2_scm_20160831_v01.cdf
+# tha_l2_scm_20160831_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
-no locator!
 |tha_scf_btotal|[]|241664|CDF_FLOAT|1|1|Z|
 |tha_scf_gse|[3]|85333|CDF_FLOAT|3|1|Z|
 |tha_scf_gsm|[3]|85333|CDF_FLOAT|3|1|Z|
@@ -857,7 +816,6 @@ no locator!
 |tha_scf_compno|[3]|1|CDF_INT4|1|0|Z|
 |tha_scf_time|[]|128000|CDF_DOUBLE|2|1|Z|
 |tha_scf_epoch0|[]|1|CDF_EPOCH|1|0|Z|
-no locator!
 |tha_scp_btotal|[]|1024|CDF_FLOAT|1|1|Z|
 |tha_scp_gse|[3]|1024|CDF_FLOAT|1|1|Z|
 |tha_scp_gsm|[3]|1024|CDF_FLOAT|1|1|Z|
@@ -865,23 +823,17 @@ no locator!
 |tha_scp_compno|[3]|1|CDF_INT4|1|0|Z|
 |tha_scp_time|[]|1024|CDF_DOUBLE|1|1|Z|
 |tha_scp_epoch0|[]|1|CDF_EPOCH|1|0|Z|
-no locator!
-no locator!
-no locator!
-no locator!
-no locator!
 |tha_scw_compno|[3]|1|CDF_INT4|1|0|Z|
-no locator!
 |tha_scw_epoch0|[]|1|CDF_EPOCH|1|0|Z|
 |Rep_xyz|[3]|1|CDF_CHAR|1|0|Z|
 |range_epoch|[]|2|CDF_EPOCH|1|0|Z|
 |tha_scp_labl|[3]|1|CDF_CHAR|1|0|Z|
 |tha_scw_labl|[3]|1|CDF_CHAR|1|0|Z|
 |tha_scf_labl|[3]|1|CDF_CHAR|1|0|Z|
-# timed_L1Cdisk_guvi_20060601005849_v01.cdf
+# timed_L1Cdisk_guvi_20060601005849_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Intensity1_rectified|[1647, 130]|1|CDF_FLOAT|1|1|Z|
@@ -951,10 +903,10 @@ Majority: row<br>
 |int3Profiles|[7]|1|CDF_CHAR|1|1|Z|
 |int4Profiles|[7]|1|CDF_CHAR|1|1|Z|
 |int5Profiles|[7]|1|CDF_CHAR|1|1|Z|
-# twins1_l1_imager_2010102701_v01.cdf
+# twins1_l1_imager_2010102701_v01.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[]|0|CDF_EPOCH|1|0|Z|
@@ -1036,44 +988,12 @@ Majority: row<br>
 |error_image_e8|[90, 22]|1|CDF_DOUBLE|65|1|Z|
 |error_image_e9|[90, 22]|1|CDF_DOUBLE|65|1|Z|
 |indexvar9|[9]|1|CDF_INT2|1|1|Z|
-# ulysses.cdf
+# ulysses.cdf<br>
 Byte Order: BIG_ENDIAN<br>
 Majority: row<br>
- 
+
 |name |record<br>dimensions |blocking<br>factor |type |locations |compressed |type |
 |-----|-----------|---------|-----|----------|-----|---|
 |Epoch|[3]|0|CDF_EPOCH|2104|0|R|
 |Time_PB5|[3]|0|CDF_INT4|2153|0|R|
-|Dist_HGI|[3]|0|CDF_REAL4|1052|0|R|
-|Lat_HGI|[3]|0|CDF_REAL4|1052|0|R|
-|Long_HGI|[3]|0|CDF_REAL4|1052|0|R|
-|BR_RTN|[3]|0|CDF_REAL4|1052|0|R|
-|BT_RTN|[3]|0|CDF_REAL4|1052|0|R|
-|BN_RTN|[3]|0|CDF_REAL4|1052|0|R|
-|B_scalar|[3]|0|CDF_REAL4|1052|0|R|
-|V|[3]|0|CDF_REAL4|1052|0|R|
-|N|[3]|0|CDF_REAL4|1052|0|R|
-|Temp|[3]|0|CDF_REAL4|1052|0|R|
-|label_time|[3]|0|CDF_CHAR|1|0|R|
-|unit_time|[3]|0|CDF_CHAR|1|0|R|
-|format_time|[3]|0|CDF_CHAR|1|0|R|
-# Summary
-|Type |Count |
-|-----|------|
-|CDF_INT1|8|
-|CDF_INT2|24|
-|CDF_INT4|81|
-|CDF_INT8|no examples|
-|CDF_UINT1|9|
-|CDF_UINT2|2|
-|CDF_UINT4|7|
-|CDF_REAL4|250|
-|CDF_REAL8|35|
-|CDF_EPOCH|36|
-|CDF_EPOCH16|2|
-|CDF_TT2000|1|
-|CDF_BYTE|18|
-|CDF_FLOAT|136|
-|CDF_DOUBLE|77|
-|CDF_CHAR|156|
-|CDF_UCHAR|9|
+|Dist_HGI|[3]|0|CDF_
