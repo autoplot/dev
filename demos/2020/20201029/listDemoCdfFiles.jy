@@ -1,0 +1,69 @@
+from gov.nasa.gsfc.spdf.cdfj import CDFReader
+from gov.nasa.gsfc.spdf.cdfj import CDFFactory,CDFDataType
+
+showLocations= getParam('showLocations',False,'Show location of each block',[True,False])
+
+dr= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/'
+ff= listDirectory( dr + '*.cdf' )
+
+print '# Files Used'
+for f in ff:
+    print f+'<br>'
+    
+types= {}
+orders= {}
+
+def tally( m, n ):
+    if m.has_key(n):
+        m[n]= m[n]+1
+    else:
+        m[n]= 1
+        
+monitor.setTaskSize(len(ff))
+monitor.started()
+for f in ff:
+    monitor.setTaskProgress(monitor.getTaskProgress()+1)
+    monitor.setProgressMessage(f)
+    fl= getFile( dr + f, False, monitor.getSubtaskMonitor('read file') )
+    
+    cdff= CDFFactory.getCDF( str(fl) )
+    
+    cdff.get
+    vv= cdff.getVariableNames()
+    
+    print '----------------'
+    print fl.name
+    print 'Byte Order: '+ str(cdff.getByteOrder())
+    
+    for v in vv:
+        var= cdff.getVariable(v)
+        vdl= var.getLocator()
+        
+        if ( vdl!=None ):
+            stype= CDFDataType.nameForType(var.type)
+            print var.name, '\t', var.dimensions, var.blockingFactor, stype, len(vdl.getLocations())
+            tally(types,stype)
+                
+            if showLocations :
+                vdls= vdl.getLocations()
+                for i in xrange(len(vdls)):
+                    vdl1= vdls[i]
+                    if i<3:
+                        print '    %d-%d offset=%d' % ( vdl1[0], vdl1[1], vdl1[2] )
+                    elif i==4:
+                        print '    ... (%d locations)' % len(vdls)
+        else:
+            print 'no locator!'
+            
+monitor.finished()
+
+print '# Summary'
+print '|Type |Count |'
+print '--------------'
+for i in xrange(64):
+    n= CDFDataType.nameForType(i)
+    if n!='???':
+        if types.has_key(n)==False:
+            print '|'+n+'no examples'+'|'
+        else:
+            print '|'+n+'|'+str(types.get(n))+'|'
