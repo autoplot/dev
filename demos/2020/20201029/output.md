@@ -1030,7 +1030,7 @@ Byte Order: BIG_ENDIAN
 |format_time|array('i',[3]) |0|CDF_CHAR|1
 # Summary
 |Type |Count |
---------------
+|-----|------|
 |CDF_INT1|8|
 |CDF_INT2|24|
 |CDF_INT4|81|
