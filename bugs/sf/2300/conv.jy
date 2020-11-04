@@ -1,0 +1,65 @@
+from org.das2.util import LoggerManager
+from java.awt import BorderLayout
+from javax.swing import JSlider,JPanel,BoxLayout
+# Goal: find the difference between two signals.
+
+logger= LoggerManager.getLogger('analysis')
+
+reset()
+plot( 0, None )
+plot( 1, None, overplotOf=dom.plots[0] )
+plot( 2, None, ylog=False )
+p,pe=plot( 3, None, ylog=False )
+ann= annotation(  
+    plotId=p, anchorType='DATA',
+    xrange=[100,100], yrange=[0,0],
+    pointAt='100,0',
+    anchorOffset='1em,1em', anchorPosition='SW',
+    fontSize='.8em' ) 
+
+def update(c1,c2):
+    logger.fine('enter update')
+    
+    f1= exp( -pow( distance(512,c1,10.), 2 ) )
+    f2= exp( -pow( distance(512,c2,10.), 2 ) )
+    logger.fine('calc f1 f2')
+    invokeLater( plot, 0, f1, ylog=False, yrange=[-0.1,1.1], reset=False )
+    invokeLater( plot, 1, f2 )
+    logger.fine('plot f1 f2')
+    ff1= fft(f1)
+    ff2= fft(f2)
+    ff3= ff1-ff2
+    logger.fine('calc ffts')
+    ff3= magnitude(ifft(complexMultiply(ff2,ff1)))
+    logger.fine('done compute conv')
+    pe= dom.plotElements[2]
+    pe.getController().dsfReset= False
+    invokeLater( plot, 2, ff3, ylog=False, yrange=[-0.01,0.1],
+          ytitle='convolution', reset=False )
+    ff4= magnitude(ifft(complexMultiply(ff2,complexConj(ff1))))
+    logger.fine('done compute cross-corr')
+    invokeLater( plot, 3, ff4, ylog=False, yrange=[-0.01,0.1],
+          ytitle='cross-corr', reset=False )
+    r= imax(ff4)
+    ann.pointAtX= datum(r)
+    ann.xrange= datumRange([r,r])
+    ann.pointAtY= datum(ff4[r])
+    ann.text= '%.1f'%datum(r)
+    logger.fine('done plot')
+    #plot( 3, f1-f2, ylog=False, yrange=[-0.1,1.1] )
+
+def updateEvt(evt):
+    global sl1
+    global sl2
+    update( sl1.value, sl2.value )
+    
+sl1= JSlider(200,300,stateChanged=updateEvt)
+sl2= JSlider(200,300,stateChanged=updateEvt)
+p= JPanel()
+p.layout= BoxLayout(p,BoxLayout.X_AXIS)
+p.add(sl1)
+p.add(sl2)
+
+getApplication().setBottomPanel(p)
+
+update( sl1.value, sl2.value )
