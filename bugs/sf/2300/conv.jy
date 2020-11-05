@@ -6,7 +6,7 @@ from javax.swing import JSlider,JPanel,BoxLayout
 logger= LoggerManager.getLogger('analysis')
 
 reset()
-plot( 0, None )
+p0,pe= plot( 0, None )
 plot( 1, None, overplotOf=dom.plots[0] )
 plot( 2, None, ylog=False )
 p,pe=plot( 3, None, ylog=False )
@@ -16,6 +16,10 @@ ann= annotation(
     pointAt='100,0',
     anchorOffset='1em,1em', anchorPosition='SW',
     fontSize='.8em' ) 
+ann2= annotation( 1, plotId=p0, anchorType='CANVAS', 
+    anchorPosition='OutsideNNW',
+    fontSize='1.2em', anchorOffset='-5em,1em',
+    text='Drag the sliders at the bottom of the screen to move peaks.' )
 
 def update(c1,c2):
     logger.fine('enter update')
@@ -23,7 +27,7 @@ def update(c1,c2):
     f1= exp( -pow( distance(512,c1,10.), 2 ) )
     f2= exp( -pow( distance(512,c2,10.), 2 ) )
     logger.fine('calc f1 f2')
-    invokeLater( plot, 0, f1, ylog=False, yrange=[-0.1,1.1], reset=False )
+    invokeLater( plot, 0, f1, ylog=False, yrange=[-0.1,1.1] )
     invokeLater( plot, 1, f2 )
     logger.fine('plot f1 f2')
     ff1= fft(f1)
@@ -35,11 +39,11 @@ def update(c1,c2):
     pe= dom.plotElements[2]
     pe.getController().dsfReset= False
     invokeLater( plot, 2, ff3, ylog=False, yrange=[-0.01,0.1],
-          ytitle='convolution', reset=False )
+          ytitle='convolution' )
     ff4= magnitude(ifft(complexMultiply(ff2,complexConj(ff1))))
     logger.fine('done compute cross-corr')
     invokeLater( plot, 3, ff4, ylog=False, yrange=[-0.01,0.1],
-          ytitle='cross-corr', reset=False )
+          ytitle='cross-corr' )
     r= imax(ff4)
     ann.pointAtX= datum(r)
     ann.xrange= datumRange([r,r])
