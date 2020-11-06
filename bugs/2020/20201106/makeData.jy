@@ -1,0 +1,20 @@
+# make example file with ordinal data
+from org.das2.qds.examples import Schemes
+ds= Schemes.bundleDataSet()
+
+print ds
+print unbundle(ds,0)
+print unbundle(ds,1)
+print unbundle(ds,2)
+
+dsi= Schemes.eventsList()
+print dsi[:,3]
+print dsi[:,3].property(QDataSet.UNITS)
+
+ds= bundle( unbundle(ds,0), 
+    dataset( unbundle(ds,1), label='data1', units='eV', format='%10.3e' ), 
+    dataset( distance(1440,30.,30.), label='data2', units='cm', format='%7.3f' ),
+    dataset( dsi[:,3], label='data3' ) )
+formatDataSet( ds, PWD + 'bundle.dat' )
+
+#tt= timegen( ,String,int)
