@@ -1,0 +1,4 @@
+resourceURI= getParam( 'resourceURI', PWD+'/bundle.dat', 'example file to load' )
+ds= getDataSet( resourceURI+ "?bundle=:" )
+print ds
+print ds.property(QDataSet.BUNDLE_1)
