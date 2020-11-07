@@ -1,0 +1,61 @@
+from java.io import FileOutputStream,File,InputStream
+from java.awt import Toolkit
+cc= dom.canvases[0].controller.dasCanvas
+import jarray
+
+clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
+
+ff= clipboard.getAvailableDataFlavors()
+for f in ff:
+    print f
+    insclass= f.getDefaultRepresentationClass() 
+    ins= clipboard.getData(f)
+
+    m= f.getMimeType()
+    i= m.find(';')
+    if i>-1:
+        m=m[0:i]
+    m= safeName( m )
+    
+    if ( isinstance( ins, InputStream ) ):
+        print 'got InputStream, putting in '+m
+        outs= FileOutputStream( File('/tmp/ap/out.'+m+'dat') )
+
+        buf = jarray.zeros(8192,'b')
+        bytesRead=0
+        lens= ins.read(buf,0,8192)
+        while ( len>=0 ):
+            outs.write(buf,bytesRead,lens)
+            lens= ins.read(buf)
+            bytesRead= bytesRead+lens
+        ins.close()
+        outs.close()
+        
+    elif ( isinstance( ins, jarray ) ):
+        print 'got array, putting in '+m
+        outs= FileOutputStream( File('/tmp/ap/out.'+m+'dat') )
+
+        buf = jarray.zeros(8192,'b')
+        bytesRead = 0
+        lens = ins.read(buf,0,8192)
+        while ( bytesRead<len(ins) ):
+            outs.write( jarray,bytesRead,lens)
+            lens= ins.read(buf)
+            bytesRead= bytesRead+lens
+        ins.close()
+        outs.close()
+
+    elif ( isinstance( ins, str ) ):
+        print 'got str, putting in '+m
+        outs= FileOutputStream( File('/tmp/ap/out.'+m+'dat') )
+        
+        buf = jarray.zeros(8192,'b')
+        bytesRead = 0
+        lens = ins.read(buf,0,8192)
+        while ( bytesRead<len(ins) ):
+            outs.write( ins,bytesRead,lens)
+            lens= ins.read(buf)
+            bytesRead= bytesRead+lens
+        ins.close()
+        outs.close()
+        

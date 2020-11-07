@@ -1,0 +1,48 @@
+from java.awt.geom import Point2D,GeneralPath,Path2D
+from java.awt.geom import Ellipse2D
+from org.das2.event import BoxRenderer
+
+p1= Point2D.Double(400,400)
+p2= Point2D.Double(500,400)
+p3= Point2D.Double(500,500)
+p4= Point2D.Double(400,500)
+
+def paint(g):
+    gp= GeneralPath(Path2D.WIND_EVEN_ODD)
+    gp.moveTo(p1.x,p1.y)
+    gp.curveTo( p2.x, p2.y, p3.x, p3.y, p4.x, p4.y )
+    g.draw(gp)
+    g.fill( Ellipse2D.Double(p1.x-5,p1.y-5,11,11) )
+    g.fill( Ellipse2D.Double(p2.x-5,p2.y-5,11,11) )
+    g.fill( Ellipse2D.Double(p3.x-5,p3.y-5,11,11) )
+    g.fill( Ellipse2D.Double(p4.x-5,p4.y-5,11,11) )
+    
+addTopDecoration( dom.plots[0],paint )
+
+class MyDragRenderer( BoxRenderer ):
+    def renderDrag( self, g, p1, p2 ):
+        g.drawLine( p1.x, p1.y, p2.x, p2.y )
+        
+def adjust( be ):
+    p= dom.plots[0].controller.dasPlot
+    istartx= p.getXAxis().transform(be.startX)
+    istarty= p.getYAxis().transform(be.startY)
+    ifinishx= p.getXAxis().transform(be.finishX)
+    ifinishy= p.getYAxis().transform(be.finishY)
+    print istartx,istarty
+    c= Ellipse2D.Double( istartx-20, istarty-20, 40, 40 )
+    p= Point2D.Double( ifinishx, ifinishy ) 
+    global p1,p2,p3,p4
+    if ( c.contains( p1 ) ): p1=p
+    elif ( c.contains( p2 ) ): p2=p
+    elif ( c.contains( p3 ) ): p3=p
+    elif ( c.contains( p4 ) ): p4=p
+    else:
+        setStatus( 'warning: click on a point' )
+    dom.plots[0].controller.dasPlot.invalidateCacheImage()
+    dom.plots[0].controller.dasPlot.repaint()
+    
+    
+mm= addMouseModule( dom.plots[0], 'arrowMaker', adjust )
+mm.setDragRenderer(MyDragRenderer(dom.plots[0].controller.dasPlot))
+
