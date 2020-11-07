@@ -1,0 +1,16 @@
+setScriptDescription('''Demo streaming capability of audiosystem source.  Data
+is read in through the audiosystem and formatted to .wav files''')
+
+from org.autoplot.datasource.capability import Streaming
+dss= getDataSource('vap+audiosystem:channels=1&rate=32000')
+ss= dss.getCapability( Streaming )
+
+i= 1
+ds1= ss.streamDataSet(monitor)
+while ds1.hasNext():
+    #plot( ds1.next(), yrange=[-5000,5000] )
+    d= ds1.next()
+    formatDataSet( d,'/tmp/ap/%05d.wav' % i )
+    #dom.options.autoranging= False
+    #writeToPng('/tmp/ap/%05d.png' % i )
+    i=i+1
