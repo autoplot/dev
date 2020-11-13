@@ -26,8 +26,9 @@ class PSymPainter( GrannyTextRenderer.Painter ):
         sym= pe.style.plotSymbol
         g.setColor( pe.style.color )
         icon= sym.draw( g, 8, -8, siz, FillStyle.STYLE_SOLID )
-        #icon.paintIcon( dom.canvases[0].controller.dasCanvas, g, 0, -icon.iconHeight ) 
-        return Rectangle2D.Double( 0, -icon.iconHeight, icon.iconWidth, icon.iconHeight )
+        r=Rectangle2D.Double( 0, -16, 16, 16 )
+        #g.draw(r)
+        return r
         
 ann= annotation(text=s,borderType='rounded_rectangle')
 ann.controller.dasAnnotation.addPainter('psym',PSymPainter())
