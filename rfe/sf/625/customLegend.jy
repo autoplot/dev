@@ -1,30 +1,34 @@
+setScriptTitle('Custom Legend')
+setScriptDescription('''Instead of using the legend built into the plot, use an annotation with 
+custom painters to draw the symbols.''')
+
 from org.das2.util import GrannyTextRenderer
 from java.awt.geom import Rectangle2D,Ellipse2D,Line2D
-
+from org.das2.graph import FillStyle
 reset()
 setLayoutOverplot(2)
 
 randomSeed(20)
 
 x= linspace(0,10,100)
-plot( 0, x, randn(100)+sin(x)/dist(5,10,100) )
-x= linspace(0,10,100000)
-plot( 1, linspace(0,10,100), randn(100000)+sin(x)/dist(5,10,100)  )
+plot( 0, x, randn(100)/10+sin(x)/distance(100,5.5,10.), color='blue' )
+x= linspace(0,10,10000)
+plot( 1, x, randn(10000)/10+sin(x)/(.2+distance(10000,500.5,1000.)/3), renderType='scatter', color='red' )
 
-s= 'Both the red symbol (!(painter;psym;0)) and ' + '!cthe blue (!(painter;psym;1)) are ' + '!cdrawn in this annotation.'
+s= '!(painter;psym;0) big dots<br>!(painter;psym;1) little dots'
 from org.das2.util import ColorUtil
 
 class PSymPainter( GrannyTextRenderer.Painter ):
     def paint( self, g, args ):
-        rend= dom.plotElements[int(args[0])].controller.renderer
-        icon= rend.getListIcon()
-        icon.paintIcon( dom.canvases[0].controller.dasCanvas, g, 0, -icon.iconHeight ) 
+        pe= dom.plotElements[int(args[0])]
+        rend= pe.controller.renderer
+        siz= 4*pe.style.symbolSize
+        sym= pe.style.plotSymbol
+        g.setColor( pe.style.color )
+        icon= sym.draw( g, 8, -8, siz, FillStyle.STYLE_SOLID )
+        #icon.paintIcon( dom.canvases[0].controller.dasCanvas, g, 0, -icon.iconHeight ) 
         return Rectangle2D.Double( 0, -icon.iconHeight, icon.iconWidth, icon.iconHeight )
         
 ann= annotation(text=s,borderType='rounded_rectangle')
 ann.controller.dasAnnotation.addPainter('psym',PSymPainter())
 
-randomSeed(5443)
-
-plot( 0, randn(30)+sin(linspace(0,PI,30) ), color='red' )
-plot( 1, randn(30)+sin(linspace(0,PI,30) ), color='blue' )
