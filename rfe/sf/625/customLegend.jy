@@ -1,0 +1,30 @@
+from org.das2.util import GrannyTextRenderer
+from java.awt.geom import Rectangle2D,Ellipse2D,Line2D
+
+reset()
+setLayoutOverplot(2)
+
+randomSeed(20)
+
+x= linspace(0,10,100)
+plot( 0, x, randn(100)+sin(x)/dist(5,10,100) )
+x= linspace(0,10,100000)
+plot( 1, linspace(0,10,100), randn(100000)+sin(x)/dist(5,10,100)  )
+
+s= 'Both the red symbol (!(painter;psym;0)) and ' + '!cthe blue (!(painter;psym;1)) are ' + '!cdrawn in this annotation.'
+from org.das2.util import ColorUtil
+
+class PSymPainter( GrannyTextRenderer.Painter ):
+    def paint( self, g, args ):
+        rend= dom.plotElements[int(args[0])].controller.renderer
+        icon= rend.getListIcon()
+        icon.paintIcon( dom.canvases[0].controller.dasCanvas, g, 0, -icon.iconHeight ) 
+        return Rectangle2D.Double( 0, -icon.iconHeight, icon.iconWidth, icon.iconHeight )
+        
+ann= annotation(text=s,borderType='rounded_rectangle')
+ann.controller.dasAnnotation.addPainter('psym',PSymPainter())
+
+randomSeed(5443)
+
+plot( 0, randn(30)+sin(linspace(0,PI,30) ), color='red' )
+plot( 1, randn(30)+sin(linspace(0,PI,30) ), color='blue' )
