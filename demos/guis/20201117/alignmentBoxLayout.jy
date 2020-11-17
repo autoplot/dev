@@ -1,0 +1,23 @@
+from javax.swing import JPanel,BoxLayout,JLabel,JSlider
+from javax.swing.border import LineBorder
+
+panel= JPanel()
+panel.layout= BoxLayout(panel,BoxLayout.Y_AXIS)
+panel.background= Color.PINK
+
+label0= JLabel('Hello There !',border=LineBorder(Color.YELLOW), alignmentX=0.5 )
+panel.add(label0)
+
+label1= JLabel('Here is a longer label!',border=LineBorder(Color.YELLOW), alignmentX=0.5 )
+panel.add(label1)
+
+def ff(evt):
+    global slider
+    label0.alignmentX= slider.value / 20.
+    label1.alignmentX= slider.value / 20.
+    slider.alignmentX= slider.value / 20.
+    panel.revalidate()
+    
+slider= JSlider( 0, 20, alignmentX=0.5, stateChanged=ff )
+panel.add(slider)
+getApplication().setBottomPanel( panel )
