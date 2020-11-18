@@ -1,0 +1,12 @@
+setScriptTitle('Link Demo')
+d= '''This script demonstrates that a 
+<a href='%s'>link</a> can appear in the description.  Note 
+it uses PWD as well.
+''' % ( PWD+'description.md' )
+setScriptDescription(d)
+
+
+plot( [1,2,3,2,3,4,3,4,5,4] )
+annotation( text=d[0:32]+"<br>"+d[32:-27]+"<br>"+d[-27:], fontSize='0.5em'  )
+
+
