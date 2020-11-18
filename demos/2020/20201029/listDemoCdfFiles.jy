@@ -5,6 +5,7 @@ showLocations= getParam('showLocations',False,'Show location of each block',[Tru
 
 dr= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/'
 ff= listDirectory( dr + '*.cdf' )
+ff.append('file:/home/jbf/ct/autoplot/data.backup/cas_rpws_wbrfull_20040102T002600_20040102T002631_325KH_VZ.cdf')
 
 outw= open( URI(PWD).path + 'output.md', 'w' )
 
@@ -15,7 +16,7 @@ and inspected to see if all the different features of CDF files are found.
 
 outw.write( '# Files Used\n' )
 for f in ff:
-    print f+'<br>'
+    outw.write( '<a href=\"#'+f+'\">'+str(f)+'</a><br>\n' )
     
 types= {}
 orders= {}
@@ -29,12 +30,27 @@ def tally( m, n ):
 def dimensionsStr( d ):
     return str(d)[10:-2]
         
+def booleanStr( b ):
+    if ( b ):
+        return 'True'
+    else:
+        return 'False'
+        
 monitor.setTaskSize(len(ff))
 monitor.started()
 for f in ff:
+    print f, type(f)
+    if ( f.find('bigcdf')==-1 ):
+        continue
+        
+    outw.write('<a name=\''+f+'\'>\n' )
     monitor.setTaskProgress(monitor.getTaskProgress()+1)
     monitor.setProgressMessage(f)
-    fl= getFile( dr + f, False, monitor.getSubtaskMonitor('read file') )
+
+    if ( f.startswith('file') ):
+        fl= getFile( f, False, monitor.getSubtaskMonitor('read file') )
+    else:
+        fl= getFile( dr + f, False, monitor.getSubtaskMonitor('read file') )
     
     cdff= CDFFactory.getCDF( str(fl) )
     
@@ -60,18 +76,24 @@ for f in ff:
                 zOrR='R'
             else:
                 zOrR='Z'    
-            outw.write( '|%s|%s|%d|%s|%d|%d|%s|\n' % ( var.name, dimensionsStr(var.dimensions), var.blockingFactor, stype, len(vdl.getLocations()), var.isCompressed(), zOrR ) )
-            tally(types,stype)
-                
+            
+            locs=''                
             if showLocations :
                 vdls= vdl.getLocations()
                 for i in xrange(len(vdls)):
                     vdl1= vdls[i]
                     if i<3:
-                        outw.write( '    %d-%d offset=%d\n' % ( vdl1[0], vdl1[1], vdl1[2] ) )
+                        locs= locs + '    %d-%d offset=%d<br>' % ( vdl1[0], vdl1[1], vdl1[2] ) 
                     elif i==4:
-                        outw.write( '    ... (%d locations)\n' % len(vdls) )
+                        locs= locs + '    ... (%d locations)<br>' % len(vdls) 
+            else:
+                locs= str(len(vdl.getLocations()))
+                        
+            outw.write( '|%s|%s|%d|%s|%s|%s|%s|\n' % ( var.name, dimensionsStr(var.dimensions), var.blockingFactor, stype, locs, booleanStr(var.isCompressed()), zOrR ) )
+            tally(types,stype)
+                
         else:
+            outw.write( '|%s|%s|%d|%s|%s|%s|%s|\n' % ( var.name+'***', dimensionsStr(var.dimensions), var.blockingFactor, stype, locs, booleanStr(var.isCompressed()), zOrR ) )
             print 'no locator!'
             
 monitor.finished()
@@ -86,3 +108,6 @@ for i in xrange(64):
             outw.write( '|'+n+'|no examples'+'|\n' )
         else:
             outw.write( '|'+n+'|'+str(types.get(n))+'|\n' )
+
+print 'closing file.'
+outw.close()
