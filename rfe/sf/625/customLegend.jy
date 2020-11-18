@@ -1,3 +1,4 @@
+from org.autoplot.dom import Annotation
 setScriptTitle('Custom Legend')
 setScriptDescription('''Instead of using the legend built into the plot, use an annotation with 
 custom painters to draw the symbols.''')
@@ -31,5 +32,7 @@ class PSymPainter( GrannyTextRenderer.Painter ):
         return r
         
 ann= annotation(text=s,borderType='rounded_rectangle')
+assert isinstance( ann, Annotation )
+
 ann.controller.dasAnnotation.addPainter('psym',PSymPainter())
 
