@@ -1,5 +1,5 @@
 setScriptDescription('''Demo digitizer for the PNGWalkTool, which shows how mouse events can 
-be handled by the script and images decorated to add labelled boxes''')
+be handled by the script and images decorated to add labelled boxes.  See <a href='README.md'>the documentation</a>.''')
 
 from org.das2.datum import EnumerationUnits
 from org.das2.components import DataPointRecorder
