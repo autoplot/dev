@@ -13,3 +13,16 @@ it to draw the points and the selected points in the recorder.  A Painter
 added to handle mouse events.
 
 This requires Autoplot version 20201120a or v2020a_13 to run.
+
+# Making your own versions of this
+A couple things to know if you want to start with this script and modify it to meet 
+your own needs.  
+
+First, if you need data coordinates and not pixel coordinates, rich PNG 
+metadata can be used to perform the axis transformations.
+
+Second, if you want to handle left click differently than middle click, you can
+get the button property for on the event:
+    print 'button=', evt.button
+    print 'modifiers=', evt.modifiers
+    print 'modifiersText=', evt.getMouseModifiersText(evt.modifiers)
