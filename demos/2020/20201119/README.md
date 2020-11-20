@@ -11,3 +11,5 @@ A DataPointRecorder is used to record the data.  The script registers listeners 
 it to draw the points and the selected points in the recorder.  A Painter 
 (BoxPainter) is used to draw the boxes over the images, and a MouseAdapter is
 added to handle mouse events.
+
+This requires Autoplot version 20201120a or v2020a_13 to run.
