@@ -1,0 +1,123 @@
+from org.das2.datum import EnumerationUnits
+from org.das2.components import DataPointRecorder
+from java.awt.geom import Rectangle2D,Line2D,RoundRectangle2D
+from java.awt.event import MouseAdapter
+from java.awt import BasicStroke
+from org.das2.dataset import DataSetUpdateListener
+
+from org.das2.graph import Painter
+from java.beans import PropertyChangeListener
+from javax.swing import JPanel,BoxLayout,JLabel,JTextField
+from org.autoplot.pngwalk import PngWalkTool
+pngw= PngWalkTool.start( 'https://jfaden.net/~jbf/examplePics/cats/*.jpg', getApplication() )
+assert isinstance( pngw, PngWalkTool )
+
+selectedName= None 
+startSelect=None
+stopSelect=None
+
+dpr= DataPointRecorder()
+pngw.getTabs().addTab( "Digitizer", dpr )
+
+class MyDataSetUpdateListener(DataSetUpdateListener):
+    def dataSetUpdated( self, evt ):
+        ds= dpr.getSelectedDataSet()  # not a bundle!!!!
+        if ( ds==None ): return
+        print ds[0]
+        img= ds[0,3]
+        print 'img=', img
+        pngw.setSelectedName(img.svalue())
+        pngw.repaint()
+dpr.addSelectedDataSetUpdateListener(MyDataSetUpdateListener())
+
+class MyDataSetUpdateListener(DataSetUpdateListener):
+    def dataSetUpdated( self, evt ):
+        pngw.repaint()
+dpr.addDataSetUpdateListener(MyDataSetUpdateListener())
+
+class BoxPainter( Painter ):
+    def paint( self, g ):
+        if ( startSelect!=None ):
+            r= Rectangle2D.Double( startSelect.x, startSelect.y, 0., 0. )
+            r.add( stopSelect.x, stopSelect.y )
+            rr= RoundRectangle2D.Double( r.x, r.y, r.width, r.height, 10, 10 )
+            g.stroke= BasicStroke(7)
+            g.draw( rr )
+            g.stroke= BasicStroke(3)
+            g.color= Color.WHITE
+            g.draw( rr )
+        ds= dpr.getBundleDataSet()
+        if ( ds==None ): return
+        for d in ds:
+            img= d[-2]
+            if ( img==selectedName ):                
+                r= Rectangle2D.Double( float(d[0]), float(d[1]), float(d[2]), float(d[3]) )
+                g.color= Color.BLACK
+                g.stroke= BasicStroke(7)
+                rr= RoundRectangle2D.Double( r.x, r.y, r.width, r.height, 10, 10 )
+                g.draw( rr )
+                g.stroke= BasicStroke(3)
+                g.color= Color.WHITE
+                g.draw( rr )
+                nam= d[-1].svalue()
+                rs= g.getFontMetrics().getStringBounds( nam, 0, len(nam), g )
+                rrs= RoundRectangle2D.Double( r.x, r.y-rs.height, rs.width+5, rs.height, 10, 10 )
+                g.color= Color.BLACK
+                g.stroke= BasicStroke(7)
+                g.draw( rrs )
+                g.color= Color.WHITE
+                g.fill( rrs )
+                g.stroke= BasicStroke(3)
+                g.draw( rrs )
+                l= Line2D.Double( r.x, r.y-4, r.x, r.y+6 )
+                g.draw( l )
+                l= Line2D.Double( r.x+rs.width-4, r.y, r.x+rs.width+6, r.y )
+                g.draw( l )
+                g.color= Color.BLACK
+                g.drawString( nam, r.x+2, r.y-2 )
+        
+p= JPanel()
+p.setLayout( BoxLayout(p,BoxLayout.X_AXIS) )
+p.add(JLabel('Animal Name:'))
+nameTF= JTextField('Chaos',10)
+p.add(nameTF)
+
+class PCL( PropertyChangeListener ):
+    def propertyChange( self, evt ):
+        global selectedName
+        if ( evt.propertyName=='selectedName' ):
+            selectedName= evt.newValue
+        print evt.propertyName, evt.newValue
+    
+pngw.addActionComponent( p, PCL() )
+pngw.addTopDecorator( BoxPainter() )
+
+euimg= EnumerationUnits.create("img")
+eunam= EnumerationUnits.create("name")
+
+class MyMouseAdapter( MouseAdapter ):
+    def mousePressed(self,evt):
+        global selectedName, startSelect, stopSelect
+        startSelect= evt.point
+        stopSelect= evt.point
+    def mouseReleased(self,evt):
+        global selectedName, startSelect, stopSelect
+        stopSelect= evt.point
+        if ( startSelect==None ): return
+        r= Rectangle2D.Double( startSelect.x, startSelect.y, 0., 0. )
+        r.add( stopSelect )
+        print 'selectedName=', selectedName
+        if ( selectedName==None ):
+            print 'no selectedName'
+        else:
+            rec= bundle( dataset(r.x), dataset(r.y), 
+                         dataset(r.width), dataset(r.height), 
+                         dataset(euimg.createDatum(selectedName)),
+                         dataset(eunam.createDatum(nameTF.text)) )
+            dpr.addDataPoint( rec )
+            startSelect=None
+            stopSelect=None
+    def mouseDragged(self,evt):
+        global selectedName, startSelect, stopSelect
+        stopSelect= evt.point
+pngw.setImageMouseAdapter(MyMouseAdapter())
