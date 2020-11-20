@@ -23,6 +23,8 @@ metadata can be used to perform the axis transformations.
 
 Second, if you want to handle left click differently than middle click, you can
 get the button property for on the event:
+~~~~~
     print 'button=', evt.button
     print 'modifiers=', evt.modifiers
     print 'modifiersText=', evt.getMouseModifiersText(evt.modifiers)
+~~~~~
