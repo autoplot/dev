@@ -15,7 +15,6 @@ from org.autoplot.pngwalk import PngWalkTool
 pngw= PngWalkTool.start( 'https://jfaden.net/~jbf/examplePics/cats/*.jpg', getApplication() )
 assert isinstance( pngw, PngWalkTool )
 
-selectedName= None 
 startSelect=None
 stopSelect=None
 
@@ -73,6 +72,7 @@ class BoxPainter( Painter ):
         if ( startSelect!=None ):
             paintBox( g, startSelect.x, startSelect.y, stopSelect.x, stopSelect.y, None, False )
                              
+        selectedName= pngw.selectedName
         ds= dpr.getDataPoints()    
         if ( ds!=None ):
             for d in ds:
@@ -88,21 +88,14 @@ class BoxPainter( Painter ):
                 if ( img==selectedName ):
                     paintBox( g, float(d[0]), float(d[1]), 
                              float(d[0]+d[2]), float(d[1]+d[3]), d[-1].svalue(), True )
+pngw.addTopDecorator( BoxPainter() )
+
 p= JPanel()
 p.setLayout( BoxLayout(p,BoxLayout.X_AXIS) )
 p.add(JLabel('Animal Name:'))
 nameTF= JComboBox(['Chaos','Cleo'])
 p.add(nameTF)
-
-class PCL( PropertyChangeListener ):
-    def propertyChange( self, evt ):
-        global selectedName
-        if ( evt.propertyName=='selectedName' ):
-            selectedName= evt.newValue
-        print evt.propertyName, evt.newValue
-    
-pngw.addActionComponent( p, PCL() )
-pngw.addTopDecorator( BoxPainter() )
+pngw.addActionComponent( p, None )
 
 euimg= EnumerationUnits.create("img")
 eunam= EnumerationUnits.create("name")
@@ -118,6 +111,7 @@ class MyMouseAdapter( MouseAdapter ):
         if ( startSelect==None ): return
         r= Rectangle2D.Double( startSelect.x, startSelect.y, 0., 0. )
         r.add( stopSelect )
+        selectedName= pngw.selectedName
         if ( selectedName==None ):
             print 'no selectedName'
         else:
