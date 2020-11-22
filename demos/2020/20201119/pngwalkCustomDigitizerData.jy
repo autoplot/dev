@@ -1,0 +1,158 @@
+setScriptDescription('''Demo digitizer for the PNGWalkTool, which shows how mouse events can 
+be handled by the script and images decorated to add labelled boxes.  See <a href='README.md'>the documentation</a>.
+This version digitizes in data coordinates, any png image which has 
+rich PNG metadata.
+''')
+
+from org.das2.datum import EnumerationUnits
+from org.das2.components import DataPointRecorder
+from java.awt.geom import Rectangle2D,Line2D,RoundRectangle2D
+from java.awt.event import MouseAdapter
+from java.awt import BasicStroke,Point
+from org.das2.dataset import DataSetUpdateListener
+
+from org.autoplot.pngwalk import SinglePngWalkView
+from org.das2.graph import Painter
+from java.beans import PropertyChangeListener
+from javax.swing import JPanel,BoxLayout,JLabel,JComboBox
+from org.autoplot.pngwalk import PngWalkTool
+pngw= PngWalkTool.start( 'https://jfaden.net/~jbf/autoplot/pngwalks/dmsp_nonTime/product.pngwalk', getApplication() )
+assert isinstance( pngw, PngWalkTool )
+
+startSelect=None
+stopSelect=None
+
+dpr= DataPointRecorder()
+pngw.getTabs().addTab( "Digitizer", dpr )
+
+clickDigitizer=None
+
+class MyDataSetUpdateListener(DataSetUpdateListener):
+    def dataSetUpdated( self, evt ):
+        ds= dpr.getSelectedDataPoints()  
+        if ( ds==None ): return
+        if ( ds.length()==0 ): return
+        img= ds[0,4]
+        pngw.setSelectedName(img.svalue())
+        pngw.repaint()
+dpr.addSelectedDataSetUpdateListener(MyDataSetUpdateListener())
+
+class MyDataSetUpdateListener(DataSetUpdateListener):
+    def dataSetUpdated( self, evt ):
+        pngw.repaint()
+dpr.addDataSetUpdateListener(MyDataSetUpdateListener())
+
+def paintBox( g, x, y, stopx, stopy, label, selected ):
+    r= Rectangle2D.Double( x, y, 0., 0. )
+    r.add( stopx, stopy )
+    rr= RoundRectangle2D.Double( r.x, r.y, r.width, r.height, 10, 10 )
+    if selected:
+        g.stroke= BasicStroke(11)
+        g.color= Color(184,207,229)
+        g.draw( rr )
+        g.color= Color.BLACK
+    g.stroke= BasicStroke(7)
+    g.draw( rr )
+    g.stroke= BasicStroke(3)
+    g.color= Color.WHITE
+    g.draw( rr )
+    if label!=None:
+        rs= g.getFontMetrics().getStringBounds( label, 0, len(label), g )
+        rrs= RoundRectangle2D.Double( r.x, r.y-rs.height, rs.width+5, rs.height, 10, 10 )
+        g.color= Color.BLACK
+        g.stroke= BasicStroke(7)
+        g.draw( rrs )
+        g.color= Color.WHITE
+        g.fill( rrs )
+        g.stroke= BasicStroke(3)
+        g.draw( rrs )
+        l= Line2D.Double( r.x, r.y-4, r.x, r.y+6 )
+        g.draw( l )
+        l= Line2D.Double( r.x+rs.width-4, r.y, r.x+rs.width+6, r.y )
+        g.draw( l )
+        g.color= Color.BLACK
+        g.drawString( label, r.x+2, r.y-2 )
+    
+class BoxPainter( Painter ):
+    def paint( self, g ):
+        if ( startSelect!=None ):
+            paintBox( g, startSelect.x, startSelect.y, stopSelect.x, stopSelect.y, None, False )
+                             
+        selectedName= pngw.selectedName
+        ds= dpr.getDataPoints()    
+        if ( ds!=None ):
+            for d in ds:
+                img= d[-2]
+                if ( img==selectedName ):
+                    singlePngWalkView= pngw.tabs.getTabByTitle('Single')
+                    global clickDigitizer
+                    print clickDigitizer
+                    dd1= clickDigitizer.dataToPixelTransform( 0, d[0:2] )
+                    dd2= clickDigitizer.dataToPixelTransform( 0, d[2:4] )
+                    paintBox( g, float(dd1[0]), float(dd1[1]), 
+                             float(dd2[0]), float(dd2[1]), d[-1].svalue(), False )
+
+        ds= dpr.getSelectedDataPoints()    
+        if ( ds!=None ): 
+            for d in ds:
+                img= d[-2]
+                if ( img==selectedName ):
+                    singlePngWalkView= pngw.tabs.getTabByTitle('Single')
+                    global clickDigitizer
+                    print singlePngWalkView
+                    dd1= clickDigitizer.dataToPixelTransform( 0, d[0:2] )
+                    dd2= clickDigitizer.dataToPixelTransform( 0, d[2:4] )                    
+                    paintBox( g, float(d[0]), float(d[1]), 
+                             float(d[0]+d[2]), float(d[1]+d[3]), d[-1].svalue(), True )
+pngw.addTopDecorator( BoxPainter() )
+
+p= JPanel()
+p.setLayout( BoxLayout(p,BoxLayout.X_AXIS) )
+p.add(JLabel('Type:'))
+nameTF= JComboBox(['Type1','Type2'])
+p.add(nameTF)
+pngw.addActionComponent( p, None )
+
+eu= EnumerationUnits.create("default")
+
+class BoxMouseAdapter( MouseAdapter ):
+    def mousePressed(self,evt):
+        global selectedName, startSelect, stopSelect
+        startSelect= evt.point
+        stopSelect= evt.point
+        print 'button=', evt.button
+        print 'modifiers=', evt.modifiers
+        print 'modifiersText=', evt.getMouseModifiersText(evt.modifiers)
+    def mouseReleased(self,evt):
+        global selectedName, startSelect, stopSelect
+        stopSelect= evt.point
+        if ( startSelect==None ): return
+        r= Rectangle2D.Double( startSelect.x, startSelect.y, 0., 0. )
+        r.add( stopSelect )
+        selectedName= pngw.selectedName
+        singlePngWalkView= evt.source
+        assert isinstance( singlePngWalkView, SinglePngWalkView )
+        dd0= singlePngWalkView.clickDigitizer.pixelToDataTransform( int(r.x), int(r.y) )
+        dd1= singlePngWalkView.clickDigitizer.pixelToDataTransform( int(r.x+r.width), int(r.y+r.height) )
+        pn=dd0.property( "PlotNumber")
+        if ( pn==None or pn!=0 ):
+            setStatus( 'not the right plot, click on the other one' )
+            return
+        digitize= p
+        global clickDigitizer
+        clickDigitizer= singlePngWalkView.clickDigitizer
+        if ( selectedName==None ):
+            print 'no selectedName'
+        else:
+            rec= bundle( dd0[0], dd0[1],
+                         dataset( dd1[0],name='x2'), dataset( dd1[1],name='y2'), 
+                         dataset(eu.createDatum(selectedName),name='img'),
+                         dataset(eu.createDatum(str(nameTF.selectedItem)),name='type') )
+            dpr.addDataPoint( rec )
+            startSelect=None
+            stopSelect=None
+    def mouseDragged(self,evt):
+        global selectedName, startSelect, stopSelect
+        stopSelect= evt.point
+        
+pngw.setImageMouseAdapter(BoxMouseAdapter())
