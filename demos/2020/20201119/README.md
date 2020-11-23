@@ -50,6 +50,7 @@ The forward part of the loop is lines <a href='https://github.com/autoplot/dev/b
 128</a>, where a mouse adapter receives mouse clicks from the PngWalkTool and loads them into the DataPointRecorder.  Note there is a pair of points,
 startSelect and stopSelect which are used for feedback as well, to show a box as it is selected by dragging the mouse.
 
-
+# Working in Data Coordinates
+This <a href='READMEdata.md'>page</a> goes on to show how to work in data coordinates.
 
 
