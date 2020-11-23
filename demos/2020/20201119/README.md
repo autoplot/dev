@@ -40,8 +40,9 @@ paintBox</a> and <a href='https://github.com/autoplot/dev/blob/9cec11b4e74381c87
 BoxPainter</a> routines in the script.  BoxPainter is a Painter which draws
 the boxes represented in the DataPointRecorder.  (A Painter is an object which
 draws something onto a graphics context, and is added with PngWalkTool's 
-addTopDecorator, which calls the painters in the single-png views, in the
-image reference frame.)  The routine paintBox simply draws a box with white 
+addTopDecorator, which calls the painters each time a single-png view is drawn. 
+The graphics context, g, is in the image reference frame.)  The routine 
+paintBox simply draws a box with white 
 and black lines so there is always contrast, and draws a label on each box.
 
 The forward part of the loop is lines <a href='https://github.com/autoplot/dev/blob/9cec11b4e74381c87ddf3c5cb80e623ef25c6ead/demos/2020/20201119/pngwalkCustomDigitizer.jy#L93'>
