@@ -4,6 +4,8 @@ like the <a href='pngwalkCustomDigitizer.jy'>pngwalkCustomDigitizer.jy</a> scrip
 except that an additional layer is added: the pixel coordinates are converted
 to data coordinates using "Rich PNG" metadata.
 
+<img src='20201123_0712.png' width=700>
+
 Rich PNG metadata is a convention defined years ago and is used with any Autoplot
 output.  PNG files can have extra data fields of data, and we add an additional
 one which is simply a JSON document describing axis titles, limits, and positions.
