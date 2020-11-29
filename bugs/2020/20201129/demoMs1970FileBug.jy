@@ -1,0 +1,5 @@
+from java.io import File
+
+f= File('/etc/shadow')
+d= Units.ms1970.createDatum(f.lastModified())
+print d
