@@ -1,0 +1,44 @@
+from org.das2.util.monitor import NullProgressMonitor
+from org.json import JSONObject,JSONArray
+setScriptDescription('''Demo digitizer for the PNGWalkTool, which shows how mouse events can 
+be handled by the script and images decorated to add labelled boxes.  See <a href='README.md'>the documentation</a>.''')
+
+from org.das2.datum import EnumerationUnits
+from org.das2.components import DataPointRecorder
+from java.awt.geom import Rectangle2D,Line2D,RoundRectangle2D
+from java.awt.event import MouseAdapter
+from java.awt import BasicStroke,Point
+from org.das2.dataset import DataSetUpdateListener
+from org.das2.util import ImageUtil
+
+from org.das2.graph import Painter
+from java.beans import PropertyChangeListener
+from javax.swing import JPanel,BoxLayout,JLabel,JComboBox,JTextField
+from org.autoplot.pngwalk import PngWalkTool
+
+pngw= PngWalkTool.start( 'https://jfaden.net/~jbf/autoplot/pngwalks/yvaries/product.pngwalk', getApplication() )
+assert isinstance( pngw, PngWalkTool )
+
+startSelect=None
+stopSelect=None
+
+class MyPCL( PropertyChangeListener ):
+    def propertyChange( self, p ):
+        global nameTF
+        uri= pngw.getSelectedFile()
+        fl = getFile( uri, NullProgressMonitor() ) # assume it's local.
+        json= ImageUtil.getJSONMetadata( fl )
+        yy= JSONObject(json).getJSONArray('plots').getJSONObject(0).getJSONObject('yaxis')
+        nameTF.text= '%.1f to %.1f' % ( float(yy.get('min')), float(yy.get('max')) )
+
+
+        
+pcl= MyPCL()
+
+p= JPanel()
+p.setLayout( BoxLayout(p,BoxLayout.Y_AXIS) )
+p.add(JLabel('Y Axis Info:'))
+nameTF= JTextField()
+p.add(nameTF)
+pngw.addActionComponent( p, pcl )
+
