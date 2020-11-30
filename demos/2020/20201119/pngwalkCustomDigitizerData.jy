@@ -84,7 +84,6 @@ class BoxPainter( Painter ):
             for d in ds:
                 img= d[-2]
                 if ( img==selectedName ):
-                    singlePngWalkView= pngw.tabs.getTabByTitle('Single')
                     global clickDigitizer
                     print clickDigitizer
                     dd1= clickDigitizer.dataToPixelTransform( 0, d[0:2] )
@@ -97,9 +96,7 @@ class BoxPainter( Painter ):
             for d in ds:
                 img= d[-2]
                 if ( img==selectedName ):
-                    singlePngWalkView= pngw.tabs.getTabByTitle('Single')
                     global clickDigitizer
-                    print singlePngWalkView
                     dd1= clickDigitizer.dataToPixelTransform( 0, d[0:2] )
                     dd2= clickDigitizer.dataToPixelTransform( 0, d[2:4] )                    
                     paintBox( g, float(d[0]), float(d[1]), 
