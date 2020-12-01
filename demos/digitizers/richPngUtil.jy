@@ -1,6 +1,8 @@
+from org.json import JSONObject,Cookie
+
 setScriptDescription('''Rich ASCII files contain JSON metadata describing plot 
 location, axis bounds and units, and axis titles. see 
-http://autoplot.org/richPng''')
+<a href='http://autoplot.org/richPng'>http://autoplot.org/richPng</a>''')
 
 from org.das2.util import ImageUtil
 from org.das2.util.monitor import NullProgressMonitor
@@ -10,31 +12,38 @@ def getRichPngMetadata( uri ):
     'return the JSON metadata found within the rich png file, or None if none is found'
     fl = getFile( uri, NullProgressMonitor() ) # assume it's local.
     json= ImageUtil.getJSONMetadata( fl )
-    
     return json
 
 def checkRichPngMetadata( json ):
     'check that the rich PNG json is valid' 
     if json==None: raise NullPointerException('JSON is missing')
+    j=JSONObject(json).get('size').length()
     getPlotNumberContaining( json, 0, 0, -1 )
     
 def getPlotNumberContaining( json, x, y, dflt ):
     'return the plot number, or dflt if no plot contains'
     j=JSONObject(json)
-    nplots= j.getInteger('numberOfPlots')
+    nplots= j.getInt('numberOfPlots')
     for i in xrange(nplots):
         plts= j.getJSONArray('plots')
-        for iplt in xrange(len(plts)):
-            plt= plts[iplt]
+        for iplt in xrange(plts.length()):
+            plt= plts.getJSONObject(iplt)
             yax= plt.get('yaxis')
-            top,bottom= yax.getInteger('top'),yax.getInteger('bottom')
+            top,bottom= yax.getInt('top'),yax.getInt('bottom')
             if top>bottom:
                 raise IllegalArgumentException('plot %d top is greater than bottom' % iplt )
             xax= plt.get('xaxis')
-            left,right=xax.getInteger('left'),xax.getInteger('right')
+            left,right=xax.getInt('left'),xax.getInt('right')
             if left>right:
                 raise IllegalArgumentException('plot %d left is greater than right' % iplt )
             if x>=left and x<right:
                 if y>top and y<=bottom:
                     return iplt
     return dflt
+
+#json= getRichPngMetadata( 'https://jfaden.net/~jbf/autoplot/pngwalks/yvaries/product_201601-01.png' )
+#print JSONObject(json).get('size').length()
+#print getPlotNumberContaining( json, 0, 0, None )
+
+
+    
