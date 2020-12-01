@@ -1,0 +1,11 @@
+from org.das2.util.monitor import NullProgressMonitor
+from java.lang import IllegalArgumentException,NullPointerException
+
+ff= getFile( 'https://github.com/autoplot/dev/blob/master/demos/digitizers/richPngUtil.jy',monitor.getSubtaskMonitor('import'))
+execfile( ff.toString() )
+
+json= getRichPngMetadata( 'https://jfaden.net/~jbf/autoplot/pngwalks/yvaries/product_201610-07.png' )
+print checkRichPngMetadata( json )
+
+print json
+print getPlotNumberContaining( json, 400, 400, -1 )
