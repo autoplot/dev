@@ -16,9 +16,9 @@ def getRichPngMetadata( uri ):
 def checkRichPngMetadata( json ):
     'check that the rich PNG json is valid' 
     if json==None: raise NullPointerException('JSON is missing')
-    getPlotNumberContaining( 0, 0 )
+    getPlotNumberContaining( json, 0, 0, -1 )
     
-def getPlotNumberContaining( x, y, dflt ):
+def getPlotNumberContaining( json, x, y, dflt ):
     'return the plot number, or dflt if no plot contains'
     j=JSONObject(json)
     nplots= j.getInteger('numberOfPlots')
