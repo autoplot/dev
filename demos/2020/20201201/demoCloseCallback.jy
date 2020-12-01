@@ -1,0 +1,10 @@
+from javax.swing import JOptionPane
+from org.autoplot import AppManager
+
+app= getApplication()
+class MyCloseCallback( AppManager.CloseCallback ):
+    def checkClose(self):
+        ans= JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( app, 'Okay to close?', 'Really Close', JOptionPane.OK_CANCEL_OPTION  )
+        return ans
+
+AppManager.getInstance().addCloseCallback( app,'?',MyCloseCallback())
