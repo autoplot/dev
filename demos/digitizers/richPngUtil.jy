@@ -3,6 +3,8 @@ location, axis bounds and units, and axis titles. see
 http://autoplot.org/richPng''')
 
 from org.das2.util import ImageUtil
+from org.das2.util.monitor import NullProgressMonitor
+from java.lang import IllegalArgumentException,NullPointerException
 
 def getRichPngMetadata( uri ):
     'return the JSON metadata found within the rich png file, or None if none is found'
