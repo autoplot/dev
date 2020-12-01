@@ -1,5 +1,3 @@
-# Rich ASCII files contain JSON metadata describing plot location, axis bounds and units, and axis titles.
-# see 
 setScriptDescription('''Rich ASCII files contain JSON metadata describing plot 
 location, axis bounds and units, and axis titles. see 
 http://autoplot.org/richPng''')
