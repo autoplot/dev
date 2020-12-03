@@ -1,0 +1,10 @@
+
+reduc= getParam( 'reduce', '1s', 'reduce to resolution', ['','1s'] )
+
+if ( reduc=='' ): reduc= None
+else: reduc= dataset('0.5s')
+
+newVersion= getParam( 'newVersion', True, 'Run with new version (requires 20200605a or v2020a_7)', [ True, False ] )
+
+print reduc
+print newVersion
