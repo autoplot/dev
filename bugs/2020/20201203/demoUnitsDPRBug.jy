@@ -1,0 +1,28 @@
+from org.das2.dataset import DataSetUpdateListener
+from org.das2.components import DataPointRecorder
+dpr= DataPointRecorder()
+
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self,evt ):
+        curDS = dpr.getDataPoints() 
+        print curDS
+        print curDS[:,1]
+        print curDS[:,1].property(QDataSet.UNITS)
+        
+dpr.addDataSetUpdateListener(MyDataSetUpdateListener())
+
+addTab( 'dpr',dpr )
+
+dp= bundle( dataset( '2009-10-10T00:00Z' ), dataset('78Hz'), dataset(1) )
+dpr.addDataPoint(dp)
+dp= bundle( dataset( '2009-10-10T01:00Z' ), dataset('78Hz'), dataset(1) )
+dpr.addDataPoint(dp)
+dp= bundle( dataset( '2009-10-10T02:00Z' ), dataset('79Hz'), dataset(2) )
+dpr.addDataPoint(dp)
+dp= bundle( dataset( '2009-10-10T03:00Z' ), dataset('79Hz'), dataset(2) )
+dpr.addDataPoint(dp)
+
+dpr.deleteRow(0)
+dpr.deleteRow(0)
+dpr.deleteRow(0)
+dpr.deleteRow(0)
