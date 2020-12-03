@@ -1,3 +1,7 @@
+setScriptDescription('''Demonstrate where deleting the last record from a DataPointRecorder
+causes it to look track of the units it once had.''')
+setScriptTitle('Empty DataPointRecorder Units')
+
 from org.das2.dataset import DataSetUpdateListener
 from org.das2.components import DataPointRecorder
 dpr= DataPointRecorder()
