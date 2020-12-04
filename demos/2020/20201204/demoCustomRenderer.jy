@@ -2,9 +2,17 @@ from java.awt.geom import Ellipse2D
 from org.das2.graph import Renderer
 
 fl= 'https://github.com/wri/global-power-plant-database/blob/master/source_databases_csv/database_USA.csv'
-solar= getDataSet( fl+'?longitude,latitude,capacity_mw&where=primary_fuel.eq(Solar)', monitor.getSubtaskMonitor('Solar') )
-coal= getDataSet( fl+'?longitude,latitude,capacity_mw&where=primary_fuel.eq(Coal)', monitor.getSubtaskMonitor('Coal') )
-wind= getDataSet( fl+'?longitude,latitude,capacity_mw&where=primary_fuel.eq(Wind)',monitor.getSubtaskMonitor('Wind') )
+usa= getDataSet( fl+'?longitude,latitude,capacity_mw,primary_fuel',monitor.getSubtaskMonitor('Wind') )
+fuel= usa[:,3]
+
+r= where( fuel.eq('Wind') )
+wind= usa[r,:]
+
+r= where( fuel.eq('Coal') )
+coal= usa[r,:]
+
+r= where( fuel.eq('Solar') )
+solar= usa[r,:]
 
 class MyRend( Renderer ):
     def __init__( self, c ):
@@ -18,8 +26,11 @@ class MyRend( Renderer ):
             s= float(sqrt( d[2] ))
             g.fill( Ellipse2D.Double( x-s/2, y-s/2, s, s ) )
 
-setLayoutOverplot(3)
+setLayoutOverplot(6)
 plot( 0, coal, renderer=MyRend(Color.BLACK), xrange=[-115,-67], yrange=[23,50] )
 plot( 1, solar, renderer=MyRend(Color.RED) )
 plot( 2, wind, renderer=MyRend(Color.BLUE) )
 
+plot( 3, 'http://autoplot.org/data/coastlines.zip/coastlines/namer-cil.txt' )
+plot( 4, 'http://autoplot.org/data/coastlines.zip/coastlines/namer-pby.txt' )
+plot( 5, 'http://autoplot.org/data/coastlines.zip/coastlines/namer-bdy.txt' )
