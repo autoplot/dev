@@ -1,0 +1,25 @@
+from java.awt.geom import Ellipse2D
+from org.das2.graph import Renderer
+
+fl= 'https://github.com/wri/global-power-plant-database/blob/master/source_databases_csv/database_USA.csv'
+solar= getDataSet( fl+'?longitude,latitude,capacity_mw&where=primary_fuel.eq(Solar)', monitor.getSubtaskMonitor('Solar') )
+coal= getDataSet( fl+'?longitude,latitude,capacity_mw&where=primary_fuel.eq(Coal)', monitor.getSubtaskMonitor('Coal') )
+wind= getDataSet( fl+'?longitude,latitude,capacity_mw&where=primary_fuel.eq(Wind)',monitor.getSubtaskMonitor('Wind') )
+
+class MyRend( Renderer ):
+    def __init__( self, c ):
+        self.color= Color( c.red, c.green, c.blue, 50 )
+    def render( self, g, xaxis, yaxis ):
+        ds= self.getDataSet()
+        g.color= self.color
+        for d in ds:
+            x= float(xaxis.transform(d[0]))
+            y= float(yaxis.transform(d[1]))
+            s= float(sqrt( d[2] ))
+            g.fill( Ellipse2D.Double( x-s/2, y-s/2, s, s ) )
+
+setLayoutOverplot(3)
+plot( 0, coal, renderer=MyRend(Color.BLACK), xrange=[-115,-67], yrange=[23,50] )
+plot( 1, solar, renderer=MyRend(Color.RED) )
+plot( 2, wind, renderer=MyRend(Color.BLUE) )
+
