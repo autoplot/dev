@@ -1,0 +1,5 @@
+ff= getFile( PWD + 'udpserver.jy', None )
+execfile( ff.toString() )
+
+EchoServer().start()
+

@@ -1,0 +1,14 @@
+#ff= getFile( PWD + 'udpserver.jy', None )
+#execfile( ff.toString() )
+
+#EchoServer().start()
+
+ff= getFile( PWD + 'udpclient.jy', None )
+execfile( ff.toString() )
+client = EchoClient()
+
+echo = client.sendEcho("hello server")
+print echo
+echo = client.sendEcho("server is working")
+print echo
+client.sendEcho("end")

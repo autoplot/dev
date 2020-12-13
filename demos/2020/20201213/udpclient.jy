@@ -1,0 +1,22 @@
+from java.net import DatagramSocket, DatagramPacket,InetAddress
+from java.lang import String
+import jarray
+
+class EchoClient:
+    def __init__(self):
+        self.socket = DatagramSocket()
+        self.address = InetAddress.getByName("localhost")
+    
+    def sendEcho(self,msg) :
+        buf = jarray.array(msg,'b')  # this will break in later Jython versions.
+        packet = DatagramPacket(buf, len(buf), self.address, 4445)
+        self.socket.send(packet)
+        packet = DatagramPacket(buf, len(buf))
+        self.socket.receive(packet)
+        received = String( packet.getData(), 0, packet.getLength() )
+        return received
+    
+    def close(self) :
+        self.socket.close()
+    
+

@@ -1,0 +1,38 @@
+from java.net import DatagramSocket,InetAddress,DatagramPacket
+from java.lang import String
+import jarray
+
+from java.lang import Thread
+
+class EchoServer( Thread ):
+    
+    def __init__(self) :
+        self.socket = DatagramSocket(4445)
+        self.buf = jarray.zeros(256,'b')
+        print 'start server on port 4445'
+    
+    def run(self) :
+        self.running = True
+        
+        try:
+            while (self.running) :
+                print 'server running...'
+                packet = DatagramPacket(self.buf, len(self.buf))
+                self.socket.receive(packet)
+                
+                address = packet.getAddress()
+                port = packet.getPort()
+                packet = DatagramPacket(self.buf, len(self.buf), address, port)
+                received = String(packet.getData(), 0, packet.getLength())
+                print 'Received "%s" (%d bytes)' % ( received, packet.getLength() )
+                if ( received.startswith("end") ) :
+                    self.running = False
+                    continue
+                
+                self.socket.send(packet)
+        except:
+            self.socket.close()
+        self.socket.close()
+    
+
+
