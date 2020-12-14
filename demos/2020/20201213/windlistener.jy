@@ -1,0 +1,72 @@
+from javax.swing import JCheckBox
+from org.das2.datum import TimeUtil
+from org.das2.graph import Renderer
+from java.awt.geom import GeneralPath,Rectangle2D
+from org.json import JSONObject
+import jarray
+from java.net import DatagramSocket,DatagramPacket
+from java.lang import String
+
+BUF_LEN=2048
+# port of Tempest
+PORT=50222
+
+arrow= GeneralPath()
+arrow.moveTo(-20,-10)
+arrow.lineTo(0,30)
+arrow.lineTo(20,-10)
+arrow.lineTo(0,0)
+arrow.closePath()
+
+class WindRenderer( Renderer ):
+    def render( self, g, xaxis, yaxis ):
+        ds= self.getDataSet()
+        if ( ds==None ): return
+        print ds
+        for d in ds:
+            ix= xaxis.transform( d[0] )
+            iy= yaxis.transform( d[1] )
+            ang= toRadians( d[2] )
+            g.fill( Rectangle2D.Double( ix-3, iy, 6, yaxis.transform(0,yaxis.units)-iy ) )
+            g2= g.create()
+            g2.translate( ix, yaxis.transform(yaxis.dataMaximum)+20 )
+            g2.rotate( float(ang) )
+            s= min( sqrt( float(d[1]) ) / 4.0, 20 )
+            g2.scale( s,s )
+            g2.fill( arrow )
+
+plot( 0, None, renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
+        
+dsb= DataSetBuilder(2,100,3)
+
+collectCB= JCheckBox('Collect Data',selected=True)
+getApplication().setBottomPanel(collectCB)
+
+mphu= Units.lookupUnits('mph')
+
+while collectCB.selected:
+    buf= jarray.zeros(BUF_LEN,'b')
+    
+    socket=None
+
+    socket= DatagramSocket(PORT)
+    
+    packet = DatagramPacket(buf, BUF_LEN)
+    socket.receive(packet)
+    
+    msg= String(packet.getData(), 0, packet.getLength())
+    
+    json= JSONObject(msg)
+    typ= json.getString('type')
+    
+    if typ=='rapid_wind':
+        ob= json.getJSONArray('ob')
+        dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), mphu.createDatum(ob.getDouble(1)*2.23694), Units.degrees.createDatum(ob.getDouble(2)) ] )
+        plot( 0, dsb.getDataSet(), renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
+    print msg
+    
+    if socket!=None:
+        socket.close()
+        
+if socket!=None:
+    socket.close()
