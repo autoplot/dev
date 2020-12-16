@@ -55,6 +55,7 @@ while collectCB.selected:
     socket.receive(packet)
     
     msg= String(packet.getData(), 0, packet.getLength())
+    print msg
     
     json= JSONObject(msg)
     typ= json.getString('type')
@@ -63,10 +64,8 @@ while collectCB.selected:
         ob= json.getJSONArray('ob')
         dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), mphu.createDatum(ob.getDouble(1)*2.23694), Units.degrees.createDatum(ob.getDouble(2)) ] )
         plot( 0, dsb.getDataSet(), renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
-    print msg
     
-    if socket!=None:
-        socket.close()
+    socket.close()
         
 if socket!=None:
     socket.close()
