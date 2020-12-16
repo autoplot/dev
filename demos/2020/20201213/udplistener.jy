@@ -10,8 +10,6 @@ while( True ):
     buf= jarray.zeros(BUF_LEN,'b')
     
     socket= DatagramSocket(PORT)
-    
-    
     packet = DatagramPacket(buf, BUF_LEN)
     socket.receive(packet)
     socket.close()
