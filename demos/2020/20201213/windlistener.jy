@@ -70,7 +70,8 @@ while collectCB.selected:
         dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), 
                           mphu.createDatum(ob.getDouble(1)*2.23694), 
                           Units.degrees.createDatum(ob.getDouble(2)) ] )
-        plot( 0, dsb.getDataSet(), renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
+        plot( 0, dsb.getDataSet(), renderer= WindRenderer(), 
+              xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
     
     socket.close()
         
