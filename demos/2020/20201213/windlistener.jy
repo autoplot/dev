@@ -1,3 +1,7 @@
+setScriptDescription( '''Listen for UDP packets broadcast by the WeatherFlow 
+Tempest Weather Station, and display detected wind speed and direction
+using a custom renderer.''' )
+
 from javax.swing import JCheckBox
 from org.das2.datum import TimeUtil
 from org.das2.graph import Renderer
