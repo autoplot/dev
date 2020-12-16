@@ -39,7 +39,8 @@ class WindRenderer( Renderer ):
             g2.scale( s,s )
             g2.fill( arrow )
 
-plot( 0, None, renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
+plot( 0, None, renderer= WindRenderer(), 
+      xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
         
 dsb= DataSetBuilder(2,100,3)
 
@@ -66,7 +67,9 @@ while collectCB.selected:
     
     if typ=='rapid_wind':
         ob= json.getJSONArray('ob')
-        dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), mphu.createDatum(ob.getDouble(1)*2.23694), Units.degrees.createDatum(ob.getDouble(2)) ] )
+        dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), 
+                          mphu.createDatum(ob.getDouble(1)*2.23694), 
+                          Units.degrees.createDatum(ob.getDouble(2)) ] )
         plot( 0, dsb.getDataSet(), renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
     
     socket.close()
