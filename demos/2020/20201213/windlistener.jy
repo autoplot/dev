@@ -1,3 +1,7 @@
+setScriptDescription( '''Listen for UDP packets broadcast by the WeatherFlow 
+Tempest Weather Station, and display detected wind speed and direction
+using a custom renderer.''' )
+
 from javax.swing import JCheckBox
 from org.das2.datum import TimeUtil
 from org.das2.graph import Renderer
@@ -59,6 +63,7 @@ while collectCB.selected:
     socket.receive(packet)
     
     msg= String(packet.getData(), 0, packet.getLength())
+    print msg
     
     json= JSONObject(msg)
     typ= json.getString('type')
@@ -83,8 +88,7 @@ while collectCB.selected:
         plot( 2, dss[:,2], xrange=DatumRangeUtil.parseTimeRange('PT30M') )
         plot( 3, dss[:,3], xrange=DatumRangeUtil.parseTimeRange('PT30M') )
     
-    if socket!=None:
-        socket.close()
+    socket.close()
         
 if socket!=None:
     socket.close()
