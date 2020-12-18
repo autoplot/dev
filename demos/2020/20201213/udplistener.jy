@@ -1,3 +1,5 @@
+from javax.swing import JCheckBox
+from org.json import JSONObject
 import jarray
 from java.net import DatagramSocket,DatagramPacket
 from java.lang import String
@@ -6,17 +8,23 @@ BUF_LEN=2048
 # port of Tempest
 PORT=50222
 
-while( True ):
+dsb= DataSetBuilder(2,100,3)
+
+collectCB= JCheckBox('Collect Data',selected=True)
+getApplication().setBottomPanel(collectCB)
+
+while collectCB.selected:
     buf= jarray.zeros(BUF_LEN,'b')
     
-    socket= DatagramSocket(PORT)
-    
-    
-    packet = DatagramPacket(buf, BUF_LEN)
-    socket.receive(packet)
-    socket.close()
-    
-    msg= String(packet.getData(), 0, packet.getLength())
-    
-    print msg
-    
+    socket=None
+    try:
+        socket= DatagramSocket(PORT)
+        
+        packet = DatagramPacket(buf, BUF_LEN)
+        socket.receive(packet)
+        
+        msg= String(packet.getData(), 0, packet.getLength())
+        
+        print msg
+    finally:
+        if socket!=None: socket.close()

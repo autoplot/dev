@@ -22,7 +22,6 @@ class WindRenderer( Renderer ):
     def render( self, g, xaxis, yaxis ):
         ds= self.getDataSet()
         if ( ds==None ): return
-        print ds
         for d in ds:
             ix= xaxis.transform( d[0] )
             iy= yaxis.transform( d[1] )
@@ -35,20 +34,25 @@ class WindRenderer( Renderer ):
             g2.scale( s,s )
             g2.fill( arrow )
 
+setLayout( 4 )
+dom.options.autoranging= False
+
 plot( 0, None, renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
+plot( 1, None, xrange=DatumRangeUtil.parseTimeRange('PT30M'), yrange=[0,10] )
+plot( 2, None, xrange=DatumRangeUtil.parseTimeRange('PT30M'), yrange=[0,10] )
+plot( 3, None, xrange=DatumRangeUtil.parseTimeRange('PT30M'), yrange=[0,10] )
         
 dsb= DataSetBuilder(2,100,3)
+dsbv= DataSetBuilder(2,100,4)
+
+mphu= Units.lookupUnits('mph')
 
 collectCB= JCheckBox('Collect Data',selected=True)
 getApplication().setBottomPanel(collectCB)
 
-mphu= Units.lookupUnits('mph')
-
 while collectCB.selected:
     buf= jarray.zeros(BUF_LEN,'b')
     
-    socket=None
-
     socket= DatagramSocket(PORT)
     
     packet = DatagramPacket(buf, BUF_LEN)
@@ -58,12 +62,26 @@ while collectCB.selected:
     
     json= JSONObject(msg)
     typ= json.getString('type')
+    print typ
     
     if typ=='rapid_wind':
         ob= json.getJSONArray('ob')
-        dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), mphu.createDatum(ob.getDouble(1)*2.23694), Units.degrees.createDatum(ob.getDouble(2)) ] )
+        dsb.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), 
+            dataset( ob.getDouble(1)*2.23694, units='mph' ), 
+            dataset( ob.getDouble(2), units='degrees' ) ] )
         plot( 0, dsb.getDataSet(), renderer= WindRenderer(), xrange=DatumRangeUtil.parseTimeRange('PT3M'), yrange=[0,10] )
-    print msg
+    elif typ=='obs_st':
+        print '####'
+        obs= json.getJSONArray('obs')
+        ob= obs.getJSONArray(0) 
+        dsbv.nextRecord( [ Units.t1970.createDatum(ob.getDouble(0)), 
+            dataset( ob.getDouble(7)*9/5.+32, units='degF', label='Temperature' ), 
+            dataset( ob.getDouble(6), label='Station Pressure' ), 
+            dataset( ob.getDouble(16), label='Battery (V)' ) ] )
+        dss= dsbv.getDataSet()
+        plot( 1, dss[:,1], xrange=DatumRangeUtil.parseTimeRange('PT30M') )
+        plot( 2, dss[:,2], xrange=DatumRangeUtil.parseTimeRange('PT30M') )
+        plot( 3, dss[:,3], xrange=DatumRangeUtil.parseTimeRange('PT30M') )
     
     if socket!=None:
         socket.close()
