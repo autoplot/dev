@@ -1,0 +1,19 @@
+from org.autoplot.datasource import DataSetURI
+from javax.swing import JButton
+from java.awt import Desktop
+
+yr= getParam( 'yr', 2020, 'year to look at', [ 2018, 2019, 2020, 2021 ] )
+
+from org.autoplot.pngwalk import PngWalkTool
+pngw= PngWalkTool.start( 'http://autoplot.org/jnlp/%d*/screen.png' % yr, getApplication() )
+
+def showit(evt):
+    screen= pngw.getSelectedFile()
+    print screen
+    i= screen.rfind('/')
+    target= DataSetURI.getResourceURI(screen[0:i]);
+    Desktop.getDesktop().browse( target );
+        
+jb= JButton('Show Version', actionPerformed=showit )
+pngw.setBottomLeftPanel( jb )
+

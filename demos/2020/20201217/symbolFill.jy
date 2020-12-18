@@ -1,0 +1,3 @@
+setLayoutOverplot(2)
+plot( 0, ripples(30)+randn(30), symbolFill='outline', symbolSize=10 )
+plot( 1, 5+ripples(30)+randn(30), symbolFill='solid', symbolSize=10 )
