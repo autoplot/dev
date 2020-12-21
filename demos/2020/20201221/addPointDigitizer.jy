@@ -1,0 +1,73 @@
+from javax.swing import JOptionPane,JComboBox
+# title: Add Point Digitizer
+# label: Point Digitizer
+# Click events are registered on the tab "digitizer." 
+# This also provides feedback showing the digitized data and the data points 
+# selected in the digitizer tab.
+
+from org.das2.components import DataPointRecorder
+from org.das2.qds import SemanticOps
+from org.das2.dataset import DataSetUpdateListener
+from org.das2.graph import SpectrogramRenderer
+import java.util.HashMap
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from java.awt.geom import Ellipse2D
+
+reset()
+
+load( PWD + '20201221T144412.png' )
+dom.plots[0].xaxis.range= datumRange( '0 to 1300' )
+
+dpr= DataPointRecorder()
+
+addTab( 'digitizer', dpr )
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+         ds= dpr.getSelectedDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+
+# we need to listen for updates from the DataPointRecorder, when the selection changes.
+from org.das2.dataset import DataSetUpdateListener
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self, e ):
+        dom.canvases[0].controller.dasCanvas.repaint()
+dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
+
+def dataPointClicked( x,y,w ):
+   dpr.addDataPoint( x, y, w )
+   
+cb= JComboBox(['tree','wreath','gingerbread man','candy cane', 'candle', 'reindeer', 'holly' ] )
+   
+def pointClicked( evt ):   
+   if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(),cb, 'Add Point', JOptionPane.OK_CANCEL_OPTION ) ):
+       dataPointClicked( evt.getFinishX(), evt.getFinishY(), cb.selectedItem )
+   
+addMouseModule( dom.plots[0], 'digitize', pointClicked )
+
+import javax
+javax.swing.JOptionPane.showMessageDialog( getViewWindow(),'Click on the plot, and the x,y position will be recorded on the digitizer tab')
+

@@ -1,0 +1,15 @@
+x()	y()	meta(ordinal)	
+115	478	candy cane	
+123	339	wreath	
+314	497	reindeer	
+319	255	wreath	
+539	495	holly	
+568	296	reindeer	
+745	489	candle	
+772	335	tree	
+815	193	candy cane	
+974	532	tree	
+1004	251	gingerbread man	
+1170	436	candle	
+1197	123	gingerbread man	
+1199	280	holly	
