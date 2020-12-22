@@ -33,10 +33,10 @@ class FeedbackPainter( Painter ):
                  y= d[1]
                  x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
                  y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
-                 g.color= Color( 200, 200,140,200)
-                 g.fill( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.color= Color.WHITE
+                 g.fill( Ellipse2D.Double( x-4, y-4, 9, 9 ) )
                  g.color= Color.BLACK
-                 g.draw( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.draw( Ellipse2D.Double( x-4, y-4, 9, 9 ) )
          ds= dpr.getSelectedDataPoints()
          if ( ds!=None ): 
              for d in ds:
@@ -44,7 +44,7 @@ class FeedbackPainter( Painter ):
                  y= d[1]
                  x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
                  y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
-                 g.color= Color( 200, 200,140,200)
+                 g.color= Color.WHITE
                  g.fill( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
                  g.color= Color.BLACK
                  g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
