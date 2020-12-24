@@ -1,0 +1,96 @@
+from java.io import File
+from org.das2.util.filesystem import FileSystem
+from org.das2.fsm import FileStorageModel
+setScriptDescription( '''Listen for UDP packets broadcast by the WeatherFlow 
+Tempest Weather Station, and record them to orderly files.  This is intended
+to be used as long-running process.''' )
+
+from org.das2.datum import TimeUtil
+from org.das2.graph import Renderer
+from java.awt.geom import GeneralPath,Rectangle2D
+from org.json import JSONObject
+import jarray
+from java.net import DatagramSocket,DatagramPacket
+from java.lang import String
+
+BUF_LEN=2048
+# port of Tempest
+PORT=50222        
+
+lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor ) # caution: this only loads once!!!!!
+
+fs= '/home/jbf/data/tempest/34803/'
+from org.hapiserver import URITemplate
+fsmwind = URITemplate('$Y/$m/34803.wind.$Y$m$d.csv')
+fsmobs= URITemplate('$Y/$m/34803.obs.$Y$m$d.csv')
+
+def recordRapidWind( json ):
+    ob= json.getJSONArray('ob')
+    t= datum( Units.t1970.createDatum(ob.getDouble(0)) ) 
+    tstr= str(t)
+    fln= File( fs + fsmwind.format( tstr,tstr ) )
+    pfln= fln.getParentFile()
+    if not pfln.exists():
+        pfln.mkdirs()
+    if fln.exists():
+        f= open( str(fln), 'a+' )
+    else:
+        f= open( str(fln), 'w' )
+        f.write( 'time,speed(mph),direction(degrees)\n' )
+    f.write( '%s,%.2f,%.1f\n' % ( tstr,
+                          ob.getDouble(1)*2.23694, 
+                          ob.getDouble(2) ) )
+    f.close()
+    
+def recordObsSt( json ):
+    ob= json.getJSONArray('obs')
+    ob= ob.getJSONArray(0) # very annoying
+    t= datum( Units.t1970.createDatum(ob.getDouble(0)) ) 
+    tstr= str(t)
+    fln= File( fs + fsmobs.format( tstr,tstr ) )
+    pfln= fln.getParentFile()
+    if not pfln.exists():
+        pfln.mkdirs()
+    if fln.exists():
+        f= open( str(fln), 'a+' )
+    else:
+        f= open( str(fln), 'w' )
+        f.write( 'time,windLull(mph),windAvg(mph),windGust(mph),windDirection(degrees),')
+        f.write( 'stationPressure(MB),airTemperature(degF),relativeHumidity(%),')
+        f.write( 'illuminance(Lux),UV(Index),solarRadiation(W/m^2),')
+        f.write( 'precipAccumulated(mm),precipType,lightningAvgDistance(km),lightingCount,' )
+        f.write( 'battery\n' )
+    f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( str(t), ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) ) )
+    f.write( '%.1f,%.1f,%.1f,' % ( ob.getDouble(6), ob.getDouble(7), ob.getDouble(8) ) )
+    f.write( '%.1f,%.1f,%.1f,'% ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) ) )
+    f.write( '%.1f,%.1f,%.1f,%.1f,' % ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) )
+    f.write( '%.2f\n' % ( ob.getDouble(16) ) )
+    f.close()
+                          
+while True:
+    buf= jarray.zeros(BUF_LEN,'b')
+    
+    socket= DatagramSocket(PORT)
+    
+    packet = DatagramPacket(buf, BUF_LEN)
+    socket.receive(packet)
+    
+    socket.close()
+
+    msg= String(packet.getData(), 0, packet.getLength())
+    
+    json= JSONObject(msg)
+    typ= json.getString('type')
+    
+    if typ=='rapid_wind':
+        recordRapidWind( json )
+    elif typ=='obs_st':
+        recordObsSt( json )
+        pass
+            
+if socket!=None:
+    socket.close()
