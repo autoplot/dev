@@ -8,6 +8,9 @@ to be used as long-running process.  This can be run like so:
 java -jar /home/jbf/bin/autoplot.jar --headless https://github.com/autoplot/dev/blob/master/demos/2020/20201213/tempestRecorder.jy
 ''' )
 
+device= getParam( 'device', '34803', 'Unique ID assigned to each device' )
+dataHome= getParam( 'dataHome', '/home/jbf/data/tempest/%s/' % device )
+
 from org.das2.datum import TimeUtil
 from org.das2.graph import Renderer
 from java.awt.geom import GeneralPath,Rectangle2D
@@ -18,20 +21,21 @@ from java.lang import String
 
 logger= LoggerManager.getLogger('tempest')
 
-BUF_LEN=2048
 # port of Tempest
 PORT=50222        
+# allow Tempest packets to be 2048 bytes long.
+BUF_LEN=2048
 
+# We use an external library to handle the naming of files where the data is stored.
 lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
 doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
-
 import sys
 addToSearchPath( sys.path,lib,doc,monitor ) # caution: this only loads once!!!!!
 
-fs= '/home/jbf/data/tempest/34803/'
+fs= dataHome
 from org.hapiserver import URITemplate
-fsmwind = URITemplate('$Y/$m/34803.wind.$Y$m$d.csv')
-fsmobs= URITemplate('$Y/$m/34803.obs.$Y$m$d.csv')
+fsmwind = URITemplate('$Y/$m/%s.wind.$Y$m$d.csv' % device )
+fsmobs= URITemplate('$Y/$m/%s.obs.$Y$m$d.csv' % device )
 
 def recordRapidWind( json ):
     ob= json.getJSONArray('ob')
