@@ -4,7 +4,8 @@ from org.das2.util.filesystem import FileSystem
 from org.das2.fsm import FileStorageModel
 setScriptDescription( '''Listen for UDP packets broadcast by the WeatherFlow 
 Tempest Weather Station, and record them to orderly files.  This is intended
-to be used as long-running process.  See 
+to be used as long-running process.  This can be run like so:
+java -jar /home/jbf/bin/autoplot.jar --headless https://github.com/autoplot/dev/blob/master/demos/2020/20201213/tempestRecorder.jy
 ''' )
 
 from org.das2.datum import TimeUtil
