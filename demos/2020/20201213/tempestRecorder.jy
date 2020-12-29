@@ -1,17 +1,21 @@
+from org.das2.util import LoggerManager
 from java.io import File
 from org.das2.util.filesystem import FileSystem
 from org.das2.fsm import FileStorageModel
 setScriptDescription( '''Listen for UDP packets broadcast by the WeatherFlow 
 Tempest Weather Station, and record them to orderly files.  This is intended
-to be used as long-running process.''' )
+to be used as long-running process.  See 
+''' )
 
 from org.das2.datum import TimeUtil
 from org.das2.graph import Renderer
 from java.awt.geom import GeneralPath,Rectangle2D
-from org.json import JSONObject
+from org.json import JSONObject, JSONArray
 import jarray
 from java.net import DatagramSocket,DatagramPacket
 from java.lang import String
+
+logger= LoggerManager.getLogger('tempest')
 
 BUF_LEN=2048
 # port of Tempest
@@ -41,7 +45,10 @@ def recordRapidWind( json ):
     else:
         f= open( str(fln), 'w' )
         f.write( 'time,speed(mph),direction(degrees)\n' )
-    f.write( '%s,%.2f,%.1f\n' % ( tstr,
+    if  ob.length()!=3:
+        logger.info("fail to get temp ")
+    else:
+        f.write( '%s,%.2f,%.1f\n' % ( tstr,
                           ob.getDouble(1)*2.23694, 
                           ob.getDouble(2) ) )
     f.close()
@@ -49,6 +56,7 @@ def recordRapidWind( json ):
 def recordObsSt( json ):
     ob= json.getJSONArray('obs')
     ob= ob.getJSONArray(0) # very annoying
+    assert isinstance( ob, JSONArray )
     t= datum( Units.t1970.createDatum(ob.getDouble(0)) ) 
     tstr= str(t)
     fln= File( fs + fsmobs.format( tstr,tstr ) )
@@ -60,15 +68,18 @@ def recordObsSt( json ):
     else:
         f= open( str(fln), 'w' )
         f.write( 'time,windLull(mph),windAvg(mph),windGust(mph),windDirection(degrees),')
-        f.write( 'stationPressure(MB),airTemperature(degF),relativeHumidity(%),')
+        f.write( 'stationPressure(MB),airTemperature(Fahrenheit),relativeHumidity(%),')
         f.write( 'illuminance(Lux),UV(Index),solarRadiation(W/m^2),')
         f.write( 'precipAccumulated(mm),precipType,lightningAvgDistance(km),lightingCount,' )
         f.write( 'battery\n' )
-    f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( str(t), ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) ) )
-    f.write( '%.1f,%.1f,%.1f,' % ( ob.getDouble(6), ob.getDouble(7), ob.getDouble(8) ) )
-    f.write( '%.1f,%.1f,%.1f,'% ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) ) )
-    f.write( '%.1f,%.1f,%.1f,%.1f,' % ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) )
-    f.write( '%.2f\n' % ( ob.getDouble(16) ) )
+    if ( ob.length()!=18 ):
+        logger.info("fail to get temp")
+    else:
+        f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( str(t), ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) ) )
+        f.write( '%.1f,%.1f,%.1f,' % ( ob.getDouble(6), ob.getDouble(7)*9/5.+32, ob.getDouble(8) ) )
+        f.write( '%.1f,%.1f,%.1f,'% ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) ) )
+        f.write( '%.1f,%.2f,%.1f,%.1f,' % ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) )
+        f.write( '%.2f\n' % ( ob.getDouble(16) ) )
     f.close()
                           
 while True:
@@ -82,6 +93,7 @@ while True:
     socket.close()
 
     msg= String(packet.getData(), 0, packet.getLength())
+    logger.fine(msg)
     
     json= JSONObject(msg)
     typ= json.getString('type')
