@@ -1,0 +1,10 @@
+setScriptDescription('add special mac stuff')
+
+from com.apple.mrj import MRJAboutHandler,MRJApplicationUtils
+#from com.apple.mrj import MacOSXController
+
+class MyMRJAboutHandler(MRJAboutHandler):
+    def handleAbout(evt):
+        print 'About Autoplot...'
+
+MRJApplicationUtils.registerAboutHandler(MyMRJAboutHandler())
