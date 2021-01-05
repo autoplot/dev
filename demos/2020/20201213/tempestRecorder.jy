@@ -80,11 +80,20 @@ def recordObsSt( json ):
     if ( ob.length()!=18 ):
         logger.info("fail to get temp")
     else:
-        f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( str(t), ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) ) )
-        f.write( '%.1f,%.1f,%.1f,' % ( ob.getDouble(6), ob.getDouble(7)*9/5.+32, ob.getDouble(8) ) )
-        f.write( '%.1f,%.1f,%.1f,'% ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) ) )
-        f.write( '%.1f,%.2f,%.1f,%d,' % ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) )
-        f.write( '%.2f\n' % ( ob.getDouble(16) ) )
+        time=str(t)
+        windLull=ob.getDouble(1)*2.23694
+        windAvg=ob.getDouble(2)*2.23694
+        windGust=ob.getDouble(3)*2.23694
+        windDirection=ob.getDouble(4)
+        f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( time,windLull, windAvg, windGust windDirection ) )
+        ( stationPressure,airTemperature,relativeHumidity ) = ( ob.getDouble(6), ob.getDouble(7)*9/5.+32, ob.getDouble(8) )
+        f.write( '%.1f,%.1f,%.1f,' % ( stationPressure,airTemperature,relativeHumidity ) )
+        ( illuminance,UV,solarRadiation ) =  ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) )
+        f.write( '%.1f,%.1f,%.1f,'% ( illuminance,UV,solarRadiation ) )
+        ( precipAccumulated,precipType,lightningAvgDistance,lightingCount ) = ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) 
+        f.write( '%.1f,%.2f,%.1f,%d,' % ( precipAccumulated,precipType,lightningAvgDistance,lightingCount ) )
+        ( battery ) = ( ob.getDouble(16) )
+        f.write( '%.2f\n' % ( battery ) )
     f.close()
                           
 while True:
