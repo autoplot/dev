@@ -81,11 +81,8 @@ def recordObsSt( json ):
         logger.info("fail to get temp")
     else:
         time=str(t)
-        windLull=ob.getDouble(1)*2.23694
-        windAvg=ob.getDouble(2)*2.23694
-        windGust=ob.getDouble(3)*2.23694
-        windDirection=ob.getDouble(4)
-        f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( time,windLull, windAvg, windGust windDirection ) )
+        ( windLull, windAvg, windGust, windDirection ) = ( ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) )
+        f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( time, windLull, windAvg, windGust, windDirection ) )
         ( stationPressure,airTemperature,relativeHumidity ) = ( ob.getDouble(6), ob.getDouble(7)*9/5.+32, ob.getDouble(8) )
         f.write( '%.1f,%.1f,%.1f,' % ( stationPressure,airTemperature,relativeHumidity ) )
         ( illuminance,UV,solarRadiation ) =  ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) )
@@ -120,3 +117,4 @@ while True:
             
 if socket!=None:
     socket.close()
+    
