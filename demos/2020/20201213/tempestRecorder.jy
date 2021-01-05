@@ -9,7 +9,8 @@ java -jar /home/jbf/bin/autoplot.jar --headless https://github.com/autoplot/dev/
 ''' )
 
 device= getParam( 'device', '34803', 'Unique ID assigned to each device' )
-dataHome= getParam( 'dataHome', '/home/jbf/data/tempest/%s/' % device )
+#dataHome= getParam( 'dataHome', '/home/jbf/data/tempest/%s/' % device )
+dataHome= getParam( 'dataHome', '/tmp/tempest/%s/' % device )
 
 from org.das2.datum import TimeUtil
 from org.das2.graph import Renderer
@@ -81,16 +82,26 @@ def recordObsSt( json ):
         logger.info("fail to get temp")
     else:
         time=str(t)
-        ( windLull, windAvg, windGust, windDirection ) = ( ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) )
-        f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( time, windLull, windAvg, windGust, windDirection ) )
-        ( stationPressure,airTemperature,relativeHumidity ) = ( ob.getDouble(6), ob.getDouble(7)*9/5.+32, ob.getDouble(8) )
-        f.write( '%.1f,%.1f,%.1f,' % ( stationPressure,airTemperature,relativeHumidity ) )
-        ( illuminance,UV,solarRadiation ) =  ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) )
-        f.write( '%.1f,%.1f,%.1f,'% ( illuminance,UV,solarRadiation ) )
-        ( precipAccumulated,precipType,lightningAvgDistance,lightingCount ) = ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) 
-        f.write( '%.1f,%.2f,%.1f,%d,' % ( precipAccumulated,precipType,lightningAvgDistance,lightingCount ) )
-        ( battery ) = ( ob.getDouble(16) )
-        f.write( '%.2f\n' % ( battery ) )
+        try:
+            ( windLull, windAvg, windGust, windDirection ) = ( ob.getDouble(1)*2.23694, ob.getDouble(2)*2.23694, ob.getDouble(3)*2.23694, ob.getDouble(4) )
+            ( stationPressure,airTemperature,relativeHumidity ) = ( ob.getDouble(6), ob.getDouble(7)*9/5.+32, ob.getDouble(8) )
+            ( illuminance,UV,solarRadiation ) =  ( ob.getDouble(9), ob.getDouble(10), ob.getDouble(11) )
+            ( precipAccumulated,precipType,lightningAvgDistance,lightingCount ) = ( ob.getDouble(12), ob.getDouble(13), ob.getDouble(14), ob.getDouble(15) ) 
+            ( battery ) = ( ob.getDouble(16) )
+            f.write( '%s,%.2f,%.2f,%.2f,%.1f,' % ( time, windLull, windAvg, windGust, windDirection ) )
+            f.write( '%.1f,%.1f,%.1f,' % ( stationPressure,airTemperature,relativeHumidity ) )
+            f.write( '%.1f,%.1f,%.1f,'% ( illuminance,UV,solarRadiation ) )
+            f.write( '%.1f,%.2f,%.1f,%d,' % ( precipAccumulated,precipType,lightningAvgDistance,lightingCount ) )
+            f.write( '%.2f\n' % ( battery ) )
+        except:
+            print 'unable to use record:'
+            print json.toString(4)
+            f.write( '%s,,,,,' % time  )
+            f.write( ',,,')
+            f.write( ',,,' )
+            f.write( ',,,,' )
+            f.write( '\n' )
+            
     f.close()
                           
 while True:
@@ -114,7 +125,7 @@ while True:
     elif typ=='obs_st':
         recordObsSt( json )
         pass
-            
+                
 if socket!=None:
     socket.close()
     
