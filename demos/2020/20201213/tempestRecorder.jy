@@ -9,8 +9,8 @@ java -jar /home/jbf/bin/autoplot.jar --headless https://github.com/autoplot/dev/
 ''' )
 
 device= getParam( 'device', '34803', 'Unique ID assigned to each device' )
-#dataHome= getParam( 'dataHome', '/home/jbf/data/tempest/%s/' % device )
-dataHome= getParam( 'dataHome', '/tmp/tempest/%s/' % device )
+dataHome= getParam( 'dataHome', '/home/jbf/data/tempest/%s/' % device )
+#dataHome= getParam( 'dataHome', '/tmp/tempest/%s/' % device )
 
 from org.das2.datum import TimeUtil
 from org.das2.graph import Renderer
