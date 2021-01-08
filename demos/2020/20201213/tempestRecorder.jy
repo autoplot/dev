@@ -5,7 +5,7 @@ from org.das2.fsm import FileStorageModel
 setScriptDescription( '''Listen for UDP packets broadcast by the WeatherFlow 
 Tempest Weather Station, and record them to orderly files.  This is intended
 to be used as long-running process.  This can be run like so:
-java -jar /home/jbf/bin/autoplot.jar --headless https://github.com/autoplot/dev/blob/master/demos/2020/20201213/tempestRecorder.jy
+java -jar /home/jbf/bin/autoplot.jar --headless https://github.com/autoplot/dev/blob/master/demos/2020/20201213/tempestRecorder.jy dataHome=/home/jbf/data/tempest/34803/
 ''' )
 
 device= getParam( 'device', '34803', 'Unique ID assigned to each device' )
