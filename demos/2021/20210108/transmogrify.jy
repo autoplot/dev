@@ -1,0 +1,22 @@
+from java.lang import StringBuilder
+from java.util.regex import Pattern
+setScriptDescription('Demo Transmography')
+
+def transmography( regex, formt, txt ):
+    p= Pattern.compile( regex )
+    m= p.matcher(txt)
+    if not m.matches():
+        return txt
+    else:
+        mp= {}
+        for i in xrange(1,m.groupCount()):
+            mp[i]=m.group(i)
+        result= formt
+        for i in xrange(1,m.groupCount()):
+            result= result.replace('$%d'%i, mp[i] )
+        return result
+        
+s= 'pj10_fhr_n.dat'
+
+print transmography( 'pj(\d+)_(.+)_(n|s).(dat)','pj$1_$2_$3.txt', s ) 
+print transmography( 'pj(\d+)_(.+)_(n|s).(dat)','pj$1_$2.txt', s ) 
