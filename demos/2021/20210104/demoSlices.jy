@@ -1,0 +1,8 @@
+ds= ripples(20,30,40,50)
+dep0= dataset( linspace('2021-01-01','2021-01-01T19:00',20), name='time' )
+dep1= dataset( linspace( 0.001, 0.002, 30 ), name='energy' )
+dep2= dataset( linspace( 0.1, 0.2, 40 ), name='alpha' )
+dep3= dataset( linspace( 10., 20., 50 ), name='beta' )
+ds= dataset( dep0, dep1, dep2, dep3, ds )
+
+plot( ds )
