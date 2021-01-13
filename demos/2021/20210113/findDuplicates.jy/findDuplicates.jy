@@ -1,0 +1,33 @@
+from java.util import HashMap
+setScriptDescription('check for duplicate timetags for each day of RBSP-A mission')
+
+lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import URITemplate
+
+extra= HashMap()
+extra.put( 'v','*' )
+
+trs= generateTimeRanges('$Y-$m-$d','2012-10-01 to 2020-01-01')
+for tr in trs:
+    ff= URITemplate('https://emfisis-soc.physics.uiowa.edu/Flight/RBSP-A/L4/$Y/$m/$d/rbsp-a_density_emfisis-L4_$Y$m$d_v$(v,sep).cdf' ).format(tr,tr,extra)
+    try:
+        ffs= listDirectory(ff)
+    except:
+        ffs= []
+    ff1= ff.rfind('/')
+    dr= ff[0:ff1]
+    # TODO: need to add directory, 10 years later and I always make the mistake
+    if ( len(ffs)>0 ):
+        uri= dr + '/' + ffs[-1]+'?y'
+        try:
+            ds= getDataSet(uri)
+        except:
+            continue
+        tt= ds.property(QDataSet.DEPEND_0)
+        r= where( diff(tt).le(0) )
+        if r.length()>0:
+            print tr, '%d of %d' % ( r.length(),tt.length() ), ffs[-1]
