@@ -7,18 +7,25 @@ resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/data/zip
 f= downloadResourceAsTempFile(URL(resourceURI),None)
 ds= getDataSet( 'vap+bin:'+str(f) )
 
+n= ds.length()
+
 finds= { 'zip34':[ 0x50, 0x4B, 0x03, 0x04 ],
          'zip56':[ 0x50, 0x4B, 0x05, 0x06 ],
          'gz': [0x1F,0x8B] }
 
+monitor.setTaskSize(n*len(finds))
+monitor.started()
+
 print 'file: '+resourceURI 
+
+iseq=0
 
 for ff in finds:
     find= finds[ff]
     print ff, find
     ifind=0
-    n= ds.length()
     for i in xrange( n ):
+        monitor.setTaskProgress(i+n*iseq)
         if ds[i]==find[ifind]:
             #if ifind>0: print 'found #%d at %d' % ( ifind, i )
             ifind= ifind+1
@@ -35,4 +42,6 @@ for ff in finds:
         print 'found %d-char sequence %s at %d' % ( len(find), ff, i-len(find)+1 )
     else:
         print 'did not found sequence %s' % ff
-        
+    iseq=iseq+1
+
+monitor.finished()
