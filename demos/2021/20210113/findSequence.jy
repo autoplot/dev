@@ -1,0 +1,38 @@
+setScriptDescription('''Find zip,gzip magic numbers within a file.  This is a 
+brute-force implementation written in slow Jython, 
+and better implementations probably exist.''')
+
+resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/data/zip/file.zip', 'example file to load' )
+
+f= downloadResourceAsTempFile(URL(resourceURI),None)
+ds= getDataSet( 'vap+bin:'+str(f) )
+
+finds= { 'zip34':[ 0x50, 0x4B, 0x03, 0x04 ],
+         'zip56':[ 0x50, 0x4B, 0x05, 0x06 ],
+         'gz': [0x1F,0x8B] }
+
+print 'file: '+resourceURI 
+
+for ff in finds:
+    find= finds[ff]
+    print ff, find
+    ifind=0
+    n= ds.length()
+    for i in xrange( n ):
+        if ds[i]==find[ifind]:
+            #if ifind>0: print 'found #%d at %d' % ( ifind, i )
+            ifind= ifind+1
+            if ifind==len(find):
+                break
+
+        elif ds[i]==find[0]:
+            ifind=1
+            
+        else:
+            ifind=0
+            
+    if ifind==len(find):
+        print 'found %d-char sequence %s at %d' % ( len(find), ff, i-len(find)+1 )
+    else:
+        print 'did not found sequence %s' % ff
+        
