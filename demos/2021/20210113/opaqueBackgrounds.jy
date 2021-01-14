@@ -1,0 +1,3 @@
+setScriptDescription("Make all the canvas components have opaque backgrounds")
+for cc in dom.canvases[0].controller.dasCanvas.getCanvasComponents():
+    cc.opaqueBackground= True
