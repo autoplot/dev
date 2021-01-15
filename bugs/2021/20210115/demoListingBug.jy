@@ -1,0 +1,11 @@
+setScriptDescription('''Demo where filesystem of non-existing directory is created,
+resulting in a strange error message when the first listing is done.
+''')
+from org.das2.util.filesystem import FileSystem
+# demo listing bug where warning is issued.
+
+fs= FileSystem.create( 'https://emfisis-soc.physics.uiowa.edu/Flight/RBSP-A/L4/2016/06/23/' )
+assert isinstance( fs, FileSystem )
+
+fs.listDirectory('/')
+
