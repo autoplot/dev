@@ -1,0 +1,9 @@
+randomSeed(0)
+ds= floor(randu(10000)*10)
+seq= dataset( [ 1,2,3 ] )
+
+x= whereSequence( ds,seq )
+print x
+
+for i in x:
+    print 'Starting at %d: [%d,%d,%d]' % ( i, ds[i], ds[i+1], ds[i+2] )
