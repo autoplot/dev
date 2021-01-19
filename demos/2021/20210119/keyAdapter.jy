@@ -1,3 +1,5 @@
+setScriptDescription('Print the key pressed.  This was created to figure out if ctrl-E is being sent to applications over x2go')
+
 from javax.swing import JLabel,JTextField
 from java.awt.event import KeyAdapter
 
