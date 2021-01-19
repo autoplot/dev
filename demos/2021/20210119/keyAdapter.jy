@@ -1,0 +1,12 @@
+from javax.swing import JLabel,JTextField
+from java.awt.event import KeyAdapter
+
+label= JTextField('Press Key')
+
+class MyKeyAdapter( KeyAdapter ):
+    def keyPressed( self, evt ):
+        label.setText( 'Key '+str(evt.getKeyCode())+' ' )
+    
+label.addKeyListener(MyKeyAdapter())
+
+getApplication().tabs.add('PressMe',label)
