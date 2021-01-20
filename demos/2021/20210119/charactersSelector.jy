@@ -1,0 +1,43 @@
+from java.awt import GridLayout
+from javax.swing import JPanel,JButton
+from java.awt.event import ActionListener
+
+setScriptTitle('Fun Characters')
+setScriptDescription('Buttons to copy unusual characters to the system clipboard.')
+
+from org.das2.util import FileUtil
+from org.das2.util import Entities
+
+jp= JPanel()
+jp.setLayout(GridLayout(3,3))
+
+class MyActionListener( ActionListener ):
+    def __init__( self, s ):
+        self.s= s
+    def actionPerformed( self, evt ):
+        from java.awt import Toolkit
+        clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
+    
+        from java.awt.datatransfer import StringSelection
+        selection= StringSelection(self.s)
+    
+        clipboard.setContents( selection, selection )
+    
+def addButton( jp, s ):
+    b= JButton( s )
+    b.addActionListener( MyActionListener(s) )
+    jp.add( b )
+    
+addButton( jp, 'Hello' )
+addButton( jp, Entities.decode('&rarr;') )
+addButton( jp, Entities.decode('&pi;') )
+
+addButton( jp, Entities.decode('&Tau;') )
+addButton( jp, Entities.decode('&gamma;') )
+addButton( jp, Entities.decode('&Gamma;') )
+
+addButton( jp, Entities.decode('&rarr;') )
+addButton( jp, Entities.decode('&rarr;') )
+addButton( jp, 'Hello' )
+
+addTab( 'characters',jp )
