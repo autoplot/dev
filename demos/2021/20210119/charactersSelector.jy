@@ -36,7 +36,7 @@ addButton( jp, Entities.decode('&Tau;') )
 addButton( jp, Entities.decode('&gamma;') )
 addButton( jp, Entities.decode('&Gamma;') )
 
-addButton( jp, Entities.decode('&rarr;') )
+addButton( jp, Entities.decode('&deg;') )
 addButton( jp, Entities.decode('&rarr;') )
 addButton( jp, 'Hello' )
 
