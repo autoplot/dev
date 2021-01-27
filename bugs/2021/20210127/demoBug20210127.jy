@@ -1,0 +1,9 @@
+from org.autoplot.datasource import URISplit
+# demo bug seen 20210127
+imgURI= 'file:/home/jbf/ct/hudson/artifacts/test142_http_autoplot.org_data_event_simpleEvent.txt_eventListColumn.png'
+print '>>', URISplit.parse(imgURI).path, '<<'
+print 'should be file:/home/jbf/ct/hudson/artifacts/'
+
+imgURI= 'file:/home/jbf/ct/hudson/artifacts/test142_http_autoplot.org_data_event_simpleEvent.txt_eventListColumn=test1.png'
+print '>>', URISplit.parse(imgURI).path, '<<'
+print 'should be file:/home/jbf/ct/hudson/artifacts/'
