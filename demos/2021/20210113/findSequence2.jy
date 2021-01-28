@@ -1,0 +1,13 @@
+setScriptDescription('Demo how much faster using a new Java code to find sequences is')
+
+ds= getDataSet( 'vap+bin:file:///home/jbf/tmp/20210112093703053__Faden,Jeremy_20210112.exe' )
+
+print 'start'
+
+x= whereSequence( ds,dataset([ 0x50, 0x4B, 0x03, 0x04 ]) )
+print x
+
+x= whereSequence( ds,dataset([ 0x50, 0x4B, 0x05, 0x06 ]) )
+print x, x[0]
+
+print 'done'
