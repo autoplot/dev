@@ -2,8 +2,6 @@ from org.autoplot.pngwalk import PngWalkTool
 setScriptDescription('''Study Jenkins test results with three pngwalks: test, okay, and diff.
 Buttons are added to copy over artifacts to become new okay version.''')
 
-# set up two pngwalks to review hudson output
-
 host= getParam( 'host', 'ci-pw', 'tests from this hist', [ 'ci-pw', 'spot5', 'spot8', 'spot8-private' ] )
 if ( host=='ci-pw' ):
     test= getParam( 'test', '147')
