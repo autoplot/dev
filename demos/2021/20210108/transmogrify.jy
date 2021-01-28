@@ -1,12 +1,23 @@
-from java.lang import StringBuilder
+
 from java.util.regex import Pattern
-setScriptDescription('Demo Transmography')
+
+setScriptLabel('Transmography')
+setScriptDescription('''Transmography command takes a regular expression and a
+format specification and converts each line of the input (on stdin) by matching
+it and then formatting it. <p>java -jar autoplot.jar --script=transmogrify.jy mod_(\d+).txt '$1'
+''')
+inp= getParam( 'arg_1', 'pj(\d+)_(.+)_(n|s).(dat)' )
+outp= getParam( 'arg_2', '$1 $2 $3' )
+ins= getParam( 'arg_3', '', 'line to run through', { 'examples':['pj1_5_n.dat',''] } )
+
+import sys
 
 def transmography( regex, formt, txt ):
     p= Pattern.compile( regex )
     m= p.matcher(txt)
     if not m.matches():
-        return txt
+        # do nothing
+        pass
     else:
         mp= {}
         for i in xrange(1,m.groupCount()):
@@ -14,9 +25,12 @@ def transmography( regex, formt, txt ):
         result= formt
         for i in xrange(1,m.groupCount()):
             result= result.replace('$%d'%i, mp[i] )
-        return result
-        
-s= 'pj10_fhr_n.dat'
+        sys.stdout.write( result )
+        sys.stdout.write( '\n' )
 
-print transmography( 'pj(\d+)_(.+)_(n|s).(dat)','pj$1_$2_$3.txt', s ) 
-print transmography( 'pj(\d+)_(.+)_(n|s).(dat)','pj$1_$2.txt', s ) 
+if ins!='':        
+    transmography( inp, outp, ins )
+else:
+    for line in sys.stdin:
+        transmography( inp, outp, line.strip() )
+
