@@ -1,0 +1,85 @@
+from org.autoplot.pngwalk import PngWalkTool
+setScriptDescription('''Study Jenkins test results with three pngwalks: test, okay, and diff.
+Buttons are added to copy over artifacts to become new okay version.''')
+
+# set up two pngwalks to review hudson output
+
+host= getParam( 'host', 'ci-pw', 'tests from this hist', [ 'ci-pw', 'spot5', 'spot8', 'spot8-private' ] )
+if ( host=='ci-pw' ):
+    test= getParam( 'test', '147')
+else:
+    test= getParam( 'test', '018')
+    
+okayDir= '/home/jbf/ct/hudson/artifacts/'
+if ( test!='140' ):
+    okay= okayDir + 'test'+test+'*.png'
+else:
+    okay= okayDir + 'test14*.png'
+    
+if ( host=='ci-pw' ):
+   tests= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/ws/test*.png'
+   diffs= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/ws/diffs.test*.png'
+   okayDir= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/lastSuccessfulBuild/artifact/'
+   okay= okayDir + 'test'+test+'*.png'
+elif ( host=='spot8' ):
+   tests= '/mynet/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/test*.png'
+   diffs=  '/mynet/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/diffs.test*.png'
+elif ( host=='spot8-private' ):
+   test= '099'
+   tests= '/home/jbf/ct/hudson/private/test/test'+test+'*.png'
+   diffs= '/home/jbf/ct/hudson/private/diffs/diffs.test'+test+'*.png'
+   okay= '/home/jbf/ct/hudson/private/artifacts/test'+test+'*.png'
+else: 
+   tests= '/mynet/spot6/var/local/hudson/jobs/autoplot-test'+test+'/workspace/test*.png'
+   diffs= '/mynet/spot6/var/local/hudson/jobs/autoplot-test'+test+'/workspace/diffs.test*.png'
+
+from org.das2.util.FileUtil import fileCopy
+from java.io import File
+
+w= getViewWindow()
+
+from org.autoplot.pngwalk import PngWalkTool
+from javax.swing import AbstractAction 
+from java.awt import Dimension
+
+png1= PngWalkTool.start(okay,w)
+png2= PngWalkTool.start(tests,w)
+png3= PngWalkTool.start(diffs,w)
+
+from org.jdesktop.beansbinding import Converter                
+class MyConverter( Converter ):
+    def convertForward( self, s ):
+        print s
+        return 'diffs.'+s
+    def convertReverse( self, s ):
+        print s, '-->'
+        return s[6:]
+        
+bind( png1,'selectedName',png2,'selectedName')
+bind( png1,'selectedName',png3,'selectedName',MyConverter())
+
+class CopyAction( AbstractAction ):
+    def __init__( self ):
+        AbstractAction.__init__( self, 'Copy' )
+        
+    def actionPerformed( self, evt ):
+        if ( okayDir.startswith('/') ):
+            print 'cp -f ', png2.getSelectedFile()[5:], ' ', okayDir
+            fileCopy( File( png2.getSelectedFile()[5:] ), File( okayDir ) )
+            png2.sequence.next()
+        else:
+            print 'wget -N ' + png2.getSelectedFile()
+
+class CopyAltAction( AbstractAction ):
+    def __init__( self ):
+        AbstractAction.__init__( self, 'CopyAlt' )
+        
+    def actionPerformed( self, evt ):
+        altOkayDir=  File( '/home/jbf/ct/hudson/artifacts_alt/' )
+        print 'cp -f ', png2.getSelectedFile()[5:], ' ', altOkayDir
+        fileCopy( File( png2.getSelectedFile()[5:] ), altOkayDir )
+
+png2.addFileAction( None, CopyAction() )
+png2.addFileAction( PngWalkTool.LOCAL_FILE_ENABLER, CopyAltAction() )
+png3.addFileAction( None, CopyAction() )
+png3.addFileAction( PngWalkTool.LOCAL_FILE_ENABLER, CopyAltAction() )
