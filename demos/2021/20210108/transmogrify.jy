@@ -2,6 +2,7 @@
 from java.util.regex import Pattern
 
 # java -jar autoplot.jar --headless --script=https://github.com/autoplot/dev/blob/master/demos/2021/20210108/transmogrify.jy  'pj(\d+)_(.+)_(n|s).(dat)'  '$1-$2-$3'
+# uptime | java -jar autoplot.jar --headless --script=https://github.com/autoplot/dev/blob/master/demos/2021/20210108/transmogrify.jy  '.+up (\d+) days.+(\d+) user.+load average: ([\d\.]+), ([\d\.]+), ([\d\.]+)'  '$1 $2 $3 $4 $5'
 
 setScriptLabel('Transmography')
 setScriptDescription('''Transmography command takes a regular expression and a
