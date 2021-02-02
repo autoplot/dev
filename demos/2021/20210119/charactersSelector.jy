@@ -1,6 +1,6 @@
 from java.awt import GridLayout
 from javax.swing import JPanel,JButton
-from java.awt.event import ActionListener
+from java.awt.event import ActionEvent,ActionListener
 
 setScriptTitle('Fun Characters')
 setScriptDescription('Buttons to copy unusual characters to the system clipboard.')
@@ -19,25 +19,40 @@ class MyActionListener( ActionListener ):
         clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
     
         from java.awt.datatransfer import StringSelection
-        selection= StringSelection(self.s)
+        
+        if (evt.getModifiers() & ActionEvent.SHIFT_MASK) != 0:
+            selection= StringSelection( Entities.encode(self.s) )
+        else:
+            selection= StringSelection(self.s)
     
         clipboard.setContents( selection, selection )
     
 def addButton( jp, s ):
+    ss= Entities.encode(s)
+    #b= JButton( s + ' ('+ss+')')
     b= JButton( s )
+    b.toolTipText= ss + " (hold shift to copy)" 
+    b.font= b.font.deriveFont( 28. )
+    b.revalidate()
+    print b.font
     b.addActionListener( MyActionListener(s) )
     jp.add( b )
     
-addButton( jp, 'Hello' )
+    
+    
+addButton( jp, Entities.decode('&#177;' ) )
 addButton( jp, Entities.decode('&rarr;') )
 addButton( jp, Entities.decode('&pi;') )
+addButton( jp, Entities.decode('&int;') )
 
 addButton( jp, Entities.decode('&Tau;') )
 addButton( jp, Entities.decode('&gamma;') )
 addButton( jp, Entities.decode('&Gamma;') )
+addButton( jp, Entities.decode('&mu;') )
 
 addButton( jp, Entities.decode('&deg;') )
-addButton( jp, Entities.decode('&rarr;') )
-addButton( jp, 'Hello' )
+addButton( jp, Entities.decode('&Delta;') )
+addButton( jp, Entities.decode('&Theta;') )
+addButton( jp, Entities.decode('&lambda;') )
 
 addTab( 'characters',jp )
