@@ -3,7 +3,7 @@ from javax.swing import JPanel,JButton
 from java.awt.event import ActionEvent,ActionListener
 
 setScriptTitle('Fun Characters')
-setScriptDescription('Buttons to copy unusual characters to the system clipboard.')
+setScriptDescription('Buttons to copy unusual characters to the system clipboard.  Hold shift during button press to copy HTML entities encoding.')
 
 from org.das2.util import FileUtil
 from org.das2.util import Entities
