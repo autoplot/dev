@@ -8,5 +8,5 @@ function ap_get_file, s_url, monitor=monitor
    DataSetURI= OBJ_NEW( 'IDLJavaObject$Static$DataSetURI', 'org.autoplot.datasource.DataSetURI' )
 
    ff= DataSetURI.getFile(s_url,monitor)
-   return, ff
+   return, ff.toString()
 end
