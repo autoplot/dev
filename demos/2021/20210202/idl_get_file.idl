@@ -16,5 +16,6 @@ line = ''
 WHILE NOT EOF(lun) DO BEGIN & $
   READF, lun, line & $
   print, line
-ENDWHILE
+
+close, lun
 
