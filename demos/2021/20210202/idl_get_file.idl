@@ -1,6 +1,6 @@
 ; Copy and paste these lines to the IDL command prompt.
 
-setenv, 'CLASSPATH=autoplot.jar'  ; download from http://autoplot.org/latest/autoplot.jar
+SETENV, 'CLASSPATH=autoplot.jar'  ; download from http://autoplot.org/latest/autoplot.jar
 
 ; get the Java class so we can use its static methods.
 DataSetURI= OBJ_NEW( 'IDLJavaObject$Static$DataSetURI', 'org.autoplot.datasource.DataSetURI' )
@@ -8,14 +8,14 @@ DataSetURI= OBJ_NEW( 'IDLJavaObject$Static$DataSetURI', 'org.autoplot.datasource
 surl= 'https://emfisis.physics.uiowa.edu/events/rbsp-a/misc-support-files/rbspa-half-orbit-periods2.txt'
 
 ff= DataSetURI.getFile(surl,OBJ_NEW())
-print, ff.toString()
+PRINT, ff.toString()
 
-openr, lun, ff.toString(), /get_lun
+OPENR, lun, ff.toString(), /get_lun
 line = ''
 
 WHILE NOT EOF(lun) DO BEGIN & $
   READF, lun, line & $
   print, line
 
-close, lun
+CLOSE, lun
 
