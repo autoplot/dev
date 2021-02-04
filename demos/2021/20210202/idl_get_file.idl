@@ -1,19 +1,21 @@
 ; Copy and paste these lines to the IDL command prompt.
 
-setenv, 'CLASSPATH=autoplot.jar'  ; download from http://autoplot.org/latest/autoplot.jar
-pm= OBJ_NEW( ) ; like null in Java or None in Jython
+SETENV, 'CLASSPATH=autoplot.jar'  ; download from http://autoplot.org/latest/autoplot.jar
 
-url= OBJ_NEW( 'IDLJavaObject$URL', 'java.net.URL', 'https://emfisis.physics.uiowa.edu/events/rbsp-a/misc-support-files/rbspa-half-orbit-periods2.txt' )
-
+; get the Java class so we can use its static methods.
 DataSetURI= OBJ_NEW( 'IDLJavaObject$Static$DataSetURI', 'org.autoplot.datasource.DataSetURI' )
-ff= DataSetURI.downloadResourceAsTempFile(url,pm)
-print, ff.toString()
 
-openr, lun, ff.toString(), /get_lun
+surl= 'https://emfisis.physics.uiowa.edu/events/rbsp-a/misc-support-files/rbspa-half-orbit-periods2.txt'
+
+ff= DataSetURI.getFile(surl,OBJ_NEW())
+PRINT, ff.toString()
+
+OPENR, lun, ff.toString(), /get_lun
 line = ''
 
 WHILE NOT EOF(lun) DO BEGIN & $
   READF, lun, line & $
   print, line
-ENDWHILE
+
+CLOSE, lun
 
