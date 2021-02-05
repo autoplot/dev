@@ -1,0 +1,21 @@
+# let's experiment with lint-type warnings about coding.
+
+# you shouldn't use real values to index an array.
+data= zeros(100)
+ff= linspace(2,6,100)
+data[ff]=1  # this is okay, but more likely data was used to index, instead of data which should share an index.
+data[floor(ff)]= 1  # this would not provoke a warning, and does the same thing.
+
+# you shouldn't use the result of where on the wrong array.
+data1= linspace(0.,1.,100)
+data2= linspace(0.,1.,80)
+
+r= where( data2.lt( 0.5 ) )
+data1[r]= 0.    # this would issue a warning because the size of the thing you did a where on (data2) isn't the same size.
+
+print 'my message at indeces.jy:16'
+
+mydata= zeros( 110, 80 )
+r= where( (randu(110)+linspace(1,-10,110) ).ge(0) )
+
+print mydata[:,r]
