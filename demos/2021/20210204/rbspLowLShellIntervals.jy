@@ -8,7 +8,7 @@ tr= datumRange( 'orbit:rbspa-pp:14' )  # this is the time range for orbit 14 (pe
 while ( tr.min().lt( datum('2016-01-01' ) ) ):
     tr= tr.next()
     trload= tr.rescale( -0.5, 0.5 )  # This shifts so that the perijove is in the center.
-    L= getDataSet( 'https://rbsp-ect.newmexicoconsortium.org/data_pub/rbsp%s/rept/level2/sectors/$Y/rbsp%s_rel03_ect-rept-sci-L2_$Y$m$d_v$(v,sep).cdf?L' % ( sc.lower, sc.lower() ), trload )
+    L= getDataSet( 'https://rbsp-ect.newmexicoconsortium.org/data_pub/rbsp%s/rept/level2/sectors/$Y/rbsp%s_rel03_ect-rept-sci-L2_$Y$m$d_v$(v,sep).cdf?L' % ( sc.lower(), sc.lower() ), trload )
     timeL= L.property( QDataSet.DEPEND_0 )
     r= where( L.lt(2.0).and( within( timeL,trload) ) )
     trSmallL= datumRange( extent( timeL[r] ) )
