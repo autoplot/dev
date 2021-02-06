@@ -1,4 +1,9 @@
-# let's experiment with lint-type warnings about coding.
+setScriptDescription( '''Let's experiment with runtime-type warnings about coding.  When a QDataSet is assigned a value,
+as in data1[r], we do sanity checks, like making sure the indices (r) are integer numbers.  If they have real components 
+(for example .5 of 3.5), then a warning is issued.  This is still a valid script, but warnings like this can catch 
+mistakes and save the scientist time debugging code.  Another example is where the result of the "where" command is
+used to index the wrong array.  This is very easy to do, especially when you have a subset of a subset.
+''' )
 
 # you shouldn't use real values to index an array.
 data= zeros(100)
