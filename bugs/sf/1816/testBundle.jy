@@ -1,0 +1,21 @@
+setScriptDescription('Demo new features for 20200211a, where bundle still has time tags and b[:,0:14] will keep metadata.')
+
+b= getDataSet( PWD + 'pj3_flhr_s_eph.dat?bundle=:' )
+print b
+
+print 'This should not be None:'
+print b.property( QDataSet.DEPEND_0 )
+b.putProperty( QDataSet.DEPEND_0, b[:,0] )
+
+print 'This should have a BUNDLE_1 property (post trim1):'
+print trim1( b, 0, 14 )
+
+print 'This should have a BUNDLE_1 property:'
+print b[:,0:14]
+
+plot( 0, b[:,0], b[:,9], title='This should have time' )
+plot( 1, b[:,9], title='This should also have time' )
+plot( 2, b[:,3:5], title='And this should have time' )
+
+formatDataSet( b[:,0:5],'/tmp/ap/testBundle_001.dat')
+formatDataSet( b,       '/tmp/ap/testBundle_002.dat')
