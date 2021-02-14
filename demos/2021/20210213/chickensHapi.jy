@@ -1,0 +1,7 @@
+# test ingest into Autoplot HAPI Server
+
+tt= dataset( ['2021-01-01T00:00Z','2021-01-01T00:10Z' ] )
+ds= dataset( [ -4.4, -4.6 ] )
+ds= bundle( tt, ds )
+
+formatDataSet(ds,'vap+hapi:http://localhost:8084/HapiServerDemo/hapi/data?id=chickens&key=12345678')
