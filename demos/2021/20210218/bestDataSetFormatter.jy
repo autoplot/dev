@@ -1,0 +1,45 @@
+# test DataSetUtil.bestFormatter.  This formats and parses each datum of
+# the datasets, and ensures that the result (dt) is not more than one part in 1000
+# away from the original.
+
+from org.virbo.dataset import DataSetUtil
+from org.virbo.dataset import SemanticOps
+
+def testDf( testNum, df, ds ):
+    'we should be able to format and parse each datum of the dataset and get a close number'
+    print '--- %d ---' % testNum
+    print df
+    u= SemanticOps.getUnits(ds)
+    if ( ds.length()>1 ):
+       limit= abs((ds[1]-ds[0]))/1000
+       print limit
+    for i in xrange(ds.length()):
+        dd= DataSetUtil.asDatum( ds.slice(i) )
+        ss= df.format( dd, u )
+        dt= u.parse( ss )
+        if ( not dd.equals(dt) ):
+            if ( dd.subtract(dt).abs().gt( limit ) ):
+                print dd, ' --> ', dt
+                return False
+    return True
+
+N= 50
+
+randomSeed(1)
+lim= 100
+ds= round( rand(N)*lim ) / lim
+testDf( 0, DataSetUtil.bestFormatter(ds), ds )
+
+randomSeed(1)
+ds= timegen( '2017-03-15','60s',1440 )
+testDf( 10, DataSetUtil.bestFormatter(ds), ds )
+
+randomSeed(1)
+ds= timegen( '2017-03-15','61s',1440 )
+testDf( 20, DataSetUtil.bestFormatter(ds), ds )
+
+randomSeed(1)
+lim= 100
+ds= round( rand(1)*lim ) / lim
+testDf( 40, DataSetUtil.bestFormatter(ds), ds )
+
