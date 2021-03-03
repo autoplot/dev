@@ -1,0 +1,11 @@
+setScriptDescription('''This demos where variable is assigned but
+the class where it is used is never called.  Maybe we can catch this
+as a real mistake.''')
+
+def foo():
+    global variable
+    print variable
+
+variable=99  # this should be flagged as assigned but not used.
+    
+#foo()

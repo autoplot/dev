@@ -1,0 +1,12 @@
+setScriptDescription('''This demos where variable is assigned, but is not read until
+it is used within a class.  This was triggered when a script variable was only
+in a graphics callback.''')
+
+variable=1
+
+class chuck:
+    def foo(self):
+        print variable
+    
+chuck().foo()
+

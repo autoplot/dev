@@ -1,0 +1,10 @@
+setScriptDescription('''This demos where variable is assigned, and is read in as
+a global variable.  Presently it is marked as being assigned but not read.''')
+
+def foo():
+    global variable
+    print variable
+
+variable=99
+    
+foo()

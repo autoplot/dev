@@ -1,0 +1,8 @@
+setScriptDescription('''The Netbeans code analysis catches unused imports,
+so I suspect this is a pretty easy one to catch.''')
+
+from java.lang import Double
+
+#variable=99 
+#x= Double(variable)    
+#print x 
