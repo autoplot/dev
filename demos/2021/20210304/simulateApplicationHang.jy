@@ -1,0 +1,15 @@
+setScriptDescription('''This will cause Autoplot to hang for 12 seconds.  If you have the 
+setting enableResponseMonitor=true in ..../autoplot_data/config/system.properties,
+this will rewrite runtime information which can be used to diagnose a problem.
+The file will be found in .../autoplot_data/log/hang*.xml.''')
+
+from javax.swing import JButton
+
+def hang(evt):
+    print 'hanging for 12 seconds'
+    sleep(12000)
+    print 'done hanging for 12 seconds'
+    
+b= JButton('Simulate Application Hang',actionPerformed=hang)
+getApplication().setBottomPanel(b)
+
