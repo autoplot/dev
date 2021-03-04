@@ -1,4 +1,7 @@
 # There is no way to do this, because of if/else blocks.  
+# Either "aaa" is flagged because we don't test for use in the else block
+# or "ddd" is flagged when we run both blocks because it is assigned but
+# not read.
 
 aaa= 1
 bbb= 2
