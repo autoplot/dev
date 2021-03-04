@@ -1,0 +1,9 @@
+# Chris pointed out that Autoplot doesn't format a stream it can then read.
+
+evt= createEvent('2015-006',0x0000FF,'mode1')
+evt= createEvent(evt,'2015-007',0x00FFFF,'mode2')
+evt= createEvent(evt,'2015-008',0xFF00FF,'mode3')
+evt= createEvent(evt,'2015-009',0xFFFF00,'mode4')
+
+formatDataSet( evt, '/tmp/foo.qds' )
+

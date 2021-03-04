@@ -1,0 +1,27 @@
+# demo formatter use in QStream.
+
+from java.lang import String
+from math import pi
+
+def tformat( f, d ):
+    s= String.format( f, d )
+    print s, len(s)
+    
+    
+tformat( '%9f', [151.12092008157163] )
+tformat( '%8f', [151.12092008157163] )
+tformat( '%f', [151.12092008157163] )
+tformat( '%d', [151] )
+tformat( '%5d', [151] )
+tformat( '%f', [ pi ] )
+tformat( '%5f', [ pi ] )
+tformat( '%5.1f', [ pi ] )
+tformat( '%e', [ pi ] )
+tformat( '%5e', [ pi ] )
+tformat( '%5.1e', [ pi ] )
+tformat( '%6.1f', [-3.14] )
+tformat( '%7.2f', [-3.14] )
+tformat( '%8.3f', [-3.14] )
+tformat( '%9.1e', [-3.14] )
+tformat( '%9.2e', [-3.14] )
+tformat( '%9.3e', [-3.14] )
