@@ -7,7 +7,7 @@ from javax.swing import JButton
 
 def hang(evt):
     print 'hanging for 14 seconds'
-    sleep(12000)
+    sleep(14000)
     print 'done hanging for 14 seconds'
     
 b= JButton('Simulate Application Hang',actionPerformed=hang)
