@@ -1,0 +1,5 @@
+r= 2
+while r*10 < 100 :
+    print r
+    r=r+1
+    

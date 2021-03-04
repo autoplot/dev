@@ -1,0 +1,5 @@
+setScriptDescription('''Demos bug where assignment to name didn't count the name as read''')
+x= 5
+y= x
+z= y
+print z

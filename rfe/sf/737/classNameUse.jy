@@ -1,0 +1,15 @@
+from org.das2.datum.format import DefaultDatumFormatter
+class HMSFormatter( DefaultDatumFormatter ):
+    def format( self, d ):
+        seconds= d.doubleValue( Units.seconds )
+        if ( seconds<0 ):
+            seconds= -seconds
+            hours= int(seconds/3600.)
+            minutes= (seconds-hours*3600) / 60.
+            return '-%02d:%02d' % ( hours, minutes )
+        else:
+            hours= int(seconds/3600.)
+            minutes= (seconds-hours*3600) / 60.     
+            return '+%02d:%02d' % ( hours, minutes )
+
+print HMSFormatter().format(datum('3720.0s'))

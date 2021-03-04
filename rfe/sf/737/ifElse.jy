@@ -1,0 +1,14 @@
+# There is no way to do this, because of if/else blocks.  
+
+aaa= 1
+bbb= 2
+ccc= True
+
+if ccc:
+    print bbb
+    ddd=False
+else:
+    print aaa
+    ddd=False
+
+print ddd
