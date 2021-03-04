@@ -1,0 +1,12 @@
+from org.das2.qds.examples import Schemes
+ds= Schemes.complexBundleDataSet2()
+
+# Bundles in QDataSet
+ff= unbundle(ds,'Flux')
+print ff.property( QDataSet.DEPEND_1 ), '<-- Not None'
+plot( 0, ff )
+
+formatDataSet( ds,'/tmp/foo.qds')
+ds2= getDataSet( '/tmp/foo.qds' )
+
+plot( 1, unbundle(ds2,'Flux' ) )

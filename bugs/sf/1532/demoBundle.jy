@@ -1,0 +1,9 @@
+tt= timegen( '1904-001', '19.2s', 1440 )
+ds1= linspace( 1.00000, 1.00001, 1440 )
+ds1= putProperty( ds1,QDataSet.FORMAT,'%12.6e' )
+ds2= mod( findgen( 1440 ), 2 )
+ds3= copy( ds2 )
+ds3= putProperty( ds3,QDataSet.FORMAT,'%2d')
+
+ds= bundle( tt, ds1, ds2, ds3 )
+formatDataSet( ds, '/tmp/bundle.qds' )
