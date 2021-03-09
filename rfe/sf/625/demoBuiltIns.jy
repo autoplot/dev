@@ -1,4 +1,4 @@
-setScriptDocumentation('''Strings used for labels, titles, and annotations all allow color 
+setScriptDescription('''Strings used for labels, titles, and annotations all allow color 
 control sequences to reset the color of the characters.  For example, the control sequence
 !(color;blue) changes the pen color to blue and any test following it will be displayed in 
 blue.  !(color) will return to the original color.''')
