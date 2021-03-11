@@ -1,0 +1,63 @@
+setScriptDescription('''Reads TFCat files from maser website.''')
+
+from java.lang import System,Double
+from java.io import File
+from org.das2.util import FileUtil,LoggerManager
+from org.json import JSONObject
+# how fast can the JSON parser parse Baptiste's file?
+
+#LoggerManager.setTimerLogfile("/tmp/mylogfile.txt")
+#LoggerManager.resetTimer('read json')
+#LoggerManager.setEnableTimers(True)
+
+logger= LoggerManager.getLogger('analysis.TFCat')
+
+resourceURI= getParam( 'resourceURI', 'https://maser.obspm.fr/doi/10.25935/r11g-6j63/content/cassini_faraday_patches_2006.json', 'example file to load' )
+theFile= getFile( resourceURI, monitor )
+
+#t0= System.currentTimeMillis()
+logger.fine( 'reading '+str(theFile) )
+ss= FileUtil.readFileToString(theFile)
+#LoggerManager.markTime('readFile')
+
+jo= JSONObject( ss )
+#LoggerManager.markTime('jsonExists')
+
+logger.fine( 'get the units' )
+units= [None,None]
+crs= jo.getJSONObject('crs')
+properties= crs.getJSONObject('properties')
+time_coords= properties.get('time_coords')
+sTimeUnits= time_coords.get('unit') + ' since '+ time_coords.get('time_origin')
+timeUnits= Units.lookupTimeUnits( sTimeUnits )
+units[0]= timeUnits
+sunits=properties.get('spectral_coords').get('unit')
+units[1]= Units.lookupUnits(sunits)
+
+fs= jo.getJSONArray('features')
+logger.fine( 'number of features: %d' % fs.length() )
+
+dsb= DataSetBuilder(2,100,2)
+
+fill= Double.NaN
+for i in xrange(fs.length()):
+    f= fs.get(i)
+    if ( f.get('type')=='Feature' ):
+        g= f.get('geometry')
+        if g.get('type')=='MultiPoint':
+            c= g.get('coordinates')
+            logger.finer( 'loading feature: %d' % c.length() )
+            dsb.setUnits(0,units[0])
+            dsb.setUnits(1,units[1])
+            for j in xrange(c.length()):
+                p= c.getJSONArray(j)
+                dsb.nextRecord( [ p.get(0), p.get(1) ] )
+    if ( dsb.length>0 ):
+        dsb.nextRecord( [ fill, fill ] )
+
+ds= dsb.getDataSet()
+result= dataset( ds[:,0], ds[:,1], renderType='scatter' )
+
+#LoggerManager.markTime('printKeys')
+
+#LoggerManager.clearTimer();  
