@@ -1,4 +1,4 @@
-setScriptDescription('''Reads TFCat files from maser website.''')
+setScriptDescription('''Reads TFCat files from MASER website.''')
 
 from java.lang import System,Double
 from java.io import File
