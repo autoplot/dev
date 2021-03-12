@@ -6,4 +6,5 @@ code instead of the script.
 
 Image using data from Das2Server at MASER and TFCat files from 
 https://maser.lesia.obspm.fr/publications/doi/catalogue-of-faraday-rotation.html
-https://doi.org/10.25935/r11g-6j63
+
+DOI: https://doi.org/10.25935/r11g-6j63
