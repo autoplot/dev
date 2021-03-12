@@ -4,7 +4,5 @@ code instead of the script.
 
 <img src='20210311_150656.png' width=500>
 
-Image using data from Das2Server at MASER and TFCat files from 
-https://maser.lesia.obspm.fr/publications/doi/catalogue-of-faraday-rotation.html
-
+Image using data from Das2Server at MASER and TFCat files via
 DOI: https://doi.org/10.25935/r11g-6j63
