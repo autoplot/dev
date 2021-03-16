@@ -1,0 +1,16 @@
+from org.das2.util.filesystem import FileSystem
+FileSystem.reset()
+
+print 'polarAxes'
+print getFile( 'https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/resources/polarAxes.jy', monitor ).length()
+print getFile( 'https://abbith.physics.uiowa.edu/jbf/juno/master/resources/polarAxes.jy', monitor ).length()
+print 'testap'
+print getFile( 'https://research-git.uiowa.edu/space-physics/juno/ap-script/-/blob/master/test/testap.jy', monitor ).length()
+print getFile( 'https://research-git.uiowa.edu/space-physics/juno/ap-script/master/test/testap.jy', monitor ).length()
+print 'testScript'
+print getFile( 'https://research-git.uiowa.edu/jbf/testproject/-/blob/master/script/testScript.jy', monitor ).length()
+print getFile( 'https://research-git.uiowa.edu/jbf/testproject/-/blob/master/script/testScript.jy', monitor ).length()
+print 'polarAxes'
+print getFile( 'https://abbith.physics.uiowa.edu/jbf/juno/-/raw/master/resources/polarAxes.jy', monitor ).length()
+print getFile( 'https://abbith.physics.uiowa.edu/jbf/juno/master/resources/polarAxes.jy', monitor ).length()
+
