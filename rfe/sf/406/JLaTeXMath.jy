@@ -1,0 +1,25 @@
+from org.das2.graph import Painter
+from java.awt.image import BufferedImage
+from sys import path
+addToSearchPath(path,
+      'https://repo1.maven.org/maven2/org/scilab/forge/jlatexmath/1.0.7/jlatexmath-1.0.7.jar',
+      'https://repo1.maven.org/maven2/org/scilab/forge/jlatexmath/1.0.7/jlatexmath-1.0.7-javadoc.jar',
+      monitor)
+      
+from java.awt import Insets
+
+from org.scilab.forge.jlatexmath import TeXFormula,TeXConstants
+formula= TeXFormula('$$E_n(z) = \int_{1}^{\infty} ' + 'e^{-zt} t^{-n} dt, \Re(z)\ge 0$$' )
+
+icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 20)
+icon.setInsets( Insets(5, 5, 5, 5) )
+
+image = BufferedImage(icon.getIconWidth(),
+   icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB)
+icon.paintIcon( None, image.createGraphics(), 0, 0 )
+
+class MyPainter(Painter):
+    def paint(self,g):
+        g.drawImage( image, 100, 100, None )
+    
+dom.canvases[0].controller.dasCanvas.addTopDecorator(MyPainter())
