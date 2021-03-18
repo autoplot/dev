@@ -1,0 +1,24 @@
+from org.autoplot.jythonsupport import SimplifyScriptSupport
+script='''
+from org.das2.graph import Painter
+from java.awt.image import BufferedImage
+from sys import path
+addToSearchPath(path,
+      'https://repo1.maven.org/maven2/org/scilab/forge/jlatexmath/1.0.7/jlatexmath-1.0.7.jar',
+      'https://repo1.maven.org/maven2/org/scilab/forge/jlatexmath/1.0.7/jlatexmath-1.0.7-javadoc.jar',
+      monitor)
+
+# see https://java.hotexamples.com/examples/org.scilab.forge.jlatexmath/TeXFormula/createTeXIcon/java-texformula-createtexicon-method-examples.html
+latex = "\\definecolor{gris}{gray}{0.9}"
+latex = latex + "\\definecolor{bleu}{rgb}{0,0,1}\\newcommand{\\pa}{\\left|}";
+latex = latex + "\\begin{array}{c}";
+latex = latex + "\\JLaTeXMath\\\\";
+latex = latex + "\\end{array}";
+    
+from org.scilab.forge.jlatexmath import TeXFormula,TeXConstants
+formula= TeXFormula( latex )
+
+icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY, 40)
+'''
+
+print SimplifyScriptSupport.removeSideEffects(script)

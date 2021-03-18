@@ -1,0 +1,7 @@
+from java.lang import System
+from java.awt import Dimension,Toolkit
+from java.awt.image import BufferedImage
+
+screenSize= Toolkit.getDefaultToolkit().getScreenSize()
+
+#screenSize.<C>
