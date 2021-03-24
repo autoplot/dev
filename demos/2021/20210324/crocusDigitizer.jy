@@ -1,0 +1,115 @@
+from java.awt import BasicStroke
+from java.util import ArrayList
+# title: Add Point Digitizer
+# label: Point Digitizer
+# Click events are registered on the tab "digitizer." 
+# This also provides feedback showing the digitized data and the data points 
+# selected in the digitizer tab.
+setScriptDescription('''Silly demo showing how table of x,y points digitized on a 
+picture of crocus flowers can be triangulated interactively.''')
+
+reset()
+
+plot( PWD + 'crocus.png' )
+
+from org.das2.components import DataPointRecorder
+from org.das2.qds import SemanticOps
+from org.das2.dataset import DataSetUpdateListener
+from org.das2.graph import SpectrogramRenderer
+import java.util.HashMap
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from java.awt.geom import Ellipse2D,Line2D
+
+dpr= DataPointRecorder()
+
+addTab( 'digitizer', dpr )
+ 
+from  ProGAL.geom2d.delaunay import Vertex 
+import ProGAL.geom2d.delaunay.DTWithBigPoints
+
+def triValid( t ):
+    if abs( t.getCorner(0).get(0) )>2999: return False 
+    else: print abs( t.getCorner(0).get(0) )
+    if abs( t.getCorner(0).get(1) )>2999: return False
+    else: print abs( t.getCorner(0).get(1) )    
+    if abs( t.getCorner(1).get(0) )>2999: return False
+    else: print abs( t.getCorner(1).get(0) )    
+    if abs( t.getCorner(1).get(1) )>2999: return False
+    else: print abs( t.getCorner(1).get(1) )    
+    if abs( t.getCorner(2).get(0) )>2999: return False
+    else: print abs( t.getCorner(2).get(0) )    
+    if abs( t.getCorner(2).get(1) )>2999: return False
+    else: print abs( t.getCorner(2).get(1) )    
+    return True
+    
+def drawTri( g, t ):
+    l= Line2D.Double( t.getCorner(0).get(0), t.getCorner(0).get(1), t.getCorner(1).get(0), t.getCorner(1).get(1) )
+    g.draw( l )
+    l= Line2D.Double( t.getCorner(1).get(0), t.getCorner(1).get(1), t.getCorner(2).get(0), t.getCorner(2).get(1) )
+    g.draw( l )
+    l= Line2D.Double( t.getCorner(2).get(0), t.getCorner(2).get(1), t.getCorner(0).get(0), t.getCorner(0).get(1) ) 
+    g.draw( l )
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         if ( ds!=None ): 
+             points= ArrayList(ds.length());
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 points.add( Vertex( x, y ) )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+        
+             rt= ProGAL.geom2d.delaunay.DTWithBigPoints( points )
+             
+             tris= rt.getTriangles()
+             for t in tris:
+                 if not triValid(t):
+                     continue
+                 g.color= Color.WHITE
+                 g.stroke= BasicStroke(5) 
+                 drawTri(g,t)
+                 g.color= Color.BLACK
+                 g.stroke= BasicStroke(3) 
+                 drawTri(g,t)
+                 
+         ds= dpr.getSelectedDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+         
+dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+
+# we need to listen for updates from the DataPointRecorder, when the selection changes.
+from org.das2.dataset import DataSetUpdateListener
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self, e ):
+        dom.canvases[0].controller.dasCanvas.repaint()
+dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
+
+def dataPointClicked( x,y ):
+   dpr.addDataPoint( x, y )
+   
+def pointClicked( evt ):
+   dataPointClicked( evt.getFinishX(), evt.getFinishY() )
+   
+addMouseModule( dom.plots[0], 'digitize', pointClicked )
+
+import javax
+javax.swing.JOptionPane.showMessageDialog( getViewWindow(),'Click on the plot, and the x,y position will be recorded on the digitizer tab')
+
