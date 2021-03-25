@@ -31,17 +31,11 @@ import ProGAL.geom2d.delaunay.DTWithBigPoints
 
 def triValid( t ):
     if abs( t.getCorner(0).get(0) )>2999: return False 
-    else: print abs( t.getCorner(0).get(0) )
     if abs( t.getCorner(0).get(1) )>2999: return False
-    else: print abs( t.getCorner(0).get(1) )    
     if abs( t.getCorner(1).get(0) )>2999: return False
-    else: print abs( t.getCorner(1).get(0) )    
     if abs( t.getCorner(1).get(1) )>2999: return False
-    else: print abs( t.getCorner(1).get(1) )    
     if abs( t.getCorner(2).get(0) )>2999: return False
-    else: print abs( t.getCorner(2).get(0) )    
     if abs( t.getCorner(2).get(1) )>2999: return False
-    else: print abs( t.getCorner(2).get(1) )    
     return True
     
 def drawTri( g, t ):
