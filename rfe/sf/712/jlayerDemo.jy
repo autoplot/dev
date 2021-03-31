@@ -1,0 +1,19 @@
+# abandoned!  This looks interesting, though.
+
+from javax.swing import JPanel
+from javax.swing import JButton
+from javax.swing import JCheckBox
+from javax.swing import JTextField
+from javax.swing import JOptionPane
+#from javax.swing import RubberBandUI
+
+panel = JPanel()
+for i in xrange(3):
+    panel.add(JButton("JButton"))
+    panel.add(JCheckBox("JCheckBox"))
+    panel.add(JTextField("JTextField"))
+    
+#l = JLayer(panel, RubberBandUI())
+#frame.add(l)
+
+JOptionPane.showMessageDialog(getApplication(),panel)

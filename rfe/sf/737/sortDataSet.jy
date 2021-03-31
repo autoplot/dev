@@ -1,0 +1,12 @@
+from org.das2.qds import SortDataSet
+# more tests of 737, where a real result is used to index an array.
+source= indgen(100)
+sor= where( source.gt(50) )
+s= SortDataSet( source, sor )
+
+plot( s )
+
+sor= where( source[sor].gt(50) )
+s= SortDataSet( source, sor )
+
+print 'Yep!'

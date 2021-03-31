@@ -1,0 +1,30 @@
+antenna=1
+fil= 'file:///home/jbf/ct/hudson/data/radiojove/191024000000-AJ4CO_DPS.sps'
+
+dsref= getDataSet('%s?antenna=%d' % ( fil, antenna ) )
+print dsref
+dsref0= dsref[0:4,0:3]
+for dsref1 in dsref0:
+    for d in dsref1:
+        print d,
+    print ''
+dsref0= dsref[-4:,-3:]
+for dsref1 in dsref0:
+    for d in dsref1:
+        print d,
+    print ''
+
+print '---'
+    
+dstest= getDataSet('vap+jyds:%s?antenna=%d&script=file:///home/jbf/project/earth/svn/public/jyds/readTypeSps.jyds' % ( fil, antenna ) )
+dstest0= dstest[0:4,0:3]
+for dstest1 in dstest0:
+    for d in dstest1:
+        print d,
+    print ''
+dstest0= dstest[-4:,-3:]
+for dstest1 in dstest0:
+    for d in dstest1:
+        print d,
+    print ''
+    

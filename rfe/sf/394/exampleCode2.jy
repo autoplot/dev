@@ -1,0 +1,12 @@
+mydata1=fltarr(12)
+mydata2=fltarr(21)
+
+class mydata:
+    def p(self,s):
+        print s
+    def q(self):
+        global mydata1
+        print mydata1
+
+mydata().q()
+mydata().p('hello')

@@ -1,0 +1,6 @@
+from gov.nasa.gsfc.spdf.cdfj import CDFReader, ReaderFactory
+cdfr= ReaderFactory.getReader('/home/jbf/autoplot_data/fscache/https/cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/c1_waveform_wbd_200202080940_v01_subset.cdf')
+print cdfr
+ts= cdfr.getTimeSeries('WBD_Elec')
+print ts
+plot( ts.values )

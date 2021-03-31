@@ -1,0 +1,9 @@
+# this demos how strarr (line 2) is dropped, but index (line 3) is kept when simplifying.
+labelz= strarr(20)
+labelz[:]='N'
+labelz[::2]='S'
+aaa= intarr(20)
+bbb= intarr(20)+30
+ccc= zeros(20)
+ccc[::2]=1
+ddd= long('20')

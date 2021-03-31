@@ -1,0 +1,12 @@
+# different sides of if/else should not trigger assign without read.
+svybst= 'GLL'
+tr= '1980-01-01'
+setStatus('fallback to fce')
+
+if ( True ):
+    if ( svybst=='GLL' ):
+        fce= getDataSet( 'vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Galileo/MAG/Fce&timerange=%s' % tr )
+    else:
+        fce= getDataSet( 'vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Juno/FGM/ElectronCyclotron', tr )
+    magOrig= fce/28.
+    print magOrig

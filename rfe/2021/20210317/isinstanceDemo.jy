@@ -1,0 +1,9 @@
+from java.awt.image import BufferedImage
+from java.awt import Graphics2D
+graphs=BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB).getGraphics()
+
+assert isinstance( graphs, Graphics2D )
+
+# graphs.<C> bug here, because "from java.awt import Graphics2D" is dropped.
+graphs.drawString('hello',50,50)
+graphs.

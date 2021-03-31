@@ -1,0 +1,23 @@
+from java.util import LinkedList
+from org.das2.graph import DefaultPlotSymbol
+
+ann= annotation(text='Here',anchorType='data')
+ann.controller.dasAnnotation.symbol= DefaultPlotSymbol.STAR
+
+xxs= LinkedList()
+yys= LinkedList()
+
+for i in xrange(37):
+    xxs.add( '%.2f' % randn() )
+    yys.add( '%.2f' % randn() )
+
+while ( True ):
+    ann.controller.dasAnnotation.referenceX= ';'.join(xxs)
+    ann.controller.dasAnnotation.referenceY= ';'.join(yys)
+    xxs.addLast( '%.2f' % randn() )
+    yys.addLast( '%.2f' % randn() )
+    xxs.remove(0)
+    yys.remove(0)
+    sleep(10)
+    
+    

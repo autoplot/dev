@@ -1,0 +1,3 @@
+from org.das2.graph import DefaultPlotSymbol
+a= annotation(text='data',anchorType='DATA')
+a.controller.dasAnnotation.symbol= DefaultPlotSymbol.STAR

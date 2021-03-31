@@ -1,0 +1,14 @@
+# It should be fairly easy to test if variable is assigned and then
+# not used.  This would have saved me about an hour yesterday,
+# pointing out a bug in my code.
+
+aaa= 1
+
+print aaa
+
+bbb= 2
+
+print aaa
+
+print ccc
+

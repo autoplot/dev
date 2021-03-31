@@ -1,0 +1,12 @@
+a=1 
+
+def myFunc( y,z ):
+    from org.das2.fsm import FileStorageModel
+    from org.das2.util.filesystem import FileSystem
+
+    print a
+    print y, z
+    
+    return dummy
+
+myFunc( 30, 31 )

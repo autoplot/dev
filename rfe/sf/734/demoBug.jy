@@ -1,0 +1,7 @@
+from org.autoplot.AutoplotUtil import guessRenderType
+
+b= getDataSet('file:///home/jbf/ct/hudson/data/dat/xyzScatter.dat?bundle=:')
+
+plot( b )
+
+annotation( text=str( guessRenderType( b ) ) )

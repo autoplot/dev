@@ -1,0 +1,18 @@
+# It should be fairly easy to test if variable is assigned and then
+# not used.  This would have saved me about an hour yesterday,
+# pointing out a bug in my code.
+
+ephem= getDataSet('vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&JALT JLAT&interval=60','orbit:junoPJ:4')
+
+mlat= unbundle( ephem, 'mlat' )
+mlat= putProperty( mlat, QDataSet.NAME, 'mlat' )
+mlt= unbundle( ephem, 'lt' )
+mlt= putProperty( mlt, QDataSet.NAME, 'lt' )
+lat= unbundle( ephem, 'lat' )
+lat= putProperty( mlat, QDataSet.NAME, 'lat' )
+
+print mlat
+print mlt
+print lat
+
+print mlat.eq(lat), ' see they are the same'

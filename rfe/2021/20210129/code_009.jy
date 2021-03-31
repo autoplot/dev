@@ -1,0 +1,17 @@
+
+from org.apache.commons.math.analysis.solvers import BisectionSolver
+from org.apache.commons.math.analysis import UnivariateRealFunction
+ 
+class MyUnivariateRealFunction(UnivariateRealFunction):
+     def __init__(self,fpe1,fce1):
+         self.fce= fce1
+         self.fci= self.fce/1836
+         self.fpe= fpe1
+     def value(self,fl):
+         d= 1 - (self.fpe**2/(fl*(fl + self.fce))) - ((self.fpe/sqrt(1836))**2/(fl*(fl - self.fci)))
+         return d.value()
+bs= BisectionSolver() 
+
+murv= MyUnivariateRealFunction(0,0)
+murv.value(2)
+print bs

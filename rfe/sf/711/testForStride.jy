@@ -1,0 +1,5 @@
+from org.das2.qds.buffer import BufferDataSet
+if ( hasattr( BufferDataSet, 'vaxlue' ) ):
+    print 'yep'
+else:
+    print 'nope'

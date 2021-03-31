@@ -1,0 +1,13 @@
+from org.das2.util import ColorUtil
+from org.das2.graph import Painter
+from java.awt.geom import RoundRectangle2D
+ColorUtil
+def paint(g):
+    print 'here paint'
+    rr= RoundRectangle2D.Double( 50, 50, 100, 100, 10, 10 )
+    g.color= ColorUtil.decodeColor('light blue')
+    g.fill(rr)
+    g.color= Color.BLUE
+    g.draw(rr)
+
+addTopDecoration( dom.canvases[0],paint )

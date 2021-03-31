@@ -1,0 +1,4 @@
+ds= linspace('2020-1-31T06:08','2020-1-31T06:10',100)
+tr= extent( ds )
+tr= tr[0] 
+print tr

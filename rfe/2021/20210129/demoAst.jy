@@ -1,0 +1,30 @@
+setScriptTitle( 'Demo AST' )
+setScriptDescription( '''Clearly I don't know how to use AST, so I need to remind myself how parsing is done.''' )
+
+from org.das2.util import FileUtil
+import org.python.core.parser
+from org.python.parser.ast import VisitorBase
+
+fil= getFile( PWD + 'code.jy',monitor )
+script= FileUtil.readFileToString(fil)
+
+class VB( VisitorBase ):
+    def traverse(self,sn):
+        print '%04d: %s TRAVERSE' % ( sn.beginLine, sn )
+        sn.traverse(self);
+    def unhandled_node(self,sn):
+        print '%04d: %s UNHANDLED' % ( n.beginLine, n )
+        return sn
+    def visitName(self,n):
+        print '%04d: %s NAME' % ( n.beginLine, n )
+    def visitModule(self,n):
+        print '%04d: %s MODULE' % ( n.beginLine, n )
+    def visitFunctionDef(self,n):
+        print '%04d: %s FUNCTIONDEF' % ( n.beginLine, n )
+        
+vb= VB()
+
+n= org.python.core.parser.parse(script, 'exec')
+
+for st in n.body:
+    st.traverse(vb)

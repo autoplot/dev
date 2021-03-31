@@ -1,0 +1,8 @@
+mydata1=fltarr(12)
+mydata2=fltarr(21)
+print '2'
+def printMyData(mydata1):
+    global mydata2
+    print mydata1
+    print mydata2
+printMyData(mydata1)

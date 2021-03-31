@@ -1,0 +1,5 @@
+aaa= 10
+aaa= aaa+1
+
+#bbb= 20     # expectation is that this line is flagged, where bbb=20 is never used.
+#bbb= aaa+1

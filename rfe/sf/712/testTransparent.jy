@@ -1,0 +1,3 @@
+load( PWD + 'contextOverview.vap' )
+conn= dom.connectors[0].controller.dasConnector
+conn.opaque=False

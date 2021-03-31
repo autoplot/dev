@@ -1,0 +1,8 @@
+setScriptDescription('''Sample script used to demo the "Run Batch" tool.''')
+
+nx= getParam( 'nx', 10, 'input for x, x>10, x<100' )
+ny= getParam( 'ny', 10, 'input for y, y>10, y<100' )
+
+sleep( 200 / ( nx**2 + ny**2 ) )
+
+plot( randn( nx, ny ) )

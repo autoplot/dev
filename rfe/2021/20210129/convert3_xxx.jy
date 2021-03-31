@@ -1,0 +1,346 @@
+from org.autoplot.datasource import URISplit
+setScriptDescription('Convert 3 column digitized files to standard format')
+
+uri= getParam('resourceURI',PWD+'example.dat','file to convert, use run batch to run all')
+outd= getParam('outf','/tmp/convert/','file will be created here')
+
+svybst='JUNO' # TODO
+markedType='Fpe'
+markedMethod='peak'
+vers= 'v20170503r' # r is for reformat
+
+from java.lang.Double import NaN
+
+# handle strings
+from org.das2.datum import EnumerationUnits
+eu= EnumerationUnits.create('visualFeature')
+eu.createDatum('cutoff')
+def d(st):
+    'turn the string into a Datum so that it can go into the table'
+    from org.das2.datum import EnumerationUnits
+    return dataset(eu.createDatum(st))
+# end, handle strings
+
+def loadAuxillaryData(tr):
+      '''The mag data is loaded into magOrig, and ephemeris is loaded into ephemeris.  ephemeris is a map, 
+      containing elements which depend on the mission'''
+      
+      print 'loadAuxillaryData for '+str(tr)
+      
+      global magOrig
+      try:
+          magOrig= getDataSet( 'vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Juno/FGM/Magnitude', tr )
+          if ( magOrig!=None ):
+              print 'sorting mag data...'
+              s= sort( magOrig.property(QDataSet.DEPEND_0) )
+              magOrig= magOrig[s]
+          print 'done sorting.'          
+      except:
+          setStatus('fallback to fce')
+          print '*** fallback to fce'
+          if ( svybst=='GLL' ):
+              fce= getDataSet( 'vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Galileo/MAG/Fce&timerange=%s' % tr )
+          else:
+              fce= getDataSet( 'vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Juno/FGM/ElectronCyclotron', tr )
+          magOrig= fce/28.
+
+      global ephemeris
+      ephem= getDataSet('vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&JALT JLAT&interval=60',tr)
+      ephem2= getDataSet('vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jupiter_Footprint&interval=60',tr)
+      ephemeris= { 'ephem':ephem, 'ephem2':ephem2 }
+      setStatus('ephemeris is loaded')
+      
+ephemeris= None
+def lookupEphemeris( tt ):
+    'returns mlat,longitude,mshell,radius,altitude for each timetag'
+    global ephemeris
+    ephem= ephemeris.get('ephem')
+    mlat= unbundle( ephem, 'mlat' )
+    mlat= putProperty( mlat, QDataSet.NAME, 'mlat' )
+    mlat= putProperty( mlat, QDataSet.LABEL, 'mlat' )
+    mlt= unbundle( ephem, 'lt' )
+    mlt= putProperty( mlt, QDataSet.NAME, 'lt' )
+    mlt= putProperty( mlt, QDataSet.LABEL, 'lt' )
+    lat= unbundle( ephem, 'lat' )
+    lat= putProperty( mlat, QDataSet.NAME, 'lat' )
+    lat= putProperty( mlat, QDataSet.LABEL, 'lat' )
+    
+    longitude= unbundle( ephem, 'long' )
+    longitude.putProperty( QDataSet.NAME, 'longitude' )
+    longitude.putProperty( QDataSet.LABEL, 'longitude' )
+    
+    radius= unbundle( ephem, 'radius' )
+    radius.putProperty( QDataSet.NAME, 'radius' )
+    radius.putProperty( QDataSet.LABEL, 'radius' )    
+
+    altitude= unbundle( ephem, 'alt' )
+    altitude.putProperty( QDataSet.NAME, 'altitude' )
+    altitude.putProperty( QDataSet.LABEL, 'altitude' )    
+
+    ephem2= ephemeris.get('ephem2')
+    
+    mshell= unbundle( ephem2, 'mshell' )
+    mshell.putProperty( QDataSet.NAME, 'mshell' )
+    mshell.putProperty( QDataSet.LABEL, 'mshell' )
+    
+    targetTT= link( tt, zeros(tt.length()) )  # there's a bug in synchronize where tt must be monotonic if not a depend_0.
+    (altitude, radius, mshell, mlat, lat, mlt, longitude)=synchronize( targetTT,(altitude, radius, mshell, mlat, lat, mlt, longitude))
+    
+    return ( altitude, radius, mshell, mlat, lat, mlt, longitude )
+    #return (mlat,longitude,mshell,radius,altitude)
+
+def putProperties( ds, label='', units='' ):
+    if label!='':
+        name= label
+        name=name.replace('/','_')
+        ds.putProperty( QDataSet.NAME, name )
+        ds.putProperty( QDataSet.LABEL, label )
+    if units!='':
+        ds.putProperty( QDataSet.UNITS, units )
+        
+def doInterpret( markedType, markedMethod, tt, markedValue ):
+     'markedType can be Fpe, Flhr, or Fuhr'
+     tt.putProperty( QDataSet.LABEL, 'SCET' )
+     tt.putProperty( QDataSet.NAME, 'SCET' )
+
+     if magOrig!=None:
+         ff= findex( magOrig.property(QDataSet.DEPEND_0), tt )
+         bmag= interpolate( magOrig, ff )
+     else:
+         bmag= link( tt, replicate( dataset(0.), len(tt) ) )
+
+     putProperties( markedValue, label='Marked Value', units=Units.hertz )          
+
+     putProperties( bmag, label='BMag', units=Units.nT )     
+     
+     fce= bmag * 28
+     fci=fce/1836.
+     putProperties( fce, label='Fce', units=Units.hertz )
+     putProperties( fci, label='Fci', units=Units.hertz )
+          
+     if ( markedType=='Fpe' ):
+         fpe= copy(markedValue)
+         putProperties( fpe, label='Fpe', units=Units.hertz )
+     
+         fuhr= sqrt( fpe**2 + fce**2 )   #  measured is Fu #This is using the approximation from pg 112 in Gurnett (omitting ion terms)
+
+         putProperties(  fuhr, label='Fuhr', units=Units.hertz )
+    
+     elif ( markedType=='F_L0' ):
+         F_L= copy(markedValue)
+         putProperties( F_L, label='F_L0', units=Units.hertz )
+         
+         #F_LR_Temp= F_L + fce/2
+         #fpe = sqrt( F_LR_Temp**2 - (fce**2 /4))
+         fpe = (6 *sqrt(51))/sqrt((1836/((fce + F_L) *F_L)) - 1/((fci - F_L) *F_L))
+         fuhr = sqrt ( fpe**2 + fce**2)
+         putProperties ( fpe, label='Fpe', units=Units.hertz )
+         putProperties ( fuhr, label='Fuhr', units=Units.hertz )
+
+     elif ( markedType=='F_R0' ):
+         F_R= copy(markedValue)
+         putProperties( F_R, label='F_R0', units=Units.hertz )
+         
+         #F_LR_Temp= F_L + fce/2
+         #fpe = sqrt( F_LR_Temp**2 - (fce**2 /4))
+         fpe = (6 *sqrt(51))/sqrt(((-1836/((fce - F_R) )) + 1/((fci + F_R)))/F_R)
+         fuhr = sqrt ( fpe**2 + fce**2)
+         putProperties ( fpe, label='Fpe', units=Units.hertz )
+         putProperties ( fuhr, label='Fuhr', units=Units.hertz )
+         
+     elif ( markedType=='Flhr' ):
+         flhr= copy(markedValue)
+         putProperties( flhr, label='Flhr', units=Units.hertz )
+         fci = fce/1836.
+         #fpe = 6 * sqrt(51/3671)* sqrt(-3 * fce**2 - 1836 * fci**2 + 3674 * flhr**2 + sqrt(9 * fce**4 + 
+         #3674 * fce**2 * fci**2 + 3367225 * fci**4 - 7360 * fce**2 * flhr**2 - 13476244 * fci**2 * flhr**2 + 13483592 * flhr**4))
+         fpe =   6./(sqrt((-36./(fce**2 - flhr**2))+(1./(51.*(-(fci**2) + flhr**2))))) #this is from solving for S=0 gives flhr
+         fuhr = sqrt ( fpe**2 + fce**2)
+         putProperties ( fuhr, label='Fuhr', units=Units.hertz )
+         putProperties (fpe, label='Fpe', units=Units.hertz )
+         putProperties (fci, label='Fci', units=Units.hertz )
+         
+     else:
+         fuhr= copy(markedValue)
+         putProperties(  fuhr, label='Fuhr', units=Units.hertz )
+         
+         fpe = sqrt( fuhr**2 - fce**2 ) #Sadie changed this to fuhr in calculation (I think before just had fuh)
+         putProperties( fpe, label='Fpe', units=Units.hertz )
+
+     N_e= ( fpe / ( 8980.0 ) ) ** 2
+     putProperties( N_e, label='N_e', units=Units.pcm3 )
+         
+     fci= fce / 1836
+     putProperties( fci, label='Fci', units=Units.hertz ) 
+     
+     F_LR_Temp= sqrt( ( fpe**2 + fce**2 / 4.0 ) )
+     F_LR_Temp.putProperty( QDataSet.UNITS, Units.hertz )  # just so we can add to fce
+     
+     #F_L= F_LR_Temp - fce/2
+    
+     if markedType!='F_L0':
+         from org.apache.commons.math.analysis.solvers import BisectionSolver
+         from org.apache.commons.math.analysis import UnivariateRealFunction
+         
+         class MyUnivariateRealFunction(UnivariateRealFunction):
+             def __init__(self,fpe1,fce1):
+                 self.fce= fce1
+                 self.fci= self.fce/1836
+                 self.fpe= fpe1
+             def value(self,fl):
+                 d= 1 - (self.fpe**2/(fl*(fl + self.fce))) - ((self.fpe/sqrt(1836))**2/(fl*(fl - self.fci)))
+                 return d.value()
+         bs= BisectionSolver() 
+         
+         F_L= zeros(len(fpe)) - 1e31
+         F_L.putProperty( QDataSet.FILL_VALUE, -1e31 )
+         for ii in xrange(len(fpe)):
+             fci1= fci[ii].value()
+             fpe1= fpe[ii].value()
+             if valid(fpe[ii])==1:
+                 murv= MyUnivariateRealFunction(fpe[ii],fce[ii])
+                 try:
+                     rs= bs.solve( murv, fci1, fpe1+fci1)
+                     #rs= bs.solve( murv, fci1, fpe1)
+                     check= murv.value(rs)
+                     if ( abs(check)<0.01 ):                         
+                         F_L[ii]=rs
+                     else:
+                         print 'dropping point b/c check=',check
+                         F_L[ii]= -1e31
+                 except:
+                     print 'fail to find solution: fci1=%f fpe1=%f' % ( fci1, fpe1 )
+                     F_L[ii]= -1e31
+             else:
+                 F_L[ii]= -1e31
+             print F_L[ii], ' <--'
+         putProperties( F_L, label='F_L0', units=Units.hertz ) 
+         
+            
+     '''F_L=(fce+fci)/3.+(-3370896 * fce**2+3370896 * fce * fci-3370896 * fci**2-10118196 * fpe**2)
+        /(2754 *2**(2/3.) * 
+        (-12377930112 * fce**3+18566895168 
+        * fce**2 * fci+18566895168 * fce * fci**2-12377930112 * fci**3-55640009376
+        * fce * fpe**2+111371032944 * fci * fpe**2+sqrt(4 * (-3370896 * fce**2+3370896 
+        * fce * fci-3370896 * fci**2-10118196 * fpe**2)**3
+        +(-12377930112 
+        * fce**3+18566895168 * fce**2 * fci+18566895168 * fce 
+        * fci**2-12377930112 * fci**3-55640009376 * fce * fpe**2+111371032944 * fci * fpe**2)**2))
+        **(1/3.))
+        -1/(5508* 2**(1/3.)) * 
+        (-12377930112 * fce**3+18566895168 * fce**2 * fci+18566895168 * fce * fci**2-12377930112 
+        * fci**3-55640009376 * fce * fpe**2+111371032944 * fci * fpe**2+
+        sqrt(4 * (-3370896 * fce**2+3370896 * fce * fci-3370896 * fci**2-10118196 * fpe**2)**3
+        +(-12377930112 * fce**3+18566895168 * fce**2 * fci+18566895168 * fce 
+        * fci**2-12377930112 * fci**3-55640009376 * fce * fpe**2+111371032944 * fci * fpe**2)**2))**(1/3.)
+     '''
+     F_R= F_LR_Temp + fce/2
+     #This is the approximate for F R=0, be careful if you use this for any calculation 
+     '''
+     upper_F_R= F_LR_Temp + fce/2
+     #This is the new stuff for R = 0
+     if markedType!='F_R0':
+         from java.lang.Double import NaN
+         from org.apache.commons.math.analysis.solvers import BisectionSolver
+         from org.apache.commons.math.analysis import UnivariateRealFunction
+         
+         class MyUnivariateRealFunction2(UnivariateRealFunction):
+             def __init__(self,fpe1,fce1):
+                 self.fce= fce1
+                 self.fci= self.fce/1836
+                 self.fpe= fpe1
+             def value(self,fr):
+                 d= 1 - (self.fpe**2/(fr*(fr - self.fce))) - ((self.fpe/sqrt(1836))**2/(fr*(fr + self.fci)))
+                 print 'line284 ', fr, d
+                 return d.value()
+         bs2= BisectionSolver() 
+         
+         F_R= zeros(len(fpe))
+         for ii in xrange(len(fpe)):
+             fci1= fci[ii].value()
+             fpe1= fpe[ii].value()
+             if valid(fpe[ii])==1:
+                 murv2= MyUnivariateRealFunction2(fpe[ii],fce[ii])
+                 
+                 rs= bs2.solve( murv2, fci1, upper_F_R[ii].value() )
+                 check= murv2.value(rs)
+                 if ( abs(check)<0.01 ):
+                     F_R[ii]=rs
+                 else:
+                     print 'dropping F_R point b/c check=',check
+                     F_R[ii]= NaN
+             else:
+                 F_R[ii]= NaN
+         putProperties( F_R, label='F_R0', units=Units.hertz ) 
+     '''
+
+     putProperties( F_R, label='F_R0', units=Units.hertz ) 
+     
+     fpe_fce= fpe / fce
+     r= where( fce.eq(0) )
+     fpe_fce[r]= NaN
+     putProperties( fpe_fce, 'Fpe_Fce', units=Units.dimensionless )
+     
+     #fce2= fce**2
+     #fci2= fci**2
+
+     #fpe2= fpe**2
+     #fpi= fpe / sqrt(1836)
+     #fpi2= fpi**2
+     
+     #flh = (1/sqrt(2.) ) * ( sqrt( fce2 + fci2 + fpe2 + 
+        #fpi2 - sqrt(fce2**2 - 2 * fce2 * fci2 + fci2**2 + 2 * fce2 * fpe2 - 
+        #2*fci2*fpe2 + fpe2**2 - 2 * fce2 * fpi2 + 2 * fci2 * fpi2 + 
+        #2*fpe2*fpi2 + fpi2**2)))
+     flh = 1./(6. * sqrt(102.)) * (sqrt(1836. * fce**2 + 1836 * fci**2 + 1837 * fpe**2 - (sqrt(3370896. * fce**4 - 
+         6741792. * fce**2 * fci**2 + 3370896. * fci**4 + 6738120. * fce**2 * fpe**2 - 6738120. * fci**2 
+         *fpe**2 + 3374569. * fpe**4))))
+   
+     putProperties( flh, label='Flhr', units=Units.hertz )
+     
+     markedTypeDs = replicate( d(markedType), tt.length() )
+     putProperties( markedTypeDs, label='markedType', units=eu )
+     
+     visualFeature= replicate( d(markedMethod), tt.length() )
+     putProperties( visualFeature, label='visualFeature', units=eu )
+     
+     qualityIndex= replicate( d('f'), tt.length() )
+     putProperties( qualityIndex, label='qualityIndex', units=eu )
+      
+     comment= replicate( d(vers), tt.length() )
+     putProperties( comment, label='comment', units=eu )
+     
+     rec= bundle( tt, markedValue )
+     rec= bundle( rec, bmag, fce, fci )
+     rec= bundle( rec, fpe, fpe_fce )
+     rec= bundle( rec, fuhr, flh )
+     rec= bundle( rec, F_L, F_R )
+     rec= bundle( rec, N_e, markedTypeDs )
+     rec= bundle( rec, visualFeature, qualityIndex, comment )
+     
+     ( altitude, radius, mshell, mlat, lat, mlt, longitude ) = lookupEphemeris( tt )
+     rec= bundle( rec, altitude, radius, mshell )
+     rec= bundle( rec, mlat, lat, mlt, longitude )
+     
+     print 'adding points: '+str(rec)
+     
+     return rec
+
+split= URISplit.parse(uri)
+
+print 'reading ' + uri
+ds= getDataSet( str(uri) + '?bundle=:' )
+
+if ds.length(0)==3:
+    if ( not valid( ds[0,0] ) ):
+        ds= ds[1:]
+    tt= ds[:,0]
+    s= sort( tt )
+    ds= ds[s]
+    tr= extent( ds[:,0] )
+    tr= datumRange( [ tr[0] - modp( tr[0],'1hr' ), tr[1] - modp( tr[1],'1hr' ) + '1hr' ] )
+    loadAuxillaryData(tr)
+    reformat = doInterpret( markedType, markedMethod, ds[:,0], ds[:,1] ) 
+    formatDataSet( reformat, outd + split.file[len(split.path):] )
+    print 'wrote ' + outd + split.file[len(split.path):]
+
