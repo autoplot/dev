@@ -16,7 +16,8 @@ This does not reproduce the image, but it is still interesting.
 ''')
  
 r= range(512)
-x= outerProduct( linspace(0,511,512),ones(512) )
+x= outerProduct( linspace(0,511,512), ones(512) )
 y= outerProduct( ones(512), linspace(0,511,512) )
-plot( (bitwiseOr( abs(x+y), abs(x-y) )+1)**37 % 7 )
+i= (bitwiseOr( abs(x+y), abs(x-y) )+1)**37 % 7
+plot( i )
 
