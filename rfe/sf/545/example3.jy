@@ -1,0 +1,13 @@
+from org.das2.util import LoggerManager
+setScriptDescription('''Sample script used to demo the "Run Batch" tool.''')
+
+logger= LoggerManager.getLogger('analysis')
+
+resourceURI= getParam( 'resourceURI', '/home/jbf/ct/autoplot/screenshots/shelfAfter.png' )
+
+logger.info('about to lead image to get dimensions')
+ds= getDataSet( resourceURI )
+logger.info('got dataset and dimensions')
+
+print ds.length(), ds.length(0)
+

@@ -1,0 +1,13 @@
+setScriptDescription('''Sample script used to demo the "Run Batch" tool, demoing a failure record.''')
+
+ds= ripples(20,20,5)
+
+ix= getParam( 'ix', 10, 'record number', range(20) )
+iy= getParam( 'iy', 1, 'y slice index', [ 0,1,2,3,4 ] )
+
+if ( ix==2 and iy==3 ):
+    raise Exception("here we have a failure")
+    
+print '-----'
+print '%d %d: %f' % ( ix, iy, max( ds[ix,:,iy] ) )
+print '-----'

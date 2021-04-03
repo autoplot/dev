@@ -1,0 +1,101 @@
+{
+   "params": ["resourceURI"],
+   "results": [
+      {
+         "executionTime": 264,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210325_152846.png",
+         "stderr": "",
+         "stdout": "1134 1025\n"
+      },
+      {
+         "executionTime": 327,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210326_162858.png",
+         "stderr": "",
+         "stdout": "1566 920\n"
+      },
+      {
+         "executionTime": 194,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210330_131432.png",
+         "stderr": "",
+         "stdout": "1279 680\n"
+      },
+      {
+         "executionTime": 138,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210331_215510.png",
+         "stderr": "",
+         "stdout": "905 655\n"
+      },
+      {
+         "executionTime": 304,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210331_220809.png",
+         "stderr": "",
+         "stdout": "1792 764\n"
+      },
+      {
+         "executionTime": 202,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210401_120341.png",
+         "stderr": "",
+         "stdout": "1155 760\n"
+      },
+      {
+         "executionTime": 197,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210401_120354.png",
+         "stderr": "",
+         "stdout": "1155 760\n"
+      },
+      {
+         "executionTime": 278,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210401_120409.png",
+         "stderr": "",
+         "stdout": "1155 760\n"
+      },
+      {
+         "executionTime": 233,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210401_120507.png",
+         "stderr": "",
+         "stdout": "1155 760\n"
+      },
+      {
+         "executionTime": 162,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/20210401_155744.png",
+         "stderr": "",
+         "stdout": "1121 657\n"
+      },
+      {
+         "executionTime": 33,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/auto_error_message.txt",
+         "stderr": "",
+         "stdout": "343 1\n"
+      },
+      {
+         "executionTime": 134,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/badCadenceSparsePeaks.png",
+         "stderr": "",
+         "stdout": "703 684\n"
+      },
+      {
+         "executionTime": 1455,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/cmyk.jpg",
+         "stderr": "",
+         "stdout": "1836 3264\n"
+      },
+      {
+         "executionTime": 45,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/componentsInCDF.jpg",
+         "stderr": "",
+         "stdout": "640 361\n"
+      },
+      {
+         "executionTime": 146,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/contactSheet.png",
+         "stderr": "",
+         "stdout": "907 607\n"
+      },
+      {
+         "executionTime": 7,
+         "resourceURI": "file:/home/jbf/ct/autoplot/screenshots/copyFieldArrow.png",
+         "stderr": "",
+         "stdout": "138 101\n"
+      }
+   ]
+}
