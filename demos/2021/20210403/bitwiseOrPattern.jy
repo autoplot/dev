@@ -1,0 +1,16 @@
+# See https://twitter.com/theFoldster/status/1357009413412950016
+# Which had the NumPy code:
+#
+#  from PIL import Image
+#  import numpy as np
+#
+#  r = range(512)
+#  x, y = np.meshgrid(r, r)
+#  i = (1 == (abs(x+y)^abs(x-y)+1)**37 % 7) * 255
+#  Image.fromarray(i).convert('L').save('1.png')
+ 
+r= range(512)
+x= outerProduct( linspace(0,511,512),ones(512) )
+y= outerProduct( ones(512), linspace(0,511,512) )
+plot( (bitwiseOr( abs(x+y), abs(x-y) )+1)**37 % 7 )
+
