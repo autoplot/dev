@@ -1,0 +1,121 @@
+# Write to animated gif.  Code adapted from 
+# http://elliot.kroo.net/software/java/GifSequenceWriter/GifSequenceWriter.java
+
+sseq= '/home/jbf/ct/autoplot/tutorials/filters/*.png'
+f= '/tmp/autoplot.pdf'
+timeBetweenFramesMS= 100
+loopContinuously= True
+    
+from org.autoplot.pngwalk import WalkImageSequence
+seq= WalkImageSequence(sseq)
+seq.initialLoad()
+
+from java.io import FileOutputStream
+from java.io import ByteArrayOutputStream
+from javax.imageio import ImageIO,ImageTypeSpecifier
+from javax.imageio.metadata import IIOMetadataNode
+
+def getWriter():
+    '''Returns the first available GIF ImageWriter using ImageIO.getImageWritersBySuffix("gif").'''
+    iter = ImageIO.getImageWritersBySuffix("gif")
+    if iter.hasNext():
+        return iter.next()
+    else:
+        raise Exception('No writers found')
+
+def getNode(rootNode,nodeName):
+    '''Returns an existing child node, or creates and returns a new child node (if 
+    the requested node does not exist).'''
+    nNodes = rootNode.getLength()
+    
+    for i in xrange(nNodes):
+      if (rootNode.item(i).getNodeName().lower()==nodeName.lower() ):
+         return (rootNode.item(i))
+      
+    node = IIOMetadataNode(nodeName)
+    rootNode.appendChild(node)
+    return node
+
+monitor.setTaskSize(seq.size())
+monitor.started()
+            
+imageNumber= 1
+out= FileOutputStream( f )
+
+gifWriter= getWriter()
+ 
+imageWriteParam = gifWriter.getDefaultWriteParam() 
+
+im= seq.imageAt(0).getImage()
+while( im==None ):
+    sleep(100)
+    im= seq.imageAt(0).getImage()
+    
+imageType= im.getType()
+
+imageTypeSpecifier= ImageTypeSpecifier.createFromBufferedImageType(imageType)
+imageMetaData = gifWriter.getDefaultImageMetadata(imageTypeSpecifier,
+     imageWriteParam) 
+     
+metaFormatName = imageMetaData.getNativeMetadataFormatName();
+
+root = imageMetaData.getAsTree(metaFormatName)
+graphicsControlExtensionNode = getNode(
+      root,
+      "GraphicControlExtension")
+graphicsControlExtensionNode.setAttribute("disposalMethod", "none")
+graphicsControlExtensionNode.setAttribute("userInputFlag", "FALSE")
+graphicsControlExtensionNode.setAttribute(
+      "transparentColorFlag",
+      "FALSE");
+graphicsControlExtensionNode.setAttribute(
+      "delayTime",
+      "%d" % (timeBetweenFramesMS / 10))
+graphicsControlExtensionNode.setAttribute(
+      "transparentColorIndex",
+      "0");
+
+commentsNode = getNode(root, "CommentExtensions")
+commentsNode.setAttribute("CommentExtension", "Created by Autoplot")
+
+appEntensionsNode = getNode(
+      root,
+      "ApplicationExtensions")
+
+child = IIOMetadataNode("ApplicationExtension")
+
+child.setAttribute("applicationID", "NETSCAPE")
+child.setAttribute("authenticationCode", "2.0")
+
+#child.setUserObject(new byte[]{ 0x1, (byte) (loop & 0xFF), (byte)
+#      ((loop >> 8) & 0xFF)});
+
+appEntensionsNode.appendChild(child)
+
+imageMetaData.setFromTree(metaFormatName, root)
+
+gifWriter.setOutput(outputStream)
+
+gifWriter.prepareWriteSequence(None)
+
+qcseq= seq.getQualityControlSequence()
+            
+for i in xrange(seq.size()):
+    monitor.setTaskProgress(i)
+    cb = writer.getDirectContent()
+
+    cb.saveState()
+
+    img= seq.imageAt(i).getImage()
+    baos = ByteArrayOutputStream()
+                
+    while ( im==None ):
+        sleep(100);
+        img= seq.imageAt(i).getImage()
+ 
+    gifWriter.writeToSequence(
+        IIOImage( img, null, imageMetaData), imageWriteParam)
+        
+    imageNumber= imageNumber+1
+                        
+gifWriter.close()
