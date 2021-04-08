@@ -1,0 +1,55 @@
+from java.util import Random
+setScriptDescription('make a fake dataset with rank 2 bins for HAPI model')
+
+tt= linspace( '2021-04-06T00:00', '2021-04-07T00:00', 1441 )
+
+from org.das2.qds.demos import PlasmaModel
+pm= PlasmaModel()
+
+npa= 18
+nen= 40
+
+data= zeros( 30, npa, nen )
+en=   zeros( 30, npa, nen )
+en.putProperty( QDataSet.UNITS, Units.eV )
+en.putProperty( QDataSet.LABEL, 'Energy' )
+en.putProperty( QDataSet.NAME, 'Energy' )
+
+pa= linspace( 0, 180, npa+1 )
+pa= ( pa[0:npa] + pa[1:] ) / 2
+pa.putProperty( QDataSet.UNITS, Units.degrees )
+pa.putProperty( QDataSet.LABEL, 'Pitch Angle' )
+pa.putProperty( QDataSet.NAME, 'Pitch' )
+
+tt= linspace( '2021-04-07T00:00', '2021-04-07T00:29', 30 )
+tt.putProperty( QDataSet.NAME, 'Time' )
+
+rr= Random(5334)
+
+paAdjust= dataset( 1 + 0.1 * sin( linspace(0,PI,npa) ) )
+
+for i in xrange(30):
+    if ( i<10 ):
+        nenAdjust= 1.
+    elif ( i<20 ):
+        nenAdjust= 7.
+    else:
+        nenAdjust= 1.
+    for j in xrange(nen):
+        be= 10 ** ( 4.*j/nen )
+        en[i,:,j]= be * paAdjust * nenAdjust
+        for k in xrange(npa):
+            data[i,k,j]= pm.counts( datum(en[i,k,j]), datum(pa[k]), rr )
+
+#stop
+data= link( tt, pa, en, data )
+       
+#data= data[-1]
+print data
+print data.property(QDataSet.DEPEND_1)
+
+#plot( data )
+#plot( 1, en )
+
+plot( data )
+
