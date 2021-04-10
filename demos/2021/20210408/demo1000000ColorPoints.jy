@@ -1,0 +1,17 @@
+setScriptDescription('Demo 1,000,000 point scatter')
+
+N= 1000000
+x= randn(N)
+y= randn(N)
+z= atan2(y,x)
+r= where( abs(z).gt(PI/6) )
+
+x= x[r]
+y= y[r]
+z= z[r]
+
+annotation( 0, text='%d colored points' % N, anchorPosition='outsideNNW',
+            anchorType='canvas', anchorOffset='0em,0em' )
+ 
+plot( x, y, z, symbolSize=5 )
+
