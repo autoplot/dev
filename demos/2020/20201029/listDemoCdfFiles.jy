@@ -1,3 +1,5 @@
+setScriptDescription('List all variable types found in https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/.  This must be run locally.')
+
 from gov.nasa.gsfc.spdf.cdfj import CDFReader
 from gov.nasa.gsfc.spdf.cdfj import CDFFactory,CDFDataType
 
