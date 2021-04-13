@@ -1,0 +1,16 @@
+from gov.nasa.gsfc.spdf.cdfj import CDFReader
+from gov.nasa.gsfc.spdf.cdfj import CDFFactory,CDFDataType
+
+
+ff= getFile('http://autoplot.org/data/ac_h2_mfi_20060101_v05.cdf',monitor)
+
+cdff= CDFFactory.getCDF( str(ff) )
+    
+vv= cdff.getVariableNames()
+
+for v in vv:
+    print v
+    
+var= cdff.getVariable('SC_pos_GSM')
+        
+print var.asDoubleArray()
