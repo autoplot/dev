@@ -4,6 +4,10 @@ sc= getParam( 'sc', 1, 'Spacecraft Number', { 'values':[1,2], 'labels':['SC-A','
 
 rr= getParam( 'rr', 2.5, 'The R Parameter', { 'VALID_MIN':1.0, 'VALID_MAX':6.0 } )
 
-total= rr % 1.0
+total= dataset(rr) % 1.0
 
-formatDataSet( total, '/tmp/output_%s.dat' )
+formatDataSet( total, '/tmp/output_%s.dat'%sc )
+
+# this will become automatic
+from java.io import File 
+setOutputParam( 'outf', File('/tmp/output_%s.dat'%sc) )
