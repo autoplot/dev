@@ -6,7 +6,4 @@ rr= getParam( 'rr', 2.5, 'The R Parameter', { 'VALID_MIN':1.0, 'VALID_MAX':6.0 }
 
 total= rr % 1.0
 
-formatDataSet( '/tmp/output_%s.dat', total )
-
-
-
+formatDataSet( total, '/tmp/output_%s.dat' )
