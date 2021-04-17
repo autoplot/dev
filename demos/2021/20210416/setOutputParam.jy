@@ -8,6 +8,5 @@ total= ( linspace(0.,2.,20)*rr ) % 1.0
 
 formatDataSet( total, '/tmp/output_%s.dat'%sc )
 
-# this will become automatic
 from java.io import File 
-setOutputParam( 'outf', File('/tmp/output_%s.dat'%sc) )
+setOutputParam( 'outf', File('/tmp/output_%s.dat'%sc), 'Output containing twenty numbers' )
