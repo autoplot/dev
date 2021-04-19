@@ -1,6 +1,6 @@
 reset()
 
-dd='https://jfaden.net/~jbf/examplePics/cats/'
+dd='https://jfaden.net/~jbf/examplePics/meter/'
 ff= listDirectory(dd+'*.jpg')
 curr= 0
 
