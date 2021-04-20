@@ -1,0 +1,12 @@
+setScriptDescription('''There's a setOutputParam which documents output of a routine.''')
+
+sc= getParam( 'sc', 1, 'Spacecraft Number', { 'values':[1,2], 'labels':['SC-A','SC-B'] } )
+
+rr= getParam( 'rr', 2.5, 'The R Parameter', { 'VALID_MIN':1.0, 'VALID_MAX':6.0 } )
+
+total= ( linspace(0.,2.,20)*rr ) % 1.0
+
+formatDataSet( total, '/tmp/output_%s.dat'%sc )
+
+from java.io import File 
+setOutputParam( 'outf', File('/tmp/output_%s.dat'%sc), 'Output containing twenty numbers' )
