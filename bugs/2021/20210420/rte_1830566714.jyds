@@ -1,0 +1,12 @@
+setScriptDescription('attempt to generate 1830566714.  Use this as a TCA dataset to verify None is handled' )
+
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+
+if ( datumRange(tr).intersects(datumRange('2014-01-09')) ):
+    tt= linspace( '2014-01-09', '2014-01-10', 1441 )
+    ds= exp( mod( linspace( 0, 5, 1441 ), 1. ) )
+    ds= dataset( ds, label='exp' )
+    result= bundle( tt, ds )
+else:
+    result= None
+    
