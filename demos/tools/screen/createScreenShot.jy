@@ -1,0 +1,116 @@
+# label: Take Screenshot
+# title: Built-in tool for creating screenshots
+# the caps lock key can be used as a shutter release.
+
+from org.autoplot import ScreenshotsTool
+from java.awt import Toolkit
+from java.awt.event import KeyEvent
+import time
+
+kit=Toolkit.getDefaultToolkit()
+
+if ( kit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK )==1 ):
+    doCountDown=False
+    setStatus( 'Release Caps Lock to take screenshot' )
+    while ( kit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK ) ):
+        time.sleep(.1)
+        setStatus( '' )
+        time.sleep(.1)
+        setStatus( 'Release Caps Lock to take screenshot' )
+        
+else:
+    doCountDown=True
+
+if doCountDown:
+   for i in xrange(50):
+       if ( kit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK )==1 ):
+           while ( kit.getLockingKeyState(KeyEvent.VK_CAPS_LOCK ) ):
+               time.sleep(.1)
+               setStatus( '' )
+               time.sleep(.1)
+               setStatus( 'Release Caps Lock to take screenshot' )
+               doCountDown= False
+       if ( doCountDown==False ): break
+       setStatus( 'screenshot in %.1f...  Caps Lock will skip...' % ( 5-i/10. ) )
+       time.sleep(.1)
+
+setStatus('')
+
+time.sleep(.3)
+   
+ss= ScreenshotsTool.getScreenShot()
+
+from org.autoplot.pngwalk import ImageResize
+thumb= ImageResize.getScaledInstance( ss, 400 )
+
+from javax.swing import JLabel, JPanel, JOptionPane, JButton, JCheckBox
+from javax.swing import ImageIcon
+from java.awt import BorderLayout
+from java.awt import Toolkit
+
+label= JLabel( ImageIcon(thumb) )
+
+panel= JPanel()
+panel.setLayout( BorderLayout() )
+
+trim= JCheckBox('Trim')
+trim.selected=True
+
+panel.add( label, BorderLayout.CENTER )
+copypanel= JPanel()
+copypanel.add( JLabel( 'Save or Copy Screenshot' ), BorderLayout.WEST )
+copypanel.add( trim, BorderLayout.CENTER )
+
+def copyClip(evt):
+   from org.autoplot.transferrable import ImageSelection
+   iss= ImageSelection()
+   if ( trim.selected ):
+     iss.setImage( ScreenshotsTool.trim(ss) )
+   else:
+     iss.setImage( ss )
+   clipboard = Toolkit.getDefaultToolkit().getSystemClipboard()
+   clipboard.setContents( iss, ImageSelection.getNullClipboardOwner() )
+   
+button= JButton( "Copy to Clipboard", actionPerformed=copyClip )
+copypanel.add( button, BorderLayout.EAST )
+
+panel.add( copypanel, BorderLayout.SOUTH )
+
+from javax.swing import JFileChooser
+jf= JFileChooser()
+jf.setAccessory(panel)
+
+from java.io import File
+from java.io import FileOutputStream
+from java.util.prefs import Preferences
+prefs= Preferences.userNodeForPackage( ScreenshotsTool )
+f= prefs.get( 'screenshotFile', '$Y$m$d_$H$M$S.png' )
+
+tp= TimeParser.create( '$Y$m$d_$H$M$S.png' )
+   
+if ( f!='' ):
+   jf.setSelectedFile( File( File(f).getParent(), tp.format( TimeUtil.now(), None ) ) )
+
+from java.lang import Runnable,Thread
+
+class SaveFileRunnable( Runnable ):
+    def run( self ):
+        from javax.imageio import ImageIO
+        global ss
+        fn= jf.getSelectedFile()
+        prefs.put( 'screenshotFile', fn.toString() )
+        fo= FileOutputStream( fn )
+        if ( trim.selected ):
+             ss= ScreenshotsTool.trim(ss)
+        ImageIO.write( ss, 'png', fo )
+        fo.close()
+    
+class MyRunnable( Runnable ):
+    def run( self ):
+        r= jf.showSaveDialog( getViewWindow() )
+        if ( r==JFileChooser.APPROVE_OPTION ):
+            Thread(SaveFileRunnable(),'SaveFileRunnable').start()
+          
+from javax.swing import SwingUtilities
+SwingUtilities.invokeAndWait(MyRunnable())
+
