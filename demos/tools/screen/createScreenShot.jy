@@ -1,6 +1,14 @@
+from javax.swing import ImageIcon
 # label: Take Screenshot
 # title: Built-in tool for creating screenshots
 # the caps lock key can be used as a shutter release.
+
+setScriptDescription( '''Create screenshot of Autoplot, grabbing the desktop and 
+masking out the non-Autoplot windows.  This is used to create the screenshots 
+with each release, and to create the screenshots which can be embedded within 
+runtime error reports.''' )
+setScriptLabel('Create Screenshot')
+setScriptIcon( ImageIcon(PWD+'cameraIcon.png') )
 
 from org.autoplot import ScreenshotsTool
 from java.awt import Toolkit
