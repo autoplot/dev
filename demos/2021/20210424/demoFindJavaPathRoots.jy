@@ -1,0 +1,10 @@
+setScriptDescription( '''Demo findJavaPathRoots command.  This recurses though a Java path identifying 
+the folders which should be added to the Java path.  This was added as a test of the documentation,
+where the Markdown Javadoc links over to GitHub documentation.''' )
+
+from org.das2.util.filesystem import FileSystem
+from org.autoplot.jythonsupport import JythonOps
+
+ff= JythonOps.findJavaPathRoots( FileSystem.create('https://svn.code.sf.net/p/autoplot/code/autoplot/trunk/AudioSystemDataSource/') )
+for f in ff:
+    print f
