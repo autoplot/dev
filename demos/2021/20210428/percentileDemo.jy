@@ -20,3 +20,5 @@ print c95[2]
 
 r= where( ds[:,2].gt(c95[2]) )
 plot( 1, ds[r,0], ds[r,1], symbol='stars', renderType='scatter', symbolSize=10 )
+
+dom.plotElements[1].controller.renderer.backgroundThick='1em+4px'
