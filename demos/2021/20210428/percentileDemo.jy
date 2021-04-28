@@ -1,0 +1,22 @@
+setScriptDescription( 'Show the points which are above the 95th percentile' )
+
+randomSeed(53333)
+ds= randn(30,30)-distance(30,30,15,17,2,2)
+#ds= distance(30,30,15,17,2,2)
+
+setLayoutOverplot( 2 )
+
+plot( ds, renderType='nnSpectrogram' )
+
+ds= flatten(ds)
+plot( 1, ds )
+
+s= sort( ds[:,2] )
+c95= ds[ s[s.length()*95/100],:] 
+print c95[2]
+
+#annotation( xrange=c95[0]*[1,1], yrange=c95[1]*[1,1], text=str(c95[2]), \
+#    pointAt='%s,%s' % ( c95[0].svalue(), c95[1].svalue() ) )
+
+r= where( ds[:,2].gt(c95[2]) )
+plot( 1, ds[r,0], ds[r,1], symbol='stars', renderType='scatter', symbolSize=10 )
