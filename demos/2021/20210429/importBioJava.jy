@@ -1,0 +1,14 @@
+import sys
+addToSearchPath( sys.path, 'https://repo1.maven.org/maven2/org/biojava/biojava-alignment/5.4.0/biojava-alignment-5.4.0.jar', monitor.getSubtaskMonitor( 'alignment') )
+addToSearchPath( sys.path, 'https://repo1.maven.org/maven2/org/biojava/biojava-core/5.4.0/biojava-core-5.4.0.jar', 
+                 'https://repo1.maven.org/maven2/org/biojava/biojava-core/5.4.0/biojava-core-5.4.0-javadoc.jar', monitor.getSubtaskMonitor('core') )
+                 
+
+from org.biojava.nbio.core.alignment import SimpleProfile
+print SimpleProfile
+
+from org.biojava.nbio.core.sequence import DNASequence
+seq= DNASequence("GATCA")
+
+print seq
+print seq.getGCCount()
