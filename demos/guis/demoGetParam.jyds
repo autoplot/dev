@@ -1,6 +1,7 @@
 setScriptTitle('getParam Demo')
 setScriptDescription('''Autoplot provides a quick way to create GUIs, 
-where the getParam calls are used to create GUI elements.''')
+where the getParam calls are used to create GUI elements. 
+See https://sourceforge.net/p/autoplot/bugs/2052/''')
 
 # 'timerange' is a special variable to control the span
 t= getParam( 'timerange', '2014-01-09', 'timerange to load' )
