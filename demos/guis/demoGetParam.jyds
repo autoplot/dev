@@ -8,7 +8,7 @@ t= getParam( 'timerange', '2014-01-09', 'timerange to load' )
 s= 'A URI is interpretted to be a data URI.'
 u1=URI('vap+inline:1,2,3,4,5,6,7,5,6,7,8,9')
 u2=URI('vap+cdf:http://autoplot.org/data/autoplot.cdf?SC_pos_GSE')
-u= getParam( 'u', u1, s, { 'examples':[u1,u2] } ) )
+u= getParam( 'u', u1, s, { 'examples':[u1,u2] } )
 
 d= getParam( 'd', datum('5 Hz'), 'a datum is a number and a unit' )
 dr= getParam( 'dr', datumRange('5 to 10 Hz'), 'a datum range spans an interval.' )
