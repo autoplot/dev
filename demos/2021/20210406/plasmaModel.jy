@@ -1,5 +1,7 @@
 from java.util import Random
-setScriptDescription('make a fake dataset with rank 2 bins for HAPI model')
+setScriptDescription('''Make a fake dataset with rank 2 bins for HAPI model.  This simulates a 
+sampling pattern where mode changes periodically and the pitch angles associated with
+the measures vary slightly with energy as well.''')
 
 tt= linspace( '2021-04-06T00:00', '2021-04-07T00:00', 1441 )
 

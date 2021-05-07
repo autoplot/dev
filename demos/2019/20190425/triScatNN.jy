@@ -5,7 +5,7 @@ xx= randu(1000)*1000
 yy= randu(1000)*1000
 zz= interpolate( ds, xx, yy ) + randu(1000)
 
-setLayoutOverplot(2)
+setLayoutOverplot(1)
 
 plot( 0, xx, yy, zz, renderType='spectrogram>rebin=nnTriScat&colorTable=blue_white_red' )
-plot( 1, xx, yy, renderType='scatter' )
+#plot( 1, xx, yy, renderType='scatter' )

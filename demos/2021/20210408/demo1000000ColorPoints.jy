@@ -4,7 +4,7 @@ N= 1000000
 x= randn(N)
 y= randn(N)
 z= atan2(y,x)
-r= where( abs(z).gt(PI/6) )
+r= where( abs(z).gt(PI/16) )
 
 x= x[r]
 y= y[r]
