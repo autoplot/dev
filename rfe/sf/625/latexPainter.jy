@@ -1,0 +1,35 @@
+setScriptDescription('Experiment with rendering LaTeX in-line with Granny text.')
+equation= getParam('latex','y = \sum_{x=0}^{10} x^2','LaTeX equation, no parens')
+
+from java.awt.geom import Rectangle2D
+from org.das2.util import GrannyTextRenderer
+from org.das2.graph import Painter
+from java.awt.image import BufferedImage
+
+from sys import path
+addToSearchPath(path,
+      'https://repo1.maven.org/maven2/org/scilab/forge/jlatexmath/1.0.7/jlatexmath-1.0.7.jar',
+      'https://repo1.maven.org/maven2/org/scilab/forge/jlatexmath/1.0.7/jlatexmath-1.0.7-javadoc.jar',
+      monitor)
+      
+class LaTeXPainter( GrannyTextRenderer.Painter ):
+    def paint( self, g, args ):
+        from org.scilab.forge.jlatexmath import TeXFormula,TeXConstants
+        formula= TeXFormula( args[0] )
+        icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY,g.getFont().getSize())
+        from java.awt import Insets
+        icon.setInsets( Insets(0,0,0,0) )
+
+        image = BufferedImage( icon.getIconWidth(),
+           icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB )
+        icon.paintIcon( None, image.createGraphics(), 0, 0 )
+        base= -1*int(icon.getBaseLine() * icon.iconHeight )
+        g.drawImage( image, 0, base, None )
+        result= Rectangle2D.Double( 0, base, icon.iconWidth, icon.iconHeight )
+        return result
+
+reset()
+
+s= 'The equation is !(painter;latex;%s).' % equation
+ann= annotation(text=s,borderType=None,fontSize='0.6em',background=None)
+ann.controller.dasAnnotation.addPainter('latex',LaTeXPainter())
