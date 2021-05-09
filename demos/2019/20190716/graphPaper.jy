@@ -1,4 +1,6 @@
-# draw graph paper for the canvas
+setScriptDescription('draw graph paper for the canvas')
+
+major= getParam( 'drawMajor', False, 'Draw the major lines as well.', [True,False] )
 
 from org.das2.util import ColorUtil
 from org.das2.graph import Painter
@@ -14,5 +16,11 @@ class GridPainter( Painter ):
             g.drawLine( i, 0, i, h )
         for i in xrange( 0, h, 10 ):
             g.drawLine( 0, i, w, i )
+        if major:
+            g.color= ColorUtil.decodeColor('Thistle').darker()
+            for i in xrange( 0, w, 100 ):
+                g.drawLine( i, 0, i, h )
+            for i in xrange( 0, h, 100 ):
+                g.drawLine( 0, i, w, i )        
 
 dom.canvases[0].controller.dasCanvas.addBottomDecorator(GridPainter())
