@@ -1,0 +1,14 @@
+setScriptDescription('''Demo binAverage use to get regular averaged grid.
+A N-point random grid of X,Y&rarr;Z is reduced to make a regular grid.''')
+
+N= 1000000
+xxx= randn(N)
+yyy= randn(N)
+zzz= exp( -1 * sqrt( xxx**2 + yyy**2 ) ) + randn(N)
+xyz= bundle( xxx,yyy,zzz )
+
+xx= linspace( -6, 6, 100 )
+yy= linspace( -6, 6, 100 )
+r2= binAverage( xyz, xx, yy )
+
+plot( r2, zrange=[0,1] )
