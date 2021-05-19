@@ -1,0 +1,17 @@
+from org.das2.datum import Orbits
+orbits= Orbits.getOrbitsFor('psp-aa')
+
+oo= orbits.first()
+
+w= open( '/tmp/ap/pspPt25.txt', 'w' )
+while oo!=None:
+    print oo
+    rr= getDataSet( 'vap+cdaweb:ds=PSP_ISOIS_L2-EPHEM&filter=parker&id=HCI_R', orbits.getDatumRange(oo) )
+    if ( rr==None ): break
+    print rr
+    r= where( rr.lt(0.25) )
+    ext= extent( r )
+    tt= rr.property( QDataSet.DEPEND_0 )
+    w.write( '%s %s %s\n' % (tt[ext[0]].svalue(), tt[ext[1]].svalue(), oo ) )
+    oo= orbits.next(oo)
+w.close()
