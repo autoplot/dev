@@ -1,0 +1,76 @@
+from org.das2.components import DasProgressPanel
+from java.beans import PropertyChangeListener
+from java.awt import BorderLayout
+from javax.swing import JSlider,JLabel,JPanel,BoxLayout
+tr= getParam( 'timerange', '2021-05-10' )
+dom.timeRange= datumRange(tr)
+
+airTemp=None
+poolTemp=None
+        
+def replot( shift ):
+    'replot the data with the shift, for example "4.2 hr"'
+    if ( poolTemp==None or airTemp==None ):
+        plot( None )
+        return
+    ptime= poolTemp.property(QDataSet.DEPEND_0)
+    ptime= ptime + shift
+    poolt= link(ptime,poolTemp)
+    airTempt= airTemp
+    poolt= synchronize( airTemp, poolt )
+    #airTempt= synchronize( poolt, airTemp )
+
+    x= airTempt
+    y= poolt
+
+    plot( x,y, 
+          title='Time Lag Between Pool Temperature and Air Temperature',
+          xtitle='Air Temperature', 
+          ytitle='Pool Temperature (Time Shifted)', 
+          renderType='scatter',
+          symbolSize=10, color='0xA0000000' )
+
+def update(evt):
+    global js,rl
+    replot( '%.2f hr' % ( float(js.value)/10. ) )
+    rl.text= '%.2f hr' % ( float(js.value)/10. ) 
+    
+js= JSlider(-240,240,stateChanged=update)
+jl= JLabel('Time shift added To Pool:')
+rl= JLabel('----')
+
+jp= JPanel(BorderLayout())
+jp.add( js, BorderLayout.CENTER )
+jp.add( jl, BorderLayout.WEST )
+jp.add( rl, BorderLayout.EAST )
+
+def reload():
+    global airTemp, poolTemp, update
+    tr= dom.timeRange
+    try:
+        m= DasProgressPanel.createComponentPanel( dom.plots[0].controller.dasPlot, 'Loading Data' )
+        m.started()
+        m.setProgressMessage('loading data')
+        airTemp=getDataSet('vap+hapi:https://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=Time,Temperature',tr)
+        poolTemp=getDataSet('vap+hapi:https://jfaden.net/HapiServerDemo/hapi?id=poolTemperature&parameters=Temperature',tr)
+        m.finished()
+    except:
+        airTemp= None
+        poolTemp= None        
+    update(None)
+reload()
+
+class TimeRangeListener( PropertyChangeListener ):
+    def propertyChange(self,evt):
+        invokeLater( reload )
+dom.addPropertyChangeListener(dom.PROP_TIMERANGE,TimeRangeListener())        
+
+bind( dom.plots[0].xaxis, 'scale', dom.plots[0].yaxis, 'scale' )
+dom.plots[0].xaxis.tickValues='+10/10'
+dom.plots[0].yaxis.tickValues='+10/10'
+
+dom.options.autoranging= False
+
+update(None)
+
+getApplication().setBottomPanel(jp)
