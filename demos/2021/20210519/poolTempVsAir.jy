@@ -2,7 +2,7 @@ from org.das2.components import DasProgressPanel
 from java.beans import PropertyChangeListener
 from java.awt import BorderLayout
 from javax.swing import JSlider,JLabel,JPanel,BoxLayout
-tr= getParam( 'timerange', '2021-05-10' )
+tr= getParam( 'timerange', '2021-Apr' )
 dom.timeRange= datumRange(tr)
 
 airTemp=None
@@ -29,6 +29,7 @@ def replot( shift ):
           ytitle='Pool Temperature (Time Shifted)', 
           renderType='scatter',
           symbolSize=10, color='0xA0000000' )
+    annotation( 0, anchorPosition='NW', text='Shift='+shift )
 
 def update(evt):
     global js,rl
