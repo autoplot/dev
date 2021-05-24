@@ -1,0 +1,3 @@
+mm= ( datum('now') - datum('2016-10-08') ).doubleValue(Units.days)
+print 'Happy %d day anniversary!' % mm 
+
