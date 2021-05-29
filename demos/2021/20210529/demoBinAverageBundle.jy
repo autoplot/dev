@@ -1,0 +1,17 @@
+setScriptDescription('''Demo binMeanAverageDeviation, which accumulates
+buckshot data and sorts it into bins.''')
+
+result= zeros(50,50)
+dep0= linspace( 0., 1., 50 )
+dep1= linspace( 0., 1., 50 )
+result= link( dep0, dep1, result )
+
+nn= 10000000
+xx= randu(nn)
+yy= randu(nn)
+zz= exp( -( (xx-0.5)**2 + (yy-0.5)**2 ) ) + ( 5*randn(nn) )
+
+data= bundle( xx, yy, zz )
+
+plot( binAverageBundle( data, dep0, dep1 ) )  # note inconsistency
+
