@@ -1,4 +1,4 @@
-setScriptDescription('''Demo binMeanAverageDeviation, which accumulates
+setScriptDescription('''Demo binAverageBundle, which accumulates
 buckshot data and sorts it into bins.''')
 
 result= zeros(50,50)
