@@ -1,0 +1,60 @@
+# show how iText library can be used to write a report.  
+# See https://coderanch.com/how-to/javadoc/itext-2.1.7/
+# This still needs work, for example, it would be nice to let itext add 
+# a rectangle to the text so we don't have to position it manually.
+
+from com.itextpdf.text import Document,Rectangle,Paragraph
+from com.itextpdf.awt import PdfGraphics2D
+from com.itextpdf.text.pdf import PdfWriter
+from com.itextpdf.text.pdf import PdfContentByte
+
+from java.io import FileOutputStream
+from java.awt import Dimension
+
+out= FileOutputStream('/tmp/autoplot.report.pdf')
+
+document = Document( Rectangle(8*73,11*72), 0,0,0,0 )
+
+writer= PdfWriter.getInstance( document, out );
+
+document.open()
+
+p1= Paragraph( 'This is my first PDF in Jython' )
+document.add( p1 )
+
+rectangle= Rectangle( 6*72., 4*72. )
+document.add( rectangle );
+
+p1= Paragraph( "Call createGraphics to get a graphics context onto which Autoplot can print." )
+document.add( p1 )
+
+cb = writer.getDirectContent()
+pt= cb.createTemplate(rectangle.width,rectangle.height)
+posX=0*72
+posY=(11-5)*72
+
+cb.saveState()
+
+# this must be free to set the canvas size, so it must not be
+# fitted.
+setLayoutOverplot(2)
+ds= getDataSet( 'http://autoplot.org/data/annotations/circleIllumn.jyds' )
+plot(0,ds)
+ds= getDataSet( 'vap+inline:ripples(5,5)' )
+plot(1,ds)
+dom.plots[0].isotropic= True
+
+getApplicationModel().getDocumentModel().getCanvases(0).fitted= False
+graphics = pt.createGraphics( rectangle.width,rectangle.height )
+getApplicationModel().getCanvas().prepareForOutput( int(rectangle.width),int(rectangle.height) ) 
+getApplicationModel().getCanvas().print(graphics) 
+graphics.dispose()
+
+cb.addTemplate(pt,posX,posY);
+
+cb.restoreState()
+
+document.close()
+out.close()
+
+showMessageDialog('report created at /tmp/autoplot.report.pdf')
