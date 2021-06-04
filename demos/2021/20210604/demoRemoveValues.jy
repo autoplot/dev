@@ -1,0 +1,22 @@
+from org.das2.util import ColorUtil
+tt1= linspace( '2021-06-03T00:00Z', '2021-06-04T00:00Z', 86401 )
+ds1= sin( (tt1-'2021-06-03T00:00Z')/'1hr'*TAU )
+ds1= link( tt1, ds1 )
+plot( ds1 )
+
+tt2= linspace( '2021-06-03T00:00Z', '2021-06-04T00:00Z', 86401 )
+ds2= sin( (tt1-'2021-06-03T00:00Z')/'1.1hr'*TAU )
+ds2= link( tt2, ds2 )
+
+ds1x= removeValues( ds1, where( ds2.gt(0) ) )
+plot( 1, ds1x )
+
+ds3= createEvent( None, '2021-06-03T01:00/02:00',ColorUtil.DARK_OLIVE_GREEN.getRGB(),'block me')
+ds3= createEvent( ds3, '2021-06-03T04:00/05:00',ColorUtil.DARK_OLIVE_GREEN.getRGB(),'block me')
+ds3= createEvent( ds3, '2021-06-03T014:00/15:00',ColorUtil.DARK_OLIVE_GREEN.getRGB(),'block me')
+
+plot( 2, ds3 )
+
+#ds4= removeValues( ds1, where( within( ds1, ds3[0] ) ) )
+ds4= removeValues( ds1, where( within( ds1.property(QDataSet.DEPEND_0), ds3 ) ) )
+plot( 3, ds4 )
