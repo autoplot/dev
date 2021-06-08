@@ -1,0 +1,7 @@
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+
+if ( tr=='2014-01-09' ):
+    result= None
+else:
+    result= ones(100)
+    
