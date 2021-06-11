@@ -1,0 +1,34 @@
+setScriptDescription('Expect that this should come up as events')
+
+# get parameters.
+sc = getParam('sc', 'A', 'spacecraft', [ 'A', 'B'])
+timeRange = getParam('timerange', '2013-01-01', 'timerange to load')
+winSize = getParam('winSize', 0.4, 'amount to pad either side of each event, in seconds')
+
+# turn winSiz into a dataset.
+winSizeDS = dataset([0.0 - winSize, winSize])
+winSizeDS = putProperty(winSizeDS, QDataSet.UNITS, Units.getByName('sec'))
+
+# load the epochs of the antenna shadowing events. Will automatically be read in as epochs...?
+shadowEpochs = dataset( linspace( '2021-06-11T00:00', '2021-06-11T17:54', 21 ) )
+
+print 'shadowEpochs:  ', shadowEpochs
+
+# convert the shadow events into a proper events dataset, by turning each into
+# an epoch range using [epoch - winSize, epoch + winSize]. See Jeremy e-mail of 4 Jun 2021:
+shadowEvt = outerSum(shadowEpochs, winSizeDS)
+
+print 'shadowEvt:  ', shadowEvt
+
+shadowEvt = createEvents(shadowEvt)
+#shadowEvt = putProperty(shadowEvt, QDataSet.RENDER_TYPE, 'eventsBar')
+
+#shadowEvt.putProperty(QDataSet.BINS_1, QDataSet.VALUE_BINS_MIN_MAX )
+#shadowEvt.putProperty(QDataSet.RENDER_TYPE,QDataSet.VALUE_RENDER_TYPE_EVENTS_BAR )
+
+print 'shadowEvt:  ', shadowEvt
+print 'shadowEvt[0]:  ', shadowEvt[0]
+print 'shadowEvt[0,0]:  ', shadowEvt[0,0]
+print 'shadowEvt[0,1]:  ', shadowEvt[0,1]
+
+result=shadowEvt
