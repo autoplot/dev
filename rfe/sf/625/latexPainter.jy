@@ -16,6 +16,7 @@ addToSearchPath(path,
 class LaTeXPainter( GrannyTextRenderer.Painter ):
     def paint( self, g, args ):
         from org.scilab.forge.jlatexmath import TeXFormula,TeXConstants
+        print args[0]
         formula= TeXFormula( args[0] )
         icon = formula.createTeXIcon(TeXConstants.STYLE_DISPLAY,g.getFont().getSize())
         from java.awt import Insets

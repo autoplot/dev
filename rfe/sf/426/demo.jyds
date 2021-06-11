@@ -25,4 +25,9 @@ userProperties['SC']=3
 userProperties['EnergyVersion']='20191127'
 userProperties['Calibration Version']=2.7
 
+up2= {}
+up2['SOFTWARE_VERSION']="1.0.1"
+
+userProperties['up2']= up2
+
 result= putProperty( result, QDataSet.USER_PROPERTIES, userProperties )
