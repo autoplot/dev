@@ -1,7 +1,15 @@
+setScriptDescription('''Return ones on any day, but None on 2014-01-09.  
+For testing.  See https://sourceforge.net/p/autoplot/bugs/2356/''')
+
 tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
 
 if ( tr=='2014-01-09' ):
     result= None
 else:
-    result= ones(100)
+    drtr= datumRange( tr )
+    result= ones(1441,10) + randn(1441,10)/10
+    tt= linspace( drtr.min(),  drtr.max(), 1441 )
+    result= link( tt, linspace( 100,1000,10 ), result )
+    
+    
     
