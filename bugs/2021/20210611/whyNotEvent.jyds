@@ -10,7 +10,7 @@ winSizeDS = dataset([0.0 - winSize, winSize])
 winSizeDS = putProperty(winSizeDS, QDataSet.UNITS, Units.getByName('sec'))
 
 # load the epochs of the antenna shadowing events. Will automatically be read in as epochs...?
-shadowEpochs = dataset( linspace( '2021-06-11T00:00', '2021-06-11T17:54', 21 ) )
+shadowEpochs = dataset( linspace( '2013-01-01T00:00', '2013-01-01T17:54', 21 ) )
 
 print 'shadowEpochs:  ', shadowEpochs
 
