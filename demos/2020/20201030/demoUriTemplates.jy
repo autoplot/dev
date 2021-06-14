@@ -8,8 +8,8 @@ import sys
 addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
 
 from org.hapiserver import URITemplate
-URITemplate('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)').format
-print URITemplate.formatRange(String,String,String)
+#URITemplate('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)').format
+#print URITemplate.formatRange(String,String,String)
 
 print URITemplate('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)').format('2020-10-30','2020-10-30')
 print (URITemplate.formatRange('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)','2020-01-03','2020-01-04'))[0]
