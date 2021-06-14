@@ -11,7 +11,7 @@ import ucar.nc2.NetcdfFile as NetcdfFile
 from ucar.nc2.dataset import NetcdfDataset
 
 # matlab.mat was created by making variables, then issuing save command.
-f= getFile( 'https://cdaweb.gsfc.nasa.gov/pub/data/gold/level2/o2den/2018/gold_l2_o2den_2018_301_v01_r01_c01.nc', monitor.getSubtaskMonitor('nc data'))
+f= getFile( 'https://cdaweb.gsfc.nasa.gov/pub/data/gold/level2/o2den/2018/gold_l2_o2den_2018_301_v03_r01_c01.nc', monitor.getSubtaskMonitor('nc data'))
 ds= NetcdfDataset( NetcdfFile.open( str(f) ) )
 #print dataset
 
