@@ -1,0 +1,11 @@
+# see https://github.com/das-developers/das2java/issues/15
+
+nn= getParam( 'nn', 500000, 'Number of points', [ 100000, 200000, 500000 ] )
+
+tt= linspace( '2021-06-01T00:00Z', '2021-06-02T00:00Z', nn )
+aa= ( tt- '2021-06-01T00:00Z' )/'1hr' * TAU 
+xx= cos(aa)+smoothFit( aa, randn(nn)/10, 11 )
+yy= sin(aa)+smoothFit( aa, randn(nn)/10, 11 )
+
+xx[(nn/10):(nn/10+10000)]= 1.7
+plot( tt, xx )

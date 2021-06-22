@@ -1,0 +1,13 @@
+# see https://github.com/das-developers/das2java/issues/15
+
+plot( 'file:///home/jbf/data/gardenhouse/data2/$Y/$m/gardenhouse.core0.$Y$m$d.csv?timerange=2021-01-01/2021-07-01', renderType='series' )
+
+dom.plots[0].xaxis.range= datumRange( '2021-06-21 18:45 to 21:05' )
+writeToPng('/tmp/0001.png')
+
+dom.plots[0].yaxis.range= datumRange( '0 to 2.5' )
+writeToPng('/tmp/0002.png')
+
+dom.plots[0].yaxis.range= datumRange( '0.0 to 3.3' )
+dom.plots[0].xaxis.range= datumRange( '2021-06-21 18:27 to 21:22' )
+writeToPng('/tmp/0003.png')
