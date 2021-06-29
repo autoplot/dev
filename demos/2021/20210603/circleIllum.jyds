@@ -3,6 +3,7 @@ setScriptLabel('circle illum')
 
 radius= getParam( 'radius', 1.0, 'radius of the circle' )
 illumPos= getParam( 'illumPos', 'right', 'position of the illumination', [ 'right', 'left', 'top', 'bottom' ] )
+thickFact= getParam( 'thickFactor', 0.9 )
 
 sq1= cos(linspace(-PI/2,3*PI/2,37)) * radius
 sq2= sin(linspace(-PI/2,3*PI/2,37)) * radius
@@ -29,6 +30,6 @@ elif ( illumPos=='left' ):
    hsq1= sq1[0:19]
    hsq2= sq2[0:19]
 
-ds= link( append( sq1, reverse(hsq1*0.9) ), append( sq2,reverse(hsq2*0.9) ) )
+ds= link( append( sq1, reverse(hsq1*thickFact) ), append( sq2,reverse(hsq2*thickFact) ) )
 
 result= putProperty( ds, QDataSet.RENDER_TYPE, 'fillToZero>color=black&fillColor=black&symbol=none' )
