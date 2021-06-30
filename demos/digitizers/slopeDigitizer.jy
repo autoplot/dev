@@ -1,0 +1,104 @@
+setScriptTitle('slope digitizer')
+setScriptDescription('''Demo of how a digitizer which measures slope is created.  
+Reset and load the data, then run this script. click and drag to add a directed line 
+segment to the digitizer tab.''')
+
+# file:///tmp/mozilla_jbf0/20180310_Heliotown_LHP.png?plotInfo=0
+# 
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from org.das2.graph import Arrow
+from org.das2.graph import GraphUtil
+from java.awt.geom import Point2D
+from org.das2.util import GrannyTextRenderer
+
+dpr= DataPointRecorder()
+dpr.setSorted(False)
+
+addTab( 'digitizer', dpr )
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         if ( ds!=None ):
+             for d in ds:
+                 x1= dom.plots[0].controller.dasPlot.getXAxis().transform( d[0] )
+                 y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
+                 x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
+                 y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
+                 gtr= GrannyTextRenderer()
+                 s4= "%.1f"%d[4]
+                 print s4
+                 gtr.setString(g,s4)
+                 r= gtr.getBounds()
+                 p1= Point2D.Double( x1, y1 )
+                 p2= Point2D.Double( x2, y2 )
+                 r.translate( int(p1.x-r.width/2), int(p1.y+r.height/2) )
+                 p= GraphUtil.lineRectangleIntersection( p1, p2, r )
+                 r.translate( int(p1.x-p.x), int(p1.y-p.y) )
+                 gtr.draw(g,r.x,r.y+r.height)
+                 g.color= Color.GRAY
+                 Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                 g.drawString(s4,r.x,r.y+r.height)
+                 gtr.draw(g,r.x,r.y+r.height)
+         ds= dpr.getSelectedDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x1= dom.plots[0].controller.dasPlot.getXAxis().transform( d[0] )
+                 y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
+                 x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
+                 y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
+                 s4= "%.1f"%d[4]
+                 gtr.setString(g,s4)
+                 r= gtr.getBounds()
+                 p1= Point2D.Double( x1, y1 )
+                 p2= Point2D.Double( x2, y2 )
+                 
+                 r.translate( int(p1.x-r.width/2), int(p1.y+r.height/2) )
+                 p= GraphUtil.lineRectangleIntersection( p1, p2, r )
+                 r.translate( int(p1.x-p.x), int(p1.y-p.y) )
+                                  
+                 from org.das2.util import ColorUtil
+                 from java.awt import BasicStroke
+
+                 g.color= ColorUtil.decodeColor('lightBlue')
+                 g.stroke= BasicStroke(3)
+                 Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                 gtr.draw(g,r.x,r.y+r.height)
+                 
+                 g.color= Color.GRAY
+                 g.stroke= BasicStroke(1)
+                 Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                 gtr.draw(g,r.x,r.y+r.height)
+
+dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+
+# we need to listen for updates from the DataPointRecorder, when the selection changes.
+from org.das2.dataset import DataSetUpdateListener
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self, e ):
+        dom.canvases[0].controller.dasCanvas.repaint()
+dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
+
+def lineSelected( ev ):
+    rec= bundle( dataset(ev.startX,name='X1'), 
+                 dataset(ev.startY,name='Y1'), 
+                 dataset(ev.finishX,name='X2'), 
+                 dataset(ev.finishY,name='Y2') )
+    slope= ev.getYRange().width().doubleValue( Units.hertz ) / ev.getXRange().width().doubleValue(Units.seconds) 
+    slope= dataset( slope, units='s**-2', name='slope' )
+    #length= dataset(length,name='len')
+    rec= bundle( rec, slope )
+                  
+    dpr.addDataPoint( rec )
+
+mm= addMouseModule( dom.plots[0], 'digitize lines', lineSelected );
+
+from org.das2.event import AbstractDragRenderer
+
+class MyDragRenderer( AbstractDragRenderer ):
+    def renderDrag( self, g, p1, p2 ):
+        Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+
+mm.setDragRenderer( MyDragRenderer() )
