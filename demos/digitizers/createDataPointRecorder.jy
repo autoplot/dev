@@ -1,7 +1,8 @@
 setScriptTitle('slope digitizer')
 setScriptDescription('''Demo of how a digitizer which measures slope is created.  
 Reset and load the data, then run this script. click and drag to add a directed line 
-segment to the digitizer tab.''')
+segment to the digitizer tab.  
+<hr>This requires v2021a_7 to run.''')
 
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
