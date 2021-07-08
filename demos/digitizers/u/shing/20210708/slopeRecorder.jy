@@ -71,8 +71,8 @@ def refresh():
     'stupid call to force the plot to repaint and draw changes.  Someday this won''t be needed.'
     dom.plots[0].controller.dasPlot.invalidateCacheImage()
     dom.plots[0].controller.dasPlot.repaint()
-    dss= dpr.getDataPoints()
-    invokeLater( reportPoints, dss )
+    #dss= dpr.getDataPoints()
+    #invokeLater( reportPoints, dss )
     
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
 from org.das2.dataset import DataSetUpdateListener
