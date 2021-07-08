@@ -2,7 +2,7 @@ setScriptTitle('slope digitizer')
 setScriptDescription('''Demo created for Shing showing how a digitizer for measuring slopes
 is made.  Reset and load the data, then run this script. click and drag to add a directed line 
 segment to the digitizer tab.  
-<hr>This requires at least v2021a_7 or 20210702a to run.''')
+<hr>This requires at least 20210708a (or v2021a_7 once released) to run.''')
 
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
