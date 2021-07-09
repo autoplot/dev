@@ -1,8 +1,11 @@
+from org.autoplot.layout import LayoutConstants
 setScriptTitle('slope digitizer')
 setScriptDescription('''Demo created showing how a digitizer for measuring slopes
 is made.  Reset and load the data, then run this script. click and drag to add a directed line 
 segment to the digitizer tab.  Slopes are recorded on the digitizer tab.
-<hr>This requires at least 20210708a (or v2021a_7 once released) to run.''')
+<hr>This requires at least 20210709a (or v2021a_7 once released) to run.''')
+
+#plot( 'file:///home/jbf/Downloads/180310_1700_2300-Heliotown.sps' )
 
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
@@ -13,6 +16,11 @@ from org.das2.util import GrannyTextRenderer
 
 dpr= createDataPointRecorder()  # requires v2021a_7 or 20210701b
 addTab( 'digitizer', dpr )
+
+slopesm= createApplicationModel('slopes')
+slopesm.dom.controller.reset()
+slopesm.dom.controller.copyPlotAndPlotElements( slopesm.dom.plots[0], None, True, False );
+addTab( 'slopes', slopesm.canvas )
 
 def feedbackPaint( g ):
      from java.awt import BasicStroke
@@ -26,10 +34,10 @@ def feedbackPaint( g ):
              y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
              p1= Point2D.Double( x1, y1 )
              p2= Point2D.Double( x2, y2 )
-             g.stroke= BasicStroke(5)
+             g.stroke= BasicStroke(3)
              g.color= Color.WHITE
              Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
-             g.stroke= BasicStroke(3)
+             g.stroke= BasicStroke(1)
              g.color= Color.GRAY
              Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
      ds= dpr.getSelectedDataPoints()
@@ -50,7 +58,7 @@ def feedbackPaint( g ):
              Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
              
              g.color= Color.GRAY
-             g.stroke= BasicStroke(3)
+             g.stroke= BasicStroke(1)
              Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
              
 addTopDecoration( dom.plots[0], feedbackPaint )
@@ -58,21 +66,19 @@ addTopDecoration( dom.plots[0], feedbackPaint )
 
 def reportPoints( dss ):
     'should be called from evt thread'
-    report= newApplication('report')
-    setApplication(report)
     tt= dss[:,0] + ( dss[:,2] - dss[:,0] ) / 2  # time mid point of each interval
     #plot( 0, tt, dss[:,1], ytitle='Y1' )
+    slopesm.setDataSet( 0, 'Slope', dataset(  tt, dss[:,4] ) )
+    slopesm.setDataSet( 1, 'Y2', dataset(  tt, dss[:,3] ) )
     #plot( 1, tt, dss[:,3], ytitle='Y2' )
     #plot( 2, tt, dss[:,4], ytitle='Slope' )
-    waitUntilIdle()
-    setDefaultApplication()    
     
 def refresh():
     'stupid call to force the plot to repaint and draw changes.  Someday this won''t be needed.'
     dom.plots[0].controller.dasPlot.invalidateCacheImage()
     dom.plots[0].controller.dasPlot.repaint()
-    #dss= dpr.getDataPoints()
-    #invokeLater( reportPoints, dss )
+    dss= dpr.getDataPoints()
+    invokeLater( reportPoints, dss )
     
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
 from org.das2.dataset import DataSetUpdateListener
