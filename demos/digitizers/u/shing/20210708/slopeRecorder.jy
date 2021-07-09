@@ -1,7 +1,7 @@
 setScriptTitle('slope digitizer')
-setScriptDescription('''Demo created for Shing showing how a digitizer for measuring slopes
+setScriptDescription('''Demo created showing how a digitizer for measuring slopes
 is made.  Reset and load the data, then run this script. click and drag to add a directed line 
-segment to the digitizer tab.  
+segment to the digitizer tab.  Slopes are recorded on the digitizer tab.
 <hr>This requires at least 20210708a (or v2021a_7 once released) to run.''')
 
 from org.das2.components import DataPointRecorder
