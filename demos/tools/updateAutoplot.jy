@@ -98,7 +98,9 @@ if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
                     error= ''
     else:
         error= 'abort'
-        
+else:
+    error= 'Unable to find autoplot.jar' 
+    
 if ( error!='' ):
     JOptionPane.showMessageDialog(getViewWindow(),'unable to update','update failed, '+error+'.',JOptionPane.WARNING_MESSAGE)
 elif ( error=='abort' ):
