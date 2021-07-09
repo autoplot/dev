@@ -102,7 +102,7 @@ else:
     error= 'Unable to find autoplot.jar' 
     
 if ( error!='' ):
-    JOptionPane.showMessageDialog(getViewWindow(),'unable to update','update failed, '+error+'.',JOptionPane.WARNING_MESSAGE)
+    JOptionPane.showMessageDialog(getViewWindow(),'unable to update: '+error,'update failed',JOptionPane.WARNING_MESSAGE)
 elif ( error=='abort' ):
     pass
 else:            
