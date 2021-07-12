@@ -1,0 +1,56 @@
+setScriptDescription('''Scan through all HAPI dataset ids and parameter names to
+identify two regular expressions which could be used to constrain a future version 
+of HAPI''')
+setScriptTitle('Check HAPI Regex')
+
+showNonComforming= getParam( 'nonConforming', False, 'Use ideal regex instead of inclusive', [False,True] )
+# There's a bug which prevents listing a github folder, so you need to check out the servers project and point to the local copy.
+# git clone git@github.com:hapi-server/servers.git .
+#serversHome= getParam('serversHome', 'https://github.com/hapi-server/servers/master/index/', 'git clone git@github.com:hapi-server/servers.git .' )
+serversHome= getParam('serversHome', 'file:/home/jbf/ct/hapi/git/servers/index/', 'Folder containing giant catalog' )
+
+from java.util.regex import Pattern
+from java.io import File
+from org.das2.util import FileUtil
+from org.json import JSONObject
+
+ss= FileUtil.readFileToString(getFile(serversHome+'servers.json',None))
+
+if showNonComforming:
+    datasetidRegex='[_a-zA-Z][_a-zA-Z0-9@\-\+\.\,\/]*'
+    parameterNameRegex= '[_a-zA-Z][_a-zA-Z0-9]{0,40}'
+else:
+    datasetidRegex='[_a-zA-Z][_a-zA-Z0-9@\-\+\.\,\/]*'
+    parameterNameRegex= '[_a-zA-Z1][_a-zA-Z0-9\-\+\/\*\.\>\%\ ]{0,60}'
+    
+#datasetidRegex='[a-zA-Z_]+[a-zA-Z0-9_/:-+]*'
+#parameterNameRegex= '[_a-zA-Z1][_a-zA-Z0-9\-\+\/\*\.\>\%\ ]{0,60}'
+
+parameterNamePattern= Pattern.compile(parameterNameRegex)
+datasetidPattern= Pattern.compile(datasetidRegex)
+
+nonConformingCount=0
+
+#ff= listDirectory('~/ct/git/servers/index//')  # bug in listDirectory
+ff= listDirectory(serversHome+'*.json')  
+for f in ff:
+    if f=='servers.json': continue
+    s= FileUtil.readFileToString(getFile(serversHome+f,None))
+    json= JSONObject( s )
+    print '# ' +json.get('id')
+    cs= json.get('catalog')
+    for i in xrange( cs.length() ):  
+        ci= cs.get(i)
+        id= ci.getString('id')
+        matcher= datasetidPattern.matcher(id)
+        if not matcher.matches():
+            print 'id mismatch: ', id
+        ps= ci.get( 'parameters' )
+        for j in xrange( ps.length() ):
+            pi= ps.get(j)
+            name= pi.get('name')
+            matcher= parameterNamePattern.matcher(name)
+            if not matcher.matches():
+                print 'name mismatch: ', name, ' of ', id
+                nonConformingCount= nonConformingCount+1
+print 'nonConformingCount: ', nonConformingCount
