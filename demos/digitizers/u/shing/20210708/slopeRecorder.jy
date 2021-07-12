@@ -11,6 +11,8 @@ from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
 from org.das2.graph import Arrow
 from org.das2.graph import GraphUtil
+from org.das2.util import ColorUtil
+from java.awt import BasicStroke
 from java.awt.geom import Point2D
 from org.das2.util import GrannyTextRenderer
 
@@ -23,7 +25,6 @@ slopesm.dom.controller.copyPlotAndPlotElements( slopesm.dom.plots[0], None, True
 addTab( 'slopes', slopesm.canvas )
 
 def feedbackPaint( g ):
-     from java.awt import BasicStroke
      ds= dpr.getDataPoints()
      if ( ds!=None ):
          i=1
@@ -50,9 +51,6 @@ def feedbackPaint( g ):
              p1= Point2D.Double( x1, y1 )
              p2= Point2D.Double( x2, y2 )
                                                
-             from org.das2.util import ColorUtil
-             from java.awt import BasicStroke
-
              g.color= ColorUtil.decodeColor('lightBlue')
              g.stroke= BasicStroke(5)
              Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
@@ -118,6 +116,12 @@ from org.das2.event import AbstractDragRenderer
 
 class MyDragRenderer( AbstractDragRenderer ):
     def renderDrag( self, g, p1, p2 ):
+        g.color= Color.GRAY
+        g.stroke= BasicStroke(3)
+        Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+        Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+        g.color= Color.BLACK
+        g.stroke= BasicStroke(1)
         Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
 
 mm.setDragRenderer( MyDragRenderer() )
