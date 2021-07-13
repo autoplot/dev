@@ -1,0 +1,19 @@
+setScriptDescription('''Demo how a script can be used to modify a vap''')
+
+load( PWD + 'template.vap' )
+
+sleep(1000)
+dom.controller.setDataSourceFilter( dom.dataSourceFilters[3] )
+dom.controller.plotUri( 'vap+inline:circle(30)', False )
+
+sleep(1000)
+dom.controller.setDataSourceFilter( dom.dataSourceFilters[0] )
+dom.controller.plotUri( 'vap+inline:circle(30)', False )
+
+sleep(1000)
+dom.controller.setDataSourceFilter( dom.dataSourceFilters[1] )
+dom.controller.plotUri( 'vap+inline:circle(30)', False )
+
+sleep(1000)
+dom.controller.setDataSourceFilter( dom.dataSourceFilters[2] )
+dom.controller.plotUri( 'vap+inline:circle(30)', False )
