@@ -1,0 +1,15 @@
+setScriptDescription('''Demo how a script can be used to modify a vap''')
+
+load( PWD + 'template.vap' )
+
+sleep(1000)
+dom.controller.plotUri( 3, 'vap+inline:circle(30)', False )
+
+sleep(1000)
+dom.controller.plotUri( 0, 'vap+inline:circle(30)', False )
+
+sleep(1000)
+dom.controller.plotUri( 1, 'vap+inline:circle(30)', False )
+
+sleep(1000)
+dom.controller.plotUri( 2, 'vap+inline:circle(30)', False )
