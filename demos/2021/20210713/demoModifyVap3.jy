@@ -1,0 +1,20 @@
+setScriptDescription('''Demo how a script can be used to modify a vap''')
+
+load( PWD + 'template.vap' )
+
+sleep(1000)
+dom.controller.plotUri( 3, circle(30), False )
+
+sleep(1000)
+dom.controller.plotUri( 0, circle(30), False )
+
+sleep(1000)
+dom.controller.plotUri( 1, circle(30), False )
+
+sleep(1000)
+dom.controller.plotUri( 2, circle(30), False )
+
+for i in xrange(100):
+    dd= circle(30)+sin(linspace(0,PI*i,601))
+    dom.controller.plotUri( 2, dd, False )
+    sleep(10)
