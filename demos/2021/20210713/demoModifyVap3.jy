@@ -15,6 +15,6 @@ sleep(1000)
 dom.controller.plotUri( 2, circle(30), False )
 
 for i in xrange(100):
-    dd= circle(30)+sin(linspace(0,PI*i,601))
+    dd= circle(sin(i/99.*PI)*5+30)+sin(linspace(0,PI*i,601))
     dom.controller.plotUri( 2, dd, False )
     sleep(10)
