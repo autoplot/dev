@@ -1,0 +1,15 @@
+setScriptDescription('''Simple script useful for testing rename variable refactoring''')
+
+ddd= 333
+bbb= 555
+
+def bahbah():
+    ddd= 321
+    global bbb
+    bbb= 654
+    
+print ddd+bbb
+bahbah()
+
+print ddd
+print bbb
