@@ -1,0 +1,80 @@
+import org.das2.graph.Renderer
+from org.das2.qds import SemanticOps
+from org.das2.util import ColorUtil
+
+from org.das2.qds import DataSetUtil
+
+def quartiles( ds ):
+    s= sort(ds)
+    N= len(s)
+    qq= [ s[0], s[N/4], s[N/2], 
+          s[3*N/4], s[N-1] ]
+    return ds[qq]
+
+def quartilesDataSet( ds, dep0, deltaT=None ):
+    dsdep0= ds.property( QDataSet.DEPEND_0 )
+    if deltaT==None:
+        deltaT= DataSetUtil.guessCadence( dep0, None )
+    dsb= DataSetBuilder(2,len(dep0),5)
+    for d in dep0:
+        rng= datumRange( [ d - deltaT/2, d + deltaT/2 ] )
+        print 'rng: ', rng
+        r= where( within( dsdep0, rng ) )
+        print 'r: ', r
+        if len(r)>0:
+             qq= quartiles( ds[r] )
+        else:
+             qq= [ -1e31, -1e31, -1e31, -1e31, -1e31 ]
+        dsb.nextRecord( dataset(qq) )
+    dsb.putProperty( QDataSet.DEPEND_0, dep0 )
+    result= dsb.getDataSet()
+    print( 'result: ', result )
+    print ( 'dep0: ', dep0 )
+    return dsb.getDataSet()
+    
+class BoxNWhisker( org.das2.graph.Renderer ):
+    def doAutorange( self, ds ):
+        print 'in autorange!'
+        yrng= extent(ds)
+        xrng= extent( SemanticOps.xtagsDataSet(ds) )
+        return join( xrng, yrng )
+        
+    "'Box and Whisker plot where data is ds[n,5].  A line is drawn from ds[i,0] to ds[i,4].  A box is drawn from ds[i,1] to ds[i,3].  A line is drawn at ds[i,2]."
+    def render( self, g, xAxis, yAxis, mon=None ):
+        ds= self.getDataSet()
+        if ( ds==None ):
+               print 'ds is None, how strange'
+               return
+        xx= ds.property( QDataSet.DEPEND_0 )
+        yy= ds
+        w= ( xx[1]-xx[0] ) * 0.50
+        xunits= SemanticOps.getUnits(xx)
+        yunits= SemanticOps.getUnits(yy)
+        sfillColor= self.getControl('fillColor','blue')
+        from org.das2.util import ColorUtil
+        fillColor= ColorUtil.decodeColor(sfillColor)
+        scolor= self.getControl('color','black')
+        colr= ColorUtil.decodeColor(scolor)
+        for i in xrange( 0,xx.length() ):
+            x= xx[i]
+            m0= yy[i,0]
+            m1= yy[i,1]
+            m2= yy[i,2]
+            m3= yy[i,3]
+            m4= yy[i,4]
+            xmid= int( xAxis.transform( x, xunits ) )
+            xmin= int( xAxis.transform( x-w/2, xunits ) )
+            xmax= int( xAxis.transform( x+w/2, xunits ) )
+            g.drawLine( xmid, int(yAxis.transform(m0,yunits)),
+                        xmid, int(yAxis.transform(m4,yunits)) )
+            ymin= int(yAxis.transform(m1,yunits))
+            ymax= int(yAxis.transform(m3,yunits))
+
+            g.setColor( fillColor )
+            g.fillRect( xmin, ymax,
+                        xmax-xmin, ymin-ymax )
+            g.setColor( colr )
+            g.drawRect( xmin, ymax,
+                        xmax-xmin, ymin-ymax )
+            ymid= int(yAxis.transform(m2,yunits))
+            g.drawLine( xmin, ymid, xmax, ymid )
