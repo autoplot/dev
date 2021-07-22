@@ -1,0 +1,15 @@
+setScriptTitle('Test Box and Whisker')
+ds= rand(10000) + sin( linspace(0,TAU,10000) )
+tt= linspace( '2000-01-01T00:00',  '2000-01-01T11:01', 10000 )
+ds= dataset( tt, ds )
+ff= getFile( PWD + 'boxAndWhisker.jy', monitor.getSubtaskMonitor('get boxAndWhisker') )
+execfile( str(ff) )
+bins= linspace( '2000-01-01T00:00',  '2000-01-02T00:00', 24*6 )
+dsq= quartilesDataSet( ds,bins )
+
+setLayoutOverplot( 2 )
+
+plot( 0, dsq, renderer=BoxNWhisker(), renderType='internal>fillColor=gray&color=black',
+         yrange=[-3,3]  )
+         
+plot( 1, ds )
