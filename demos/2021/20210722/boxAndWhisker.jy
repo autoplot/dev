@@ -1,3 +1,10 @@
+setScriptDescription('''Box and whisker code.  This library should be imported 
+into other codes using 
+<code>
+ff= getFile( PWD + 'boxAndWhisker.jy', monitor.getSubtaskMonitor('get boxAndWhisker') )
+execfile( str(ff) )
+</code>
+''')
 import org.das2.graph.Renderer
 from org.das2.qds import SemanticOps
 from org.das2.util import ColorUtil
