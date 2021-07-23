@@ -6,9 +6,6 @@ setScriptLabel('Split Plot Horizontally')
 
 # was karate chop script, at https://github.com/autoplot/dev/blob/master/demos/2019/20191108/karateChop.jy
 
-if ( len(dom.canvases[0].getColumns())>0 ):
-     raise Exception('this board has already been chopped')
-
 lockObject= 'lock'
 
 dom.controller.registerPendingChange( 'script' , lockObject )
@@ -23,11 +20,14 @@ thelock.lock()
 try:
     from org.autoplot.dom import DomUtil
     
-    cols= dom.canvases[0].controller.addColumns(2)
+    if ( len( dom.canvases[0].columns )==2 ):
+        cols=  dom.canvases[0].columns
+    else:
+        cols= dom.canvases[0].controller.addColumns(2)
     
     rang= dom.plots[0].xaxis.range
     
-    pp= [ dom.plot ]
+    pp= [ dom.controller.plot ]
     firstRightP= None
     
     for p in pp:
