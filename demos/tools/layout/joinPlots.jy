@@ -1,0 +1,59 @@
+setScriptDescription( '''Combine two adjacent plots into one, creating one
+plot and moving all the plot elements onto one plot.''' )
+
+setScriptLabel('Join Plots')
+
+pp= dom.controller.getSelectedPlotsArray()
+if ( len(pp)<2 ):
+    raise Exception('select two adjacent plots')
+
+lockObject= 'lock'
+
+dom.controller.registerPendingChange( 'script' , lockObject )
+dom.canvases[0].controller.dasCanvas.registerPendingChange('script' , lockObject )
+dom.controller.performingChange( 'script' , lockObject )
+dom.canvases[0].controller.dasCanvas.performingChange( 'script' , lockObject )
+
+from org.autoplot.dom import Plot, DomUtil,DomOps
+
+plots= pp
+
+cols= map( lambda x :DomUtil.getElementById(dom,x), map( Plot.getColumnId, plots ) ) 
+rows= map( lambda x : DomUtil.getElementById(dom,x), map( Plot.getColumnId, plots ) ) 
+    
+[ pbottom, ptop ] = DomOps.bottomAndTopMostPlot( dom, plots )
+[ pleft, pright ] = DomOps.leftAndRightMostPlot( dom, plots )
+
+[ rbottom, rtop ] =  map( lambda x :DomUtil.getElementById(dom,x), map( Plot.getRowId, [ pbottom, ptop ]  ) ) 
+[ cleft, cright ] =  map( lambda x :DomUtil.getElementById(dom,x), map( Plot.getColumnId, [ pleft, pright ]  ) ) 
+
+newColumn= dom.canvases[0].controller.addColumn()
+newColumn.left= cleft.left
+newColumn.right= cright.right
+
+newRow= dom.canvases[0].controller.addRow()
+newRow.bottom= rbottom.bottom
+newRow.top= rtop.top
+
+p= dom.controller.addPlot( newRow,newColumn )
+
+pes= []
+for p1 in plots:
+    l= dom.controller.getPlotElementsFor(p1)
+    pes.extend( l.toArray(  ) )
+
+dsfs= []
+for pe1 in pes:
+    try:
+        dsfs.index(pe1.dataSourceFilterId)
+        print 'this was already moved'
+    except:
+        print 'new one found', pe1.dataSourceFilterId, dsfs
+        dsfs.append( pe1.dataSourceFilterId )
+        pe1.plotId= p.id
+    
+for p1 in plots:
+    dom.controller.deletePlot(p1)
+    
+dom.controller.changePerformed( 'script' , lockObject )
+dom.canvases[0].controller.dasCanvas.changePerformed( 'script' , lockObject )
