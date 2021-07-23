@@ -1,0 +1,64 @@
+setScriptDescription( '''Split the focus plot into two by adding columns and new plots, and 
+moving the plots' content into the two plots.  If there are already two columns, these
+will be used.''' )
+
+setScriptLabel('Split Plot Horizontally')
+
+# was karate chop script, at https://github.com/autoplot/dev/blob/master/demos/2019/20191108/karateChop.jy
+
+if ( len(dom.canvases[0].getColumns())>0 ):
+     raise Exception('this board has already been chopped')
+
+lockObject= 'lock'
+
+dom.controller.registerPendingChange( 'script' , lockObject )
+dom.canvases[0].controller.dasCanvas.registerPendingChange('script' , lockObject )
+dom.controller.performingChange( 'script' , lockObject )
+dom.canvases[0].controller.dasCanvas.performingChange( 'script' , lockObject )
+
+c= dom.canvases[0].controller.dasCanvas
+thelock= c.mutatorLock()  
+thelock.lock()
+
+try:
+    from org.autoplot.dom import DomUtil
+    
+    cols= dom.canvases[0].controller.addColumns(2)
+    
+    rang= dom.plots[0].xaxis.range
+    
+    pp= [ dom.plot ]
+    firstRightP= None
+    
+    for p in pp:
+        p.columnId= cols[0].id
+        p.xaxis.range= rang.rescale(0,0.5)
+    
+        row= DomUtil.getElementById( dom, p.rowId )
+        pright= dom.controller.addPlot( row,cols[1] )
+        pright.syncTo( p, ['columnId','id'] )
+        
+        if ( firstRightP==None ):
+            firstRightP= pright
+        else:
+            bind( firstRightP.xaxis, 'range', pright.xaxis, 'range' )
+            
+        pes0= p.controller.getPlotElement() # this is a dumb routine and really should not be used.    
+        peright=  dom.controller.addPlotElement(pright,None)
+        peright.syncTo( pes0, ['plotId','id'] )
+        pright.xaxis.range= rang.rescale(0.5,1.0)
+        
+        bind( p.yaxis, 'range', pright.yaxis, 'range' )
+        bind( p.zaxis, 'range', pright.zaxis, 'range' )
+        bind( p.yaxis, 'log', pright.yaxis, 'log' )
+        bind( p.zaxis, 'log', pright.zaxis, 'log' )
+        p.zaxis.visible=False
+        pright.yaxis.drawTickLabels= False
+        bind( p.xaxis, 'scale', pright.xaxis, 'scale' )
+    cols[0].right='50%-1em'
+    cols[1].left= '50%+1em'
+    
+finally:
+        dom.controller.changePerformed( 'script' , lockObject )  
+        dom.canvases[0].controller.dasCanvas.changePerformed( 'script' , lockObject )  
+        thelock.unlock()  
