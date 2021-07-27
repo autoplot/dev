@@ -1,5 +1,5 @@
 setScriptLabel('Rename Variable')
-setScriptDescription('Rename a variable in the script editor.  Note this misses some in classes, and gets some it should not!')
+setScriptDescription('Rename a variable in the script editor.  Note this misses some in classes, and gets some it should not! See https://github.com/autoplot/dev/blob/master/rfe/sf/394/renameSymbol.jy')
 
 print '==== v0728 ===='
 from javax.swing import JOptionPane,BoxLayout
