@@ -110,6 +110,7 @@ def refactorVarRename( script, i, old, new ):
         else:
             i0= 0            
         i0= i0 + (n.beginColumn-1)
+        print 'replace at '+str(i0)
         script= script[0:i0] + new + script[(i0+oldLen):]
     return script
     
