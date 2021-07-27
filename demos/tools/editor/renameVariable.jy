@@ -1,0 +1,120 @@
+setScriptLabel('Rename Variable')
+setScriptDescription('Rename a variable in the script editor.  Note this misses some in classes, and gets some it should not!')
+
+print '==== v0728 ===='
+from javax.swing import JOptionPane,BoxLayout
+from javax.swing import JPanel,JLabel,JTextField,BoxLayout
+from java.awt import FlowLayout,GridLayout,BorderLayout
+from org.autoplot.jythonsupport.ui import EditorAnnotationsSupport
+
+editor= getApplication().getScriptPanel().getEditorPanel()
+
+script= editor.getText()
+var= editor.getSelectedText()
+
+if var==None or len(var)==0:
+    var= EditorAnnotationsSupport.getSymbolAt( editor, editor.getCaretPosition() )
+    
+import javax.swing.JLabel
+import javax.swing.JTextField
+import javax.swing.GroupLayout
+from java.lang import Short
+
+jLabel1 = javax.swing.JLabel()
+jLabel2 = javax.swing.JLabel()
+jLabel3 = javax.swing.JLabel()
+jTextField1 = javax.swing.JTextField()
+jTextField2 = javax.swing.JTextField()
+
+jLabel1.setText("Old Symbol:")
+
+jLabel2.setText("New Symbol:")
+
+jLabel3.setText("<html>Replace each instance where the name is used with the name.  Global/Local context is not supported.")
+
+jTextField1.setText("jTextField1")
+
+jTextField2.setText("jTextField2")
+
+panel1=javax.swing.JPanel()
+
+layout = javax.swing.GroupLayout(panel1)
+panel1.setLayout(layout)
+layout.setHorizontalGroup(
+    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, False)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                    .addComponent(jTextField1))
+                .addGap(0, 74, Short.MAX_VALUE))))
+    )
+layout.setVerticalGroup(
+    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+    .addGroup(layout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(jLabel1)
+            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            .addComponent(jLabel2)
+            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+    )
+
+
+oldtf= jTextField1
+newtf= jTextField2
+
+oldtf.editable=False
+oldtf.text= var
+newtf.text= var
+
+def refactorVarRename( script, i, old, new ):
+    oldLen= len(old)
+    import org.python.core.parser
+    from org.python.parser.ast import VisitorBase
+    n= org.python.core.parser.parse(script, 'exec')
+    nodes= []
+    class VB( VisitorBase ):
+        def traverse(self,sn):
+            print '%04d: %s' % ( sn.beginLine, sn )
+            sn.traverse(self);
+        def unhandled_node(self,sn):
+            return sn
+        def visitName(self,n):
+            if ( n.id==old ):
+                nodes.append(n)
+        def visitModule(self,n):
+            print '%04d: %s MODULE' % ( n.beginLine, n )
+        def visitFunctionDef(self,n):
+            print '%04d: %s FUNCTIONDEF' % ( n.beginLine, n )
+            
+    vb= VB()
+    for st in n.body:
+        st.traverse(vb)
+    for n in nodes[::-1]:
+        root= editor.document.defaultRootElement
+        if n.beginLine>0:
+            i0= root.getElement(n.beginLine-1).startOffset
+        else:
+            i0= 0            
+        i0= i0 + (n.beginColumn-1)
+        script= script[0:i0] + new + script[(i0+oldLen):]
+    return script
+    
+if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(), panel1, 'rename variable', JOptionPane.OK_CANCEL_OPTION ) ):
+    newn= newtf.text
+    script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
+    if var!=newn:
+        editor.setText( script1 )
