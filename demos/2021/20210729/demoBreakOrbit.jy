@@ -1,6 +1,6 @@
 # demo bug where Autoplot doesn't break orbits
 
-fix_break= getParam('fixBreak',False,'manually insert fill data to break line',['True','False'])
+fix_break= getParam('fixBreak',False,'manually insert fill data to break line',[True,False])
 
 from java.lang import Double
 tr = '2017-12-05T15:00 to 17:00' 
