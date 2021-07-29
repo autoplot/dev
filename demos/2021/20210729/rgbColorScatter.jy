@@ -1,0 +1,19 @@
+from org.das2.util import ColorUtil
+len_data= 10000
+
+randomSeed(5334)
+
+xx= randn(len_data)
+yy= randn(len_data)
+
+rgb_color = zeros(len_data)
+
+rgb_color.putProperty( QDataSet.UNITS, Units.rgbColor )
+
+for i in xrange(len(rgb_color)):
+    if ( xx[i]<0 and yy[i]<0 ):
+        rgb_color[i] = ColorUtil.CRIMSON.getRGB() & 0xFFFFFF
+    else:
+        rgb_color[i] = ColorUtil.BLUE.brighter().getRGB() & 0xFFFFFF
+
+plot( xx, yy, rgb_color, symbolSize=5 )
