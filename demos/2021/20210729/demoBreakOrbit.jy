@@ -1,0 +1,21 @@
+# demo bug where Autoplot doesn't break orbits
+
+from java.lang import Double
+tr = '2017-12-05T15:00 to 17:00' 
+
+mlt_fu3_full = getDataSet('http://rbsp.space.umn.edu/firebird/FU3/2017/FU3_context_20171205_v01.cdf?MLT')
+mlt_fu3 = trim(mlt_fu3_full, tr)
+
+lshell_fu3_full = getDataSet('http://rbsp.space.umn.edu/firebird/FU3/2017/FU3_context_20171205_v01.cdf?McIlwainL')
+lshell_fu3 = trim(lshell_fu3_full, tr) 
+
+mlt_fu3 = (mlt_fu3/24.)*PI*2.0 
+
+xx_fu3 = cos( ( mlt_fu3) ) * lshell_fu3
+yy_fu3 = sin( ( mlt_fu3) ) * lshell_fu3 
+
+r= where( yy_fu3.gt(2.8) )
+
+yy_fu3[r]= Double.NaN
+
+plot( xx_fu3, yy_fu3 )
