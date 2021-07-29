@@ -1,3 +1,5 @@
+# Sadie had a case where using units 'rgbColor' would be useful in a graphic.
+
 from org.das2.util import ColorUtil
 len_data= 10000
 
