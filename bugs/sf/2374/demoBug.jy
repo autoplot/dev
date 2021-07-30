@@ -1,0 +1,12 @@
+from org.autoplot.jythonsupport import StaticCodeAnalysis
+
+script='''mlt_micro3 = 1
+print mlt_micro3
+xx_micro3 = cos( ( mlt_micro3) )
+'''
+
+usages= StaticCodeAnalysis.showUsage( script,"mlt_micro3" )
+
+for n in usages:
+    print n, n.beginLine, n.beginColumn, n.image
+    
