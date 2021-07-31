@@ -1,3 +1,6 @@
+from org.autoplot.jythonsupport import StaticCodeAnalysis
+from java.util import Collections
+
 setScriptLabel('Rename Variable')
 setScriptDescription('Rename a variable in the script editor.  Note this misses some in classes, and gets some it should not!')
 
@@ -82,28 +85,9 @@ newtf.text= var
 
 def refactorVarRename( script, i, old, new ):
     oldLen= len(old)
-    import org.python.core.parser
-    from org.python.parser.ast import VisitorBase
-    n= org.python.core.parser.parse(script, 'exec')
-    nodes= []
-    class VB( VisitorBase ):
-        def traverse(self,sn):
-            print '%04d: %s' % ( sn.beginLine, sn )
-            sn.traverse(self);
-        def unhandled_node(self,sn):
-            return sn
-        def visitName(self,n):
-            if ( n.id==old ):
-                nodes.append(n)
-        def visitModule(self,n):
-            print '%04d: %s MODULE' % ( n.beginLine, n )
-        def visitFunctionDef(self,n):
-            print '%04d: %s FUNCTIONDEF' % ( n.beginLine, n )
-            
-    vb= VB()
-    for st in n.body:
-        st.traverse(vb)
-    for n in nodes[::-1]:
+    usages= StaticCodeAnalysis.showUsage( script,var );
+    Collections.reverse( usages )
+    for n in usages:
         root= editor.document.defaultRootElement
         if n.beginLine>0:
             i0= root.getElement(n.beginLine-1).startOffset
@@ -113,8 +97,9 @@ def refactorVarRename( script, i, old, new ):
         print 'replace at '+str(i0)
         script= script[0:i0] + new + script[(i0+oldLen):]
     return script
-    
-if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(), panel1, 'rename variable', JOptionPane.OK_CANCEL_OPTION ) ):
+
+option= JOptionPane.showConfirmDialog( getApplication(), panel1, 'rename variable', JOptionPane.OK_CANCEL_OPTION )    
+if ( JOptionPane.OK_OPTION==option ):
     newn= newtf.text
     script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
     if var!=newn:
