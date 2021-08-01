@@ -1,0 +1,19 @@
+from javax.swing import JPanel
+from java.util import HashMap
+# test doVariables
+
+from org.autoplot.jythonsupport.ui import ParametersFormPanel
+pfp= ParametersFormPanel()
+
+src='''
+pp= getParam('aparam',0)
+print pp
+'''
+
+params= HashMap()
+zparamsPanel= JPanel()
+env= HashMap()
+
+pfp.doVariables( env, src, params, zparamsPanel )
+
+addTab( 'testDoVariables', zparamsPanel )
