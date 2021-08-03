@@ -1,0 +1,36 @@
+from java.awt.geom import Line2D
+from org.das2.util import ColorUtil,LoggerManager
+setScriptDescription('''draw a horizontal or vertical strike at the position''')
+
+reset()
+
+location= getParam('location','20','location of the line' )
+horizVert= getParam('horizVert','v','horizontal or vertical', ['h','v'] )
+scol= getParam('color','blue')
+
+col= ColorUtil.decodeColor(scol)
+
+if ( horizVert=='h' ):
+    plot= dom.plots[0]
+else:
+    plot= dom.plots[0]
+    
+logger= LoggerManager.getLogger('myscript')
+
+def drawLineAt( g ):
+    try:
+        if horizVert=='v':
+            xaxis= plot.xaxis.controller.dasAxis
+            xpos= xaxis.transform( datum(location) )
+            g.color= col
+            g.draw(Line2D.Double( xpos, 0, xpos, dom.canvases[0].height ))
+        else:
+            yaxis= plot.yaxis.controller.dasAxis
+            ypos= yaxis.transform( datum(location) )
+            g.color= col
+            g.draw(Line2D.Double( 0, ypos, dom.canvases[0].width, ypos ) )
+
+    except:
+        logger.fine('units conversion')
+         
+addTopDecoration( dom.canvases[0], drawLineAt )
