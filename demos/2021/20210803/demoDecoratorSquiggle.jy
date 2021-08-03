@@ -1,0 +1,25 @@
+from java.awt.geom import Line2D
+from org.das2.util import ColorUtil
+setScriptDescription('''demo how a decorator can be used to draw arbitrary regions''')
+
+location= getParam('location','20','location of the squiggle' )
+reset()
+
+def drawGreenSquigglyLineAt( g ):
+     try:
+         xaxis= dom.plots[0].xaxis.controller.dasAxis
+         xpos= xaxis.transform( datum(location) )
+         g.color= ColorUtil.GREEN
+         squiggle = 4
+         twoSquiggles = squiggle * 2
+         
+         xx = xpos 
+        
+         for yy in range( 0, dom.canvases[0].height, twoSquiggles ):
+             g.draw( Line2D.Double( xx-squiggle, yy, xx+squiggle, yy+squiggle ) )
+             g.draw( Line2D.Double( xx+squiggle, yy+squiggle, xx-squiggle, yy+squiggle*2 ) )
+             
+     except:
+         pass
+         
+addTopDecoration( dom.canvases[0], drawGreenSquigglyLineAt )

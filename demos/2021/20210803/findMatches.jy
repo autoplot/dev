@@ -1,0 +1,27 @@
+from java.util.regex import Pattern
+from org.das2.util import FileUtil
+setScriptDescription('''download each of the matching URLs, and then grep for text''')
+
+plug= ','.join(map(str,range(1900,1947)))
+
+uriPattern= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test140/%s/consoleText'
+
+plugs= getParam('plug',plug,'comma separated list of things to try')
+
+uritemplate= getParam('uriTemplate',uriPattern,'star will be replaced with each of the plug entries')
+
+regex= getParam( 'regex', 'No Datum exists', 'regular expression search target' )
+
+pattern= Pattern.compile(regex)
+
+for p in plug.split(','):
+    f= getFile( uriPattern % p, None )
+    t= FileUtil.readFileToString(f)
+    lines= t.split('\n')
+    print '# ' + p + ' ' +uriPattern % p, len(lines)
+    matchCount=0
+    for line in lines:
+        if pattern.matcher(line).find():
+            matchCount+= matchCount
+            print line
+    
