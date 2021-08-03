@@ -2,13 +2,12 @@ from java.awt.geom import Line2D
 from org.das2.util import ColorUtil
 setScriptDescription('''demo how a decorator can be used to draw arbitrary regions''')
 
-l = 20
+location= getParam('location','20','location of the vertical line' )
+
 def drawLineAt( g ):
      xaxis= dom.plots[0].xaxis.controller.dasAxis
-     xpos= xaxis.transform( datum(l) )
+     xpos= xaxis.transform( datum(location) )
      g.color= ColorUtil.GREEN
-     
-     xx = xpos
-     g.draw(Line2D.Double( xx, 0, xx, dom.canvases[0].height ))
+     g.draw(Line2D.Double( xpos, 0, xpos, dom.canvases[0].height ))
          
 addTopDecoration( dom.canvases[0], drawLineAt )
