@@ -1,0 +1,37 @@
+setScriptDescription('''This shows a number of bugs that were fixed in v2021a_8''')
+
+ds1= dindgen(10)*1e6
+ds1.putProperty(QDataSet.UNITS,Units.us1970)
+
+ds2= dindgen(10)*1e6
+ds2.putProperty(QDataSet.UNITS,Units.us1980)
+
+ds3= dindgen(10)*1e6
+ds3.putProperty(QDataSet.UNITS,Units.us2000)
+
+ds= bundle( ds1, ds2, ds3 )
+
+ds[ 0,0 ] = '2000-01-01T00:09'
+ds[ 0,1 ] = '2000-01-01T00:09'
+ds[ 0,2 ] = '2000-01-01T00:09'
+
+print ds[0,0], ds[0,1], ds[0,2]  # okay
+
+ds[0,:]= '2000-01-01T00:59'
+print ds[0,0], ds[0,1], ds[0,2]  # Shows bug
+
+ds[0,[0,1,2]]= '2000-01-01T00:49'
+print ds[0,0], ds[0,1], ds[0,2]  # Shows bug
+
+ds[[0,0,0],[0,1,2]]= '2000-01-01T00:19'
+print ds[0,0], ds[0,1], ds[0,2]  # Shows bug
+
+ds0= convertUnitsTo( dataset( '2000-01-01T00:39' ), Units.us2000 )
+ds1= convertUnitsTo( dataset( '2000-01-01T00:39' ), Units.us1970 )
+ds2= convertUnitsTo( dataset( '2000-01-01T00:39' ), Units.us1980 )
+
+vv= join( join( ds0, ds1 ), ds2 )
+print vv[0], vv[1], vv[2], vv[0].property(QDataSet.UNITS), vv[1].property(QDataSet.UNITS), vv[2].property(QDataSet.UNITS)
+
+ds[0,:] = vv
+print ds[0,0], ds[0,1], ds[0,2]  # Shows bug
