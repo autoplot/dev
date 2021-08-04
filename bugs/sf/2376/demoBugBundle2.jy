@@ -1,0 +1,44 @@
+# demo bundle mutability
+
+aa= findgen(20)
+bb= findgen(20)/10
+cc= sin( findgen(20)/10 )
+
+dd= bundle( aa, bb, cc )
+dd.makeImmutable() # TODO: this should have the effect of making aa,bb,cc immutable as well.
+
+print dd
+
+dd[0,0]= 10
+print 'dd[0,0]', dd[0,0]
+
+print 'aa[0]', aa[0]
+bb[0]= 1.
+
+print 'bb[0]', bb[0]
+print 'dd[0,1]', dd[0,1]
+
+
+print '~~~'
+
+aa= findgen(20)
+bb= findgen(20)/10
+cc= sin( findgen(20)/10 )
+
+dd= bundle( aa, bb, cc )
+dd.makeImmutable() # TODO: this should have the effect of making aa,bb,cc immutable as well.
+
+print dd
+
+bb[0]= 1.
+
+print 'bb[0]', bb[0]
+print 'dd[0,1]', dd[0,1]
+
+dd[0,0]= 10
+print 'dd[0,0]', dd[0,0]
+
+print 'aa[0]', aa[0]
+
+print '~~~'
+print 'Note they are different.'
