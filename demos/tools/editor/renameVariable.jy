@@ -85,7 +85,10 @@ newtf.text= var
 
 def refactorVarRename( script, i, old, new ):
     oldLen= len(old)
-    usages= StaticCodeAnalysis.showUsage( script,var );
+    usagesNew= StaticCodeAnalysis.showUsage( script,new )
+    if len( usagesNew )>0 :
+        raise Exception( "new name '"+new+"' is already in use" )
+    usages= StaticCodeAnalysis.showUsage( script,old )
     Collections.reverse( usages )
     for n in usages:
         root= editor.document.defaultRootElement
@@ -101,8 +104,10 @@ def refactorVarRename( script, i, old, new ):
 option= JOptionPane.showConfirmDialog( getApplication(), panel1, 'rename variable', JOptionPane.OK_CANCEL_OPTION )    
 if ( JOptionPane.OK_OPTION==option ):
     newn= newtf.text
-    script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
-    if var!=newn:
-        editor.setText( script1 )
-    
-    
+    try: 
+        script1= refactorVarRename( script, editor.getCaretPosition(), var, newn )
+        if var!=newn:
+            editor.setText( script1 )
+    except:    
+        import sys
+        JOptionPane.showMessageDialog( getApplication(), str(sys.exc_info()[1]) )
