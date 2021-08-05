@@ -1,0 +1,56 @@
+# copying data from B with units to A which is dimensionless will set the units of A.
+
+aa = fltarr(10)
+
+bb = findgen(10)
+bb = putProperty(bb, QDataSet.UNITS, "m")
+
+nn = dataset([1,2,4,6])
+
+aa[nn] = bb[nn]
+
+print aa, aa.property(QDataSet.UNITS)
+print bb, bb.property(QDataSet.UNITS) 
+
+# copying over a datum with units into an array has the effect of setting the units.
+
+aa= dblarr(5)
+aa[0]= datum('2019-02-22T00:00Z')
+aa[1]= '2019-02-22T01:00Z'
+print aa[0], aa[1], aa[2]
+
+# this might have surprising effects when creating bundles.
+bb= zeros(10,5)
+
+# a bundle descriptor should override
+from org.das2.qds import SparseDataSetBuilder
+bds= SparseDataSetBuilder(2)
+bds.putProperty( QDataSet.NAME, 0, 'Time' )
+bds.putProperty( QDataSet.UNITS, 0, bb.property(QDataSet.UNITS) )
+bds.putProperty( QDataSet.NAME, 1, 'Length' )
+bds.putProperty( QDataSet.UNITS, 1, Units.lookupUnits('m') )
+bds.putProperty( QDataSet.NAME, 2, 'Index1' )
+bds.putProperty( QDataSet.UNITS, 2, None )
+bds.putProperty( QDataSet.NAME, 3, 'Index2' )
+bds.putProperty( QDataSet.UNITS, 3, Units.dimensionless )
+bds.putProperty( QDataSet.NAME, 4, 'Duration' )
+bds.putProperty( QDataSet.UNITS, 4, Units.seconds )
+bds.setLength(5)
+
+bb.putProperty( QDataSet.BUNDLE_1, bds.getDataSet() )
+
+for i in xrange(10):
+    bb[i,0]= '2019-02-22T01:%02dZ' % i
+    bb[i,1]= '10m'
+    bb[i,2]= '10'
+    bb[i,3]= '10'
+    bb[i,4]= '10s'
+print bb[0,0]
+print bb[0,1] # not '10m'
+
+print bb[0,0]
+print bb[0,1] # not '10m'
+print bb[0,2] # This is unfortunate--time units are used because we can't assert dimensionless.
+# This shows if Units.dimensionless is used, then this is okay.  Though missing units should be equivalent to Units.dimensionless.
+print bb[0,3] 
+print bb[0,4]
