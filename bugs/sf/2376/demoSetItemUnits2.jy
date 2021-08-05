@@ -1,0 +1,19 @@
+setScriptDescription('''This shows a number of bugs that were fixed in v2021a_8.  Here we create
+an array and set to a rank 0 dataset, and its units should be adopted.''')
+
+ds= zeros(10,2)
+
+# Setting the data has the effect of 
+ds[0,0]= dataset( '2021-08-05T00:00Z' )
+ds[:,0]= dataset( '2021-08-05T00:00Z' ) + dataset( findgen(10), units='hr' )
+
+# Note this never worked, as recently as 2021a_7.
+#ds[0,1]= dataset( '5 hr' )
+#ds[:,1]= dataset( 3600* 5 + findgen(10), units='s' )
+
+print ds[9,0]
+
+print ds[0,1], 'A value was never set here.'
+
+plot( ds[:,0] )
+plot( 1, ds[:,1] )
