@@ -1,0 +1,26 @@
+from org.das2.util.filesystem import FileSystem
+setScriptDescription('Demo bug with listing github fs')
+
+fs= FileSystem.create('https://github.com/autoplot/dev/blob/master/bugs/sf/2376')
+fo= fs.getFileObject('/demoSetItemUnits3.jy')
+
+#print fs.gitHubMapFile( URI( 'https://github.com/autoplot/dev/blob/master/bugs/sf/2376' ), '/demoSetItemUnits3.jy' )
+#print fs.gitHubMapFile( URI( 'https://github.com/autoplot/dev/blob/master/bugs/sf/2376' ), '/' )
+
+print fo.size, 'should be 535'
+
+ll= fs.listDirectory('/')
+for l in ll:
+    print l
+    
+
+print len(ll), 'should be 4'
+
+fs= FileSystem.create('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/')
+fo= fs.getFileObject('readme.md')
+
+print fo.size, 'should be 34'
+
+ll= fs.listDirectory('/')
+for l in ll:
+    print l
