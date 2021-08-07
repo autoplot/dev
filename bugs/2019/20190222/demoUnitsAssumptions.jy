@@ -1,6 +1,6 @@
 # copying data from B with units to A which is dimensionless will set the units of A.
 
-print 'hello'
+print 'hello demoUnitsAssumptions.jy'
 
 aa = fltarr(10)
 
