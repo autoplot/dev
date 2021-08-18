@@ -1,0 +1,11 @@
+setScriptDescription('''When you interactively use operations (a.k.a. filters) on the data tab to modify the data, how 
+can these filters be used in a script?  The OperationsProcessor handles these strings and
+can be used.  Note, however, that all operations should be available as script commands as well,
+and let us (autoplot@groups.google.com) if a function is missing.''')
+
+ds= dataset( findgen(40), sin( linspace( 0, 2*PI, 40 ) ) )
+
+from org.das2.qds import OperationsProcessor
+ds= OperationsProcessor.sprocess( "|setDepend0Units('ms since 1970-01-01T00:00')", ds, None )
+
+plot( ds )
