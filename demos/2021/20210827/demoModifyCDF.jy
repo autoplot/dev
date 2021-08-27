@@ -4,8 +4,6 @@ add a quality flag where the density is greater than 20.''')
 from gov.nasa.gsfc.spdf.cdfj import CDFReader
 cdffile= getFile( 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2019/rbsp-a_density_emfisis-l4_20190101_v1.5.16.cdf', monitor )
 
-density= getDataSet( 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2019/rbsp-a_density_emfisis-l4_20190101_v1.5.16.cdf?density' )
-
 cdfread = CDFReader( str(cdffile) )
 
 nrec= cdfread.getNumberOfValues( 'Epoch' )  # this depends on the file
@@ -26,7 +24,7 @@ from org.das2.qds import ArrayDataSet
 
 myquality= jarray.zeros( nrec,'f' )
 ads= ArrayDataSet.wrap(myquality,[nrec],False)
-
+density= getDataSet( 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2019/rbsp-a_density_emfisis-l4_20190101_v1.5.16.cdf?density' )
 r= where( density.gt(20.) )
 ads[r]= 1
 
