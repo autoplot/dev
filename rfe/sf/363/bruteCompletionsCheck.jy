@@ -58,10 +58,7 @@ def runAsync():
 mon.setTaskSize( len(ss) )
 mon.started()
 invokeLater( runAsync )
-<<<<<<< HEAD
+
 while not monitor.isFinished():
     sleep(200)
-=======
-
->>>>>>> 346f00f0803d438620213626acf11363c00bafbe
     
