@@ -1,0 +1,31 @@
+from java.awt.geom import Ellipse2D
+from org.das2.graph import Renderer,Painter
+setScriptDescription('''experiment with showing close points''')
+
+n= 1000
+xx= accum( randn(n) )
+yy= accum( randn(n) )
+
+plot( xx, yy )
+
+rr= zeros( xx.length() )
+
+for i in range(xx.length()):
+    x= xx[i]
+    y= yy[i]
+    d= sqrt( ( xx - x )**2 + ( yy - y )**2 )
+    r= where( d.lt( 1 ) )
+    rr[i]= r.length()
+
+class RadPlot( Renderer ):
+    def render( self, g, xaxis, yaxis ):
+        for i in range(xx.length()):
+            ix= xaxis.transform( xx[i] )
+            iy= yaxis.transform( yy[i] )
+            sz= rr[i].value()
+            g.fill( Ellipse2D.Double( ix-sz, iy-sz, sz*2, sz*2 ) )
+            
+plot( xx, yy, rr, symbolSize=10, renderer=RadPlot() )
+
+
+    
