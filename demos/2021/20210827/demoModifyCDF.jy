@@ -1,0 +1,38 @@
+setScriptDescription('''Autoplot and CDFJ library can be used to modify a CDF file.  Here we 
+add a quality flag where the density is greater than 20.''')
+
+from gov.nasa.gsfc.spdf.cdfj import CDFReader
+cdffile= getFile( 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2019/rbsp-a_density_emfisis-l4_20190101_v1.5.16.cdf', monitor )
+
+density= getDataSet( 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2019/rbsp-a_density_emfisis-l4_20190101_v1.5.16.cdf?density' )
+
+cdfread = CDFReader( str(cdffile) )
+
+nrec= cdfread.getNumberOfValues( 'Epoch' )  # this depends on the file
+print 'nrec=', nrec
+
+from gov.nasa.gsfc.spdf.cdfj import GenericReader, CDFWriter
+
+# this copies over the entire file
+cdfwrite= CDFWriter( cdfread )
+
+# now we can tweak metadata
+cdfwrite.setVariableAttributeEntry( 'density', 'UNITS', 'cm^-3' );
+
+# we can also add a variable
+from gov.nasa.gsfc.spdf.cdfj import CDFDataType
+import jarray
+from org.das2.qds import ArrayDataSet
+
+myquality= jarray.zeros( nrec,'f' )
+ads= ArrayDataSet.wrap(myquality,[nrec],False)
+
+r= where( density.gt(20.) )
+ads[r]= 1
+
+cdfwrite.defineCompressedVariable( 'myquality', CDFDataType.FLOAT, [] )
+cdfwrite.addData( 'myquality', myquality, [0,nrec-1,1] )
+cdfwrite.addVariableAttributeEntry( 'myquality', 'var_type', CDFDataType.CHAR, 'DATA' )
+cdfwrite.addVariableAttributeEntry( 'myquality', 'DEPEND_0', CDFDataType.CHAR, 'Epoch' )
+
+cdfwrite.write( '/tmp/newfile.cdf' )
