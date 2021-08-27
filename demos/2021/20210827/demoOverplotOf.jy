@@ -1,0 +1,35 @@
+# Demo swap plot order
+reset()
+
+plot( 0, 'vap+inline:X=linspace(-150,149,300)&Y=linspace(-150,149,300)&Z=randn(300,300)&X,Y,Z', colorTable='grayScale' )
+plot( 1, 'vap+inline:randn(300,300)', colorTable='white_blue_black' )
+plot( 2, 'vap+inline:accum(randn(300))+150', overplotOf=dom.plots[1]  )
+
+def printAll( arr ):
+    for a in arr:
+        print a
+        
+printAll( dom.canvases[0].controller.dasCanvas.components )
+
+dom.plots[1].rowId= dom.plots[0].rowId
+bind( dom.plots[1].xaxis, 'range', dom.plots[0].xaxis, 'range' )
+bind( dom.plots[1].yaxis, 'range', dom.plots[0].yaxis, 'range' )
+
+dom.plots[1].xaxis.range=datumRange(-150,300).rescale( -0.1,1.1 )
+dom.plots[1].yaxis.range=datumRange(-150,300).rescale( -0.1,1.1 )
+dom.plots[1].zaxis.visible=False
+
+dom.plots[0].title='plot0'
+dom.plots[1].title='plot1'
+
+dom1= getDocumentModel()
+p= dom1.plots[0]
+dom1.plots= [ dom1.plots[1], dom1.plots[0] ]
+
+dom.syncTo( dom1 )
+print dom.plots[0].title
+print dom1.plots[0].title
+
+printAll( dom.canvases[0].controller.dasCanvas.components )
+
+fixLayout()
