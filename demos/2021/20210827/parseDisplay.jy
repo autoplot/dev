@@ -1,0 +1,71 @@
+# On a cool September morning, I sat on the back deck playing with the digits p
+# parser and thinking of how a class could be developed.
+
+def stats( ds,i,j ):
+    'return the mean and stddev of the block around i,j'
+    b= ds[i-3:i+3,j-3:j+3]
+    m= mean( b )
+    s= stddev( b )
+    return ( m,s )
+
+def eq( a,b ):
+    'return True if the two (mean,stddev) are within two stddevs of one another.'
+    return ( (a[0]-b[0])**2 < 2*(a[1]*b[1]) )
+
+def getSegments( i,j ):
+    'return the segments of the 7-segment display with the center of the display at i,j'
+    g= stats( ds, i,j )
+    a= stats( ds, i+8, j+9 )
+    b= stats( ds, i+7, j-9 )
+    c= stats( ds, i-2, j-17 )
+    d= stats( ds, i-8, j-9 )
+    e= stats( ds, i-6, j+9 )
+    f= stats( ds, i+2, j+17 )
+    zf= stats( ds, i+1, j+9 )
+    zc= stats( ds, i-1, j-9 )
+    return ( eq(zf,a), eq(zf,b), eq(zc,c), eq(zc,d), eq(zf,e), eq(zf,f), eq(zf,g) )
+
+def digit( (a,b,c,d,e,f,g) ):
+    '''
+Starting in the upper right, going clockwise, then the middle.
+d0= 	0×3F 	0×7E 	on 	on 	on 	on 	on 	on 	off
+d1= 	0×06 	0×30 	off on 	on 	off off off off
+d2= 	0×5B 	0×6D 	on 	on 	off on 	on 	off on
+d3= 	0×4F 	0×79 	on 	on 	on 	on 	off off on
+d4= 	0×66 	0×33 	off on 	on 	off off on 	on
+d5= 	0×6D 	0×5B 	on 	off on 	on 	off on 	on
+d6= 	0×7D 	0×5F 	on 	off on 	on 	on 	on 	on
+d7= 	0×07 	0×70 	on 	on 	on 	off off off off
+d8= 	0×7F 	0×7F 	on 	on 	on 	on 	on 	on 	on
+d9= 	0×6F 	0×7B 	on 	on 	on 	on 	off on 	on
+'''
+    print (a,b,c,d,e,f,g) 
+    d= a + b*2 + c*4 + d*8 + d*16 + e*32 + g*64
+    if ( d==0x3f ): return 0
+    elif ( d==0x06 ): return 1
+    elif ( d==0x5B ): return 2
+    elif ( d==0x4F ): return 3
+    elif ( d==0x66 ): return 4
+    elif ( d==0x6D ): return 5
+    elif ( d==0x7D ): return 6
+    elif ( d==0x07 ): return 7
+    elif ( d==0x7f ): return 8
+    elif ( d==0x6f ): return 9 
+    else: return -1
+        
+ds= getDataSet('http://jfaden.net/~jbf/camE/2016/09/05/20160905T001101.jpg?channel=greyscale')
+a= stats( ds, 235, 88 )
+print a
+b= stats( ds, 243, 88 )
+print b
+print a[0]-b[0]
+print eq(a,b)
+c= stats( ds, 235, 72 )
+print c
+print eq(a,c)
+print getSegments(236,81)
+print digit(getSegments(236,81))
+print getSegments(185,82)
+print digit(getSegments(185,82))
+
+    
