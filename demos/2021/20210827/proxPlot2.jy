@@ -1,0 +1,51 @@
+from org.das2.graph import Renderer
+from java.awt.geom import Line2D,GeneralPath,Path2D
+setScriptDescription('Demo triangulate function')
+import math
+
+xx= randn(1000)
+yy= randn(1000)
+
+tt= triangulate(xx,yy)
+
+zcb= dom.plots[0].zaxis.controller.dasAxis
+
+def triArea( xx, yy, t1 ):
+    ax= xx[t1[0]]
+    bx= xx[t1[1]]
+    cx= xx[t1[2]]
+    ay= yy[t1[0]]
+    by= yy[t1[1]]
+    cy= yy[t1[2]]
+    
+    return abs( ax * ( by- cy ) +
+                bx * ( cy - ay ) +
+                cx * ( ay - by ) ) / 2;
+                
+class TriPlot( Renderer ):
+    def render( self, g, xaxis, yaxis ):
+        for i in range(tt.length()):
+            t1= tt[i]
+            x1= xx[t1[0]]
+            x2= xx[t1[1]]
+            x3= xx[t1[2]]
+            y1= yy[t1[0]]
+            y2= yy[t1[1]]
+            y3= yy[t1[2]]
+            ix1= xaxis.transform( x1 )
+            ix2= xaxis.transform( x2 )
+            ix3= xaxis.transform( x3 )
+            iy1= yaxis.transform( y1 )
+            iy2= yaxis.transform( y2 )
+            iy3= yaxis.transform( y3 )
+            gp= Path2D.Double()
+            gp.moveTo( ix1, iy1 )
+            gp.lineTo( ix2, iy2 )
+            gp.lineTo( ix3, iy3 )
+            gp.lineTo( ix1, iy1 )
+            a= triArea( xx, yy, t1 )
+            g.color= Color( zcb.rgbTransform( 1/a.value(),Units.dimensionless) )
+            g.fill( gp )
+            
+plot( xx, yy, symbolSize=10, renderer=TriPlot() )
+
