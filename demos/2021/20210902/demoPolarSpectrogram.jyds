@@ -1,0 +1,22 @@
+# demo dataset for color scatter
+
+nrad=201
+nangle=108
+
+randomSeed(0)
+
+rad=linspace(0,20,nrad)
+angle= ( indgen(nangle)+0.5 ) /nangle * TAU
+angle.putProperty( QDataSet.UNITS,Units.radians)
+
+aa= outerProduct( angle,ones(nrad) )
+rr=  outerProduct( ones(nangle), rad )
+
+d= sqrt(pow(rr*cos(aa)-10,2)+pow(rr*sin(aa)-10,2))
+
+data= randn( nangle, nrad ) + 2*cos(aa)
+r= where( d.lt(5) )
+data[r]= 10
+
+result= dataset( angle, rad, data, renderType='polar' )
+

@@ -1,0 +1,13 @@
+# demo dataset for color scatter
+n=5000
+randomSeed(0)
+rad=linspace(0,5*TAU,n)
+a=rad+randn(n)
+a=mod(a,TAU)
+a=putProperty(a,QDataSet.UNITS,Units.radians)
+c=replicate(10,n)
+c= dataset( c )
+d= sqrt(pow(rad*cos(a)-10,2)+pow(rad*sin(a)-10,2))
+r= where(d.lt(9))
+c[r]= 20
+result= dataset( a,rad,c, renderType='polar' )
