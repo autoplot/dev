@@ -1,0 +1,30 @@
+from java.awt import Color
+setScriptTitle('Demo new eventsDiff function')
+setScriptDescription('Calculate and compare versions of data products found using aggregation templates.')
+
+dss1= None
+dss1= createEvent( dss1, datumRange('2019-001'), 0x00FFFF,  'e1 ')
+dss1= createEvent( dss1, datumRange('2019-002'), 0x00FFFF,  'e1' )
+dss1= createEvent( dss1, datumRange('2019-003'), 0x00FFFF,  'e1' )
+dss1= createEvent( dss1, datumRange('2019-004'), 0x00FFFF,  'e1' )
+dss1= createEvent( dss1, datumRange('2019-005'), 0x00FFFF,  'e1' )
+dss1= createEvent( dss1, datumRange('2019-006'), 0x00FFFF,  'e1' )
+#dss1= createEvent( dss1, datumRange('2019-010'), 0x00FFFF,  'e1' )
+#dss1= createEvent( dss1, datumRange('2019-010'), 0x00FFFF,  'e1' )
+
+dss2= None
+#dss2= createEvent( dss2, datumRange('2019-001'), 0x00FFFF,  'e1' )
+#dss2= createEvent( dss2, datumRange('2019-002'), 0x00FFFF,  'e1' )
+dss2= createEvent( dss2, datumRange('2019-003'), 0x00FFFF,  'e1' )
+dss2= createEvent( dss2, datumRange('2019-004'), 0x00FFFF,  'e1' )
+dss2= createEvent( dss2, datumRange('2019-005'), 0x00FFFF,  'e2' )
+dss2= createEvent( dss2, datumRange('2019-006'), 0x00FFFF,  'e1' )
+dss2= createEvent( dss2, datumRange('2019-010'), 0x00FFFF,  'e1' )
+
+diff= eventsDiff( dss1, dss2 ) 
+
+reset()
+plot( 0, dss1, ytitle='before' )
+plot( 1, dss2, ytitle='after' )
+plot( 2, diff, xrange='2018-365/2019-007', ytitle='diff' )
+
