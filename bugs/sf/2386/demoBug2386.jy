@@ -1,0 +1,6 @@
+ds= randn(0,10)
+s1= dataset([])
+
+from org.das2.qds import SortDataSet
+ss = SortDataSet( ds, s1 )
+print ss
