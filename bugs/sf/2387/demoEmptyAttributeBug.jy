@@ -17,4 +17,7 @@ cdf= CDFReader( '/tmp/myCdfWithEmptyGlobalAttribute.cdf' )
 aa= cdf.getGlobalAttribute('myGlobalAttribute')
 print '>>', aa.getEntry(0), '<<'
 
-cdf.close()
+meta= getMetadata( '/tmp/myCdfWithEmptyGlobalAttribute.cdf?myVariable' , None )
+print meta
+print meta['GlobalAttributes']['myGlobalArtribute'], '  (should be empty string)'
+
