@@ -1,0 +1,9 @@
+# labels on the page
+x= dataset( '2017-3-29T00:00Z' ) + [ '5hr', '12.5hr' ]
+y= dataset( [ 1e2, 1e4 ] )
+nom= Units.nominal()
+
+z= dataset( [ nom.createDatum( 'NK' ), nom.createDatum( 'ID' ) ] )
+result= dataset( x, y, z, renderType='digital' )
+
+
