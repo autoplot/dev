@@ -1,0 +1,20 @@
+
+setScriptDescription('This demonstrates there is a path that handles an empty string correctly.')
+from gov.nasa.gsfc.spdf.cdfj import GenericReader, CDFWriter,CDFDataType,CDFReader
+
+cdfwrite= CDFWriter(True)
+cdfwrite.addGlobalAttributeEntry('myGlobalAttribute','')
+
+cdfwrite.defineVariable( 'myVariable', CDFDataType.FLOAT, [] )
+
+import jarray
+data= jarray.array( [ 101,102,103,104,105,106] , 'f' )
+
+cdfwrite.addOneD( 'myVariable', data )
+cdfwrite.write( '/tmp/myCdfWithEmptyGlobalAttribute.cdf' )
+
+cdf= CDFReader( '/tmp/myCdfWithEmptyGlobalAttribute.cdf' )
+aa= cdf.getGlobalAttribute('myGlobalAttribute')
+print '>>', aa.getEntry(0), '<<'
+
+cdf.close()
