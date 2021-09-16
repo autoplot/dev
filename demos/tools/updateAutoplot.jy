@@ -19,8 +19,8 @@ if ( resource.startswith('jar:file:') ) :
 else:
     raise Exception('unable to update jar file, autoplot.jar not found.')
 
-from java.awt import GridLayout
-from javax.swing import JPanel, JLabel, JTextField, JFormattedTextField
+from java.awt import GridLayout,BorderLayout,Dimension
+from javax.swing import JPanel, JLabel, JTextField, JFormattedTextField,ImageIcon, JEditorPane,JScrollPane
 
 # we need to identify the original file which links to the jar we are using.
 from java.nio.file import Path,Paths,Files
@@ -70,13 +70,25 @@ ntf=JTextField(jarlink)
 ntf.setEditable(False)
 panel.add( ntf )
 
+#imgScreen = ImageIcon(URL('http://autoplot.org/jnlp/'+version+'/screen.png'))
+#label= JLabel('')
+#label.setIcon(imgScreen)
+
+website = JEditorPane('http://autoplot.org/jnlp/'+version)
+website= JScrollPane(website)
+website.preferredSize= website.maximumSize= Dimension(1040,320)
+
+fpanel= JPanel(BorderLayout() )
+fpanel.add(panel, BorderLayout.CENTER)
+fpanel.add( website, BorderLayout.SOUTH )
+
 from java.io import File
 from java.nio.file import Files, FileSystems,Paths    
 from javax.swing import JOptionPane
 
 if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
     
-    response= JOptionPane.showConfirmDialog(getViewWindow(), panel, 'update Autoplot', JOptionPane.OK_CANCEL_OPTION )
+    response= JOptionPane.showConfirmDialog(getViewWindow(), fpanel, 'update Autoplot', JOptionPane.OK_CANCEL_OPTION )
 
     if ( response==JOptionPane.OK_OPTION ):
         
