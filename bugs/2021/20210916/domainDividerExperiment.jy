@@ -1,0 +1,26 @@
+from org.das2.datum import DomainDividerUtil
+
+case= getParam( 'case', '0.5,19', 'case number',
+   [ '1,10', '1.1,10', '0.5,19', '0.2,0.94', '0.5,99', '0.5,100', '1,9', '2,10', '2,100' ] )
+
+ss= case.split(',')
+mn= datum(ss[0])
+mx= datum(ss[1])
+
+ldd= DomainDividerUtil.getDomainDivider( mn, mx,True)
+ff= DomainDividerUtil.getDatumFormatter(ldd,DatumRangeUtil.union(mn,mx))
+
+print ldd
+
+ldd= ldd.finerDivider(True)
+print ldd
+
+bb= ldd.boundaries( mn, mx )
+print '[',
+for i in xrange(bb.getLength()):
+    if i>0: print ',',
+    print ff.format(bb.get(i)),
+print ']'
+
+if ( bb.get(bb.getLength()-1).value()==0.0 ):
+    raise Exception("last value was 0.0" )

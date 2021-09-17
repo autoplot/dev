@@ -1,0 +1,18 @@
+from org.das2.datum import DomainDividerUtil
+
+case= getParam( 'case', '1.1,10', 'case number', [ '1.1,10'] )
+
+ss= case.split(',')
+mn= datum(ss[0])
+mx= datum(ss[1])
+
+ldd= DomainDividerUtil.getDomainDivider( datum(1.1), datum(10), False )
+print ldd
+
+bb= ldd.boundaries( mn, mx )
+print '[',
+for i in xrange(bb.getLength()):
+    if i>0: print ',',
+    print bb.get(i),
+print ']'
+
