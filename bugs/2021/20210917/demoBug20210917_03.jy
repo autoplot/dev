@@ -1,0 +1,11 @@
+reset()
+
+from org.autoplot import RenderType
+plot( 'vap+inline:randn(300,30,20)/10+outerProduct(ones(300),linspace(PI/2,PI,30))+sin(linspace(0,PI,300))' )
+
+waitUntilIdle()
+
+dom.controller.getPlotElement().setRenderType(RenderType.series)
+waitUntilIdle()
+
+plot= dom.controller.copyPlotAndPlotElements(dom.plots[0],None,False,False)
