@@ -9,4 +9,5 @@ waitUntilIdle()
 dom.controller.getPlotElement().setRenderType(RenderType.series)
 waitUntilIdle()
 
-plot= dom.controller.copyPlotAndPlotElements(dom.plots[0],None,False,False)
+dom.controller.getPlotElement().setRenderType(RenderType.stairSteps)
+

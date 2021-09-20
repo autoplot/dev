@@ -1,8 +1,7 @@
-from org.autoplot.dom import DomOps
 reset()
 
 from org.autoplot import RenderType
-plot( 'vap+inline:randn(300,5,6)/10+outerProduct(ones(300),linspace(PI/2,PI,5))+sin(linspace(0,PI,300))' )
+plot( getDataSet( 'file:/home/jbf/project/rbsp/u/allison/20210917/rbspa_int_ect-rept-sci-L1_20180102_v1.0.0.cdf?Sector_Results' ) )
 
 waitUntilIdle()
 
