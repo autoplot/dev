@@ -43,7 +43,7 @@ Here are most of the field types:
 | $H | 2-digit hour | data_2021_123_<b>04</b>0000.dat |  data_$Y_$j_<b>$H</b>$M$S.dat |
 | $M | 2-digit minute | data_2021_123_04<b>00</b>00.dat | data_$Y_$j_$H<b>$M</b>$S.dat |
 | $S | 2-digit second | data_2021_123_0400<b>00</b>.dat | data_$Y_$j_$H$M$S.dat | data__$Y_$j_$H$M<b>$S</b>.dat |
-| $v | version number, alpha sorted | data_20210503_v<b>04</b>.dat | data_$Y$m$d_v$v.dat |
+| $v | version number, alpha sorted | data_20210503_v<b>04</b>.dat | data_$Y$m$d_v<b>$v</b>.dat |
 | $(v;sep) |version number, semmantic versioning | data_20210503_v<b>4.1.5</b>.dat | data_$Y$m$d_v$(v,sep).dat |
 | $x | ignore, matching anything | data_20210503_<b>faden</b>.dat | data_$Y$m$d_$x.dat |
 | $y | 2-digit year | data_<b>21</b>0503.dat  | data_$y$m$d.dat |
