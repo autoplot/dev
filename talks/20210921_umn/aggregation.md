@@ -52,4 +52,14 @@ Some missions also use numbers to count off orbit numbers.  These are supported
 too, as well as subsecond fields using $(subsec;places=6).  
 See https://github.com/hapi-server/uri-templates/wiki/Specification
 
+# Make Aggregation Feature
+There's a tool that tries to form aggregations for you, [menubar]&rarr;Tools&rarr;Aggregate.  
+This scans through the focus URI looking for things that look like they could be templated.
+For example, four digits between 1900 and 2100 are likely to be a year.  This assumes that
+templates go from coursest to finest (Year to Minute), 4-digit years, 3-digit day of years 
+(003 for Jan 3), and so on.  It's pretty simple logic but works pretty well.  
+
+Note also when "tab" is pressed to get a directory listing, it may also suggest an 
+aggregation, using the same logic.
+
 
