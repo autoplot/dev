@@ -42,11 +42,11 @@ Here are most of the field types:
 | $j | 3-digit day of year | data_2021_<b>123</b>_040000.dat | data_$Y_<b>$j</b>_$H$M$S.dat |
 | $H | 2-digit hour | data_2021_123_<b>04</b>0000.dat |  data_$Y_$j_<b>$H</b>$M$S.dat |
 | $M | 2-digit minute | data_2021_123_04<b>00</b>00.dat | data_$Y_$j_$H<b>$M</b>$S.dat |
-| $S | 2-digit second | data_2021_123_0400<b>00</b>.dat | data_$Y_$j_$H$M$S.dat | data__$Y_$j_$H$M<b>$S</b>.dat |
+| $S | 2-digit second | data_2021_123_0400<b>00</b>.dat | data__$Y_$j_$H$M<b>$S</b>.dat |
 | $v | version number, alpha sorted | data_20210503_v<b>04</b>.dat | data_$Y$m$d_v<b>$v</b>.dat |
-| $(v;sep) |version number, semmantic versioning | data_20210503_v<b>4.1.5</b>.dat | data_$Y$m$d_v$(v,sep).dat |
-| $x | ignore, matching anything | data_20210503_<b>faden</b>.dat | data_$Y$m$d_$x.dat |
-| $y | 2-digit year | data_<b>21</b>0503.dat  | data_$y$m$d.dat |
+| $(v;sep) |version number, semmantic versioning | data_20210503_v<b>4.1.5</b>.dat | data_$Y$m$d_v<b>$(v,sep)</b>.dat |
+| $x | ignore, matching anything | data_20210503_<b>faden</b>.dat | data_$Y$m$d_<b>$x</b>.dat |
+| $y | 2-digit year | data_<b>21</b>0503.dat  | data_<b>$y</b>$m$d.dat |
 
 Some missions also use numbers to count off orbit numbers.  These are supported
 too, as well as subsecond fields using $(subsec;places=6).  
