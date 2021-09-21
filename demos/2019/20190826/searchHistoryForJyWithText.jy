@@ -1,5 +1,5 @@
 # grep all Jython scripts for string
-
+# see https://research-git.uiowa.edu/space-physics/rbsp/ap-script/-/blob/master/u/jeremy/20210921/myScriptGrep.jy which may be more complete.
 search= getParam('search', 'servers.json', 'string to search for' )
 
 from org.autoplot.datasource import AutoplotSettings
