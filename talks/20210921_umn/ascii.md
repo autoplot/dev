@@ -28,7 +28,7 @@ This complexity is hidden from the scientist by the ASCII Data Source Editor.
 It provides tabs to manage all the things that can be controlled, and 
 gives a preview of how the file will be interpretted.  
 
-* image of ascii editor *
+* image of ascii editor
 
 ## Selecting Columns
 Typically one column is read in and corresponds to the Y parameter on the 
@@ -46,6 +46,9 @@ can also be used to indicate the extent of valid data.
 Selecting multiple columns will load in several quantities at once.
 
 # Handling Time Tags
+
+* image of times tab
+
 Often the time tags are not one ISO8601 time, but are split out into separate
 fields which must be combined to form a time tag.  In this case we use 
 the first column to indicate the position, and then a specification indicating
