@@ -4,7 +4,7 @@ setScriptDescription( 'write pngwalk to mp4, minding timetags.  The PNGWalkTool 
 
 fps= getParam( 'fps', 15, 'frames per second', [ 15,30 ] )
 
-outf= getParam( 'out', '/home/jbf/tmp/product.%02d.mp4' % fps, 'mpg output file' )
+outf= getParam( 'out', '/tmp/product.%02d.mp4' % fps, 'mpg output file' )
 
 from org.autoplot import AppManager
 pwt= AppManager.getInstance().getApplication(1)
@@ -12,9 +12,10 @@ pwt= AppManager.getInstance().getApplication(1)
 from org.autoplot.pngwalk import PngWalkTool
 #assert isinstance( pwt, PngWalkTool )
 
-d= 'http://central.maven.org/maven2/org/jcodec/'
+d= 'https://repo1.maven.org/maven2/org/jcodec/'
 import sys
-addToSearchPath( sys.path,d+'jcodec/0.2.2/jcodec-0.2.2.jar',monitor.getSubtaskMonitor('load jar'))
+
+addToSearchPath( sys.path,d+'jcodec/0.2.5/jcodec-0.2.5.jar',monitor.getSubtaskMonitor('load jar'))
 addToSearchPath( sys.path,d+'jcodec-javase/0.2.2/jcodec-javase-0.2.2.jar',monitor.getSubtaskMonitor('load jar'))
 
 from org.jcodec.api.awt import AWTSequenceEncoder
