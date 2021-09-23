@@ -4,7 +4,7 @@ setScriptDescription( 'write pngwalk to mp4, minding timetags.  The PNGWalkTool 
 
 fps= getParam( 'fps', 15, 'frames per second', [ 15,30 ] )
 
-outf= getParam( 'out', '/home/jbf/tmp/product.%02d.mp4' % fps, 'mpg output file' )
+outf= getParam( 'out', '/tmp/product.%02d.mp4' % fps, 'mpg output file' )
 
 from org.autoplot import AppManager
 pwt= AppManager.getInstance().getApplication(1)
