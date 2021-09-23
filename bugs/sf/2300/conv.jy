@@ -27,8 +27,8 @@ def update(c1,c2):
     f1= exp( -pow( distance(512,c1,10.), 2 ) )
     f2= exp( -pow( distance(512,c2,10.), 2 ) )
     logger.fine('calc f1 f2')
-    invokeLater( plot, 0, f1, ylog=False, yrange=[-0.1,1.1] )
-    invokeLater( plot, 1, f2 )
+    plot( 0, f1, ylog=False, yrange=[-0.1,1.1] )
+    plot( 1, f2 )
     logger.fine('plot f1 f2')
     ff1= fft(f1)
     ff2= fft(f2)
@@ -38,19 +38,16 @@ def update(c1,c2):
     logger.fine('done compute conv')
     pe= dom.plotElements[2]
     pe.getController().dsfReset= False
-    invokeLater( plot, 2, ff3, ylog=False, yrange=[-0.01,0.1],
-          ytitle='convolution' )
+    plot( 2, ff3, ylog=False, yrange=[-0.01,0.1], ytitle='convolution'  )
     ff4= magnitude(ifft(complexMultiply(ff2,complexConj(ff1))))
     logger.fine('done compute cross-corr')
-    invokeLater( plot, 3, ff4, ylog=False, yrange=[-0.01,0.1],
-          ytitle='cross-corr' )
+    plot( 3, ff4, ylog=False, yrange=[-0.01,0.1],ytitle='cross-corr'  )
     r= imax(ff4)
     ann.pointAtX= datum(r)
     ann.xrange= datumRange([r,r])
     ann.pointAtY= datum(ff4[r])
     ann.text= '%.1f'%datum(r)
     logger.fine('done plot')
-    #plot( 3, f1-f2, ylog=False, yrange=[-0.1,1.1] )
 
 def updateEvt(evt):
     global sl1
