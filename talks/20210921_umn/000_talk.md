@@ -8,6 +8,8 @@ The talk will be a 45 minute talk on use of Autoplot, following Sadie's introduc
 * CDAWeb, Das2Servers, and HAPI servers
 * orbits for time intervals and other Autoplot quirks.
 * using PNGWalkTool Quality Control.
+* filters on the data tab
+  - load in waveform data, fftPower to show as spectrum
 * scripting -- [ https://github.com/autoplot/documentation/wiki/scripting ]
 * collaboration with scripting, using GitHub and GitLabs.
   - what is git -- RCS system
