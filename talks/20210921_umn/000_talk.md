@@ -11,6 +11,8 @@ The talk will be a 45 minute talk on use of Autoplot, following Sadie's introduc
 * filters on the data tab
   - load in waveform data, fftPower to show as spectrum
 * scripting -- [ https://github.com/autoplot/documentation/wiki/scripting ]
+  - cross-correllation example
+  - script to replace lanl.gov with newmexicoconsortium.org
 * collaboration with scripting, using GitHub and GitLabs.
   - what is git -- RCS system
   - GitLabs is git plus a website that allows browsing and searching.
