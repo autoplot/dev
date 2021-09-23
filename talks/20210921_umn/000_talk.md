@@ -7,6 +7,7 @@ The talk will be a 45 minute talk on use of Autoplot, following Sadie's introduc
 * vap files
 * CDAWeb, Das2Servers, and HAPI servers
 * orbits for time intervals and other Autoplot quirks.
+* using PNGWalkTool Quality Control.
 * scripting -- [ https://github.com/autoplot/documentation/wiki/scripting ]
 * collaboration with scripting, using GitHub and GitLabs.
   - what is git -- RCS system
