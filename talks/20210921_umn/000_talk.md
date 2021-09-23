@@ -3,7 +3,7 @@ The talk will be a 45 minute talk on use of Autoplot, following Sadie's introduc
 * close look at the ASCII file source
   - Cindy provided a file
 * aggregation
-* multiple plots and layout
+* multiple plots and layout, bindings
 * vap files
 * CDAWeb, Das2Servers, and HAPI servers
 * orbits for time intervals and other Autoplot quirks.
