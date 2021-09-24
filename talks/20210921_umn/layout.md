@@ -2,15 +2,16 @@ Autoplot's layout is simple, just divide the page into some number of plots
 and go from there.  However there's really a lot more to it and control that 
 Autoplot (and the Das2 library used for its graphics) provides.
 
-<img src="media/addPlots.png">
+<img src="media/addPlots.png"><br>
 add plots dialog has option to create M by N plots.
 
-<img src="media/tweakDimensions.png">
+<img src="media/tweakDimensions.png"><br>
 plot boundaries can be tweaked with shift-mouse click, then drag.
 
-<img src="media/movePlot.png">
+<img src="media/movePlot.png"><br>
 middle circle is move plot 
 
+<img src="media/sameHeight.png"><br>
 * Auto-layout tries to make room when things run off the page. This can be disabled.
 * taller/shorter buttons on layout tab
 * "same height" will make the selected plots the same height

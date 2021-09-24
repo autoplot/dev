@@ -1,7 +1,7 @@
 # ASCII Files 
 ASCII files, or text files, are often used to send data.  They are easily 
-interpreted by humans and parseable in any programming language.  
-But they are also vague, so building software which can parse any ASCII file
+interpreted by humans and parseable in any programming language.  But they 
+are also vague, so building software which can parse any ASCII file
 is impossible.  Autoplot tries to make an efficient parser which can handle
 many types of ASCII files encountered.
 
@@ -10,25 +10,25 @@ and using a record parser to split each line into fields.  These
 fields are each handled by field parsers, finally turning the ASCII into
 quantities useful for science.
 
-The record parser is typically a "Delimiter parser" which breaks up each
+The record parser is typically a "delimiter parser" which breaks up each
 record into fields.  For example, the delimiter parser might be set up to
 break the record into fields by splitting it on commas or on white space,
-as is typically the case.  Other record parsers are available. For example
+as is typically the case.  Other record parsers are available. For example,
 there is one for fixed columns and another that uses regular expressions
 to identify fields.
 
-All this configuration is stored within the keywords of Autoplot URIs.
-With a CDF file, you can just specify the file, ?, and then the name of the
+All this configuration is stored within the keywords of Autoplot URIs. With 
+a CDF file, you can just specify the file, ?, and then the name of the
 variable you want to plot.  With ASCII URIs there is often more that's needed,
 such as the number of lines to skip before parsing or the units of the column
 read in.  Note that Autoplot tries to have a reasonable set of assumptions 
 that make this easier as well.
 
-This complexity is hidden from the scientist by the ASCII Data Source Editor.
-It provides tabs to manage all the things that can be controlled, and 
+This complexity is hidden from the scientist by the ASCII Data Source 
+Editor.  It provides tabs to manage the things that can be controlled, and 
 gives a preview of how the file will be interpretted.  
 
-* image of ascii editor
+<img src="media/ascii.png">
 
 ## Selecting Columns
 Typically one column is read in and corresponds to the Y parameter on the 
@@ -47,7 +47,7 @@ Selecting multiple columns will load in several quantities at once.
 
 # Handling Time Tags
 
-* image of times tab
+<img src='media/timeFormat.png'>
 
 Often the time tags are not one ISO8601 time, but are split out into separate
 fields which must be combined to form a time tag.  In this case we use 
@@ -61,12 +61,15 @@ and the first will contain the day, and the second will contain the time of
 day.
 
 Here a 'guess' button will try to guess the components automatically, assuming 
-that years will come before days, months have no more than 12 in them, and so on.
+that years will come before days, months have no more than 12 in them, and so 
+on.
+
+file:/home/jbf/ct/autoplot/u/2021/cindy/20210920/psp_tds_20210429_093418_l2_eandb_FA_ez0_scmu0_zoom_000_519.simpleColumns.dat
 
 # More difficult files
-A file was provided to me which has the times in seconds since some point in time.
-In this case I was able to plot the file used
 
+A file was provided to me which has the times in seconds since some point in 
+time.  In this case I was able to plot the file by specifying the time tag
+units:
 
-
-
+file:///home/jbf/ct/autoplot/u/2021/cindy/20210920/psp_tds_20210429_093418_l2_eandb_FA_ez0_scmu0_zoom_000_519.txt?depend0=TIME&column=Ex&depend0Units=seconds+since+2021-04-29T09:34:18.177
