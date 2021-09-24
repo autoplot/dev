@@ -7,7 +7,7 @@ The talk will be a 45 minute talk on use of Autoplot, following Sadie's introduc
 * [ vap files ](vapfiles.md)
 * [ CDAWeb ](cdaweb.md)
 * [ orbits for time intervals ](orbitsTimeRangeQuirks.md) and other Autoplot quirks.
-* using [ PNG Walk Tool Quality Control](pngwalkQualityControl.md).
+* using [ PNG Walk Tool Quality Control](pngwalkToolQualityControl.md).
 * [ filters ](filterProcesses.md) on the data tab
   - load in waveform data, fftPower to show as spectrum
 * scripting -- [ https://github.com/autoplot/documentation/wiki/scripting ]
