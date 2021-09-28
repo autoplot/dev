@@ -3,7 +3,7 @@ from java.awt import BorderLayout
 from javax.swing import JSlider,JPanel,BoxLayout
 # Goal: find the difference between two signals.
 
-# Keywords: cross correlation convolution
+# Keywords: cross correlation convolution autocorrelation
 
 logger= LoggerManager.getLogger('analysis')
 
