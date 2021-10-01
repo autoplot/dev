@@ -1,0 +1,37 @@
+ff= listDirectory('https://jfaden.net/~jbf/autoplot/data/sav/')
+ff= map( lambda x : 'https://jfaden.net/~jbf/autoplot/data/sav/' + x, ff )
+
+localRepo= '/home/jbf/ct/autoplot/git/dev/bugs/sf/2394/'
+
+outs= open( localRepo + 'table.md', 'w' )
+outs.write( '|      |      |      |\n' )
+outs.write( '| ---- | ---- | ---- |\n' )
+
+i= 1001
+for f in ff:
+    if not ( f.endswith('.sav') or f.endswith('.idlsav') ):
+        continue
+    try:
+        cc= getCompletions( f+'?')
+    except:
+        outs.write( '| %d | %s | %s |\n' % ( i, 'XXX', 'XXX' ) )
+        continue
+    for c in cc:
+        if c.endswith('='):
+            continue
+        print c
+        
+        reset()
+        
+        label= c[42:]
+        
+        try:
+            ds= getDataSet( c )
+            plot( ds )
+            writeToPng( localRepo + 'image/%08d.png' % i )
+            outs.write( '| %d | %s | <img src="%s" width="200"> |\n' % ( i, label, 'image/%08d.png' % i ) )
+        except:
+            outs.write( '| %d | %s | %s |\n' % ( i, label, 'XXX' ) )
+        i = i + 1
+
+outs.close()
