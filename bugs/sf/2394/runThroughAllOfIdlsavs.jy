@@ -7,7 +7,13 @@ outs= open( localRepo + 'table.md', 'w' )
 outs.write( '|      |      |      |\n' )
 outs.write( '| ---- | ---- | ---- |\n' )
 
+monitor.setTaskSize(len(ff))
+monitor.started()
+
+i=0
 for f in ff:
+    monitor.setTaskProgress(i)
+    i=i+1
     if not ( f.endswith('.sav') or f.endswith('.idlsav') ):
         continue
     try:
@@ -36,3 +42,4 @@ for f in ff:
             outs.write( '| %d | %s | %s |\n' % ( i, label, 'XXX' ) )
 
 outs.close()
+monitor.finished()
