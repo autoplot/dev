@@ -31,15 +31,15 @@ for f in ff:
         label= c[42:]
         
         import math
-        i= abs( hash( label ) )
+        ihash= abs( hash( label ) )
         
         try:
             ds= getDataSet( c )
             plot( ds )
-            writeToPng( localRepo + 'image/%010d.png' % i )
-            outs.write( '| %d | %s | <img src="%s" width="200"> |\n' % ( i, label, 'image/%010d.png' % i ) )
+            writeToPng( localRepo + 'image/%010d.png' % ihash )
+            outs.write( '| %d | %s | <img src="%s" width="200"> |\n' % ( ihash, label, 'image/%010d.png' % ihash ) )
         except:
-            outs.write( '| %d | %s | %s |\n' % ( i, label, 'XXX' ) )
+            outs.write( '| %d | %s | %s |\n' % ( ihash, label, 'XXX' ) )
 
 outs.close()
 monitor.finished()
