@@ -1,0 +1,16 @@
+from org.das2.util import FileUtil
+from java.util import ArrayList
+
+f1= getFile( '/home/jbf/ct/autoplot/git/dev/demos/2021/20211005/diffDemo.jy', None )
+f2= getFile( '/home/jbf/ct/autoplot/git/dev/demos/2021/20211005/diffDemo2.jy', None )
+
+s1= FileUtil.readFileToString(f1)
+s2= FileUtil.readFileToString(f2)
+
+from com.github.difflib import DiffUtils
+        
+deltas= DiffUtils.diff( s1, s2 )
+
+for d in deltas.getDeltas():
+    print d
+
