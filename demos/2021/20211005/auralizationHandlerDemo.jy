@@ -1,0 +1,12 @@
+from org.das2.util import LoggerManager
+t= LoggerManager.getLogger('das2.url')
+from external import AuralizationHandler
+handler= AuralizationHandler()
+handler.addSound( 'HEAD.*', getDataSet( 'http://jfaden.net/~jbf/autoplot/data/wav/dinkq.wav' ) )
+handler.addSound( 'GET.*', getDataSet( 'http://jfaden.net/~jbf/autoplot/data/wav/ding2.wav' ) )
+t.addHandler( handler )
+from java.util.logging import Level
+t.setLevel( Level.FINER )
+t.info('GET test:')
+sleep(2000)
+getDataSet( 'http://jfaden.net/~jbf/autoplot/data/events/colorEvents.txt' )

@@ -1,0 +1,30 @@
+from java.util import ArrayList
+ds1= dataset( [ 1,2,3,4,5 ] )
+ds2= dataset( [ 1,2,4,5 ] )
+
+def toList(ds):
+    al= ArrayList()
+    for d in ds:
+        al.add(d)
+    return al
+    
+from com.github.difflib import DiffUtils
+print toList(ds1)
+
+import java.util.function.BiPredicate
+class MyEq( java.util.function.BiPredicate ):
+    def test( self, a, b ):
+        print type(a), type(b)
+        print a,b, a.equals(b)
+        return a.equals(b)
+        
+# this only works for QDataSets when ArrayDataSet has equals defined.
+deltas= DiffUtils.diff( toList(ds1), toList(ds2), MyEq() )
+#deltas= DiffUtils.diff( ['a','b','c','d','e'], ['a','b','d','e'] )
+
+print 'are they equal? ', ds1[0].equals(ds2[0])
+
+print 'are they equal? ', ds1[0]==ds2[0]
+
+print deltas
+
