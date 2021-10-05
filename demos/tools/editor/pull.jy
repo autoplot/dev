@@ -1,8 +1,11 @@
+from org.das2.util import LoggerManager
+print '****'
+print 'This is pull.jy, an editor action.'
+
 setScriptTitle('Git Pull')
 setScriptDescription('Run the git pull command.  This assumes that the git commands are available at the command line.')
 
-print '****'
-print 'This is pull.jy, an editor action.'
+logger= LoggerManager.getLogger('jython.actions')
 
 script= getApplication().getScriptPanel().getFilename()
 
@@ -11,6 +14,8 @@ from org.autoplot.datasource import AutoplotSettings
 autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
 
 exe= 'git pull'
+
+logger.info("pwd: "+str( File( script ).parentFile ) )
 
 setStatus( "busy: executing pull" )
 
@@ -23,7 +28,7 @@ log= File( autoplotData, 'log' )
 log= File( log, 'editor.pull.txt' )
 
 pb.redirectErrorStream(True)
-pb.redirectOutput( ProcessBuilder.Redirect.appendTo(log) )
+pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
 
 p= pb.start()
 p.waitFor()
