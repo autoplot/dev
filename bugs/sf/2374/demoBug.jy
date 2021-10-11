@@ -1,5 +1,10 @@
 from org.autoplot.jythonsupport import StaticCodeAnalysis
 
+mlt_micro3 = 1
+print mlt_micro3
+xx_micro3 = cos( ( mlt_micro3) )
+
+
 script='''mlt_micro3 = 1
 print mlt_micro3
 xx_micro3 = cos( ( mlt_micro3) )
