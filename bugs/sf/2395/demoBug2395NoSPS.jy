@@ -2,8 +2,13 @@ from org.das2.graph.SpectrogramRenderer import RebinnerEnum
 #ds= getDataSet('file:///home/jbf/ct/autoplot/data/sps/shing/180310_1700_2300-Heliotown.sps')
 #ds= ds[0:20]
 
+flip= getParam( 'flip', False, 'Flip the data to show where it does work', [True,False] )
+
 ds= distance( 20,300, 150,150, 25,30 ) + randn(20,300)/10
 ds= link( indgen(20), linspace(30,15,300), ds )
 
+if flip:
+    ds= ds[:,::-1]
+    
 plot( ds, renderType='nnSpectrogram' )
 dom.plotElements[0].controller.renderer.rebinner= RebinnerEnum.lanlNearestNeighbor 
