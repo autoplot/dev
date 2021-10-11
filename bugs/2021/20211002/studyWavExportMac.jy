@@ -1,0 +1,33 @@
+setScriptDescription('''There are reports that Autoplot exported wav files do
+not work on Macs.  What's happened?  See https://docs.fileformat.com/audio/wav/.
+The byte positions start at 1, so that the file description is more useful.
+''')
+
+ds0= getDataSet( PWD + 'E-Mu-Proteus-FX-Wacky-Ride-Cymbal.wav?channel=0' )
+ds1= getDataSet( PWD + 'E-Mu-Proteus-FX-Wacky-Ride-Cymbal.wav?channel=1' )
+ds= bundle( ds0, ds1 )
+ds= link( xtags( ds0 ), ds )
+
+formatDataSet( ds, PWD + 'outCompare.wav' )
+
+ds1= getDataSet( 'vap+bin:' + PWD + 'E-Mu-Proteus-FX-Wacky-Ride-Cymbal.wav?channel=0' )
+ds2= getDataSet( 'vap+bin:' + PWD + 'outCompare.wav' )
+
+ds3= ds1-ds2
+plot( 0, findgen(ds1.length())+1, ds1, ytitle='input wav', renderType='digital>fontSize=0.8em&format=%d' )
+plot( 1, findgen(ds1.length())+1, ds2, ytitle='autoplot<br>export', renderType='digital>fontSize=0.8em&format=%d' )
+plot( 2, findgen(ds1.length())+1, ds3, ytitle='Difference'  )
+
+for p in dom.plots:
+    p.xaxis.reference='44.5'
+
+bind( dom.plots[0].xaxis, 'range', dom.plots[1].xaxis, 'range' )
+bind( dom.plots[0].xaxis, 'range', dom.plots[2].xaxis, 'range' )
+
+dom.plots[0].xaxis.range=datumRange([0,60])
+
+ds= getDataSet( 'vap+bin:/home/jbf/ct/autoplot/git/dev/bugs/2021/20211002/E-Mu-Proteus-FX-Wacky-Ride-Cymbal.wav?byteOffset=40&recCount=1&type=int&byteOrder=little' )
+print 'internet file= %d' % ds[0]
+
+ds= getDataSet( 'vap+bin:/home/jbf/ct/autoplot/git/dev/bugs/2021/20211002/outCompare.wav?byteOffset=40&recCount=1&type=int&byteOrder=little' )
+print 'autoplot export= %d' % ds[0]

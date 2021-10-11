@@ -1,0 +1,9 @@
+ds= randn(100)
+ds.putProperty( QDataSet.DELTA_PLUS, ones(100) )
+ds.putProperty( QDataSet.DELTA_MINUS, ones(100) )
+ds.putProperty( QDataSet.BIN_PLUS, ones(100) )
+ds.putProperty( QDataSet.BIN_MINUS, ones(100) )
+
+ds= subset( ds, linspace( 2,12,11 ) )
+print ds.property( QDataSet.DELTA_PLUS )
+print ds.property( QDataSet.BIN_PLUS )
