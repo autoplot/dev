@@ -17,7 +17,7 @@ the SAMP mechanism.
 * Search
 * 2021-08-01 to 2021-08-31; All; All
 * Select solo_L1_epd-epthet2-sc_20210801 
-* click the SAMP broadcast button, "Send Products"
+* click the SAMP broadcast button, "Send Products" <img src="cimgbcjekjplojec-1.png">
 * A popup shows that no software is running to receive the message.
 * Launch Autoplot
 * Tools -> "Start SAMP Hub and Listener"
