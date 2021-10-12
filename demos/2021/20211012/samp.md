@@ -38,3 +38,5 @@ Tools&rarr;"Manage and Browse Tools", then File&rarr;"Merge in Default".
 The "Start SAMP Hub" is a Jython script which launches the SAMP software
 which is embedded within Autoplot.  It is at http://autoplot.org/data/tools/startSampHub.jy.
 
+http://astrojs.github.io/sampjs/ talks about the JavaScript library used
+to create SAMP messages.
