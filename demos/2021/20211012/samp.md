@@ -25,3 +25,6 @@ the SAMP mechanism.
 * The connection must be authorized
 * click the SAMP broadcast button, "Send Products"
 * Autoplot now receives the URL reference and handles it properly.
+
+Here's a You Tube video showing the demo:
+https://www.youtube.com/watch?v=foFUjFAxrvk
