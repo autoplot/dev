@@ -31,7 +31,8 @@ https://www.youtube.com/watch?v=foFUjFAxrvk
 
 # Notes
 It's only been for about two years now that the "Start SAMP Hub" bookmark
-has been automatically added to Autoplot.  This can be added with 
+has been automatically added to Autoplot.  This can be added to older
+Autoplot installations with 
 Tools&rarr;"Manage and Browse Tools", then File&rarr;"Merge in Default".
 
 The "Start SAMP Hub" is a Jython script which launches the SAMP software
