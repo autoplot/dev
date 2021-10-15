@@ -1,5 +1,9 @@
-setScriptDescription('''I think eq should use the nominal units to interpret A''')
-ds1= Units.nominal('space1').createDatum('A')
+setScriptDescription('''I think eq should use the nominal units to interpret A.  
+Oddly it looked like it was supposed to do this, but this case doesn't work.''')
+
+from org.das2.datum import EnumerationUnits
+ds1= EnumerationUnits.create('space1').createDatum('A')
+#ds1= Units.nominal('space1').createDatum('A')
 
 print ds1, 'ds1'
 print eq(ds1,'A'), "eq(ds1,'A')"
