@@ -1,0 +1,19 @@
+u= Units.nominal()
+
+def pprint(ds,doc):
+    #print ','.join( ds )
+    if ds.rank()==0:
+        print ds, doc
+    else:
+        print '[',
+        for d in ds:
+            print d, ' ',
+        print '] ', doc
+
+pprint( dataset( 'A', u ), "dataset( 'A', u )" )
+pprint( dataset( ['A','B'], u ), "dataset( ['A','B'], u )" )
+pprint( dataset( ('A','B'), u ), "dataset( ('A','B'), u )" )
+
+pprint( dataset( 'A', units=u ), "dataset( 'A', units=u )" )
+pprint( dataset( ['A','B'], units=u ), "dataset( ['A','B'], units=u )" )
+pprint( dataset( ('A','B'), units=u ), "dataset( ('A','B'), units=u )" )
