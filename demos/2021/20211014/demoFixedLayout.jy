@@ -1,0 +1,18 @@
+setScriptDescription('Demo how a particular size can be realized')
+dom.canvases[0].fitted= False
+dom.canvases[0].width= 640
+dom.canvases[0].height= 480
+
+dom.canvases[0].marginColumn.left='50px'
+dom.canvases[0].marginColumn.right='590px'
+
+dom.canvases[0].marginRow.top='50px'
+dom.canvases[0].marginRow.bottom='430px'
+
+dom.canvases[0].rows[0].top='0px'
+dom.canvases[0].rows[0].bottom='100%-0px'
+
+waitUntilIdle()
+
+print dom.plots[0].controller.dasPlot.column.width
+print dom.plots[0].controller.dasPlot.row.height

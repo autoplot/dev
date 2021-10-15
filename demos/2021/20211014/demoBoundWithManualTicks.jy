@@ -1,0 +1,9 @@
+reset()
+bind( dom, 'timeRange', dom.plots[0].xaxis, 'range' )
+addPlots(2,1,'below')
+bind( dom, 'timeRange', dom.plots[1].xaxis, 'range' )
+bind( dom, 'timeRange', dom.plots[2].xaxis, 'range' )
+
+dom.plots[2].xaxis.tickValues='+6hr/6'
+sleep(1000)
+dom.plots[2].xaxis.tickValues='+4hr/4'
