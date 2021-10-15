@@ -1,0 +1,24 @@
+setScriptDescription('''I think eq should use the nominal units to interpret A''')
+ds1= Units.nominal('space1').createDatum('A')
+
+print ds1, 'ds1'
+print eq(ds1,'A'), "eq(ds1,'A')"
+print eq(ds1,'B'), "eq(ds1,'B')"
+print ne(ds1,'B'), "ne(ds1,'B')"
+print ne(ds1,'A'), "ne(ds1,'A')"
+
+print eq('A',ds1), "eq('A',ds1)"
+print eq('B',ds1), "eq('B',ds1)"
+print ne('B',ds1), "ne('B',ds1)"
+print ne('A',ds1), "ne('A',ds1)"
+
+def pprint(ds,doc):
+    #print ','.join( ds )
+    for d in ds:
+        print d, ' ',
+    print ' ', doc
+    
+pprint( eq( [1,2,3,4,5], [1,2,3,4,5] ), 'eq( [1,2,3,4,5], [1,2,3,4,5] )' )
+pprint( eq( ds1, [1,2,3,4,5] ), 'eq( ds1, [1,2,3,4,5] )  WARNING BAD' )
+pprint( eq( ds1, ['A','A','B','B'] ), "eq( ds1, ['A','A','B','B'] )"  )
+pprint( ne( ds1, ['A','A','B','B'] ), "ne( ds1, ['A','A','B','B'] )"  )
