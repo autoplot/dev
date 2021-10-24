@@ -1,0 +1,9 @@
+setScriptDescription('''Calculate the distance between posts for a railing''')
+
+totalLength= getParam( 'totalLength', 91, 'The total length' )
+numberOfPosts= getParam( 'numberOfPosts', 3, 'The number of posts' )
+postWidth= getParam( 'postWidth', 3.5, 'The width of each post' )
+
+print 'Between posts: ', ( totalLength - numberOfPosts * postWidth ) / ( numberOfPosts -1 )
+print 'Post Center to center: ', ( totalLength - postWidth ) / ( numberOfPosts -1 )
+
