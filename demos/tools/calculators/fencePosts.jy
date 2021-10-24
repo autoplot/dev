@@ -1,4 +1,5 @@
 setScriptDescription('''Calculate the distance between posts for a railing''')
+setScriptTitle('Fence Posts')
 
 totalLength= getParam( 'totalLength', 91, 'The total length' )
 numberOfPosts= getParam( 'numberOfPosts', 3, 'The number of posts' )
