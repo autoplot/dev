@@ -7,3 +7,4 @@ postWidth= getParam( 'postWidth', 3.5, 'The width of each post' )
 print 'Between posts: ', ( totalLength - numberOfPosts * postWidth ) / ( numberOfPosts -1 )
 print 'Post Center to center: ', ( totalLength - postWidth ) / ( numberOfPosts -1 )
 
+annotation( 0, text= 'Between posts: %f<br>Post Center to center: %f' % ( ( totalLength - numberOfPosts * postWidth ) / ( numberOfPosts -1 ), ( totalLength - postWidth ) / ( numberOfPosts -1 ) )
