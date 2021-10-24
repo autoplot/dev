@@ -10,6 +10,8 @@ from java.io import BufferedReader, InputStreamReader
 
 script= getParam( 'scriptName', 'demoAutorangeBug.jy' )
 apv= getParam( 'apv', 'v2019a_5', 'autoplot version' )
+headless= getParam( 'headless', True, 'headless mode', [ True,False ] )
+javaexe= getParam( 'javaexe', 'java', 'Java executable', [ 'java', '/usr/local/jdk1.8/jre/bin/java' ] )
 
 if ( script.find('/')==-1 ):
     script= PWD + script
@@ -18,7 +20,12 @@ l= apv
 print '=== ' +l + ' ==='
 url= 'http://autoplot.org/jnlp/'+l+'/autoplot.jar'
 jar= downloadResourceAsTempFile(URL(url),3600,monitor.getSubtaskMonitor(url))
-exe= 'java -Djava.awt.headless=true -cp '+jar.toString()+' org.autoplot.AutoplotUI  --script='+script
+if headless:
+    headlessstr='-Djava.awt.headless=true'
+else:
+    headlessstr=''
+    
+exe= javaexe + ' '+headlessstr+' -cp '+jar.toString()+' org.autoplot.AutoplotUI  --script='+script
 print exe
 pb= ProcessBuilder(exe.split(' '))
 p= pb.start()
