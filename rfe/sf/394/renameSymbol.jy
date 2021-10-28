@@ -1,3 +1,5 @@
+# See also RefactorRenameVariable.java, as this was made internal today.
+
 from org.autoplot.jythonsupport import StaticCodeAnalysis
 from java.util import Collections
 
