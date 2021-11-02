@@ -1,6 +1,6 @@
 from org.autoplot import RenderType
 from org.das2.util import ColorUtil,LoggerManager
-setScriptDescription('Spacecraft Orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
+setScriptDescription('Spacecraft orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
 
 logger= LoggerManager.getLogger('aaa')
 
@@ -39,7 +39,7 @@ for i in xrange(6):
     print doPlot[i]
     
 setLayoutOverplot( sum(doPlot)+1 )
-print 'Number of plot elements: '+sum(doPlot)+1 
+print 'Number of plot elements: '+str(sum(doPlot)+1)
 
 sun= circle(0)
 plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True )
