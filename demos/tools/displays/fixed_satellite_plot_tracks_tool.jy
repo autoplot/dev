@@ -18,8 +18,7 @@ xx= [ 'stereo','Stereo','STA', 'red',
 scs= xx[0::4]
 lbs= xx[1::4]
 cdw= xx[2::4]
-
-colors= ColorUtil.getNamedColors().keySet().toArray()
+colors= xx[3::4]
 
 tr= getParam( 'timerange', '2011-10-20 T00:00 to 2011-10-28T00:00', 'timerange to load' )
 
