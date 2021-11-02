@@ -1,0 +1,54 @@
+from org.autoplot import RenderType
+from org.das2.util import ColorUtil
+setScriptDescription('S/C Orbit plotter')
+
+TF= [ True, False ]
+
+scs= [ 'stereo', 'messanger', 'earth' ]
+lbs= [ 'Stereo', 'Messanger', 'Earth' ]
+cdw= [ 'STA',    'MESSENGER', 'EARTH' ]
+
+colors= ColorUtil.getNamedColors().keySet().toArray()
+
+tr= getParam( 'timerange', '2011-10-20 T00:00 to 2011-10-28T00:00', 'timerange to load' )
+
+stereo= getParam( 'stereo', False, 'Stereo', TF)
+messenger= getParam( 'messenger', False, 'Messenger', TF)
+earth= getParam( 'earth', False, 'Earth', TF )
+
+reset()
+
+setLayoutOverplot( 6 )
+
+sun= circle(0)
+plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True )
+
+doPlot= [ stereo, messenger, earth ]
+
+for i in xrange( len( scs ) ):
+    
+    if ( doPlot[i]==False ): continue
+    
+    cdawebId= cdw[i]
+    
+    sc= scs[i]
+    cdawebId= '%s_HELIO1DAY_POSITION' % cdawebId
+    sc_lon= getDataSet('vap+cdaweb:ds=%s&id=SE_LON' % cdawebId, tr )
+    sc_lon = trim(sc_lon, tr)
+    sc_lon = toRadians( sc_lon )
+    sc_rad = getDataSet('vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr )
+    sc_rad = trim(sc_rad, tr) 
+    
+    if ( sc=='cdawebId' ):
+        tt= xtags(sc_lon)   
+        r= where( diff(tt).le(0) )
+        sc_lon= sc_lon[0:r[0]]
+        
+    x_sc = sc_rad * sin(sc_lon)
+    y_sc = sc_rad * cos(sc_lon)
+    
+    plot( i+1, x_sc, y_sc, 
+        color = colors[i],  
+        legendLabel = lbs[i], 
+        renderType = RenderType.orbitPlot)
+
