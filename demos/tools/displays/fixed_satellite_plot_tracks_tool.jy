@@ -1,6 +1,6 @@
 from org.autoplot import RenderType
 from org.das2.util import ColorUtil,LoggerManager
-setScriptDescription('Spacecraft Orbit plotter that uses the HELIO1DAY files to locate spacecraft.')
+setScriptDescription('Spacecraft Orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
 
 logger= LoggerManager.getLogger('aaa')
 
@@ -9,7 +9,7 @@ TF= [ True, False ]
 # variable name, label, cdaweb variable
 xx= [ 'stereo','Stereo','STA',
       'psp', 'Parker Solar Probe', 'PSP', 
-      'messanger','Messanger','MESSENGER',
+      'messenger','Messenger','MESSENGER',
       'earth', 'Earth', 'EARTH',
       'thb', 'Themis B', 'THB',
       'thc', 'Themis C', 'THC',
