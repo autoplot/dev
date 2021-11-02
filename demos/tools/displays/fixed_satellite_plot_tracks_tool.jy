@@ -44,7 +44,7 @@ print 'Number of plot elements: '+str(sum(doPlot)+1)
 sun= circle(0)
 plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True )
 
-
+iplot=1
 for i in xrange( len( scs ) ):
     
     if ( doPlot[i]==False ): continue
@@ -75,8 +75,8 @@ for i in xrange( len( scs ) ):
     x_sc = sc_rad * sin(sc_lon)
     y_sc = sc_rad * cos(sc_lon)
     
-    plot( i+1, x_sc, y_sc, 
+    plot( iplot, x_sc, y_sc, 
         color = colors[i],  
         legendLabel = lbs[i], 
         renderType = RenderType.orbitPlot)
-
+    iplot= iplot+1
