@@ -7,17 +7,17 @@ logger= LoggerManager.getLogger('aaa')
 TF= [ True, False ]
 
 # variable name, label, cdaweb variable
-xx= [ 'stereo','Stereo','STA',
-      'psp', 'Parker Solar Probe', 'PSP', 
-      'messenger','Messenger','MESSENGER',
-      'earth', 'Earth', 'EARTH',
-      'thb', 'Themis B', 'THB',
-      'thc', 'Themis C', 'THC',
-      'juno', 'Juno', 'JUNO'
+xx= [ 'stereo','Stereo','STA', 'red',
+      'psp', 'Parker Solar Probe', 'PSP', 'black',
+      'messenger','Messenger','MESSENGER', 'blue',
+      'earth', 'Earth', 'EARTH', 'green',
+      'thb', 'Themis B', 'THB', 'purple',
+      'thc', 'Themis C', 'THC', 'orange',
+      'juno', 'Juno', 'JUNO', 'saddleBrown',
     ]
-scs= xx[0::3]
-lbs= xx[1::3]
-cdw= xx[2::3]
+scs= xx[0::4]
+lbs= xx[1::4]
+cdw= xx[2::4]
 
 colors= ColorUtil.getNamedColors().keySet().toArray()
 
