@@ -1,3 +1,4 @@
+p0= getParam( 'timerange', '2014-01-09', 'timerange to load' )
 p1= getParam('p1',1,'int param',[1,2,3])
 p2= getParam('p2',False,'boolean param',[False,True])
 p3= getParam('p3','F','old boolean param',['T','F'])
@@ -10,6 +11,7 @@ plot( 2, circle(1), color='blue' )
 
 annotation( 0, text='p1=%d<br>p2=%d<br>p3=%s' % ( p1, p2, p3 ) )
 
+print 'p0=',p0
 print 'p1=',p1
 print 'p2=',p2
 print 'p3=',p3
