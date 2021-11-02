@@ -35,7 +35,11 @@ reset()
 
 doPlot= [ stereo, psp, messenger, earth, thb, thc, juno ]
 
+for i in xrange(6):
+    print doPlot[i]
+    
 setLayoutOverplot( sum(doPlot)+1 )
+print 'Number of plot elements: '+sum(doPlot)+1 
 
 sun= circle(0)
 plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True )
