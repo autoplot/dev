@@ -23,13 +23,13 @@ colors= ColorUtil.getNamedColors().keySet().toArray()
 
 tr= getParam( 'timerange', '2011-10-20 T00:00 to 2011-10-28T00:00', 'timerange to load' )
 
-stereo= getParam( scs[0], False, lbs[0], TF)
-psp=    getParam( scs[1], False, scs[1], TF)
-messenger= getParam( scs[2], False, scs[2], TF)
-earth=  getParam( scs[3], False, lbs[3], TF )
-thb =   getParam( scs[4], False, lbs[4], TF )
-thc =   getParam( scs[5], False, lbs[5], TF )
-juno =  getParam( scs[6], False, lbs[6], TF )
+stereo=     getParam( scs[0], False, lbs[0], TF)
+psp=        getParam( scs[1], False, lbs[1], TF)
+messenger=  getParam( scs[2], False, lbs[2], TF)
+earth=      getParam( scs[3], False, lbs[3], TF )
+thb =       getParam( scs[4], False, lbs[4], TF )
+thc =       getParam( scs[5], False, lbs[5], TF )
+juno =      getParam( scs[6], False, lbs[6], TF )
 
 reset()
 
