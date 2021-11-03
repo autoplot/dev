@@ -7,42 +7,58 @@ logger= LoggerManager.getLogger('aaa')
 TF= [ True, False ]
 
 # variable name, label, cdaweb variable
-xx= [ 'stereo','Stereo','STA', 'red',
+xx= [ 'stereoa','Stereo A','STA', 'red',
+      'stereob', 'Stereo B','STB','blue',
       'psp', 'Parker Solar Probe', 'PSP', 'black',
-      'messenger','Messenger','MESSENGER', 'blue',
+      'messenger','Messenger','MESSENGER', 'orange',
       'earth', 'Earth', 'EARTH', 'green',
       'thb', 'Themis B', 'THB', 'purple',
-      'thc', 'Themis C', 'THC', 'orange',
+      'thc', 'Themis C', 'THC', 'pink',
       'juno', 'Juno', 'JUNO', 'saddleBrown',
+      'bepi', 'BepiColombo', 'BEPICOLOMBO', 'teal',
+      'cassini', 'Cassini', 'CASSINI', 'yellow',
+      'galileo', 'Galileo', 'GALILEO', 'peach',
+      'mercury', 'Mercury', 'MERCURY', 'magenta',
+      'venus', 'Venus', 'VENUS', 'dark green',
+      'mars', 'Mars', 'MARS', 'light gray',
+      'voyager1', 'Voyager1', 'VOYAGER1', 'indigo',
+      'voyager2', 'Voyager2', 'VOYAGER2', 'deep pink',
     ]
 scs= xx[0::4]
 lbs= xx[1::4]
 cdw= xx[2::4]
-
-colors= ColorUtil.getNamedColors().keySet().toArray()
+colors= xx[3::4]
 
 tr= getParam( 'timerange', '2011-10-20 T00:00 to 2011-10-28T00:00', 'timerange to load' )
 
-stereo=     getParam( scs[0], False, lbs[0], TF)
-psp=        getParam( scs[1], False, lbs[1], TF)
-messenger=  getParam( scs[2], False, lbs[2], TF)
-earth=      getParam( scs[3], False, lbs[3], TF )
-thb =       getParam( scs[4], False, lbs[4], TF )
-thc =       getParam( scs[5], False, lbs[5], TF )
-juno =      getParam( scs[6], False, lbs[6], TF )
+stereoa=     getParam( scs[0], False, lbs[0], TF)
+stereob=     getParam( scs[1], False, lbs[1], TF)
+psp=        getParam( scs[2], False, lbs[2], TF)
+messenger=  getParam( scs[3], False, lbs[3], TF)
+earth=      getParam( scs[4], False, lbs[4], TF )
+thb =       getParam( scs[5], False, lbs[5], TF )
+thc =       getParam( scs[6], False, lbs[6], TF )
+juno =      getParam( scs[7], False, lbs[7], TF )
+bepi =      getParam( scs[8], False, lbs[8], TF )
+cassini =      getParam( scs[9], False, lbs[9], TF )
+galileo =      getParam( scs[10], False, lbs[10], TF )
+mercury =      getParam( scs[11], False, lbs[11], TF )
+venus =      getParam( scs[12], False, lbs[12], TF )
+mars =      getParam( scs[13], False, lbs[13], TF )
+voyager1 =      getParam( scs[14], False, lbs[14], TF )
+voyager2 =      getParam( scs[15], False, lbs[15], TF )
 
 reset()
 
-doPlot= [ stereo, psp, messenger, earth, thb, thc, juno ]
+doPlot= [ stereoa, stereob, psp, messenger, earth, thb, thc, juno, bepi, cassini, galileo, mercury, venus, mars, voyager1, voyager2 ]
 
-for i in xrange(6):
-    print doPlot[i]
-    
 setLayoutOverplot( sum(doPlot)+1 )
 print 'Number of plot elements: '+str(sum(doPlot)+1)
 
 sun= circle(0)
-plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True )
+p,pe= plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True,  )
+p.xaxis.flipped= True
+p.yaxis.flipped= True
 
 iplot=1
 for i in xrange( len( scs ) ):
@@ -75,8 +91,9 @@ for i in xrange( len( scs ) ):
     x_sc = sc_rad * sin(sc_lon)
     y_sc = sc_rad * cos(sc_lon)
     
-    plot( iplot, x_sc, y_sc, 
+    plot( iplot, y_sc, x_sc, 
         color = colors[i],  
         legendLabel = lbs[i], 
         renderType = RenderType.orbitPlot)
+    
     iplot= iplot+1
