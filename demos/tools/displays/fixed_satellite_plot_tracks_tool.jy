@@ -104,7 +104,6 @@ for i in xrange( len( scs ) ):
     
     sc_rad = getDataSet('vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr )
     
-    print cdawebId, 'JUNO_HELIO1DAY_POSITION' 
     if ( True ):
         logger.fine('trimming tags for non-monotonic data')
         tt= xtags(sc_lon)   
