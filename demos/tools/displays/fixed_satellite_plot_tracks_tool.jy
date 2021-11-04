@@ -96,6 +96,8 @@ for i in xrange( len( scs ) ):
     if ( doPlot[i]==False ): continue
         
     cdawebId= '%s_HELIO1DAY_POSITION' % cdw[i]
+    print cdawebId
+    
     sc_lon= getDataSet('vap+cdaweb:ds=%s&id=SE_LON' % cdawebId, tr )
     
     if ( sc_lon==None ): 
