@@ -51,7 +51,7 @@ mars =      getParam( scs[13], False, lbs[13], TF )
 voyager1 =      getParam( scs[14], False, lbs[14], TF )
 voyager2 =      getParam( scs[15], False, lbs[15], TF )
 
-vel_wind=  getParam( 'velwind', 500, 'solar wind veolcity in km/s' )
+vel_wind=  getParam( 'velwind', 500, 'solar wind velocity in km/s' )
 
 reset()
 
