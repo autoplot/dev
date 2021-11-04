@@ -1,5 +1,7 @@
 from org.autoplot import RenderType
 from org.das2.util import ColorUtil,LoggerManager
+from java.lang.Double import NaN
+
 setScriptDescription('Spacecraft orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
 
 logger= LoggerManager.getLogger('aaa')
@@ -48,11 +50,13 @@ mars =      getParam( scs[13], False, lbs[13], TF )
 voyager1 =      getParam( scs[14], False, lbs[14], TF )
 voyager2 =      getParam( scs[15], False, lbs[15], TF )
 
+vel_wind=  getParam( 'velwind', 500, 'solar wind veolcity in km/s' )
+
 reset()
 
 doPlot= [ stereoa, stereob, psp, messenger, earth, thb, thc, juno, bepi, cassini, galileo, mercury, venus, mars, voyager1, voyager2 ]
 
-setLayoutOverplot( sum(doPlot)+1 )
+setLayoutOverplot( 2 + sum(doPlot) ) 
 print 'Number of plot elements: '+str(sum(doPlot)+1)
 
 sun= circle(0)
@@ -60,7 +64,30 @@ p,pe= plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = Tr
 p.xaxis.flipped= True
 p.yaxis.flipped= True
 
-iplot=1
+vel_wind = ( vel_wind / 150e6 ) * 24. * 60. * 60. # AU per day
+
+rot_sun = toRadians( 14.4 ) # rotation rate of the Sun
+theta_spiral = toRadians( -findgen( 360 * 6 ) )
+
+r_spiral = -( vel_wind / rot_sun ) * theta_spiral
+foot_points = toRadians( [ -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180 ] )
+
+np1= len(r_spiral)+1
+
+spir_x= zeros( np1 * len(foot_points) )
+spir_y= zeros( np1 * len(foot_points) )
+
+per_lon= 0
+for j in xrange(len(foot_points)):
+    spir_x_1= r_spiral * cos( theta_spiral + per_lon + foot_points[j] )
+    spir_y_1= r_spiral * sin( theta_spiral + per_lon + foot_points[j] )
+    spir_x[1+j*np1:(j+1)*np1]= spir_x_1
+    spir_y[1+j*np1:(j+1)*np1]= spir_y_1
+    spir_x[(j)*np1]= NaN
+    spir_y[(j)*np1]= NaN
+plot( 1, spir_x, spir_y, color='gray' )
+    
+iplot=2
 for i in xrange( len( scs ) ):
     
     if ( doPlot[i]==False ): continue
