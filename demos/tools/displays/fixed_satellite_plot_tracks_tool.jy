@@ -105,15 +105,22 @@ for i in xrange( len( scs ) ):
         logger.warning( 'No data found for '+cdawebId )
         continue
     
+    print 'vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr
     sc_rad = getDataSet('vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr )
     
     if ( True ):
         logger.info('trimming tags for non-monotonic data')
         tt= xtags(sc_lon)   
         logger.info('tt: '+str(tt))
-        r= where( diff(tt).le(0) )
+        r= where( valid(tt[0:-1]).eq(0) )
         if ( len(r)>0 ):
-            logger.warning( 'trimming data to make monotonic, to 0:%d' % r[0] )
+            logger.warning( 'trimming data to make clip fill timetags, to %d' % r[0] )
+            sc_lon= sc_lon[0:r[0]]
+            sc_rad= sc_rad[0:r[0]]    
+            tt= xtags(sc_lon)    
+        r= where( diff(tt).le(0).or(valid(tt[0:-1]).eq(0)) )
+        if ( len(r)>0 ):
+            logger.warning( 'trimming data to make monotonic, to %d' % r[0] )
             sc_lon= sc_lon[0:r[0]]
             sc_rad= sc_rad[0:r[0]]
         
@@ -128,6 +135,6 @@ for i in xrange( len( scs ) ):
     plot( iplot, y_sc, x_sc, 
         color = colors[i],  
         legendLabel = lbs[i], 
-        renderType = RenderType.orbitPlot)
+        renderType = RenderType.orbitPlot )
     
     iplot= iplot+1
