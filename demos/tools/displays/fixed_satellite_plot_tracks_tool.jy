@@ -2,6 +2,7 @@ from org.autoplot import RenderType
 from org.das2.util import ColorUtil,LoggerManager
 from java.lang.Double import NaN
 
+setScriptTitle( 'Spacecraft Position Plotter' )
 setScriptDescription('Spacecraft orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
 
 logger= LoggerManager.getLogger('aaa')
@@ -64,6 +65,7 @@ p,pe= plot( 0, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = Tr
 p.xaxis.flipped= True
 p.yaxis.flipped= True
 
+# calculate a data set to represent the Parker spiral
 vel_wind = ( vel_wind / 150e6 ) * 24. * 60. * 60. # AU per day
 
 rot_sun = toRadians( 14.4 ) # rotation rate of the Sun
@@ -86,7 +88,8 @@ for j in xrange(len(foot_points)):
     spir_x[(j)*np1]= NaN
     spir_y[(j)*np1]= NaN
 plot( 1, spir_x, spir_y, color='gray' )
-    
+
+# plot each of the s/c targets         
 iplot=2
 for i in xrange( len( scs ) ):
     
