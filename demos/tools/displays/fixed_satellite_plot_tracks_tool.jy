@@ -110,15 +110,17 @@ for i in xrange( len( scs ) ):
     
     if ( True ):
         logger.info('trimming tags for non-monotonic data')
+        
         tt= xtags(sc_lon)   
+        r= where( valid(tt) )
+        sc_lon= sc_lon[r]
+        sc_rad= sc_rad[r]
+        
+        tt= xtags(sc_lon)   
+        
         logger.info('tt: '+str(tt))
-        r= where( valid(tt).eq(0) )
-        if ( len(r)>0 ):
-            logger.warning( 'trimming data to make clip fill timetags, to %d' % r[0] )
-            sc_lon= sc_lon[0:r[0]]
-            sc_rad= sc_rad[0:r[0]]    
-            tt= xtags(sc_lon)    
-        r= where( diff(tt).le(0).or(valid(tt[0:-1]).eq(0)) )
+        
+        r= where( diff(tt).le(0) )
         if ( len(r)>0 ):
             logger.warning( 'trimming data to make monotonic, to %d' % r[0] )
             sc_lon= sc_lon[0:r[0]]
