@@ -6,6 +6,7 @@ setScriptTitle( 'Spacecraft Position Plotter' )
 setScriptDescription('Spacecraft orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
 
 logger= LoggerManager.getLogger('aaa')
+logger.info('Logging to aaa')
 
 TF= [ True, False ]
 
