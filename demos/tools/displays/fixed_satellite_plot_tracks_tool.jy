@@ -107,8 +107,9 @@ for i in xrange( len( scs ) ):
     sc_rad = getDataSet('vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr )
     
     if ( True ):
-        logger.fine('trimming tags for non-monotonic data')
+        logger.info('trimming tags for non-monotonic data')
         tt= xtags(sc_lon)   
+        logger.info('tt: '+str(tt))
         r= where( diff(tt).le(0) )
         if ( len(r)>0 ):
             logger.warning( 'trimming data to make monotonic, to 0:%d' % r[0] )
