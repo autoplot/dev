@@ -24,7 +24,7 @@ xx= [ 'stereoa','Stereo A','STA', 'red',
       'galileo', 'Galileo', 'GALILEO', 'peach',
       'mercury', 'Mercury', 'MERCURY', 'magenta',
       'venus', 'Venus', 'VENUS', 'dark green',
-      'mars', 'Mars', 'MARS', 'light gray',
+      'mars', 'Mars', 'MARS', 'light grey',
       'voyager1', 'Voyager1', 'VOYAGER1', 'indigo',
       'voyager2', 'Voyager2', 'VOYAGER2', 'deep pink',
     ]
@@ -62,7 +62,8 @@ setLayoutOverplot( 2 + sum(doPlot) )
 print 'Number of plot elements: '+str(sum(doPlot)+1)
 
 sun= circle(0)
-p,pe= plot( 1, sun, symbolSize= 10, xrange=[-2,2], yrange=[-2,2], isotropic = True,  )
+p,_= plot( 1, sun, symbolSize= 10, 
+           xrange=[-2,2], yrange=[-2,2], isotropic = True )
 p.xaxis.flipped= True
 p.yaxis.flipped= True
 
@@ -88,7 +89,7 @@ for j in xrange(len(foot_points)):
     spir_y[1+j*np1:(j+1)*np1]= spir_y_1
     spir_x[(j)*np1]= NaN
     spir_y[(j)*np1]= NaN
-plot( 0, spir_x, spir_y, color=ColorUtil.LIGHT_GREY )
+plot( 0, spir_x, spir_y, color=ColorUtil.LIGHT_GREY, lineStyle = 'dotfine' )
 
 # plot each of the s/c targets         
 iplot=2
@@ -136,7 +137,10 @@ for i in xrange( len( scs ) ):
     
     plot( iplot, y_sc, x_sc, 
         color = colors[i],  
-        legendLabel = lbs[i], 
+        #legendLabel = lbs[i], 
         renderType = RenderType.orbitPlot )
     
+    annotation( iplot-2, text=lbs[i], xrange=extent(y_sc), yrange=extent(x_sc),
+        background=None, anchorPosition='outsideNE' )
+     
     iplot= iplot+1
