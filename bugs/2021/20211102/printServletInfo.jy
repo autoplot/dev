@@ -1,0 +1,7 @@
+setScriptDescription('''Show that the server location can be revealed with a script.''')
+
+from org.das2.util.filesystem import FileSystem
+
+ff= getFile('http://autoplot.org/data/2010_061_17_41_40.txt',monitor)
+print ff
+
