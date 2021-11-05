@@ -75,6 +75,7 @@ rot_sun = toRadians( 14.4 ) # rotation rate of the Sun
 theta_spiral = toRadians( -findgen( 360 * 6 ) )
 
 r_spiral = -( vel_wind / rot_sun ) * theta_spiral
+r_spiral = putProperty( r_spiral, QDataSet.UNITS, None )
 foot_points = toRadians( [ -150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150, 180 ] )
 
 np1= len(r_spiral)+1
@@ -136,10 +137,13 @@ for i in xrange( len( scs ) ):
     x_sc = sc_rad * sin(sc_lon)
     y_sc = sc_rad * cos(sc_lon)
     
+    x_sc= putProperty( x_sc, QDataSet.UNITS, None )
+    y_sc= putProperty( y_sc, QDataSet.UNITS, None )
+    
     plot( iplot, y_sc, x_sc, 
         color = colors[i],  
         #legendLabel = lbs[i], 
-        renderType = RenderType.orbitPlot )
+        renderType = 'orbitPlot>tickDirection=outside' )
     
     annotation( iplot-2, text=lbs[i], xrange=extent(y_sc), yrange=extent(x_sc),
         background=None, anchorPosition='outsideNE' )
