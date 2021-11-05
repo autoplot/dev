@@ -111,6 +111,12 @@ for i in xrange( len( scs ) ):
     print 'vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr
     sc_rad = getDataSet('vap+cdaweb:ds=%s&id=RAD_AU'% cdawebId, tr )
     
+    # These files have VALID_MAX set to 2020-01-01, and this needs to be cleared.
+    tt= sc_rad.property( QDataSet.DEPEND_0 )
+    tt.putProperty( QDataSet.VALID_MAX, None )
+    sc_rad.putProperty( QDataSet.DEPEND_0, tt )
+    sc_lon.putProperty( QDataSet.DEPEND_0, tt )
+    
     if ( True ):
         logger.info('trimming tags for non-monotonic data')
         
@@ -143,7 +149,7 @@ for i in xrange( len( scs ) ):
     plot( iplot, y_sc, x_sc, 
         color = colors[i],  
         #legendLabel = lbs[i], 
-        renderType = 'orbitPlot>tickDirection=outside' )
+        renderType = 'orbitPlot>tickDirection=right' )
     
     annotation( iplot-2, text=lbs[i], xrange=extent(y_sc), yrange=extent(x_sc),
         background=None, anchorPosition='outsideNE' )
