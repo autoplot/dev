@@ -1,0 +1,26 @@
+import sys
+addToSearchPath( sys.path, 
+   'https://repo1.maven.org/maven2/org/codehaus/jettison/jettison/1.4.1/jettison-1.4.1.jar',
+   'https://repo1.maven.org/maven2/org/codehaus/jettison/jettison/1.4.1/jettison-1.4.1-javadoc.jar',
+   monitor.getSubtaskMonitor('download libraries') )
+   
+
+from org.codehaus.jettison.json import JSONObject
+
+jo= JSONObject()
+jo.put( "Z", 3 )
+jo.put( "Y", 2 )
+jo.put( "X", 1 )
+
+print 'In inserted order:'
+print jo.toString(4)
+
+   
+from org.json import JSONObject
+jo= JSONObject()
+jo.put( "Z", 3 )
+jo.put( "Y", 2 )
+jo.put( "X", 1 )
+
+print 'Not in inserted order (alphabetical order):'
+print jo.toString(4)
