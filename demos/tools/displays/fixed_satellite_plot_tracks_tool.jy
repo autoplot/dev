@@ -54,11 +54,12 @@ voyager2 =      getParam( scs[15], False, lbs[15], TF )
 
 vel_wind=  getParam( 'velwind', 500, 'solar wind velocity in km/s' )
 
-reset()
 
 doPlot= [ stereoa, stereob, psp, messenger, earth, thb, thc, juno, bepi, cassini, galileo, mercury, venus, mars, voyager1, voyager2 ]
 
 setLayoutOverplot( 2 + sum(doPlot) ) 
+dom.options.canvasFont= 'roboto-12'
+
 print 'Number of plot elements: '+str(sum(doPlot)+1)
 
 sun= circle(0)
