@@ -1,0 +1,4 @@
+tr= getParam( 'timerange', '2020-11-01', 'timerange to load' )
+
+load( PWD + 'IowaCityConditions.vap?timerange='+tr )
+
