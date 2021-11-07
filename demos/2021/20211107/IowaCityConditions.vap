@@ -102,7 +102,7 @@
                 <property name="scale" type="Double" value="1.0"/>
                 <property name="showArrow" type="Boolean" value="false"/>
                 <property name="splitAnchorType" type="Boolean" value="false"/>
-                <property default="Annotation" name="text" type="String" value="!(color;SkyBlue)#!(color)Clear&amp;block;&lt;br>!(color;Green)#!(color)Rain&lt;br>!(color;DarkGreen)#!(color)Storm&lt;br>!(color;lightgrey)#!(color)Overcast"/>
+                <property default="Annotation" name="text" type="String" value="!(color;SkyBlue)#!(color)Clear&amp;block;&lt;br>!(color;LightGreen)#!(color)Rain&lt;br>!(color;DarkGreen)#!(color)Storm&lt;br>!(color;lightgrey)#!(color)Overcast"/>
                 <property name="textColor" type="color" value="#000000 (Black)"/>
                 <property name="url" type="String" value=""/>
                 <property name="verticalAnchorType"
