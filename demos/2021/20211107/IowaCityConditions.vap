@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vap appVersionTag="20211104b" domVersion="1.08">
     <Application id="app_0">
-        <property class="Annotation" length="1" name="annotations">
+        <property class="Annotation" length="2" name="annotations">
             <Annotation id="annotation_0">
                 <property name="anchorBorderType"
                     type="enum:org.das2.graph.BorderType" value="NONE"/>
@@ -38,6 +38,44 @@
                     <datumRange units="" value="0.0 to 10.0 "/>
                 </property>
             </Annotation>
+            <Annotation id="annotation_1">
+                <property name="anchorBorderType"
+                    type="enum:org.das2.graph.BorderType" value="NONE"/>
+                <property default="1em,1em" name="anchorOffset"
+                    type="String" value=""/>
+                <property default="NE" name="anchorPosition"
+                    type="enum:org.das2.graph.AnchorPosition" value="OutsideN"/>
+                <property name="anchorType"
+                    type="enum:org.das2.graph.AnchorType" value="CANVAS"/>
+                <property default="#ffffff (White)" name="background"
+                    type="color" value="#00000000"/>
+                <property name="borderType"
+                    type="enum:org.das2.graph.BorderType" value="NONE"/>
+                <property default="" name="columnId" type="String" value="marginColumn_0"/>
+                <property name="fontSize" type="String" value="1.4em"/>
+                <property name="foreground" type="color" value="#000000 (Black)"/>
+                <property default="false" name="overrideColors"
+                    type="Boolean" value="true"/>
+                <property default="" name="plotId" type="String" value="plot_1"/>
+                <property name="pointAtOffset" type="String" value=""/>
+                <property name="pointAtX" type="datum" value="0.0 (dimensionless)"/>
+                <property name="pointAtY" type="datum" value="0.0 (dimensionless)"/>
+                <property default="" name="rowId" type="String" value="row_3"/>
+                <property name="scale" type="Double" value="1.0"/>
+                <property name="showArrow" type="Boolean" value="false"/>
+                <property name="splitAnchorType" type="Boolean" value="false"/>
+                <property default="Annotation" name="text" type="String" value="Iowa City Weather Conditions"/>
+                <property name="textColor" type="color" value="#000000 (Black)"/>
+                <property name="url" type="String" value=""/>
+                <property name="verticalAnchorType"
+                    type="enum:org.das2.graph.AnchorType" value="CANVAS"/>
+                <property name="xrange" type="datumRange">
+                    <datumRange units="" value="0.0 to 10.0 "/>
+                </property>
+                <property name="yrange" type="datumRange">
+                    <datumRange units="" value="0.0 to 10.0 "/>
+                </property>
+            </Annotation>
         </property>
         <property class="BindingModel" length="6" name="bindings">
             <property default="null" type="propertyBinding" value="plot_1.colortable to style_1.colortable  (plot_1)"/>
@@ -59,7 +97,7 @@
                             type="String" value="+6.0em"/>
                         <property name="parent" type="String" value=""/>
                         <property default="100%-3em" name="right"
-                            type="String" value="100.10%-6.0em"/>
+                            type="String" value="100.00%-6.0em"/>
                     </Column>
                 </property>
                 <property name="marginRow" type="DomNode">
@@ -68,30 +106,30 @@
                             type="String" value="100.00%+1.0em"/>
                         <property name="parent" type="String" value=""/>
                         <property default="+2em" name="top"
-                            type="String" value="2em"/>
+                            type="String" value="0%"/>
                     </Row>
                 </property>
                 <property class="Row" length="3" name="rows">
                     <Row id="row_3">
                         <property default="+100%-2em" name="bottom"
-                            type="String" value="67.00%-1.7em"/>
+                            type="String" value="70.20%-1.7em"/>
                         <property default="" name="parent" type="String" value="marginRow_0"/>
                         <property default="+2em" name="top"
-                            type="String" value="-3.80%+2.0em"/>
+                            type="String" value="4.20%+2.0em"/>
                     </Row>
                     <Row id="row_5">
                         <property default="+100%-2em" name="bottom"
-                            type="String" value="80.70%-1.0em"/>
+                            type="String" value="87.30%-1.7em"/>
                         <property default="" name="parent" type="String" value="marginRow_0"/>
                         <property default="+2em" name="top"
-                            type="String" value="65.00%"/>
+                            type="String" value="68.30%"/>
                     </Row>
                     <Row id="row_7">
                         <property default="+100%-2em" name="bottom"
-                            type="String" value="94.30%-4.2em"/>
+                            type="String" value="100.00%-4.2em"/>
                         <property default="" name="parent" type="String" value="marginRow_0"/>
                         <property default="+2em" name="top"
-                            type="String" value="80.70%"/>
+                            type="String" value="85.20%"/>
                     </Row>
                 </property>
                 <property default="640" name="width" type="Integer" value="799"/>
@@ -688,7 +726,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="fahrenheit degrees: 0.28133"/>
+                            name="scale" type="datum" value="fahrenheit degrees: 0.28871"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -710,7 +748,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.25575 (dimensionless)"/>
+                            name="scale" type="datum" value="0.26247 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -782,7 +820,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="mph: 0.48828"/>
+                            name="scale" type="datum" value="mph: 0.41430"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -804,7 +842,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="1.1905 (dimensionless)"/>
+                            name="scale" type="datum" value="1.0101 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -874,7 +912,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.52632 (dimensionless)"/>
+                            name="scale" type="datum" value="0.32258 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -898,7 +936,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="5.2632 (dimensionless)"/>
+                            name="scale" type="datum" value="3.2258 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
