@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <vap appVersionTag="20211104b" domVersion="1.08">
     <Application id="app_0">
-        <property class="Annotation" length="2" name="annotations">
+        <property class="Annotation" length="3" name="annotations">
             <Annotation id="annotation_0">
                 <property name="anchorBorderType"
                     type="enum:org.das2.graph.BorderType" value="NONE"/>
@@ -65,6 +65,44 @@
                 <property name="showArrow" type="Boolean" value="false"/>
                 <property name="splitAnchorType" type="Boolean" value="false"/>
                 <property default="Annotation" name="text" type="String" value="Iowa City Weather Conditions"/>
+                <property name="textColor" type="color" value="#000000 (Black)"/>
+                <property name="url" type="String" value=""/>
+                <property name="verticalAnchorType"
+                    type="enum:org.das2.graph.AnchorType" value="CANVAS"/>
+                <property name="xrange" type="datumRange">
+                    <datumRange units="" value="0.0 to 10.0 "/>
+                </property>
+                <property name="yrange" type="datumRange">
+                    <datumRange units="" value="0.0 to 10.0 "/>
+                </property>
+            </Annotation>
+            <Annotation id="annotation_2">
+                <property name="anchorBorderType"
+                    type="enum:org.das2.graph.BorderType" value="NONE"/>
+                <property default="1em,1em" name="anchorOffset"
+                    type="String" value="0em,-.7em"/>
+                <property default="NE" name="anchorPosition"
+                    type="enum:org.das2.graph.AnchorPosition" value="OutsideSE"/>
+                <property name="anchorType"
+                    type="enum:org.das2.graph.AnchorType" value="CANVAS"/>
+                <property default="#ffffff (White)" name="background"
+                    type="color" value="#00000000"/>
+                <property name="borderType"
+                    type="enum:org.das2.graph.BorderType" value="NONE"/>
+                <property default="" name="columnId" type="String" value="marginColumn_0"/>
+                <property default="1.4em" name="fontSize" type="String" value="1em"/>
+                <property name="foreground" type="color" value="#000000 (Black)"/>
+                <property default="false" name="overrideColors"
+                    type="Boolean" value="true"/>
+                <property default="" name="plotId" type="String" value="plot_3"/>
+                <property name="pointAtOffset" type="String" value=""/>
+                <property name="pointAtX" type="datum" value="0.0 (dimensionless)"/>
+                <property name="pointAtY" type="datum" value="0.0 (dimensionless)"/>
+                <property default="" name="rowId" type="String" value="row_7"/>
+                <property name="scale" type="Double" value="1.0"/>
+                <property name="showArrow" type="Boolean" value="false"/>
+                <property name="splitAnchorType" type="Boolean" value="false"/>
+                <property default="Annotation" name="text" type="String" value="!(color;SkyBlue)#!(color)Clear&amp;block;&lt;br>!(color;Green)#!(color)Rain&lt;br>!(color;DarkGreen)#!(color)Storm&lt;br>!(color;lightgrey)#!(color)Overcast"/>
                 <property name="textColor" type="color" value="#000000 (Black)"/>
                 <property name="url" type="String" value=""/>
                 <property name="verticalAnchorType"
