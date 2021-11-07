@@ -52,7 +52,7 @@
                 <property class="Column" length="0" name="columns"/>
                 <property name="fitted" type="Boolean" value="true"/>
                 <property default="sans-10" name="font" type="String" value="Dialog-16"/>
-                <property default="480" name="height" type="Integer" value="691"/>
+                <property default="480" name="height" type="Integer" value="652"/>
                 <property name="marginColumn" type="DomNode">
                     <Column id="marginColumn_0">
                         <property default="2em" name="left"
@@ -94,7 +94,7 @@
                             type="String" value="80.70%"/>
                     </Row>
                 </property>
-                <property default="640" name="width" type="Integer" value="1181"/>
+                <property default="640" name="width" type="Integer" value="799"/>
             </Canvas>
         </property>
         <property class="Connector" length="0" name="connectors"/>
@@ -102,13 +102,13 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&amp;parameters=Time,Temperature,WindSpeed&amp;timerange=2021-11-05+00:00+to+2021-11-07+10:35"/>
+                <property default="" name="uri" type="String" value="vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&amp;parameters=Time,Temperature,WindSpeed&amp;timerange=2020-11-01"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
             <DataSourceFilter id="data_1">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=icwc&amp;parameters=Time,Conditions&amp;timerange=2021-11-05+00:00+to+2021-11-07+10:35"/>
+                <property default="" name="uri" type="String" value="vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=icwc&amp;parameters=Time,Conditions&amp;timerange=2020-11-01"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
@@ -163,12 +163,9 @@
         <property class="PlotElement" length="3" name="plotElements">
             <PlotElement id="plotElement_1">
                 <property name="active" type="Boolean" value="true"/>
-                <property default="false" name="autoComponent"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoLabel"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoRenderType"
-                    type="Boolean" value="true"/>
+                <property name="autoComponent" type="Boolean" value="false"/>
+                <property name="autoLabel" type="Boolean" value="false"/>
+                <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property default="" name="component" type="String" value="Temperature"/>
                 <property default="" name="dataSourceFilterId"
@@ -320,10 +317,8 @@
             </PlotElement>
             <PlotElement id="plotElement_2">
                 <property name="active" type="Boolean" value="true"/>
-                <property default="false" name="autoComponent"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoLabel"
-                    type="Boolean" value="true"/>
+                <property name="autoComponent" type="Boolean" value="false"/>
+                <property name="autoLabel" type="Boolean" value="false"/>
                 <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property default="" name="component" type="String" value="WindSpeed"/>
@@ -477,12 +472,9 @@
             </PlotElement>
             <PlotElement id="plotElement_3">
                 <property name="active" type="Boolean" value="true"/>
-                <property default="false" name="autoComponent"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoLabel"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoRenderType"
-                    type="Boolean" value="true"/>
+                <property name="autoComponent" type="Boolean" value="false"/>
+                <property name="autoLabel" type="Boolean" value="false"/>
+                <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
                 <property default="" name="dataSourceFilterId"
@@ -671,11 +663,11 @@
                         <property name="log" type="Boolean" value="false"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="us2000" value="2021-11-05 00:00 to 2021-11-07 10:35"/>
+                            <datumRange units="us2000" value="2020-11-01"/>
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="microseconds: 2.13070E8"/>
+                            name="scale" type="datum" value="microseconds: 1.42340E8"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -696,7 +688,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="fahrenheit degrees: 0.26253"/>
+                            name="scale" type="datum" value="fahrenheit degrees: 0.28133"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -718,7 +710,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.23866 (dimensionless)"/>
+                            name="scale" type="datum" value="0.25575 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -765,11 +757,11 @@
                         <property name="log" type="Boolean" value="false"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="us2000" value="2021-11-05 00:00 to 2021-11-07 10:35"/>
+                            <datumRange units="us2000" value="2020-11-01"/>
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="microseconds: 2.13070E8"/>
+                            name="scale" type="datum" value="microseconds: 1.42340E8"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -790,7 +782,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="mph: 0.45573"/>
+                            name="scale" type="datum" value="mph: 0.48828"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -812,7 +804,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="1.1111 (dimensionless)"/>
+                            name="scale" type="datum" value="1.1905 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -855,11 +847,11 @@
                         <property name="log" type="Boolean" value="false"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="us2000" value="2021-11-05 00:00 to 2021-11-07 10:35"/>
+                            <datumRange units="us2000" value="2020-11-01"/>
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="microseconds: 2.13070E8"/>
+                            name="scale" type="datum" value="microseconds: 1.42340E8"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -882,7 +874,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.4 (dimensionless)"/>
+                            name="scale" type="datum" value="0.52632 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -906,7 +898,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="4.0 (dimensionless)"/>
+                            name="scale" type="datum" value="5.2632 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
@@ -915,7 +907,7 @@
             </Plot>
         </property>
         <property name="timeRange" type="datumRange">
-            <datumRange units="us2000" value="2021-11-05 00:00 to 2021-11-07 10:35"/>
+            <datumRange units="us2000" value="2020-11-01"/>
         </property>
     </Application>
 </vap>
