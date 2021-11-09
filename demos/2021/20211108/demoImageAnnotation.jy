@@ -1,0 +1,30 @@
+from javax.imageio import ImageIO
+
+  
+# This was introduced to experiment with completions within the painter.
+# I always have to interrupt my workflow to get the java2d web page docs out,
+# and it would be nice if completions could pick up this use case.
+
+from org.das2.util import GrannyTextRenderer
+from java.awt.geom import Rectangle2D
+
+s= '!(painter;image;https://das2.org/das2new-300.png;32)<br>The Das2 Logo'
+from org.das2.util import ColorUtil
+
+class ImagePainter( GrannyTextRenderer.Painter ):
+    def __init__(self):
+        print 'init'
+        
+    def paint( self, g, args ):
+        self.im= ImageIO.read( getFile( args[0],None ) )
+        scale= float(args[1]) / self.im.width
+        h=self.im.height*scale
+        w=self.im.width*scale
+        g.scale( scale, scale )
+        g.drawImage(self.im,0,-self.im.height,None)
+        g.draw( Rectangle2D.Float(0,-self.im.height,self.im.width,self.im.height) )
+        r= Rectangle2D.Float(0,0,w,h)
+        return r
+        
+ann= annotation(text=s)
+ann.controller.dasAnnotation.addPainter('image',ImagePainter())
