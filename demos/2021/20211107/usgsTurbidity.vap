@@ -25,7 +25,7 @@
                 <property name="scale" type="Double" value="1.0"/>
                 <property name="showArrow" type="Boolean" value="false"/>
                 <property name="splitAnchorType" type="Boolean" value="false"/>
-                <property default="Annotation" name="text" type="String" value="!(painter;img;%{PWD}/usgsBranding.png)"/>
+                <property default="Annotation" name="text" type="String" value="!(painter;img;https://github.com/autoplot/dev/raw/master/demos/2021/20211107/usgsBranding.png)"/>
                 <property name="textColor" type="color" value="#000000 (Black)"/>
                 <property name="url" type="String" value=""/>
                 <property name="verticalAnchorType"
