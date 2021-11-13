@@ -1,0 +1,49 @@
+setScriptDescription('''Demo codes to read ODL headers from FGM sts files.''')
+
+from java.io import BufferedReader,FileReader
+from org.json import JSONArray,JSONObject
+#ff= getFile( '/home/jbf/data/juno/pds/erd/02317.STS',None )
+#ff= getFile( '/home/jbf/data/juno/pds/fgm/fgm_jno_l3_2020290ss_v01.sts',None )
+#ff= getFile( 'https://pds-ppi.igpp.ucla.edu/data/JNO-J-3-FGM-CAL-V1.0/DATA/JUPITER/SS/PERI-30/fgm_jno_l3_2020290ss_v01.sts', monitor )
+ff= getFile( 'https://pds-ppi.igpp.ucla.edu/data/JNO-J-3-FGM-CAL-V1.0/DATA/JUPITER/PL/PERI-01/fgm_jno_l3_2016214pl_r1s_v01.sts', monitor )
+#ff= getFile( 'https://pds-ppi.igpp.ucla.edu/data/JNO-J-3-FGM-CAL-V1.0/DATA/JNO-SS-3-FGM-CAL-V1.0/DATA/CRUISE/SE/FULL/2012/fgm_jno_l3_2012001se_v01.sts', monitor )
+#ff= getFile( 'https://pds-ppi.igpp.ucla.edu/data/maven-mag-calibrated/data/pl/1sec/2015/03/mvn_mag_l2_2015060pl1s_20150301_v01_r01.sts', monitor )
+#ff= getFile( 'https://pds-ppi.igpp.ucla.edu/data/maven-mag-calibrated/data/ss/highres/2016/02/mvn_mag_l2_2016032ss_20160201_v01_r01.sts', monitor )
+from org.das2.qds.util import OdlParser,AsciiParser
+
+print 'File: '+str(ff)
+
+record= JSONObject()
+reader= BufferedReader(FileReader(ff))
+
+ss= OdlParser.readOdl( reader,record )
+print '----'
+print ss
+print '----'
+
+print 'we can query all the names in the file:'
+nn= OdlParser.getNames( record,"",True,None ) 
+lastVector=""
+for n in nn:
+    print n
+    if ( n.find('.')==-1 ): lastVector= n
+print '----'
+
+# This establishes that the file format isn't working.  For example, the records in fgm_jno_l3_2020290ss_v01.sts
+# start with two spaces, but there's only a "1X" in the format.
+format= OdlParser.getFormat( record )
+print format
+
+# demo code which calculates columns
+print  OdlParser.getColumns( record, 0, 'TIME.DOY' )[0]
+if ( lastVector!='' ):
+    x =  OdlParser.getColumns( record, 0, lastVector )
+    print x[0], ':', x[1]
+x =  OdlParser.getColumns( record, 0, nn[-1] )
+print x[0], ':', x[1]
+
+ds= OdlParser.readStream( reader, record, monitor )
+print ds
+
+plot( OdlParser.getDataSet( record, ds, lastVector ) )
+

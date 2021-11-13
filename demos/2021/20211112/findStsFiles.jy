@@ -1,0 +1,26 @@
+from org.das2.util.filesystem import FileSystem
+setScriptDescription('''Identify many different .sts files by scanning through the PDS-PPI filesystem.''')
+
+fs= FileSystem.create('https://pds-ppi.igpp.ucla.edu/data/')
+
+def findSts( fs,folder ):
+    ff= fs.listDirectory(folder)
+    if ( folder=='' ):
+        limit=1000
+    else:
+        limit=3
+    for f in ff: 
+        fo= fs.getFileObject(f)
+        if fo.isFolder():
+            findSts(fs,folder + f)
+            limit=limit-1
+            if limit==0:
+                break
+        else:
+            if ( f.endswith('.sts') ):
+                print folder + f
+                break
+
+findSts( fs, '' )
+               
+#https://pds-ppi.igpp.ucla.edu/data/JNO-J-3-FGM-CAL-V1.0/DATA/JUPITER/SS/PERI-30/
