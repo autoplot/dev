@@ -23,7 +23,7 @@ class ImagePainter( GrannyTextRenderer.Painter ):
         g.scale( scale, scale )
         g.drawImage(self.im,0,-self.im.height,None)
         g.draw( Rectangle2D.Float(0,-self.im.height,self.im.width,self.im.height) )
-        r= Rectangle2D.Float(0,0,w,h)
+        r= Rectangle2D.Float(0,-h,w,h)
         return r
         
 ann= annotation(text=s)
