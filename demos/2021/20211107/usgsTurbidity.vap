@@ -81,7 +81,7 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+txt:file:///home/jbf/ct/autoplot/git/dev/demos/2021/20211107//usgsTurbidity.txt?column=turbidity&amp;time=field0&amp;timeFormat=$m/$d/$Y+$H:$M"/>
+                <property default="" name="uri" type="String" value="vap+txt:%{PWD}usgsTurbidity.txt?column=turbidity&amp;time=field0&amp;timeFormat=$m/$d/$Y+$H:$M"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
