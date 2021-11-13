@@ -6,4 +6,4 @@ ds2= dataset( [-1,-2,-3,-4,-99,-6,-7,-8] )
 ds2.putProperty( QDataSet.FILL_VALUE, -99 )
 
 ds3= append( ds1, ds2 )
-print extent(ds3)
+print extent(ds3)  # returns -99 to 99
