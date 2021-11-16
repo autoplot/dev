@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qualityControlRecord xmlns="http://autoplot.org/data/schema/pngwalkQC">
+    <currentStatus>OK</currentStatus>
+    <modifiedDate>2021-11-16T18:50:42Z</modifiedDate>
+    <imageURI>http://autoplot.org/data/pngwalk/product_20080119.png</imageURI>
+    <reviewComment date="2021-11-16T18:50:42Z" reviewer="jbf" status="OK"/>
+</qualityControlRecord>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qualityControlRecord xmlns="http://autoplot.org/data/schema/pngwalkQC">
+    <currentStatus>Problem</currentStatus>
+    <modifiedDate>2021-11-16T18:54:12Z</modifiedDate>
+    <imageURI>http://autoplot.org/data/pngwalk/product_20080117.png</imageURI>
+    <reviewComment date="2021-11-16T18:50:40Z" reviewer="jbf" status="OK"/>
+    <reviewComment date="2021-11-16T18:54:12Z" reviewer="jbf" status="Problem">Missing data</reviewComment>
+</qualityControlRecord>
