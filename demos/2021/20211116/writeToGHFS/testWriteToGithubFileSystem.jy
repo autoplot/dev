@@ -1,0 +1,17 @@
+from org.das2.util.filesystem import FileSystem,WriteCapability
+
+FileSystem.reset()
+fs= FileSystem.create( URI( 'https://github.com/autoplot/dev/') )
+
+fo= fs.getFileObject('demos/2021/20211116/writeToGHFS/test.dat')
+print fo.getFile()
+
+wr= fo.getCapability( WriteCapability )
+if ( wr==None ):
+    print 'Nope can not write...'
+else:
+    os= wr.getOutputStream()
+    os.write( str(TimeUtil.now()) )
+    os.close()
+    wr.commit( 'automatic change' ) 
+    
