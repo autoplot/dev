@@ -1,0 +1,31 @@
+setScriptDescription('''Demos bug Sadie caught, where trim and append give an absurd result.''')
+
+tr= '2017-12-05T11:00 to 21:00'
+
+from org.das2.qds import ArrayDataSet
+
+doCopy= getParam( 'doCopy', False, 'Make a copy to ArrayDataSet from BufferDataSet', [True,False] )
+
+lshellA=getDataSet('vap+cdaweb:ds=RBSPA_REL04_ECT-HOPE-MOM-L3&filter=rbspa&id=L_TT',tr)
+lshellA = trim(lshellA,tr)
+
+lshellB=getDataSet('vap+cdaweb:ds=RBSPB_REL04_ECT-HOPE-MOM-L3&filter=rbspb&id=L_TT',tr)
+lshellB = trim(lshellB, tr)
+
+lshellA.putProperty(QDataSet.DEPEND_0,None)
+lshellB.putProperty(QDataSet.DEPEND_0,None)
+
+if doCopy:
+    lshellA= ArrayDataSet.copy(lshellA)
+    lshellB= ArrayDataSet.copy(lshellB)
+
+A= extent( lshellA )
+B= extent( lshellB )
+AB= extent( append( lshellA, lshellB ) )
+print A
+print B
+print AB
+
+if ( not datumRange(AB).contains( datumRange(A) ) 
+     or not datumRange(AB).contains( datumRange(B) ) ):
+    print 'ABSURD!'
