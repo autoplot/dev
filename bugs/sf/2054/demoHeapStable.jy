@@ -1,0 +1,14 @@
+# plot file size vs timestamp
+from java.io import File
+dsb= DataSetBuilder(2,100,2)
+dsb.setUnits(0,Units.ms1970)
+
+dd= getParam( 'files', '/tmp/apheap/*.hprof', 'files to list' )
+ff= listDirectory(dd)
+i= dd.rindex('/')
+
+for f in ff:
+    fil= File( dd[0:i+1]+f )
+    dsb.nextRecord( [ fil.lastModified(), fil.length() ] )
+
+plot( dsb.getDataSet() )
