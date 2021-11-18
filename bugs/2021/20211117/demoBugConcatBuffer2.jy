@@ -1,0 +1,16 @@
+from org.das2.qds.buffer import BufferDataSet
+
+def doTest( a1, a2 ):
+    for a in append(a1[5:10],a2[0:5]):
+        print a,
+    print ''
+
+a1= indgen(10)
+a2= indgen(10)+10
+
+doTest(a1,a2)
+    
+a1= BufferDataSet.copy( a1 )
+a2= BufferDataSet.copy( a2 )
+
+doTest(a1,a2)
