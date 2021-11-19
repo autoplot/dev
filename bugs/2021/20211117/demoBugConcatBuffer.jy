@@ -22,10 +22,10 @@ if doCopy:
 A= extent( lshellA )
 B= extent( lshellB )
 AB= extent( append( lshellA, lshellB ) )
-print A
-print B
-print AB
+print 'A = ', A, ' (extent of lshellA)'
+print 'B = ', B, ' (extent of lshellB)'
+print 'AB = ', AB, ' (extent of lshellA and lshellB concatenated)'
 
 if ( not datumRange(AB).contains( datumRange(A) ) 
      or not datumRange(AB).contains( datumRange(B) ) ):
-    print 'ABSURD!'
+    print 'ABSURD result, since AB must contain both A and B!'
