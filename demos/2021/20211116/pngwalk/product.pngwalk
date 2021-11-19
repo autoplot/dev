@@ -6,3 +6,5 @@ timeRange=2008-01-01/2008-02-05
 autorange=true
 autorangeFlags=true
 
+# the following line indicates where the QC records are stored.
+qcturl=.
