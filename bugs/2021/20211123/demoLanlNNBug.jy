@@ -1,0 +1,27 @@
+#ds= getDataSet( 'file:///home/jbf/ct/autoplot/u/2021/sadie/20211123/histogram_example.txt?rank2=1:&depend0=time')
+#ds.putProperty( QDataSet.DEPEND_0, None )
+randomSeed(5334)
+ds= distance(10,10,6.7,6.7,3.0,3.0) + randn(10,10)/30.0
+
+setCanvasSize(300,200)
+
+plot( ds, 
+    renderType='nnSpectrogram>rebin=lanlNearestNeighbor',
+    xrange='3 to 9',   # should drop a bin at 8.5 to 9.0
+    yrange='2.6 to 9.5'  )  # includes all bins
+
+from org.das2.dataset import LanlNNRebinner,RebinDescriptor
+rebin= LanlNNRebinner()
+
+#xrange= datumRange( '2017-12-05 0:00 to 6:10' )
+xrange= datumRange( '7 to 8' )
+yrange= datumRange( '7 to 8' )
+ddX= RebinDescriptor(xrange.min(),xrange.max(),510,False)
+ddY= RebinDescriptor(yrange.min(),yrange.max(),10,False)
+dss= rebin.rebin( ds,ddX,ddY,None )
+
+print dss[0,0]
+print dss[-1,0]
+#Lanl
+
+#formatDataSet(dss,'/tmp/ap/lanlNN.cdf?spectrogram')
