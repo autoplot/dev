@@ -1,0 +1,103 @@
+from java.lang import System
+from org.das2.util import FileUtil
+setScriptDescription('''Test JSON SAX parser.  A SAX parser gives control to
+the client code as the JSON is read in, rather than parsing the entire
+document before control is returned to the code.  The TFCat files are quite
+large, and I would like to read just enough to detect the schema.''')
+
+import sys
+addToSearchPath( sys.path, 
+   'https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar',
+   monitor )
+
+from org.json.simple.parser import ContainerFactory
+from org.json.simple.parser import ContentHandler
+from org.json.simple.parser import JSONParser
+from org.json.simple.parser import ParseException
+
+class KeyFinder( ContentHandler ):
+    def __init__(self):
+        self.found= False
+        self.end= False
+        self.key= ''
+        self.matchKey= ''
+
+    def isFound(self):
+        return self.found
+    
+    def setMatchKey(self,matchKey):
+        self.matchKey = matchKey
+            
+    def getValue(self):
+        return self.value
+            
+    def isEnd(self):
+        return self.end
+                        
+    def startJSON(self):
+        self.found = False
+        self.end = False
+        print 'startJSON'
+
+    def endJSON(self):
+        self.end = True
+        print 'endJSON'
+
+    def primitive(self, value):
+        print 'primative ', value
+        return True
+
+    def startArray(self):
+        return True
+
+    
+    def startObject(self) :
+        print 'startObject'
+        return True
+
+    def startObjectEntry(self,key):
+        print 'startObjectEntry ',key
+        if ( key=='time_coords' ):
+            self.found= True
+        self.key = key
+    
+    def endArray(self) :
+        print 'startArray'
+        return False
+
+    def endObject(self):
+        print 'endObject'
+        return True
+    
+
+    def endObjectEntry(self):
+        print 'endObjectEntry'
+        return True
+
+#tfcat= getFile(  '~/eg/data.backup/json/tfcat/juno_waves_lesia_tfcat_2017.pp.little.json', None )
+#tfcat= getFile(  '~/eg/data.backup/json/tfcat/juno_waves_lesia_tfcat_2017.json', None )
+tfcat= getFile(  '~/eg/data.backup/json/tfcat/juno_waves_lesia_tfcat_2017.pp.json', None )
+s= FileUtil.readFileToString(tfcat)
+
+parser = JSONParser()
+parser.reset()
+
+t0= System.currentTimeMillis()
+keyFinder = KeyFinder()
+i=0
+try:
+    while( not ( keyFinder.isEnd() or keyFinder.isFound() ) ):
+        i=i+1
+        parser.parse(s, keyFinder, True)
+        if(keyFinder.isFound()):
+            print 'Found it'
+        if ( i==10 ):
+            stop
+
+except:
+    import traceback
+    traceback.print_exc()
+print 'done in %.1f ms' % ( System.currentTimeMillis() - t0 )
+
+
+
