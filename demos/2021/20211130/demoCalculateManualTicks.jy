@@ -1,0 +1,18 @@
+from org.das2.graph.GraphUtil import calculateManualTicks
+
+tr= datumRange('2021')
+
+tt= calculateManualTicks( '2021-01-01,2021-01-02,2021-01-03/+4hr',tr,False)
+print tt.getMajorTicks().length, tt.getMinorTicks().length, tt
+
+tt= calculateManualTicks( '+10/5', datumRange('0 to 100'), False )
+print tt.getMajorTicks().length, tt.getMinorTicks().length, tt
+
+tt= calculateManualTicks( '*10/10', datumRange('1 to 1000'), True )
+print tt.getMajorTicks().length, tt.getMinorTicks().length, tt
+
+tt= calculateManualTicks( '*10/+1', datumRange('1 to 1000'), True )
+print tt.getMajorTicks().length, tt.getMinorTicks().length, tt
+
+tt= calculateManualTicks( '+10/2,6,7', datumRange('0 to 100'), False )
+print tt.getMajorTicks().length, tt.getMinorTicks().length, tt
