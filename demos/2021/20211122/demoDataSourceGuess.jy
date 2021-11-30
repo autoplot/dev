@@ -1,0 +1,12 @@
+from org.autoplot.datasource import DataSourceGuess
+
+ff= getFile('/home/jbf/ct/hudson/data/dat/events/Draft_VOTable_EventLList_Std.xml',None)
+print DataSourceGuess.guessDataSourceType(ff)
+
+ff= getFile('https://space.physics.uiowa.edu/voyager/data/voyager-1-pws-sa/data/1988/vg1pws_lr_19880105_v5.10.xml', None )
+print ff
+print DataSourceGuess.guessDataSourceType(ff)
+
+ff= getFile('/home/jbf/eg/data.backup/json/tfcat/juno_waves_lesia_tfcat_2017.json', None )
+print ff
+print DataSourceGuess.guessDataSourceType(ff)
