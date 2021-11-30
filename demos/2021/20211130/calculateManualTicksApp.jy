@@ -1,3 +1,17 @@
+setScriptDescription('''Demonstrate manual ticks specification.  One can specify tick locations
+with strings like:
+<ul>
+     * <li>+20 every 20 units, whatever the data units are.
+     * <li>+20s  every 20 seconds
+     * <li>0,20,40,60,100  explicit locations.
+     * <li>+20s/4 every 20 seconds, with four minor divisions.
+     * <li>+20s/5,10,15 minor ticks repeat each 20s.
+     * <li>100,200,300/50,150,250,350 explicit list of major and minor ticks.
+     * <li>*10/+1 log ticks with linear minor ticks.
+     * </ul>
+''')
+setScriptTitle('Demo Calculate Manual Ticks')
+
 from org.das2.graph.GraphUtil import calculateManualTicks
 
 range= getParam( 'range', '2021', 'Data range to calculate ticks', { "examples":["2021","2021-01-01","0 to 10"] } )
