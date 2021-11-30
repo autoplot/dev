@@ -1,0 +1,96 @@
+setScriptDescription('''Test JSON SAX parser.  A SAX parser gives control to
+the client code as the JSON is read in, rather than parsing the entire
+document before control is returned to the code.  The TFCat files are quite
+large, and I would like to read just enough to detect the schema.''')
+
+import sys
+addToSearchPath( sys.path, 
+   'https://repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar',
+   monitor )
+
+from org.json.simple.parser import ContainerFactory
+from org.json.simple.parser import ContentHandler
+from org.json.simple.parser import JSONParser
+from org.json.simple.parser import ParseException
+
+class KeyFinder( ContentHandler ):
+    def __init__(self):
+        self.value= None
+        self.found= False
+        self.end= False
+        self.key= ''
+        self.matchKey= ''
+            
+    def setMatchKey(self,matchKey):
+        self.matchKey = matchKey
+            
+    def getValue(self):
+        return self.value
+            
+    def isEnd(self):
+        return self.end
+            
+    def setFound(self, found):
+        self.found = found
+            
+    def isFound(self):
+        return self.found
+    
+    def startJSON(self):
+        self.found = False
+        self.end = False
+
+    def endJSON(self):
+        self.end = True
+
+    def primitive(self, value):
+        if(self.key != None):
+            if(self.key==self.matchKey):
+                self.found = True
+                self.value = value
+                self.key = None
+                return False
+        return True
+
+    def startArray(self):
+        return True
+
+    
+    def startObject(self) :
+        return True
+
+    def startObjectEntry(self,key):
+        self.key = key
+    
+    def endArray(self) :
+        return False;
+
+    def endObject(self):
+        return True;
+    
+
+    def endObjectEntry(self):
+        return True;
+    
+s = "{\"first\": 123, \"second\": [{\"k1\":{\"id\":\"id1\"}}, 4, 5, 6, {\"id\": 123}], \"third\": 789, \"id\": null}"
+parser = JSONParser()
+parser.reset()
+
+keyFinder = KeyFinder()
+keyFinder.setMatchKey("id")
+i = 0
+try:
+    while(not keyFinder.isEnd()):
+        print s
+        parser.parse(s, keyFinder, True)
+        if(keyFinder.isFound()):
+            i=i+1
+            keyFinder.setFound(False)
+            print("found id:")
+            print(keyFinder.getValue())
+except:
+    import traceback
+    traceback.print_exc()
+    
+
+
