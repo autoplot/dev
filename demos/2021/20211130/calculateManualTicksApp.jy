@@ -25,5 +25,6 @@ print 'number of major ticks: ', tt.getMajorTicks().length
 print 'number of minor ticks: ', tt.getMinorTicks().length
 print 'ticks: ', tt
 
+setCanvasSize(640,200)
 dom.plots[0].xaxis.range= tr
 dom.plots[0].xaxis.tickValues= spec
