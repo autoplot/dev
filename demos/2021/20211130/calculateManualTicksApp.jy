@@ -14,7 +14,7 @@ setScriptTitle('Demo Calculate Manual Ticks')
 
 from org.das2.graph.GraphUtil import calculateManualTicks
 
-range= getParam( 'range', '2021', 'Data range to calculate ticks', { "examples":["2021","2021-01-01","0 to 10"] } )
+range= getParam( 'range', '2021-nov', 'Data range to calculate ticks', { "examples":["2021","2021-01-01","0 to 10"] } )
 tr= datumRange(range)
 
 spec= getParam('spec','+5days/5', 'Ticks Specification', { 'examples': ['+5days/5','*10/+1' ] } )
@@ -24,3 +24,6 @@ tt= calculateManualTicks( spec,tr,log )
 print 'number of major ticks: ', tt.getMajorTicks().length
 print 'number of minor ticks: ', tt.getMinorTicks().length
 print 'ticks: ', tt
+
+dom.plots[0].xaxis.range= tr
+dom.plots[0].xaxis.tickValues= spec
