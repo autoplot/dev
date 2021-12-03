@@ -1,0 +1,10 @@
+setScriptDescription('''We were confused about why the plotId doesn't set the correct plot.  
+The row and column ids must be used.''')
+
+setLayout(2)
+
+p= dom.plots[0]
+annotation( 0, text=p.id, plotId=dom.plots[0], rowId=p.rowId, columnId=p.columnId   )
+
+p= dom.plots[1]
+annotation( 1, text=p.id, plotId=dom.plots[1], rowId=p.rowId, columnId=p.columnId )
