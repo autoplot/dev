@@ -1,0 +1,20 @@
+from org.das2.datum import DatumVector,DatumUtil
+setScriptDescription( 'Demonstrate and test DatumUtil.bestFormatter' )
+
+t1= '2021-01-01,2021-01-02,2021-01-03'
+
+datums= getParam( 'datums', t1, 'The datums to use, where the datum function parses' )
+
+ss= datums.split(',')
+dd= map( datum, ss )
+u= dd[0].units
+ds= map( lambda d : d.doubleValue(u), dd )
+
+dv= DatumVector.newDatumVector(ds,u)
+
+print dv
+ff= DatumUtil.bestFormatter( dv )
+
+for i in xrange(dv.length):
+    print ff.format(dv.get(i),u)
+    
