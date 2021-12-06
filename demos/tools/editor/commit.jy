@@ -1,9 +1,6 @@
 from org.das2.util import LoggerManager
 from java.io import File
 
-print '****'
-print 'This is commit.jy, an editor action.'
-
 setScriptTitle('Git Pull')
 setScriptDescription('Run the git commit command.  This assumes that the git commands are available at the command line.')
 
@@ -16,7 +13,7 @@ from java.io import File
 from org.autoplot.datasource import AutoplotSettings
 autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
 
-exe= 'git commit -m "no doc yet" '+name
+msg= 'no message'
 
 logger.info("pwd: "+str( File( script ).parentFile ) )
 
@@ -24,7 +21,7 @@ setStatus( "busy: executing commit" )
 
 from java.lang import ProcessBuilder
 
-pb= ProcessBuilder(exe.split(' '))
+pb= ProcessBuilder(['git','commit','-m',msg,name])
 pb.directory( File( script ).parentFile )
 
 log= File( autoplotData, 'log' )
