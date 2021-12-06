@@ -1,0 +1,6 @@
+ds1= findgen(10)
+ds2= findgen(10)+11
+ds2= link( linspace('2021-12-06T00:00','2021-12-06T00:09',10), ds2 )
+
+ds= append( ds1, ds2 )
+plot( ds )
