@@ -2,9 +2,15 @@ setScriptDescription('''Demo where Autoplot before v2021a_11 would not allow a d
 timetags to have a dataset with timetags appended.  The new behavior is to simply drop the timetags
 from the appended dataset.''')
 
+flip= getParam( 'flip', False, 'flip arguments to demo that joinProperties is commutative logic works.', [True,False] )
+
 ds1= findgen(10)
 ds2= findgen(10)+11
 ds2= link( linspace('2021-12-06T00:00','2021-12-06T00:09',10), ds2 )
 
-ds= append( ds1, ds2 )
+if flip:
+    ds= append( ds2, ds1 )
+else:
+    ds= append( ds1, ds2 )
+    
 plot( ds )
