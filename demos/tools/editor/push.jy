@@ -37,4 +37,4 @@ from org.das2.util import FileUtil
 msg= FileUtil.readFileToString( log )
 showMessageDialog(msg)
 
-setStatus( "Pull complete, see " + str(log) )
+setStatus( "Push complete, see " + str(log) )
