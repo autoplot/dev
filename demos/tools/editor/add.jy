@@ -1,0 +1,43 @@
+from org.das2.util import LoggerManager
+from java.io import File
+
+print '****'
+print 'This is add.jy, an editor action.'
+
+setScriptTitle('Git Add')
+setScriptDescription('Run the git add command.  This assumes that the git commands are available at the command line.')
+
+logger= LoggerManager.getLogger('jython.actions')
+
+script= getApplication().getScriptPanel().getFilename()
+name= File( getApplication().getScriptPanel().getFilename() ).getName()
+
+from java.io import File
+from org.autoplot.datasource import AutoplotSettings
+autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
+
+exe= 'git add '+name
+
+logger.info("pwd: "+str( File( script ).parentFile ) )
+
+setStatus( "busy: executing add" )
+
+from java.lang import ProcessBuilder
+
+pb= ProcessBuilder(exe.split(' '))
+pb.directory( File( script ).parentFile )
+
+log= File( autoplotData, 'log' )
+log= File( log, 'editor.add.txt' )
+
+pb.redirectErrorStream(True)
+pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
+
+p= pb.start()
+p.waitFor()
+
+from org.das2.util import FileUtil
+msg= FileUtil.readFileToString( log )
+showMessageDialog(msg)
+
+setStatus( "Commit complete, see " + str(log) )
