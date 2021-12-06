@@ -1,3 +1,7 @@
+setScriptDescription('''Demo where Autoplot before v2021a_11 would not allow a dataset without
+timetags to have a dataset with timetags appended.  The new behavior is to simply drop the timetags
+from the appended dataset.''')
+
 ds1= findgen(10)
 ds2= findgen(10)+11
 ds2= link( linspace('2021-12-06T00:00','2021-12-06T00:09',10), ds2 )
