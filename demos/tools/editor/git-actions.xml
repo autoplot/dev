@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bookmark-list version="1.1">
+    <bookmark-folder>
+        <title>TeamGit</title>
+        <bookmark-list>
+            <bookmark>
+                <title>Add</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/add.jy</uri>
+                <description>Add the editor file to the git repository.  Commit is typically done after.</description>
+            </bookmark>
+            <bookmark>
+                <title>Commit</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/commit.jy</uri>
+                <description>Commit the version to the file with a comment to the local repository.  Often this is followed by a push.</description>
+            </bookmark>
+            <bookmark>
+                <title>Pull</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/pull.jy</uri>
+                <description>Runs git pull at the command line, getting any changes made in the remote repository.</description>
+            </bookmark>
+            <bookmark>
+                <title>Push</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/push.jy</uri>
+                <description>Push commits in this repository to the remote repository.  Often people will pull before pushing changes.</description>
+            </bookmark>
+            <bookmark>
+                <title>Open Terminal</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/openTerminal.jy</uri>
+            </bookmark>
+            <bookmark>
+                <title>Revert</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/revert.jy</uri>
+            </bookmark>
+        </bookmark-list>
+    </bookmark-folder>
+</bookmark-list>
