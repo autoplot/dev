@@ -1,3 +1,4 @@
+from javax.swing import JOptionPane
 from org.das2.util import LoggerManager
 from java.io import File
 
@@ -13,7 +14,9 @@ from java.io import File
 from org.autoplot.datasource import AutoplotSettings
 autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
 
-msg= 'no message'
+msg= JOptionPane.showInputDialog('Commit Message:')
+if ( msg==None ):
+    stop
 
 logger.info("pwd: "+str( File( script ).parentFile ) )
 
