@@ -1,0 +1,37 @@
+script= getApplication().getScriptPanel().getFilename()
+
+from java.io import File
+from org.autoplot.datasource import AutoplotSettings
+autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
+
+from java.lang import System
+linux= System.getProperty("os.name")=="Linux"
+windows= System.getProperty("os.name").find("Windows")==0
+
+if linux:
+   exe= 'mate-terminal --working-directory=' + str(File( script ).parentFile)
+   print exe
+
+   from java.lang import ProcessBuilder
+
+   pb= ProcessBuilder(exe.split(' '))
+   pb.directory( File( script ).parentFile )
+
+   log= File( autoplotData, 'log' )
+   log= File( log, 'editor.openterminal.txt' )
+
+   pb.redirectErrorStream(True)
+   pb.redirectOutput( ProcessBuilder.Redirect.appendTo(log) )
+
+   p= pb.start()
+
+   setStatus( "mate-terminal complete, see " + str(log) )
+
+elif windows:
+   from javax.swing import JOptionPane
+   JOptionPane.showMessageDialog( 'Windows not supported.' )
+
+else:
+   from javax.swing import JOptionPane
+   JOptionPane.showMessageDialog( 'Mac not supported.' )
+   
