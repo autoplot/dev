@@ -13,3 +13,6 @@ https://github.com/autoplot/vap/errorBarsRPI.vap
 
 # translucent colors
 https://github.com/autoplot/dev/blob/master/bugs/sf/2200/demoSaveColors.vap
+
+# PDS4 tests
+https://pds-ppi.igpp.ucla.edu/data/vg2-crs-jup-avg-flux/data-ions/LD_RATE.xml?X=Time&Y=LD%20Rate
