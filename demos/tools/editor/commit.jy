@@ -2,7 +2,7 @@ from javax.swing import JOptionPane
 from org.das2.util import LoggerManager
 from java.io import File
 
-setScriptTitle('Git Pull')
+setScriptTitle('Git Commit')
 setScriptDescription('Run the git commit command.  This assumes that the git commands are available at the command line.')
 
 logger= LoggerManager.getLogger('jython.actions')
@@ -16,28 +16,28 @@ autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP
 
 msg= JOptionPane.showInputDialog('Commit Message:')
 if ( msg==None ):
-    stop
+    setStatus( 'git commit cancelled.' )
+else:
+    logger.info("pwd: "+str( File( script ).parentFile ) )
 
-logger.info("pwd: "+str( File( script ).parentFile ) )
+    setStatus( "busy: executing commit" )
 
-setStatus( "busy: executing commit" )
+    from java.lang import ProcessBuilder
 
-from java.lang import ProcessBuilder
+    pb= ProcessBuilder(['git','commit', '-m',msg,name])
+    pb.directory( File( script ).parentFile )
 
-pb= ProcessBuilder(['git','commit','-m',msg,name])
-pb.directory( File( script ).parentFile )
+    log= File( autoplotData, 'log' )
+    log= File( log, 'editor.commit.txt' )
 
-log= File( autoplotData, 'log' )
-log= File( log, 'editor.commit.txt' )
+    pb.redirectErrorStream(True)
+    pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
 
-pb.redirectErrorStream(True)
-pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
+    p= pb.start()
+    p.waitFor()
 
-p= pb.start()
-p.waitFor()
+    from org.das2.util import FileUtil
+    msg= FileUtil.readFileToString( log )
+    showMessageDialog(msg)
 
-from org.das2.util import FileUtil
-msg= FileUtil.readFileToString( log )
-showMessageDialog(msg)
-
-setStatus( "Commit complete, see " + str(log) )
+    setStatus( "Commit complete, see " + str(log) )
