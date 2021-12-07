@@ -8,10 +8,14 @@ setScriptDescription('Run the git diff command.  This assumes that the git comma
 logger= LoggerManager.getLogger('jython.actions')
 
 script= getApplication().getScriptPanel().getFilename()
-f= File( getApplication().getScriptPanel().getFilename() )
+if ( script==None ):
+    JOptionPane.showMessageDialog(getApplication(),'script must be saved in a local clone')
+    
+else:
+    f= File( script )
 
-editor= getApplication().getScriptPanel().getEditorPanel()
-from org.autoplot.scriptconsole import ScriptPanelSupport
-ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
+    editor= getApplication().getScriptPanel().getEditorPanel()
+    from org.autoplot.scriptconsole import ScriptPanelSupport
+    ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
 
-setStatus( "diff complete" )
+    setStatus( "diff complete" )
