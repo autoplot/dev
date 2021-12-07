@@ -40,4 +40,4 @@ from org.das2.util import FileUtil
 msg= FileUtil.readFileToString( log )
 showMessageDialog(msg)
 
-setStatus( "Commit complete, see " + str(log) )
+setStatus( "add complete, see " + str(log) )
