@@ -1,0 +1,17 @@
+from javax.swing import JOptionPane
+from org.das2.util import LoggerManager
+from java.io import File
+
+setScriptTitle('Git Diff')
+setScriptDescription('Run the git diff command.  This assumes that the git commands are available at the command line.')
+
+logger= LoggerManager.getLogger('jython.actions')
+
+script= getApplication().getScriptPanel().getFilename()
+f= File( getApplication().getScriptPanel().getFilename() )
+
+editor= getApplication().getScriptPanel().getEditorPanel()
+from org.autoplot.scriptconsole import ScriptPanelSupport
+ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
+
+setStatus( "diff complete" )
