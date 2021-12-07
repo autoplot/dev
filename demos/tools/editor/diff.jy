@@ -16,6 +16,11 @@ else:
 
     editor= getApplication().getScriptPanel().getEditorPanel()
     from org.autoplot.scriptconsole import ScriptPanelSupport
-    ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
-
-    setStatus( "diff complete" )
+    count= ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
+    if count==0:
+        setStatus( "diff complete, no changes" )
+    elif count==1:
+        setStatus( "diff complete, one change" )
+    else:
+        setStatus( "diff complete, %d changes" % count )
+ 
