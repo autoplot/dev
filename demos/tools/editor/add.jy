@@ -38,6 +38,9 @@ p.waitFor()
 
 from org.das2.util import FileUtil
 msg= FileUtil.readFileToString( log )
-showMessageDialog(msg)
+if msg=='':
+    showMessageDialog('add was successful.')
+else:
+    showMessageDialog(msg)
 
 setStatus( "add complete, see " + str(log) )
