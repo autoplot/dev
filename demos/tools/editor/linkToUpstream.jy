@@ -1,0 +1,77 @@
+setScriptDescription('''This links the current working directory to the directory in
+Autoplot's cache, so that Autoplot knows to use the local checkout.''')
+
+from java.lang import ProcessBuilder
+from java.io import File, InputStreamReader, BufferedReader
+from java.util.regex import Pattern
+from org.das2.util.filesystem import FileSystem
+from javax.swing import JOptionPane
+
+# git config --get remote.origin.url
+# git worktree list
+
+script= getApplication().getScriptPanel().getFilename()
+
+pb= ProcessBuilder(['git','config', '--get','remote.origin.url'])
+pb.directory( File( script ).parentFile )
+
+pb.redirectErrorStream(True)
+
+process= pb.start()
+
+br= BufferedReader(InputStreamReader(process.getInputStream()))
+line = br.lines().toArray()
+gitRemote= line[0]
+
+
+cwd= File( script ).parentFile
+
+pb= ProcessBuilder(['git','worktree', 'list'])
+pb.directory( cwd )
+
+pb.redirectErrorStream(True)
+
+process= pb.start()
+br= BufferedReader(InputStreamReader(process.getInputStream()))
+line = br.lines().toArray()
+localRoot= line[0]
+
+pat= Pattern.compile( '(.+)  .+ \[(.+)\]' )
+matcher= pat.matcher( localRoot )
+
+if ( matcher.matches() ) :
+    localRoot= matcher.group(1)
+    branch= matcher.group(2) 
+else:
+    raise Exception('expected match for "(.+)  .+ \[(.+)\]", got '+localRemote)
+
+localRoot= File(localRoot).getCanonicalPath()
+cwd= File(cwd.path).getCanonicalPath()
+
+print 'gitRemote: ', gitRemote
+print 'branch: ', branch
+print 'localRoot: ', localRoot
+print 'cwd: ', cwd
+
+pat= Pattern.compile( '[a-z]*@([a-zA-Z\.a-z]+):(.+)\.git' )
+matcher= pat.matcher( gitRemote )
+
+if ( matcher.matches() ):
+    remote= 'https://'+matcher.group(1)+'/'+matcher.group(2)
+    print 'remote: ', remote
+    cacheDir= FileSystem.settings().localCacheDir.getCanonicalPath()
+    gitCacheDir= cacheDir + '/' + 'https' + '/' + matcher.group(1)+'/'+matcher.group(2)+'/'+branch
+    print 'gitCacheDir: ', gitCacheDir
+else:
+    raise Exception('expected match for "[a-z]*@([a-zA-Z\.a-z]+):(.+)\.git", got '+gitRemote) 
+    
+roCacheFile= gitCacheDir + '/' + 'ro_cache.txt' 
+print 'roCacheFile: '+roCacheFile
+
+if fileExists(roCacheFile):
+    JOptionPane.showMessageDialog(getApplication(),'ro_cache.txt already exists, see console.')
+else:
+    ff= open('w',roCacheFile)
+    ff.write( localRoot )
+    ff.write( '\n' )
+    ff.close()

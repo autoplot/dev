@@ -1,6 +1,6 @@
 setScriptDescription('''Demo where Autoplot before v2021a_11 would not allow a dataset without
 timetags to have a dataset with timetags appended.  The new behavior is to simply drop the timetags
-from the appended dataset.''')
+from the appended dataset.  See https://sourceforge.net/p/autoplot/bugs/2409/.''')
 
 flip= getParam( 'flip', False, 'flip arguments to demo that joinProperties is commutative logic works.', [True,False] )
 
