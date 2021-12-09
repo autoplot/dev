@@ -68,10 +68,10 @@ else:
 roCacheFile= gitCacheDir + '/' + 'ro_cache.txt' 
 print 'roCacheFile: '+roCacheFile
 
-if !File(gitCacheDir).exists():
-    if !File(gitCacheDir).mkdirs:
+if not File(gitCacheDir).exists():
+    if not File(gitCacheDir).mkdirs:
         raise Exception('Unable to mkdirs: '+gitCacheDir)
-        
+
 if fileExists(roCacheFile):
     JOptionPane.showMessageDialog(getApplication(),'ro_cache.txt already exists, see console.')
 else:
