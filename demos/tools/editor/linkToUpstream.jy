@@ -75,7 +75,7 @@ if not File(gitCacheDir).exists():
 if fileExists(roCacheFile):
     JOptionPane.showMessageDialog(getApplication(),'ro_cache.txt already exists, see console.')
 else:
-    ff= open('w',roCacheFile)
+    ff= open(roCacheFile,'w')
     ff.write( localRoot )
     ff.write( '\n' )
     ff.close()
