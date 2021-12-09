@@ -69,7 +69,7 @@ roCacheFile= gitCacheDir + '/' + 'ro_cache.txt'
 print 'roCacheFile: '+roCacheFile
 
 if not File(gitCacheDir).exists():
-    if not File(gitCacheDir).mkdirs:
+    if not File(gitCacheDir).mkdirs():
         raise Exception('Unable to mkdirs: '+gitCacheDir)
 
 if fileExists(roCacheFile):
