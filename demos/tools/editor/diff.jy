@@ -21,6 +21,9 @@ else:
         setStatus( "diff complete, no changes" )
     elif count==1:
         setStatus( "diff complete, one change" )
+    elif count==None:
+        setStatus( "diff complete" )  # old Autoplot versions (before v2021a_11)
     else:
+        print type(count)
         setStatus( "diff complete, %d changes" % count )
  
