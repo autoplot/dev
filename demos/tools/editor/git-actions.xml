@@ -8,6 +8,10 @@
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/diff.jy</uri>
             </bookmark>            
             <bookmark>
+                <title>Link to Upstream</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/linkToUpstream.jy</uri>
+            </bookmark>      
+            <bookmark>
                 <title>Add</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/add.jy</uri>
                 <description>Add the editor file to the git repository.  Commit is typically done after.</description>
