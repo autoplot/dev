@@ -12,6 +12,9 @@ from javax.swing import JOptionPane
 
 script= getApplication().getScriptPanel().getFilename()
 
+if ( script==None ):
+    raise Exception('script must be saved in a local clone')
+    
 pb= ProcessBuilder(['git','config', '--get','remote.origin.url'])
 pb.directory( File( script ).parentFile )
 
