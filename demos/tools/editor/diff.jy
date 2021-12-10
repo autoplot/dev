@@ -10,20 +10,20 @@ logger= LoggerManager.getLogger('jython.actions')
 script= getApplication().getScriptPanel().getFilename()
 if ( script==None ):
     JOptionPane.showMessageDialog(getApplication(),'script must be saved in a local clone')
-    
-else:
-    f= File( script )
+    raise Exception( 'script must be saved in a local clone' )
 
-    editor= getApplication().getScriptPanel().getEditorPanel()
-    from org.autoplot.scriptconsole import ScriptPanelSupport
-    count= ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
-    if count==0:
-        setStatus( "diff complete, no changes" )
-    elif count==1:
-        setStatus( "diff complete, one change" )
-    elif count==None:
-        setStatus( "diff complete" )  # old Autoplot versions (before v2021a_11)
-    else:
-        print type(count)
-        setStatus( "diff complete, %d changes" % count )
+f= File( script )
+
+editor= getApplication().getScriptPanel().getEditorPanel()
+from org.autoplot.scriptconsole import ScriptPanelSupport
+count= ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
+if count==0:
+    setStatus( "diff complete, no changes" )
+elif count==1:
+    setStatus( "diff complete, one change" )
+elif count==None:
+    setStatus( "diff complete" )  # old Autoplot versions (before v2021a_11)
+else:
+    print type(count)
+    setStatus( "diff complete, %d changes" % count )
  
