@@ -1,7 +1,8 @@
-setScriptDescription('''See if I can demo the Log4J volnerability, see
-https://blog.cloudflare.com/inside-the-log4j2-vulnerability-cve-2021-44228/.
-I believe that the log4J version within Autoplot is too old to show this
-problem.  Autoplot itsself has always Java's built-in logging.''')
+setScriptDescription('''<html>See if I can demo the Log4J volnerability, see
+<a href='https://blog.cloudflare.com/inside-the-log4j2-vulnerability-cve-2021-44228/'>
+this description</a>  I believe that the log4J version within Autoplot is too old (2004) to 
+show this problem (2013).  Autoplot itsself has always Java's built-in logging. 
+''')
 
 newVers= getParam( 'newVers', False, 'Try to run newer Log4J', [ True,False] )
 
