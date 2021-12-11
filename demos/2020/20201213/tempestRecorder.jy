@@ -105,27 +105,30 @@ def recordObsSt( json ):
     f.close()
                           
 while True:
-    buf= jarray.zeros(BUF_LEN,'b')
-    
-    socket= DatagramSocket(PORT)
-    
-    packet = DatagramPacket(buf, BUF_LEN)
-    socket.receive(packet)
-    
-    socket.close()
+    try:
+        buf= jarray.zeros(BUF_LEN,'b')
+        
+        socket= DatagramSocket(PORT)
+        
+        packet = DatagramPacket(buf, BUF_LEN)
+        socket.receive(packet)
+        
+        socket.close()
 
-    msg= String(packet.getData(), 0, packet.getLength())
-    logger.fine(msg)
+        msg= String(packet.getData(), 0, packet.getLength())
+        logger.fine(msg)
     
-    json= JSONObject(msg)
-    typ= json.getString('type')
-    
-    if typ=='rapid_wind':
-        recordRapidWind( json )
-    elif typ=='obs_st':
-        recordObsSt( json )
-        pass
-                
+        json= JSONObject(msg)
+        typ= json.getString('type')
+        
+        if typ=='rapid_wind':
+            recordRapidWind( json )
+        elif typ=='obs_st':
+            recordObsSt( json )
+            pass
+    except:
+        logger.info('exception')
+        
 if socket!=None:
     socket.close()
     
