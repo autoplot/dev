@@ -35,8 +35,8 @@ colors= xx[3::4]
 
 tr= getParam( 'timerange', '2011-10-20 T00:00 to 2011-10-28T00:00', 'timerange to load' )
 
-stereoa=     getParam( scs[0], False, lbs[0], TF)
-stereob=     getParam( scs[1], False, lbs[1], TF)
+stereoa=    getParam( scs[0], False, lbs[0], TF)
+stereob=    getParam( scs[1], False, lbs[1], TF)
 psp=        getParam( scs[2], False, lbs[2], TF)
 messenger=  getParam( scs[3], False, lbs[3], TF)
 earth=      getParam( scs[4], False, lbs[4], TF )
@@ -44,16 +44,15 @@ thb =       getParam( scs[5], False, lbs[5], TF )
 thc =       getParam( scs[6], False, lbs[6], TF )
 juno =      getParam( scs[7], False, lbs[7], TF )
 bepi =      getParam( scs[8], False, lbs[8], TF )
-cassini =      getParam( scs[9], False, lbs[9], TF )
-galileo =      getParam( scs[10], False, lbs[10], TF )
-mercury =      getParam( scs[11], False, lbs[11], TF )
-venus =      getParam( scs[12], False, lbs[12], TF )
+cassini =   getParam( scs[9], False, lbs[9], TF )
+galileo =   getParam( scs[10], False, lbs[10], TF )
+mercury =   getParam( scs[11], False, lbs[11], TF )
+venus =     getParam( scs[12], False, lbs[12], TF )
 mars =      getParam( scs[13], False, lbs[13], TF )
-voyager1 =      getParam( scs[14], False, lbs[14], TF )
-voyager2 =      getParam( scs[15], False, lbs[15], TF )
+voyager1 =  getParam( scs[14], False, lbs[14], TF )
+voyager2 =  getParam( scs[15], False, lbs[15], TF )
 
 vel_wind=  getParam( 'velwind', 500, 'solar wind velocity in km/s' )
-
 
 doPlot= [ stereoa, stereob, psp, messenger, earth, thb, thc, juno, bepi, cassini, galileo, mercury, venus, mars, voyager1, voyager2 ]
 
