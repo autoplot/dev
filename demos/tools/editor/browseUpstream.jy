@@ -1,5 +1,5 @@
-setScriptDescription('''This links the current working directory to the directory in
-Autoplot's cache, so that Autoplot knows to use the local checkout.''')
+setScriptDescription('''Open the file on the remote area, assuming it's a GitLabs or GitHub instance
+This constructs the name and opens the browser.''')
 
 from java.lang import ProcessBuilder
 from java.io import File, InputStreamReader, BufferedReader
