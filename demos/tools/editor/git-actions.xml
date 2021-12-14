@@ -32,6 +32,11 @@
                 <description>Push commits in this repository to the remote repository.  Often people will pull before pushing changes.</description>
             </bookmark>
             <bookmark>
+                <title>Open Upstream</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/browseUpstream.jy</uri>
+                <description>Open the upstream version of the file to confirm that changes where pushed properly.
+            </bookmark>
+            <bookmark>
                 <title>Open Terminal</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/openTerminal.jy</uri>
             </bookmark>
