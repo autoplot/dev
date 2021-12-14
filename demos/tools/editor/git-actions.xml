@@ -34,7 +34,7 @@
             <bookmark>
                 <title>Open Upstream</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/browseUpstream.jy</uri>
-                <description>Open the upstream version of the file to confirm that changes where pushed properly.
+                <description>Open the upstream version of the file to confirm that changes where pushed properly.</description>
             </bookmark>
             <bookmark>
                 <title>Open Terminal</title>
