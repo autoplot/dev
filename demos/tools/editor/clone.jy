@@ -1,0 +1,56 @@
+from java.awt import FlowLayout
+from org.das2.util import LoggerManager
+print '****'
+print 'This is clone.jy, an editor action.'
+from javax.swing import JOptionPane,JPanel,JLabel,JTextField,BoxLayout
+
+setScriptTitle('Git Clone')
+setScriptDescription('Run the git clone command.  This assumes that the git commands are available at the command line.')
+
+logger= LoggerManager.getLogger('jython.actions')
+
+from java.io import File
+from org.autoplot.datasource import AutoplotSettings
+autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
+
+dia= JPanel()
+dia.setLayout( BoxLayout( dia, BoxLayout.Y_AXIS ) )
+dia.add( JLabel( 'Clone Repository:') )
+repoTF= JTextField(40)
+dia.add( repoTF )
+dia.add( JLabel( 'Local Folder:' ) )
+localFile= JTextField(40)
+dia.add( localFile )
+dia.add( JLabel( '<html><em>This will create the repo folder within the local folder' ) )
+
+target= JOptionPane.showConfirmDialog(getApplication(),dia,'Clone Repo',JOptionPane.OK_CANCEL_OPTION)
+if ( target==JOptionPane.CANCEL_OPTION ):
+    setStatus( 'git clone cancelled.' )
+elif( target==JOptionPane.OK_OPTION ):
+    exe= 'git clone '+ repoTF.text
+
+    setStatus( "busy: executing clone" )
+
+    from java.lang import ProcessBuilder
+
+    pb= ProcessBuilder(exe.split(' '))
+    if ( not File( localFile.text ).mkdirs() ):
+        logger.warning("unable to mkdirs")
+        
+    pb.directory( File( localFile.text ) )
+
+    log= File( autoplotData, 'log' )
+    log= File( log, 'editor.clone.txt' )
+
+    pb.redirectErrorStream(True)
+    pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
+
+    p= pb.start()
+    p.waitFor()
+
+    from org.das2.util import FileUtil
+    msg= FileUtil.readFileToString( log )
+    showMessageDialog(msg)
+
+    setStatus( "Clone complete, see " + str(log) )
+
