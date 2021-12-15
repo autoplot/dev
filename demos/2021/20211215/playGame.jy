@@ -1,0 +1,36 @@
+setScriptDescription('''Silly game where you try to figure out the order 
+of the labels''')
+
+gameNumber= getParam( 'gameNumber', 0, 'The game number', [ 0,1,2,3,4] )
+
+randomSeed(gameNumber)
+
+nstep= getParam( 'nstep', 10, 'number of steps' )
+
+showAnswer= getParam( 'showAnswer', False, 'Show the answer', [ False,True] )
+
+x= randn(nstep)
+y= randn(nstep)
+
+z= dataset( zeros(nstep), units=Units.nominal() )
+z[0]= 'Start<br>Here'
+
+for i in range(1,nstep):
+    s= ''
+    if ( x[i-1]<x[i] ):
+        s= s+'went right' 
+    else:
+        s= s+'went left' 
+    if ( y[i-1]<y[i] ):
+        s= s+'<br>and up' 
+    else:
+        s= s+'<br>and down'
+    
+    z[i]= s
+
+if ( showAnswer ) :
+    setLayoutOverplot(2)
+    plot( 0, x, y, z, renderType='digital' )
+    plot( 1, x, y, renderType='series' )
+else:
+    plot( x, y, z, renderType='digital' )
