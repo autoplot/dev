@@ -1,5 +1,6 @@
-setScriptDescription('''Silly game where you try to figure out the order 
-of the labels''')
+setScriptDescription('''Silly game where you try to 
+figure out the order of the labels.  Start at "Start Here" 
+and see if you can figure out the order of the stops.''')
 
 gameNumber= getParam( 'gameNumber', 0, 'The game number', [ 0,1,2,3,4] )
 
