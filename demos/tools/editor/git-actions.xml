@@ -8,6 +8,10 @@
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/diff.jy</uri>
             </bookmark>            
             <bookmark>
+                <title>Clone</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/clone.jy</uri>
+            </bookmark>
+            <bookmark>
                 <title>Link to Upstream</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/linkToUpstream.jy</uri>
             </bookmark>      

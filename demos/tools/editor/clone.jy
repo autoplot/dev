@@ -2,7 +2,7 @@ from java.awt import FlowLayout
 from org.das2.util import LoggerManager
 print '****'
 print 'This is clone.jy, an editor action.'
-from javax.swing import JOptionPane,JPanel,JLabel,JTextField,BoxLayout
+from javax.swing import JOptionPane,JPanel,JLabel,JTextField,BoxLayout,ImageIcon
 
 setScriptTitle('Git Clone')
 setScriptDescription('Run the git clone command.  This assumes that the git commands are available at the command line.')
@@ -23,7 +23,8 @@ localFile= JTextField(40)
 dia.add( localFile )
 dia.add( JLabel( '<html><em>This will create the repo folder within the local folder' ) )
 
-target= JOptionPane.showConfirmDialog(getApplication(),dia,'Clone Repo',JOptionPane.OK_CANCEL_OPTION)
+icon= ImageIcon( URL( PWD + 'Git-Icon-1788C_48px.png' ) )
+target= JOptionPane.showConfirmDialog(getApplication(),dia,'Clone Repo',JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,icon)
 if ( target==JOptionPane.CANCEL_OPTION ):
     setStatus( 'git clone cancelled.' )
 elif( target==JOptionPane.OK_OPTION ):

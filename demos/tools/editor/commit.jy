@@ -8,6 +8,10 @@ setScriptDescription('Run the git commit command.  This assumes that the git com
 logger= LoggerManager.getLogger('jython.actions')
 
 script= getApplication().getScriptPanel().getFilename()
+
+if ( script==None ):
+    raise Exception('No file loaded')
+    
 name= File( getApplication().getScriptPanel().getFilename() ).getName()
 
 from java.io import File

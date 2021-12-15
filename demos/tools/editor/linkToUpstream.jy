@@ -56,7 +56,7 @@ print 'branch: ', branch
 print 'localRoot: ', localRoot
 print 'cwd: ', cwd
 
-pat= Pattern.compile( '[a-z]*@([a-zA-Z\.a-z]+):(.+)\.git' )
+pat= Pattern.compile( '[a-zA-Z0-9]*@([a-zA-Z0-9\.a-z]+):(.+)\.git' )
 matcher= pat.matcher( gitRemote )
 
 if ( matcher.matches() ):
@@ -66,7 +66,7 @@ if ( matcher.matches() ):
     gitCacheDir= cacheDir + '/' + 'https' + '/' + matcher.group(1)+'/'+matcher.group(2)+'/'+branch
     print 'gitCacheDir: ', gitCacheDir
 else:
-    raise Exception('expected match for "[a-z]*@([a-zA-Z\.a-z]+):(.+)\.git", got '+gitRemote) 
+    raise Exception('expected match for "[a-zA-Z0-9]*@([a-zA-Z0-9\.a-z]+):(.+)\.git", got '+gitRemote) 
     
 roCacheFile= gitCacheDir + '/' + 'ro_cache.txt' 
 print 'roCacheFile: '+roCacheFile
