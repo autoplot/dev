@@ -46,11 +46,14 @@ elif( target==JOptionPane.OK_OPTION ):
     pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
 
     p= pb.start()
-    p.waitFor()
+    status= p.waitFor()
 
     from org.das2.util import FileUtil
     msg= FileUtil.readFileToString( log )
     showMessageDialog(msg)
 
+    if status==0:
+        showMessageDialog('See local clone, '+repoTF.text )
+        
     setStatus( "Clone complete, see " + str(log) )
 
