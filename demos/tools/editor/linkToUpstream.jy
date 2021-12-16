@@ -12,6 +12,10 @@ from javax.swing import JOptionPane
 
 script= getApplication().getScriptPanel().getFilename()
 
+print '*****'
+print script
+print '*****'
+
 if ( script==None ):
     raise Exception('script must be saved in a local clone')
     
