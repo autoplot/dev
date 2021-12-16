@@ -11,6 +11,44 @@ script= getApplication().getScriptPanel().getFilename()
 
 if ( script==None ):
     raise Exception('No file loaded')
+
+def runCommand( cmd, cmdid ):
+    from java.lang import ProcessBuilder
+    
+    print '# runCommand'
+    print 'cd ' + File(script).parent
+    print ' '.join( cmd )
+    print '# end runCommand'
+    
+    pb= ProcessBuilder( cmd )
+    pb.directory( File(script).parentFile )
+    
+    if isinstance( cmdid, File ):
+        log= cmdid
+    else:
+        log= File( autoplotData, 'log' )
+        log= File( log, 'editor.'+cmdid+'.txt' )
+
+    pb.redirectErrorStream(True)
+    pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
+    
+    p= pb.start()
+    p.waitFor()
+    
+    if p.exitValue()==0:
+        return True
+    else:
+        return False
+        
+def isTracked( f ):
+    'Return True if the file f is tracked in git'
+    cmd= ['git', 'ls-files', '--error-unmatch', str(f) ]
+    return runCommand( cmd, 'log' )
+        
+def doAdd( f ):
+    'do git add f'
+    cmd= ['git', 'add', str(f) ]
+    return runCommand( cmd, 'add' )
     
 name= File( getApplication().getScriptPanel().getFilename() ).getName()
 
@@ -18,27 +56,29 @@ from java.io import File
 from org.autoplot.datasource import AutoplotSettings
 autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP_AUTOPLOTDATA )
 
-msg= JOptionPane.showInputDialog('Commit Message:')
+notTracked = not isTracked(File(script))
+
+if notTracked:
+    msg= JOptionPane.showInputDialog('<html>Add and commit.<br>Commit Message:')
+else:
+    msg= JOptionPane.showInputDialog('Commit Message:')
+    
 if ( msg==None ):
     setStatus( 'git commit cancelled.' )
 else:
     logger.info("pwd: "+str( File( script ).parentFile ) )
 
+    if notTracked:
+        cmd= ['git', 'add', script ]
+        if not runCommand( cmd, 'add' ):
+            raise Exception( 'failed to run command add' )
+        
     setStatus( "busy: executing commit" )
 
-    from java.lang import ProcessBuilder
-
-    pb= ProcessBuilder(['git','commit', '-m',msg,name])
-    pb.directory( File( script ).parentFile )
-
+    cmd= ['git','commit', '-m',msg,name]
     log= File( autoplotData, 'log' )
-    log= File( log, 'editor.commit.txt' )
-
-    pb.redirectErrorStream(True)
-    pb.redirectOutput( ProcessBuilder.Redirect.to(log) )
-
-    p= pb.start()
-    p.waitFor()
+    log= File( log, 'editor.commit.txt' )    
+    runCommand( cmd, log )
 
     from org.das2.util import FileUtil
     msg= FileUtil.readFileToString( log )
