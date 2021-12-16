@@ -36,3 +36,6 @@ if ( showAnswer ) :
     plot( 1, x, y, renderType='series' )
 else:
     plot( x, y, z, renderType='digital' )
+
+dom.plots[0].xaxis.range= dom.plots[0].xaxis.range.rescale(-0.1,1.1)
+dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(-0.1,1.1)
