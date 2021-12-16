@@ -16,14 +16,9 @@
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/linkToUpstream.jy</uri>
             </bookmark>      
             <bookmark>
-                <title>Add</title>
-                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/add.jy</uri>
-                <description>Add the editor file to the git repository.  Commit is typically done after.</description>
-            </bookmark>
-            <bookmark>
                 <title>Commit</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/commit.jy</uri>
-                <description>Commit the version to the file with a comment to the local repository.  Often this is followed by a push.</description>
+                <description>Commit the version to the file with a comment to the local repository.  Add is done automatically.  Often this is followed by a pull and push.</description>
             </bookmark>
             <bookmark>
                 <title>Pull</title>
