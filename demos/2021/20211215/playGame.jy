@@ -1,12 +1,14 @@
 setScriptDescription('''Silly game where you try to 
 figure out the order of the labels.  Start at "Started Here" 
-and see if you can figure out the order of the stops.''')
+and see if you can figure out the order of the stops.
+There may be more than one solution.
+''')
 
 gameNumber= getParam( 'gameNumber', 0, 'The game number', [ 0,1,2,3,4] )
 
 randomSeed(gameNumber)
 
-nstep= getParam( 'nstep', 10, 'number of steps' )
+nstep= getParam( 'nstep', 5, 'number of steps' )
 
 showAnswer= getParam( 'showAnswer', False, 'Show the answer', [ False,True] )
 
