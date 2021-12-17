@@ -68,6 +68,7 @@ if ( matcher.matches() ):
     print 'remote: ', remote
     cacheDir= FileSystem.settings().localCacheDir.getCanonicalPath()
     gitCacheDir= cacheDir + '/' + 'https' + '/' + matcher.group(1)+'/'+matcher.group(2)+'/'+branch
+    gitHubFsStr=               'https://' + matcher.group(1)+'/'+matcher.group(2)+'/'+branch 
     print 'gitCacheDir: ', gitCacheDir
 else:
     raise Exception('expected match for "[a-zA-Z0-9]*@([a-zA-Z0-9\.a-z]+):(.+)\.git", got '+gitRemote) 
@@ -86,3 +87,8 @@ else:
     ff.write( localRoot )
     ff.write( '\n' )
     ff.close()
+
+githubfs= FileSystem.create( gitHubFsStr );
+githubfs.reset()
+print 'reset '+str(githubfs)
+
