@@ -46,7 +46,6 @@ t=0
 for i in xrange(50000):
     r= where( x[i].gt(0) )
     t= t+ total( x[i,r] )
-print t
 results[ 'forWhereTotal' ]= System.currentTimeMillis()-t0 
 ll.append('forWhereTotal')
 
