@@ -2,45 +2,58 @@ from java.lang import System
 setScriptDescription('Some Autoplot Benchmarks')
 
 results= {}
+ll=[]
 
 t0= System.currentTimeMillis()
-randomSeed()
+randomSeed(0)
 x= randn(10000000)
 results[ 'generateRandn' ]= System.currentTimeMillis()-t0 
+ll.append('generateRandn')
 
 t0= System.currentTimeMillis()
 s= total(x)
 results[ 'total' ]= System.currentTimeMillis()-t0 
+ll.append('total')
 
 t0= System.currentTimeMillis()
 r= where( x.gt(0) )
 results[ 'where' ]= System.currentTimeMillis()-t0 
+ll.append('where')
 
 t0= System.currentTimeMillis()
 r= total( x[r] )
-print r
 results[ 'totalSubset' ]= System.currentTimeMillis()-t0 
+ll.append( 'totalSubset' )
 
 t0= System.currentTimeMillis()
 x= reform( x, [50000,200] )
 results[ 'reformRand' ]= System.currentTimeMillis()-t0 
+ll.append( 'reformRand' )
 
 t0= System.currentTimeMillis()
-randomSeed()
+randomSeed(0)
 x= randn( 50000,200 )
 results[ 'rank2Rand' ]= System.currentTimeMillis()-t0 
+ll.append('rank2Rand')
 
 t0= System.currentTimeMillis()
 r= collapse1( x )
 results[ 'collapse1' ]= System.currentTimeMillis()-t0 
+ll.append('collapse1')
 
 t0= System.currentTimeMillis()
 t=0
-for i in xrange(33000):
+for i in xrange(50000):
     r= where( x[i].gt(0) )
     t= t+ total( x[i,r] )
 print t
 results[ 'forWhereTotal' ]= System.currentTimeMillis()-t0 
+ll.append('forWhereTotal')
 
-print results
+for l in ll:
+    if ( len(l)<9 ):
+        print l, '\t\t', results[l]
+    else:
+        print l, '\t', results[l]
+
 
