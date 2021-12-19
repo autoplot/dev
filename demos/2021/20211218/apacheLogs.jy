@@ -1,0 +1,34 @@
+setScriptDescription('parse web logs')
+
+from java.util.regex import Pattern
+regex= '(\S+) (\S+) (\S+) \[(\S+) (\S+)\] \"(\S+) (\S+) (\S+)\" (\d+) (\d+) \"(.+)\" \"(.+)\"'
+
+pat= Pattern.compile(regex)
+client= Units.nominal('client')
+agent= Units.nominal('agent')
+
+# example line
+s= '192.168.0.208 - - [19/Dec/2021:00:23:05 -0600] "GET /~jbf/autoplot/data/qds/ HTTP/1.1" 301 629 "-" "Java/1.8.0_181"'
+s= '51.158.156.78 - - [19/Dec/2021:00:04:15 -0600] "GET /hmc/hybris HTTP/1.1" 404 438 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"'
+m= pat.matcher(s)
+if not m.matches():
+    raise Exception('does not match')
+
+tt= DataSetBuilder(2,3,100)
+ff= open( '/home/jbf/tmp/access.log' )
+for line in ff:
+    line=line.strip()
+    m= pat.matcher(line)
+    if not m.matches(): 
+        continue
+    wh= m.group(1)
+    ts= m.group(4)
+    tz= m.group(5)
+    t= TimeUtil.create(ts)
+    t = t + datum( tz[:-2]+'hrs' )
+    tt.nextRecord([t,client.createDatum(wh),agent.createDatum(m.group(12))])
+
+ds= tt.getDataSet()
+plot( 0, ds[:,0], ds[:,1] )
+plot( 1, ds[:,0], ds[:,2] )
+
