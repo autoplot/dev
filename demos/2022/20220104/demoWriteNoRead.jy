@@ -1,0 +1,16 @@
+from org.das2.util import FileUtil
+from org.python.parser.ast import Name
+
+#ss= FileUtil.readFileToString( getFile( 'https://github.umn.edu/tetri006/RBSP_FU/blob/master/Master_dialplot.jy' ) )
+ss= FileUtil.readFileToString( getFile( 'https://github.com/autoplot/dev/blob/master/demos/2017/20170518/writePngwalkAnimatedGif.jy' ) )
+
+from org.autoplot.jythonsupport import StaticCodeAnalysis
+ll = StaticCodeAnalysis.showWriteWithoutRead( ss )
+
+i=1
+for n in ll:
+    if isinstance( n, Name ):
+        print '%4d' % i, n.id, n.beginLine, n.beginColumn, n.beginColumn+ len(n.id), n
+    else:
+        print '%4d' % i, n
+    i=i+1
