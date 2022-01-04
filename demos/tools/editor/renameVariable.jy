@@ -2,7 +2,8 @@ from org.autoplot.jythonsupport import StaticCodeAnalysis
 from java.util import Collections
 
 setScriptLabel('Rename Variable')
-setScriptDescription('Rename a variable in the script editor.  Note this misses some in classes, and gets some it should not!')
+setScriptDescription('''Rename a variable in the script editor.  Note this misses 
+some in classes, and gets some it should not!  Be sure to verify the result.''')
 
 print '==== v0728 ===='
 from javax.swing import JOptionPane,BoxLayout
