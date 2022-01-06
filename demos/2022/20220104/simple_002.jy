@@ -1,0 +1,24 @@
+
+repeater= False        
+def doInterp( evt ):
+    global repeat
+    global lastDigispec
+    keyChar= evt.getPlane( 'keyChar' )
+    print 'keyChar:', keyChar
+    if ( 'r'==keyChar ):
+        repeater= True
+        setStatus( 'r pressed, repeat last setting' )
+        return
+    elif ( keyChar!=None ):
+        setStatus( 'unsupported keyChar, repeat cancelled, use r to repeat' )
+        repeater= False
+        return
+    else:
+        if repeater==False:
+            print 'false'
+        else:
+            print 'true'
+            repeater= False
+    rect= join( dataset(evt.getXRange()), dataset(evt.getYRange()) )
+
+doInterp(evt)
