@@ -1,3 +1,4 @@
+from java.util.regex import Pattern
 setScriptTitle('Update Autoplot')
 setScriptDescription('''Download and install a new version of the Autoplot single-jar release''')
 
@@ -32,15 +33,13 @@ jarlink= jarfile
 print 'autoplotdir: '+str(autoplotDir)
 for f in ff:
     p= Paths.get(f.toURI())
-    print "f,p", f, p
     if ( Files.isSymbolicLink(p) ):
         rp= p.toRealPath([])
-        print 'realpath: '+str(rp) + " =? " + str( File(jarfile) )
+        print 'does the realpath '+str(rp) + " link to " + str( File(jarfile) ) + " ?"
         if ( rp.toFile().equals(File(jarfile)) ):
             print 'found it: '+str(f)+' links to ' +jarfile
             jarlink= f.toString()
-    else:
-        print 'not symlink:' + str(f)
+            break
 
 newjarfile= File( autoplotDir, 'autoplot.jar.'+version )
 
@@ -86,8 +85,10 @@ from java.io import File
 from java.nio.file import Files, FileSystems,Paths    
 from javax.swing import JOptionPane
 
-if ( jarfile.find( 'autoplot.jar' )>-1 ):  # may end with version
-    
+pp= Pattern.compile('autoplot.*\.jar')
+m= pp.matcher(jarfile)
+
+if ( m.find() ):    
     response= JOptionPane.showConfirmDialog(getViewWindow(), fpanel, 'update Autoplot', JOptionPane.OK_CANCEL_OPTION )
 
     if ( response==JOptionPane.OK_OPTION ):
