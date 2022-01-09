@@ -9,4 +9,4 @@ ds[200000:300000] = ds[200000:300000] +30
 r= where( sin( linspace( 0, N*5*TAU, N ) ).gt(0) )
 ds[r]= ds[r] + 10
 
-plot( ds, renderType=RenderType.fillToZero )
+plot( tt, ds, renderType=RenderType.fillToZero )
