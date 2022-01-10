@@ -1,0 +1,14 @@
+# This shows were completions have a bug that is intermittent.  The line dom.plotd[1].rowId is
+# incorrectly left in the code for completions.  When there are two plots on the canvas
+# already, completions work, but when there is just one, there's an error.
+
+setLayout(2)
+dom.plots[1].rowId= dom.plots[0].rowId
+
+aa= linspace( 0, TAU, 200 )
+aa[1]= 2
+
+plot( 0, sin( aa ) )
+plot( 1, cos( aa ) ) 
+
+fixLayout()
