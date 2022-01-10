@@ -1,12 +1,19 @@
 setScriptDescription( 'demo bug <a href="https://sourceforge.net/p/autoplot/bugs/2425/">2425</a>' )
 
+clip= getParam( 'clip', False, 'Clip the data to 10000 points', [ True, False ] )
+
 from org.autoplot import RenderType
 N= 86400*8
 tt= linspace('2022-01-01','2022-01-09',N)
 ds= randn(N)/10 + 10 * ones(N)
 ds[200000:300000] = ds[200000:300000] +30
-
+    
 r= where( sin( linspace( 0, N*5*TAU, N ) ).gt(0) )
 ds[r]= ds[r] + 10
+
+if clip:
+    N= 2000
+    ds= ds[199000:(199000+N)]
+    tt= tt[199000:(199000+N)]
 
 plot( tt, ds, renderType=RenderType.fillToZero )
