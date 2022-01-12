@@ -1,0 +1,20 @@
+setScriptDescription('''<html><p>Autoplot imports work a bit differently than Python's.  In Python,
+the codes must be local to the running process, but in Autoplot they are brought in 
+automatically when the script is run.  This allows anyone to run scripts.</p>  
+<p>The script <a href='https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/resources/polarAxes.jy'>
+here</a> is included to provide the class AxisPainter.  Note it will only be loaded once during a 
+session.''')
+
+f= getFile( 'https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/resources/polarAxes.jy' )
+execfile( str(f) )
+
+randomSeed(0)  # predictable random sequence allows for QA testing
+
+ap= AxisPainter(dom.plots[0])
+dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
+
+angle= linspace( 0, 4*TAU, 1000 )
+angle.putProperty( QDataSet.UNITS, Units.radians )
+radius= 4+cos(angle) + 0.3* cos( angle*12 ) + randn(len(angle)) * .3
+
+plot( radius, angle, renderType='polar', isotropic=True )
