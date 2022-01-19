@@ -90,7 +90,7 @@ for j in xrange(len(foot_points)):
     spir_y[1+j*np1:(j+1)*np1]= spir_y_1
     spir_x[(j)*np1]= NaN
     spir_y[(j)*np1]= NaN
-plot( 0, spir_x, spir_y, color=ColorUtil.DARK_GRAY, lineStyle = 'dotfine' )
+plot( 0, spir_x, spir_y, color=ColorUtil.DARK_GRAY, lineStyle = 'dotfine', isotropic=True )
 
 # plot each of the s/c targets         
 iplot=2
