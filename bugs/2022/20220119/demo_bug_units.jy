@@ -1,0 +1,7 @@
+form1= getDataSet( PWD + 'all_ground_event.txt?column=field0')
+form2= getDataSet( PWD + 'all_ground_event.txt?field0')
+
+print 'this should be the same data'
+print form1
+print form2
+
