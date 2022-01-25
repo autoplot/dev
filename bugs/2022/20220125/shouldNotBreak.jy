@@ -1,0 +1,10 @@
+setScriptDescription('''Demo of where connections are not made but should be made.''')
+
+L1= 5.1
+MLT1= 5.890
+MLT2= 6.09
+
+MLT= linspace( MLT1, MLT2, 100 )
+L1= ones(100) * L1
+
+plot( cos(MLT)*L1, sin(MLT)*L1, renderType='series>cadenceCheck=false' )
