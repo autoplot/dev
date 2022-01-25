@@ -1,4 +1,5 @@
-setScriptDescription('''Demo of where connections are not made but should be made.''')
+setScriptDescription('''Demo of where connections are not made but should be made.  
+See <a href='https://sourceforge.net/p/autoplot/bugs/1582/'>bug 1582</a>''')
 
 L1= 5.1
 MLT1= 5.890
