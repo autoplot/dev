@@ -1,0 +1,20 @@
+setScriptDescription('''Demo of where connections are not made but should be made.  
+See <a href='https://sourceforge.net/p/autoplot/bugs/1582/'>bug 1582</a>''')
+
+L1= 5.1
+MLT1= 5.890
+MLT2= 6.09
+
+MLT= linspace( MLT1, MLT2, 100 )
+L1= ones(100) * L1
+
+plot( cos(MLT)*L1, sin(MLT)*L1, renderType='series>cadenceCheck=false' )
+
+L2= 5.4
+MLT1= 5.79
+MLT2= 5.99
+
+MLT= concatenate( MLT, linspace( MLT1, MLT2, 100 ) )
+L1= concatenate( L1, ones(100) * L2 )
+
+plot( 1, cos(MLT)*L1, sin(MLT)*L1, renderType='series>cadenceCheck=false' )
