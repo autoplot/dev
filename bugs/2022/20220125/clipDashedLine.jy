@@ -1,0 +1,20 @@
+from org.das2.util import ColorUtil
+from java.awt.geom import Line2D
+setScriptDescription('''Demo new performance optimizations where lines are clipped which leave the
+visible plot space.''')
+
+reset()
+
+def grid( g ):
+    g.color= ColorUtil.LIGHT_STEEL_BLUE
+    for i in xrange(0,1000,100):
+        g.draw( Line2D.Double( i, 0, i, 1000 ) )
+        g.drawString(str(i),0,i)
+        g.draw( Line2D.Double( 0, i, 1000, i ) )
+        g.drawString(str(i),i,14)
+        
+addBottomDecoration( dom.canvases[0],grid)
+
+#ds= mod(findgen(1000),2)
+ds= dataset( [0,1,-1000,1,0] )
+plot( ds, lineStyle='dotfine' )
