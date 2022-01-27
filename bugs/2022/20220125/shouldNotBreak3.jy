@@ -1,0 +1,25 @@
+setScriptDescription('''Demo of where connections are not made but should be made.  
+See <a href='https://sourceforge.net/p/autoplot/bugs/1582/'>bug 1582</a>''')
+
+reset()
+dom.options.canvasFont= 'Scheme Bk-bolditalic-14'
+dom.options.lineThickness= '1.5px'
+
+L1= 5.1
+MLT1= 5.890
+MLT2= 6.09
+
+TT= linspace( '2022-01-27T00:00Z', '2022-01-27T01:39Z', 100 )
+MLT= link( TT, linspace( MLT1, MLT2, 100 ) )
+L1= link( TT, ones(100) * L1 )
+
+plot( 0, cos(MLT)*L1, sin(MLT)*L1, renderType='series' )
+
+plot( 1, bundle( cos(MLT)*L1, sin(MLT)*L1 ), renderType='series' )
+
+annotation( text= 'Y Axis auto-ranging is incorrect',
+    borderType='rounded_rectangle',
+    anchorPosition='NE', plotId=dom.plots[1], 
+    rowId=dom.plots[1].rowId, columnId=dom.plots[1].columnId,
+     ) 
+    
