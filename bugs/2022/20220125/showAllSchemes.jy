@@ -1,0 +1,27 @@
+setScriptDescription('''Tests both the detection and autoranging of all QDataSet schemes.''')
+setScriptTitle('')
+from org.das2.qds.examples import Schemes
+mm= dir( Schemes )
+
+# count the number of methods
+i=0
+for m in mm:
+    if ( m[0:2]=='is' ):
+        continue
+    else:
+        i=i+1
+
+ncolumn= int(floor(sqrt(i)))
+nrow= int( ceil( float(i)/ncolumn ) )
+
+setLayout( nrow, ncolumn )
+setCanvasSize( 1569, 904 )
+
+i=0
+for m in mm:
+    if ( m[0:2]=='is' ):
+        continue
+    else:
+        method= getattr( Schemes, m )
+        plot( i, method(), title=m )
+        i=i+1
