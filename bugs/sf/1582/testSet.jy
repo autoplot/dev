@@ -1,0 +1,68 @@
+setScriptDescription('''List of callenging cadence datasets to test new guess cadence routine''')
+
+from java.lang import System
+from org.das2.qds import DataSetUtil
+
+# define the function to use
+guessCadence= DataSetUtil.guessCadenceNew  # this is actually the old routine.
+#guessCadence= DataSetUtil.guessCadence20220128 # this doesn't exist yet
+
+ctm= System.currentTimeMillis
+
+print '| test name | calculate time | result |'
+print '|:---- |:---- |:---- |'
+
+def doBonk( name, tds, yds ):
+    t0= ctm()
+    cd= guessCadence( tds, yds )
+    print '| %s | %dms | %s |' % ( name, ctm()-t0, str(cd) )
+    
+
+ds= getDataSet('vap+cdfj:file:///home/jbf/ct/hudson/data.backup/cdf/c4_cp_fgm_spin_20030102_v01.cdf?B_vec_xyz_gse__C4_CP_FGM_SPIN&where=range__C4_CP_FGM_SPIN.eq(2)')
+doBonk( 'c4_cp_fgm_spin_20030102_v01.cdf', xtags(ds), ds )
+
+ds= rand(150)
+doBonk( "rand", ds, None )
+
+ds= rand(150)
+s= sort(ds)
+doBonk( 'sort rand', ds[s], None )
+
+ds= linspace( 20,30, 1001 )
+doBonk( 'linspace001', ds, None )
+
+ds= logspace( 10,1000, 1001 )
+doBonk( 'logspace001', ds, None )
+
+ds= append( linspace( 20,30, 1001 ), linspace( 40,60, 1001 ) )
+doBonk( 'multicadence 1', ds, None )
+
+ds= append( linspace( 20,40, 1001 ), linspace( 50,60, 1001 ) )
+doBonk( 'multicadence 2', ds, None )
+
+ds= append( linspace( 40,41, 101 ), linspace( 50,52, 101 ) )
+doBonk( 'multicadence 3', ds, None )
+
+L1= 5.1
+MLT1= 5.890
+MLT2= 6.09
+
+MLT= linspace( MLT1, MLT2, 100 )
+L1= ones(100) * L1
+xx= cos(MLT)*L1
+yy= sin(MLT)*L1
+doBonk( 'orbitconfused1', xx, yy )
+
+L2= 5.4
+MLT1= 5.79
+MLT2= 5.99
+
+MLT= concatenate( MLT, linspace( MLT1, MLT2, 100 ) )
+L1= concatenate( L1, ones(100) * L2 )
+
+yy= sin(MLT)*L1
+xx= cos(MLT)*L1
+from java.lang.Double import NaN
+yy[80]= NaN
+
+doBonk( 'orbitconfused2', xx, yy )
