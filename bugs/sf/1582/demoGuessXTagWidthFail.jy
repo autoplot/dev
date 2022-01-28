@@ -1,0 +1,16 @@
+from org.das2.qds import SemanticOps
+L1= 5.1
+MLT1= 5.890
+MLT2= 6.09
+
+MLT= linspace( MLT1, MLT2, 100 )
+L1= ones(100) * L1
+
+xx= cos(MLT)*L1
+
+cad=SemanticOps.guessXTagWidth( xx, None ) 
+print cad
+r= where( diff(xx).gt(cad) )
+print r, xx
+
+print 'This picks a cadence that breaks half of the data!'
