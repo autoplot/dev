@@ -1,0 +1,9 @@
+ds= randn(10000)
+#s= sort(ds)
+#ds= ds[s]
+r1= where( ds.lt(0.2) )
+r2= where( ds[r1].gt(0.1) )
+
+#ds= ds[r2[r1]]  # correct
+ds= ds[r2]
+plot( ds )
