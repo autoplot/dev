@@ -1,0 +1,25 @@
+setLayout(3,2)
+
+red= rescale( distance( 60,50, 0, 0, 5, 5  ), dataset(0), dataset(255) ) * 255
+
+plot( 0, red, colorTable='black_red' )
+
+green= rescale( distance( 60,50, 59,49, 5, 5  ), dataset(0), dataset(255) ) * 255
+plot( 1, green, colorTable='black_green' )
+
+blue= rescale( distance( 60,50, 59, 0, 5, 5  ),  dataset(0), dataset(255) ) * 255
+plot( 2, blue, colorTable='black_blue' )
+
+rgbColor= rgbColorDataset( red, green, blue )
+rgbColor[ :, 28:32 ] = -1
+rgbColor.putProperty( QDataSet.VALID_MIN, 0 )
+
+xx= linspace(200,340,60)
+yy= linspace(20,40,50)
+rgbColor= link( xx,yy, rgbColor )
+
+plot( 3, flatten( rgbColor ), symbolSize=10 )
+p,pe= plot( 4, circle( 20,250,30 ), lineThick=3 )
+plot( 5, rgbColor, renderType='spectrogram' )
+
+plot( 6, rgbColor, renderType='image', overplotOf=p )
