@@ -1,13 +1,12 @@
 setLayout(3,2)
 
-red= rescale( distance( 60,50, 0, 0, 5, 5  ), dataset(0), dataset(255) ) * 255
-
+red= rescale( distance( 60,50, 0, 0, 5, 5  ), dataset(0), dataset(255) )
 plot( 0, red, colorTable='black_red' )
 
-green= rescale( distance( 60,50, 59,49, 5, 5  ), dataset(0), dataset(255) ) * 255
+green= rescale( distance( 60,50, 59,49, 5, 5  ), dataset(0), dataset(255) )
 plot( 1, green, colorTable='black_green' )
 
-blue= rescale( distance( 60,50, 59, 0, 5, 5  ),  dataset(0), dataset(255) ) * 255
+blue= rescale( distance( 60,50, 59, 0, 5, 5  ),  dataset(0), dataset(255) )
 plot( 2, blue, colorTable='black_blue' )
 
 rgbColor= rgbColorDataset( red, green, blue )
