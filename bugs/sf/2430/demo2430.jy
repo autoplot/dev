@@ -1,0 +1,22 @@
+setScriptDescription('See bug 2430, where rapid prints don\'t display promptly.')
+
+x=1
+
+showBug= getParam( 'showBug', True, 'show the bug', [True,False] )
+
+if showBug: N=10000000
+else: N=100000000
+    
+dsb= DataSetBuilder(1,100)
+
+from java.lang.System import currentTimeMillis as ctm
+
+i=0
+while (True):
+    t0 = ctm()
+    i=i+1
+    _= randu(N)
+    if (i<20):
+        print '%5d %d' % ( i, ctm()-t0 )
+    
+    
