@@ -1,0 +1,5 @@
+p1= getParam( 'p1', 4.5 )
+p2= getParam( 'p2', 5.6 )
+
+p =  sqrt(  (p1-5)**2 + ( p2-5)**2 )
+plot( p )
