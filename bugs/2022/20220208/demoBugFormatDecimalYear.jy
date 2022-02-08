@@ -1,0 +1,5 @@
+decimalYear1= 2019.99
+decimalYear2= 2021.01
+
+print Units.decimalYear.createDatum(decimalYear1)
+print DatumRange.newDatumRange(decimalYear1, decimalYear2, Units.decimalYear );
