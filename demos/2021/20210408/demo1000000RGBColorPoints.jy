@@ -1,0 +1,24 @@
+setScriptDescription('Demo 1,000,000 point scatter')
+
+img= getDataSet( PWD + 'extentionCords.png' )
+imgx= linspace( -5,5, img.length() )
+imgy= linspace( -5,5, img.length(0) )
+img= link( imgx, imgy, img )
+
+plot(img)
+
+N= 1000000
+x= randn(N)
+y= randn(N)
+
+zr= interpolate( img[:,:,0], findex( imgx, x ), findex( imgy, y ) )
+zg= interpolate( img[:,:,1], findex( imgx, x ), findex( imgy, y ) )
+zb= interpolate( img[:,:,2], findex( imgx, x ), findex( imgy, y ) )
+
+z= rgbColorDataset( zr, zg, zb )
+
+annotation( 0, text='%d colored points' % N, anchorPosition='outsideNNW',
+            anchorType='canvas', anchorOffset='0em,0em' )
+ 
+plot( x, y, z, symbolSize=5 )
+
