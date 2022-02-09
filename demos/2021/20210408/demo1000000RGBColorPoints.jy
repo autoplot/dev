@@ -1,7 +1,10 @@
 setScriptDescription('Demo 1,000,000 point scatter using rgbColor units')
 
 from org.das2.graph import SeriesRenderer
-print SeriesRenderer.VERSION
+print 'SeriesRenderer.VERSION=', SeriesRenderer.VERSION
+
+from java.lang import System
+print 'java.version=', System.getProperty('java.version')
 
 N= getParam( 'N', 1000000, 'number of points' )
 size= getParam( 'symbolSize', 5, 'symbol size in pixels' )
