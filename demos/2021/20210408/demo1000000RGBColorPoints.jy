@@ -8,6 +8,8 @@ imgx= linspace( -5,5, img.length() )
 imgy= linspace( -5,5, img.length(0) )
 img= link( imgx, imgy, img )
 
+randomSeed(0)
+
 x= randn(N)
 y= randn(N)
 
