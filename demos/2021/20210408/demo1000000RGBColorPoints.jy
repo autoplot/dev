@@ -1,6 +1,6 @@
 setScriptDescription('Demo 1,000,000 point scatter using rgbColor units')
 
-from org.das.graph import SeriesRenderer
+from org.das2.graph import SeriesRenderer
 print SeriesRenderer.VERSION
 
 N= getParam( 'N', 1000000, 'number of points' )
