@@ -1,3 +1,5 @@
+# https://github.com/das-developers/das2java/issues/27
+
 from org.das2.datum import DatumRange
 t1= Units.cdfTT2000.parse('2020-10-17T06:23:00Z')
 t2= Units.cdfTT2000.parse('2020-10-17T18:09:00Z')
