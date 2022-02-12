@@ -1,13 +1,12 @@
 setScriptDescription('Demo 1,000,000 point scatter using rgbColor units')
 
-from org.das2.graph import SeriesRenderer
-print 'SeriesRenderer.VERSION=', SeriesRenderer.VERSION
-
 from java.lang import System
 print 'java.version=', System.getProperty('java.version')
-
-N= getParam( 'N', 1000000, 'number of points' )
+     
+N= getParam( 'N', 1000000, 'number of points', { "min":50, "max":100 } )
 size= getParam( 'symbolSize', 5, 'symbol size in pixels' )
+
+print N, size
 
 img= getDataSet( PWD + 'extentionCords.png' )
 imgx= linspace( -5,5, img.length() )
@@ -24,6 +23,9 @@ zg= interpolate( img[:,:,1], findex( imgx, x ), findex( imgy, y ) )
 zb= interpolate( img[:,:,2], findex( imgx, x ), findex( imgy, y ) )
 
 z= rgbColorDataset( zr, zg, zb )
+
+r= where( abs( atan2( y, x ) ).lt( PI/16 ) )
+z[r]= Color.BLUE.RGB
 
 annotation( 0, text='%d colored points' % N, anchorPosition='outsideNNW',
             anchorType='canvas', anchorOffset='0em,0em' )
