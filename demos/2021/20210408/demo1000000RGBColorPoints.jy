@@ -3,10 +3,8 @@ setScriptDescription('Demo 1,000,000 point scatter using rgbColor units')
 from java.lang import System
 print 'java.version=', System.getProperty('java.version')
      
-N= getParam( 'N', 1000000, 'number of points', { "min":50, "max":100 } )
-size= getParam( 'symbolSize', 5, 'symbol size in pixels' )
-
-print N, size
+N= getParam( 'N', 1000000, 'number of points' )
+size= getParam( 'symbolSize', 5, 'symbol size in pixels', { "min":1, "max":20 } )
 
 img= getDataSet( PWD + 'extentionCords.png' )
 imgx= linspace( -5,5, img.length() )
