@@ -1,3 +1,14 @@
+# seed;red;green;blue
+"""
+0;200;200;0
+1;0;200;200
+2;0;100;200
+3;200;100;0
+4;100;200;0
+0;100;200;100
+1;100;0;100
+2;100;0;200
+"""
 
 red= getParam( 'red', 0, 'red',         { "label":"Red",   "min":0, "max":255 } )
 green= getParam( 'green', 100, 'green', { "label":'Green', "min":0, "max":255 } )
