@@ -1,3 +1,5 @@
+setScriptDescription('Demonstration script for new multi-parameter control in Run Batch Tool.')
+
 # seed;red;green;blue
 """
 0;200;200;0
