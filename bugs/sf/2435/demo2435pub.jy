@@ -1,0 +1,8 @@
+setScriptDescription('''Demo bug <a href='https://sourceforge.net/p/autoplot/bugs/2435/'>2435</a>''')
+
+N= 864000
+ds= randn(N,32) + sin( linspace(0,86400,N) )
+ds= link( linspace( '2022-02-18T00:00Z','2022-02-19T00:00Z',N), linspace( '0Hz', '32Hz',32 ), ds )
+sl= slice1(ds,8)
+pp= fftPower( sl, 1024, 2, 'Hann', None )
+plot( pp )
