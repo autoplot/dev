@@ -1,0 +1,12 @@
+
+red= getParam( 'red', 0, 'red',         { "label":"Red",   "min":0, "max":255 } )
+green= getParam( 'green', 100, 'green', { "label":'Green', "min":0, "max":255 } )
+blue= getParam( 'blue', 200, 'blue',    { "label":'Blue',  "min":0, "max":255 } )
+
+seed= getParam( 'seed', 0, 'seed' )
+if seed>0:
+   randomSeed(seed)
+
+c= Color( red, green, blue )
+
+plot( accum(randn(100)), accum(randn(100)), color=c, xrange=[-10,10], yrange=[-10,10] )
