@@ -1,4 +1,5 @@
 setScriptDescription('Demo 1,000,000 point scatter using rgbColor units')
+setScriptTitle('Scatter with rgbColor Units')
 
 from java.lang import System
 print 'java.version=', System.getProperty('java.version')
