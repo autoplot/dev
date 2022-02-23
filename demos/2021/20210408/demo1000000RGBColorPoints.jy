@@ -30,4 +30,4 @@ annotation( 0, text='%d colored points' % N, anchorPosition='outsideNNW',
             anchorType='canvas', anchorOffset='0em,0em' )
  
 plot( x, y, z, symbolSize=size )
-
+dom.plots[0].zaxis.visible=False
