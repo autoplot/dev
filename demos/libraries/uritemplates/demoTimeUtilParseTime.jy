@@ -1,5 +1,6 @@
 from org.das2.jythoncompletion import JavadocLookup
-setScriptDescription('''Demo TimeUtil class found in UriTemplates.jar.''')
+setScriptDescription('''Demo TimeUtil class found in UriTemplates.jar.  This shows how parseISO8601TimeRange
+is used.''')
 
 lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
 doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
@@ -10,5 +11,7 @@ addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!
 from org.hapiserver import TimeUtil
 
 print TimeUtil.parseISO8601TimeRange( '1998-01-02/1998-01-17' )
+print TimeUtil.parseISO8601TimeRange( '2022/P1Y' )
+print TimeUtil.parseISO8601TimeRange( '2022-06/P1M' )
 print TimeUtil.parseISO8601TimeRange( '2022-W13/P7D' )
 
