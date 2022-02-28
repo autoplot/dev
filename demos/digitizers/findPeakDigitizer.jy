@@ -2,7 +2,7 @@ from org.das2.qds.util import Reduction
 setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
 run this script to digitize the only plot.''')
 
-demoData= getParam( 'demoData', True, 'load dummy data set', [ True,False] )
+demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
 
 smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', [0,5,11] )
 
@@ -51,6 +51,7 @@ class FeedbackPainter( Painter ):
                  g.color= Color.BLACK
                  g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
                  
+#dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter() )
 dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
@@ -101,6 +102,10 @@ def boxLookup( evt ):
         
         if zpeak > ( meen + 10*mad ):
             dpr.addDataPoint( dataset( [ xt[i], yt[rf[j]] ] ) )
-  
+            
+    #dom.plots[0].controller.dasPlot.revalidate()
+    #dom.plots[0].controller.dasPlot.repaint()  # TODO: wha? look into this!
+    #dom.canvases[0].controller.dasCanvas.repaint()
+     
 addMouseModule( dom.plots[0], 'Digitize Peak', boxLookup )
    
