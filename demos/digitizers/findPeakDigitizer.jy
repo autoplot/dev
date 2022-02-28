@@ -1,0 +1,106 @@
+from org.das2.qds.util import Reduction
+setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
+run this script to digitize the only plot.''')
+
+demoData= getParam( 'demoData', True, 'load dummy data set', [ True,False] )
+
+smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', [0,5,11] )
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from java.awt.geom import Ellipse2D
+
+if (demoData):
+    dummyData= link( linspace( '2022-02-28T00:00', '2022-02-28T24:00', 1441 ),
+                     logspace( 10,100,39 ),
+                     randn( 1441, 39 ) )
+    
+    dummyData[ findgen(1441), floor( 20 + sin( linspace(0,TAU,1441 ) ) * 10 ) ]= 10 + 10 * sin( linspace(0,TAU,1441 ) ) + randn(1441)
+    dummyData[ 100:400,: ] = randn( 300, 39 )
+    dummyData[ 800:1000,: ] = randn( 200, 39 )
+    dummyData[ findgen(600)+600, floor( 30 + sin( linspace(PI,3*PI/2,600 ) ) * 10 ) ]= 20 + 10 * sin( linspace(0,TAU,600) ) + randn(600)
+    
+    plot( dummyData, ylog=True, yrange=[10,100] )
+
+dpr= DataPointRecorder()
+
+addTab( 'digitizer', dpr )
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+         ds= dpr.getSelectedDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 
+dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+
+# we need to listen for updates from the DataPointRecorder, when the selection changes.
+from org.das2.dataset import DataSetUpdateListener
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self, e ):
+        dom.canvases[0].controller.dasCanvas.repaint()
+dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
+
+
+def boxLookup( evt ):
+    ds= dom.plotElements[0].controller.dataSet
+    if ( smoothx!=0 ):
+        ds= smooth(ds,smoothx)
+        
+    if ( ds==None ): 
+        showMessageDialog( "No data loaded in plotElements[0]" )
+        return
+    
+    xt= xtags(ds)
+    
+    rt= where( within( xt, evt.getXRange() ) )
+    if ( len(rt)==0 ):
+        setStatus( "No records within interval "+str(evt.getXRange()) )
+        return
+        
+    yt= ytags(ds)
+    rf= where( within( yt, evt.getYRange() ) )
+    
+    for i in rt:
+        sl= ds[i]
+        sl1= sl[rf]
+        j= imax( sl1 )
+        
+        yy= yt[rf[j]]
+        xx= xt[i]
+        
+        # we will ask the question, is the peak 2 sigmas greater than the bottom 1/2 of the data?
+        s= sort( sl1 )
+        np= len(sl1) * 3 / 4
+        s= s[0:np]
+        
+        meen= mean(sl1[s])
+        mad= meanAverageDeviation(sl1[s])
+        
+        zpeak= ds[i,rf[j]]
+        print zpeak, ( meen + 10*mad ), 'np=%f mean=%f mad=%f' % ( np, meen, mad )
+        
+        if zpeak > ( meen + 10*mad ):
+            dpr.addDataPoint( dataset( [ xt[i], yt[rf[j]] ] ) )
+  
+addMouseModule( dom.plots[0], 'Digitize Peak', boxLookup )
+   
