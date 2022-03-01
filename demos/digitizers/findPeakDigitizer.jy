@@ -5,10 +5,17 @@ from org.das2.qds.util import Reduction
 setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
 run this script to digitize the only plot.''')
 
-demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
+demoData= getParam( 'demoData', True, 'load dummy data set', [ True,False] )
 
-smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', [0,5,11] )
+constraints= {
+   'examples':[0,5,11],
+   'min':0,
+   'max':101
+}
 
+smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', constraints )
+
+nsigma= getParam( 'nsigma', 20, 'number of MAD deviations above the mean required' )
 
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
@@ -111,9 +118,9 @@ def doDigitize( ds, xrange, yrange ):
         mad= meanAverageDeviation(sl1[s])
         
         zpeak= ds[i,rf[j]]
-        print zpeak, ( avg + 2*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
+        print zpeak, ( avg + nsigma*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
         
-        if zpeak > ( avg + 2*mad ):
+        if zpeak > ( avg + nsigma*mad ):
             rec= bundle( xt[i], yt[rf[j]], 
                 dataset( zpeak, name='peak' ), 
                 dataset( np, name='numpoints' ), 
