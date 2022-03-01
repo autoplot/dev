@@ -94,13 +94,13 @@ def boxLookup( evt ):
         np= len(sl1) * 3 / 4
         s= s[0:np]
         
-        meen= mean(sl1[s])
+        avg= mean(sl1[s])
         mad= meanAverageDeviation(sl1[s])
         
         zpeak= ds[i,rf[j]]
-        print zpeak, ( meen + 10*mad ), 'np=%f mean=%f mad=%f' % ( np, meen, mad )
+        print zpeak, ( avg + 10*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
         
-        if zpeak > ( meen + 10*mad ):
+        if zpeak > ( avg + 10*mad ):
             dpr.addDataPoint( dataset( [ xt[i], yt[rf[j]] ] ) )
             
     #dom.plots[0].controller.dasPlot.revalidate()
