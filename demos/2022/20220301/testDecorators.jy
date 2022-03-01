@@ -38,7 +38,6 @@ panel.add( canvasPos )
 getApplication().setBottomPanel(panel)
                 
 def stateChanged(e):
-   print 'line39'
    dom.plots[0].controller.dasPlot.invalidateCacheImage()  # <-- this is the trick...
    dom.canvases[0].controller.dasCanvas.repaint()
    
