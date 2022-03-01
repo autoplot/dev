@@ -139,11 +139,10 @@ def boxLookup( evt ):
         dpr.select( evt.getXRange(), evt.getYRange() )     
         
     elif ( action=='manual' ):
-        r= where( within( ytags, evt.getYRange() ) )
-        if len(r)==0: return
-        ir= len(r)/2
-        for i in xrange(len(xt)):
-            dpr.addDataPoint( dataset( [ xt[i], yt[ir] ] ) )
+        ir= len(ry)/2
+        j= ry[ir]
+        for i in xrange(len(rt)):
+            dpr.addDataPoint( dataset( [ xt[rt[i]], yt[j] ] ) )
     elif ( action=='cancel' ):
         setStatus( 'cancel pressed' )
     else:
