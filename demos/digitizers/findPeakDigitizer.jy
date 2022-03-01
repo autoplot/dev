@@ -12,7 +12,6 @@ constraints= {
    'min':0,
    'max':101
 }
-
 smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', constraints )
 
 nsigma= getParam( 'nsigma', 20, 'number of MAD deviations above the mean required' )
@@ -29,7 +28,7 @@ if (demoData):
     dummyData[ findgen(1441), floor( 20 + sin( linspace(0,TAU,1441 ) ) * 10 ) ]= 10 + 10 * sin( linspace(0,TAU,1441 ) ) + randn(1441)
     dummyData[ 100:400,: ] = randn( 300, 39 )
     dummyData[ 800:1000,: ] = randn( 200, 39 )
-    dummyData[ findgen(600)+600, floor( 30 + sin( linspace(PI,3*PI/2,600 ) ) * 10 ) ]= 20 + 10 * sin( linspace(0,TAU,600) ) + randn(600)
+    dummyData[ findgen(600)+600, floor( 30 + sin( linspace(PI,3*PI/2,600 ) ) * 10 ) ]= 30 * sin( linspace(0,PI,600) ) + randn(600)
     
     plot( dummyData, ylog=True, yrange=[10,100] )
 
@@ -62,14 +61,16 @@ class FeedbackPainter( Painter ):
                  g.color= Color.BLACK
                  g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
                  
-#dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter() )
-dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter() )
+#dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
 from org.das2.dataset import DataSetUpdateListener
 class MyDataSetUpdateListener( DataSetUpdateListener ):
     def dataSetUpdated( self, e ):
+        dom.plots[0].controller.dasPlot.invalidateCacheImage()
         dom.canvases[0].controller.dasCanvas.repaint()
+        
 dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
 
 def getDigitizeAction():
