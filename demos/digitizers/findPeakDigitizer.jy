@@ -1,3 +1,4 @@
+from java.awt.event import InputEvent
 from org.das2.qds.util import Reduction
 setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
 run this script to digitize the only plot.''')
@@ -61,25 +62,34 @@ class MyDataSetUpdateListener( DataSetUpdateListener ):
         dom.canvases[0].controller.dasCanvas.repaint()
 dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
 
+def getDigitizeAction():
+    '''Return string indicating the action to take, one of peak, manual, or select. A modal dialog is displayed allowing the scientist to pick the action.'''
+    p= getApplication()
+    from javax.swing import JOptionPane, JPanel, JComboBox
+    from java.awt import BorderLayout
+    panel= JPanel()
+    panel.setLayout(BorderLayout())
+                
+    cb2= JComboBox( [ 'peak', 'manual', 'select' ] )
+    
+    cb2.selectedItem= 'peak'
+    
+    panel.add( cb2, BorderLayout.SOUTH )
+    
+    if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),panel,'auto digitize',JOptionPane.OK_CANCEL_OPTION) ):
+        return str(cb2.getSelectedItem())
+    else:
+        return 'cancel'
 
-def boxLookup( evt ):
-    ds= dom.plotElements[0].controller.dataSet
+def doDigitize( ds, xrange, yrange ):
     if ( smoothx!=0 ):
         ds= smooth(ds,smoothx)
         
-    if ( ds==None ): 
-        showMessageDialog( "No data loaded in plotElements[0]" )
-        return
-    
-    xt= xtags(ds)
-    
-    rt= where( within( xt, evt.getXRange() ) )
-    if ( len(rt)==0 ):
-        setStatus( "No records within interval "+str(evt.getXRange()) )
-        return
+    xt= xtags(ds)    
+    rt= where( within( xt, xrange ) )
         
     yt= ytags(ds)
-    rf= where( within( yt, evt.getYRange() ) )
+    rf= where( within( yt, yrange ) )
     
     for i in rt:
         sl= ds[i]
@@ -102,7 +112,43 @@ def boxLookup( evt ):
         
         if zpeak > ( avg + 10*mad ):
             dpr.addDataPoint( dataset( [ xt[i], yt[rf[j]] ] ) )
-            
+
+def boxLookup( evt ):           
+    ds= dom.plotElements[0].controller.dataSet
+        
+    if ( ds==None ): 
+        showMessageDialog( "No data loaded in plotElements[0]" )
+        return
+
+    xt= xtags(ds)
+    
+    rt= where( within( xt, evt.getXRange() ) )
+    if ( len(rt)==0 ):
+        setStatus( "No records within interval "+str(evt.getXRange()) )
+        return
+    
+    yt= ytags(ds)
+    ry= where( within( yt, evt.getYRange() ) )
+    if ( len(ry)==0 ):
+        setStatus( "No records within y range select "+str(evt.getYRange()) )
+        return
+    
+    action= getDigitizeAction()
+    
+    if ( action=='select' ):
+        dpr.select( evt.getXRange(), evt.getYRange() )     
+        
+    elif ( action=='manual' ):
+        r= where( within( ytags, evt.getYRange() ) )
+        if len(r)==0: return
+        ir= len(r)/2
+        for i in xrange(len(xt)):
+            dpr.addDataPoint( dataset( [ xt[i], yt[ir] ] ) )
+    elif ( action=='cancel' ):
+        setStatus( 'cancel pressed' )
+    else:
+        doDigitize( ds, evt.getXRange(), evt.getYRange() )
+    
     #dom.plots[0].controller.dasPlot.revalidate()
     #dom.plots[0].controller.dasPlot.repaint()  # TODO: wha? look into this!
     #dom.canvases[0].controller.dasCanvas.repaint()
