@@ -5,7 +5,7 @@ from org.das2.qds.util import Reduction
 setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
 run this script to digitize the only plot.''')
 
-demoData= getParam( 'demoData', True, 'load dummy data set', [ True,False] )
+demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
 
 constraints= {
    'examples':[0,5,11],
