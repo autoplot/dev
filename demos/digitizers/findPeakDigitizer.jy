@@ -1,3 +1,5 @@
+from java.awt import BasicStroke,Rectangle
+from org.das2.event import BoxRenderer
 from java.awt.event import InputEvent
 from org.das2.qds.util import Reduction
 setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
@@ -9,7 +11,7 @@ smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', [0,5,11] )
 
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
-from java.awt.geom import Ellipse2D
+from java.awt.geom import Ellipse2D,Line2D,Rectangle2D
 
 if (demoData):
     dummyData= link( linspace( '2022-02-28T00:00', '2022-02-28T24:00', 1441 ),
@@ -108,10 +110,16 @@ def doDigitize( ds, xrange, yrange ):
         mad= meanAverageDeviation(sl1[s])
         
         zpeak= ds[i,rf[j]]
-        print zpeak, ( avg + 10*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
+        print zpeak, ( avg + 2*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
         
-        if zpeak > ( avg + 10*mad ):
-            dpr.addDataPoint( dataset( [ xt[i], yt[rf[j]] ] ) )
+        if zpeak > ( avg + 2*mad ):
+            rec= bundle( xt[i], yt[rf[j]], 
+                dataset( zpeak, name='peak' ), 
+                dataset( np, name='numpoints' ), 
+                dataset( avg, name='avg' ),
+                dataset( mad, name='deviation' ),
+                dataset( ( np - avg ) / mad, name='sigmas' ) )
+            dpr.addDataPoint( rec )
 
 def boxLookup( evt ):           
     ds= dom.plotElements[0].controller.dataSet
@@ -142,7 +150,14 @@ def boxLookup( evt ):
         ir= len(ry)/2
         j= ry[ir]
         for i in xrange(len(rt)):
-            dpr.addDataPoint( dataset( [ xt[rt[i]], yt[j] ] ) )
+            zpeak= ds[i,j]
+            rec= bundle( xt[rt[i]], yt[j], 
+                dataset( zpeak, name='peak' ), 
+                dataset( len(ry), name='numpoints' ), 
+                dataset( 0, name='avg' ),
+                dataset( 0, name='deviation' ),
+                dataset( 0, name='sigmas' ) )
+            dpr.addDataPoint( rec )
     elif ( action=='cancel' ):
         setStatus( 'cancel pressed' )
     else:
@@ -151,6 +166,36 @@ def boxLookup( evt ):
     #dom.plots[0].controller.dasPlot.revalidate()
     #dom.plots[0].controller.dasPlot.repaint()  # TODO: wha? look into this!
     #dom.canvases[0].controller.dasCanvas.repaint()
-     
-addMouseModule( dom.plots[0], 'Digitize Peak', boxLookup )
+
+angleSelect= False
+boxWidth= 0
+class BoxAngleDragRenderer( BoxRenderer ):
+    def __init__( self, parent ):
+        BoxRenderer.__init__( self,parent )
+        
+    def renderDrag( self, g, p1, p2 ):
+
+        r = Rectangle(p1)
+        r.add(p2)
+        
+        color0= g.getColor()
+        g.setColor(Color(255,255,255,100))
+        g.setStroke(BasicStroke( 3.0, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ))
+        
+        g.drawRect(r.x, r.y, r.width, r.height)
+        
+        g.setStroke(BasicStroke())
+        g.setColor(color0)
+        
+        g.drawRect(r.x, r.y, r.width, r.height)
+        
+        dirtyBounds= Rectangle()
+        dirtyBounds.setLocation(r.x-2,r.y-3)
+        dirtyBounds.add(r.x+r.width+2,r.y+r.height+3)
+        #g.draw( Line2D.Double( p1, p2 ) )
+        return [ dirtyBounds ]
+        
+ 
+mm= addMouseModule( dom.plots[0], 'Digitize Peak', boxLookup )
+mm.dragRenderer= BoxAngleDragRenderer( dom.plots[0].controller.dasPlot )
    
