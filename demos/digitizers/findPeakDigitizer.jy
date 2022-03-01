@@ -9,9 +9,10 @@ demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
 
 smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', [0,5,11] )
 
+
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
-from java.awt.geom import Ellipse2D,Line2D,Rectangle2D
+from java.awt.geom import Ellipse2D,Line2D,Rectangle2D,GeneralPath
 
 if (demoData):
     dummyData= link( linspace( '2022-02-28T00:00', '2022-02-28T24:00', 1441 ),
@@ -101,7 +102,7 @@ def doDigitize( ds, xrange, yrange ):
         yy= yt[rf[j]]
         xx= xt[i]
         
-        # we will ask the question, is the peak 2 sigmas greater than the bottom 1/2 of the data?
+        # we ask the question, is the peak N sigmas greater than the bottom 3/4 of the data?
         s= sort( sl1 )
         np= len(sl1) * 3 / 4
         s= s[0:np]
@@ -118,10 +119,11 @@ def doDigitize( ds, xrange, yrange ):
                 dataset( np, name='numpoints' ), 
                 dataset( avg, name='avg' ),
                 dataset( mad, name='deviation' ),
-                dataset( ( np - avg ) / mad, name='sigmas' ) )
+                dataset( ( zpeak - avg ) / mad, name='sigmas' ) )
             dpr.addDataPoint( rec )
 
-def boxLookup( evt ):           
+
+def boxLookup( evt ):
     ds= dom.plotElements[0].controller.dataSet
         
     if ( ds==None ): 
@@ -169,33 +171,35 @@ def boxLookup( evt ):
 
 angleSelect= False
 boxWidth= 0
+
 class BoxAngleDragRenderer( BoxRenderer ):
     def __init__( self, parent ):
         BoxRenderer.__init__( self,parent )
         
     def renderDrag( self, g, p1, p2 ):
 
-        r = Rectangle(p1)
-        r.add(p2)
+        if not angleSelect:
+            w= abs( p1.y - p2.y )
+            r = Rectangle(p1.x, p1.y-w, p2.x - p1.x, 2*w )
         
         color0= g.getColor()
         g.setColor(Color(255,255,255,100))
         g.setStroke(BasicStroke( 3.0, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ))
         
-        g.drawRect(r.x, r.y, r.width, r.height)
+        g.draw(r)
         
         g.setStroke(BasicStroke())
         g.setColor(color0)
         
-        g.drawRect(r.x, r.y, r.width, r.height)
+        g.draw(r)
         
-        dirtyBounds= Rectangle()
-        dirtyBounds.setLocation(r.x-2,r.y-3)
-        dirtyBounds.add(r.x+r.width+2,r.y+r.height+3)
-        #g.draw( Line2D.Double( p1, p2 ) )
+        dirtyBounds= r
+
         return [ dirtyBounds ]
         
  
 mm= addMouseModule( dom.plots[0], 'Digitize Peak', boxLookup )
-mm.dragRenderer= BoxAngleDragRenderer( dom.plots[0].controller.dasPlot )
-   
+#mm.keyEvents= True
+#mm.releaseEvents= True
+
+#mm.dragRenderer= BoxAngleDragRenderer( dom.plots[0].controller.dasPlot )
