@@ -1,5 +1,5 @@
 setScriptDescription('''Demonstrates new Waypoints Mouse Module, which allows a interval to be
-drawn through the data.''')
+drawn through the data, possibly used to control a digitizer.''')
 
 from org.das2.event import BoxSelectionListener
 
