@@ -48,8 +48,8 @@ def getParam( name, deflt, doc='', constraint='' ):
 setScriptDescription('Demo and experiment with constraints on parameters.')
 
 ii= getParam( 'ii', 1, 'integer value, 5 would break the machine', { 'min':1, 'max':4 } )
-ee1= getParam( 'ee1', 'sc-c', 'enum value', ['sc-a','sc-b'] )
-ee2= getParam( 'ee2', 'sc-c', 'enum value', { 'values':['sc-a','sc-b'] } )
+ee1= getParam( 'ee1', 'sc-b', 'enum value', ['sc-a','sc-b'] )
+ee2= getParam( 'ee2', 'sc-b', 'enum value', { 'values':['sc-a','sc-b'] } )
 ss= getParam( 'ss', 'alpha', 'regex constraint', { 'regex':'alpha|beta' } )
 
 print ii
