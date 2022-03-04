@@ -1,7 +1,9 @@
+from org.das2.util import ColorUtil
 
-from javax.swing import JOptionPane,BoxLayout,ButtonGroup,JCheckBox,JTextField
+from javax.swing import JOptionPane,BoxLayout,ButtonGroup,JCheckBox,JTextField,JLabel,BorderFactory
+from javax.swing.border import AbstractBorder
 from java.util import ArrayList
-from java.awt import BasicStroke,Rectangle
+from java.awt import BasicStroke,Rectangle,Component,Color
 from org.das2.event import BoxRenderer,WaypointsMouseModule
 from java.awt.event import InputEvent
 from org.das2.qds.util import Reduction
@@ -9,6 +11,7 @@ setScriptDescription('''Digitizer selects the peak within the selected interval.
 run this script to digitize the only plot.  This uses the WaypointsMouseModule code which was
 introduced in 20220302a/v2022a_3.''')
 
+# The check below doesn't work, unfortunately, because the import of WaypointsMouseModule
 from org.autoplot import APSplash
 vv= APSplash.getVersion()
 if ( vv[0]=='v' ):
@@ -21,7 +24,7 @@ elif ( vv[0]!='(' ):
 demoData= getParam( 'demoData', True, 'load dummy data set', [ True,False] )
 
 constraints= {
-   'examples':[0,5,11],
+   'examples':[0,3,5,9,15,25],
    'min':0,
    'max':101
 }
@@ -93,15 +96,28 @@ def getDigitizeAction():
     panel= JPanel()
     panel.setLayout(BorderLayout())
 
-    panel2= JPanel()
-    panel2.setLayout(BoxLayout(panel2,BoxLayout.X_AXIS) )
-    bg= ButtonGroup()
-    bg.add( JCheckBox('peak',selected=True, actionCommand='peak') )
-    bg.add( JCheckBox('manual', actionCommand='manual' ) )
-    bg.add( JCheckBox('select', actionCommand='select' ) )
+    panel2= JPanel(alignmentY=Component.TOP_ALIGNMENT)
+    panel2.setLayout( BoxLayout(panel2,BoxLayout.X_AXIS) )
     
-    for b in bg.getElements():
-        panel2.add( b )
+    bg= ButtonGroup()
+    b1= JCheckBox('peak',selected=True, actionCommand='peak')
+    bg.add( b1 )
+    b2= JCheckBox('manual', actionCommand='manual', alignmentY=Component.TOP_ALIGNMENT )
+    bg.add( b2 )
+    b3= JCheckBox('select', actionCommand='select', alignmentY=Component.TOP_ALIGNMENT )
+    bg.add( b3 )
+
+    panel3= JPanel(alignmentY=Component.TOP_ALIGNMENT ) # all components need to have the same alignment!
+    panel3.setLayout(BoxLayout(panel3,BoxLayout.Y_AXIS ) )
+    panel3.add( b1 )
+    sigmaLbl= JLabel('N Sigma:',toolTipText='Number of deviations away from the mean of the bottom 75%')
+    panel3.add( sigmaLbl )
+    sigmaTf= JTextField(str(nsigma),5)
+    panel3.add( sigmaTf )
+    
+    panel2.add( panel3 )
+    panel2.add( b2 )
+    panel2.add( b3 )
         
     panel.add( panel2, BorderLayout.CENTER )
     
@@ -204,11 +220,8 @@ def boxLookup( evt ):
     #dom.plots[0].controller.dasPlot.repaint()  # TODO: wha? look into this!
     #dom.canvases[0].controller.dasCanvas.repaint()
 
-angleSelect= False
-boxWidth= 0        
- 
 wpmm= WaypointsMouseModule( dom.plots[0].controller.dasPlot, 'Digitize Peak' )
-dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().addMouseModule(wpmm)
+#dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().addMouseModule(wpmm)
 dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().primaryModule= wpmm
 
 wpmm.boxSelected= boxLookup
