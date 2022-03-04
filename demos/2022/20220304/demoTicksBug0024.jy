@@ -4,8 +4,9 @@ from org.das2.graph import GraphUtil
 ticks= GraphUtil.calculateManualTicks( '+3hr/+1hr',datumRange('2022-03-04'),False)
 print ticks.getMajorTicks().get(0)  #2022-03-04T00:00:00.000Z
 print ticks.getMinorTicks().get(0)  #2044-05-05T00:00:00.000Z
+print ticks.getMinorTicks().get(1)  #2044-05-05T01:00:00.000Z
 
 ticks= GraphUtil.calculateManualTicks( '+3hr/3',datumRange('2022-03-04'),False)
 print ticks.getMajorTicks().get(0)  #2022-03-04T00:00:00.000Z
 print ticks.getMinorTicks().get(0)  #2022-03-04T00:00:00.000Z
-
+print ticks.getMinorTicks().get(1)  #2022-03-04T01:00:00.000Z
