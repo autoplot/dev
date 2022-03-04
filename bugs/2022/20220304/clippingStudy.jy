@@ -1,0 +1,17 @@
+setScriptDescription('''Sadie noticed where the bounding box was not calculated properly. This
+is on a Mac.''')
+
+from org.autoplot.dom import Annotation
+a= annotation( text='A+B REPT FESA (Spin Averaged Electrons) 2.60 MeV', anchorPosition='SE',
+  borderType= 'rounded_rectangle' )
+
+for i in xrange(20):
+    for j in xrange(100):
+        a.fontSize='%.2fem' % ( float(j)/30. )
+        print a.fontSize
+        waitUntilIdle()
+    for j in xrange(100,0,-1):
+        a.fontSize='%.2fem' % ( float(j)/30. )
+        print a.fontSize
+        waitUntilIdle()
+        
