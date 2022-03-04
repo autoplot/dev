@@ -21,7 +21,7 @@ elif ( vv[0]!='(' ):
     if ( vv<'20220302a' ):
         raise Exception('This script only runs with 20220302a and newer.')
 
-demoData= getParam( 'demoData', True, 'load dummy data set', [ True,False] )
+demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
 
 constraints= {
    'examples':[0,3,5,9,15,25],
@@ -90,6 +90,7 @@ dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
 
 def getDigitizeAction():
     '''Return string indicating the action to take, one of peak, manual, or select. A modal dialog is displayed allowing the scientist to pick the action.'''
+    global nsigma
     p= getApplication()
     from javax.swing import JOptionPane, JPanel, JComboBox
     from java.awt import BorderLayout
@@ -122,6 +123,7 @@ def getDigitizeAction():
     panel.add( panel2, BorderLayout.CENTER )
     
     if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),panel,'auto digitize',JOptionPane.OK_CANCEL_OPTION) ):
+        nsigma= int(sigmaTf.text)
         return str(bg.selection.actionCommand)
     else:
         return 'cancel'
