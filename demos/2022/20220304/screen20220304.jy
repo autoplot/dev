@@ -1,6 +1,10 @@
 # demo completions
 
-date= getParam( 'date', '20141231' )
+tr= getParam( 'timerange', '2014-12-31', 'Timerange to load' )
+
+date= generateTimeRanges('$Y$m$d',tr)
+date= date[0]
+
 f= 'https://rbspgway.jhuapl.edu/share/ac6/data/AC6-A/2014/AC6-A_'+date+'_V03.tgz/AC6-A_'+date+'_L2_survey_V03.csv'
 beta= getDataSet( f+"?column=Beta" )
 alpha=  getDataSet( f+"?column=Alpha" )
