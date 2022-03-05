@@ -1,0 +1,23 @@
+# demo completions
+
+date= getParam( 'date', '20141231' )
+f= 'https://rbspgway.jhuapl.edu/share/ac6/data/AC6-A/2014/AC6-A_'+date+'_V03.tgz/AC6-A_'+date+'_L2_survey_V03.csv'
+beta= getDataSet( f+"?column=Beta" )
+alpha=  getDataSet( f+"?column=Alpha" )
+t= getDataSet( f + "?time=year&timeFormat=$Y+$m+$d+$H+$M+$S" )
+
+alpha= smooth(alpha,10)
+beta= smooth(beta,10)
+
+ix= ( alpha + 50 )  / 400 * 50
+iy= ( beta + 250 )  / 500 * 50
+    
+plot( ix,iy )
+
+zz= zeros(50,50)
+for i in xrange( len( alpha ) ):
+    if ix[i]<0 or ix[i]>50: continue
+    if iy[i]<0 or iy[i]>50: continue
+    zz[ix[i],iy[i]]= zz[ix[i],iy[i]]+1
+zz= transpose( smooth2d(zz,7,7) )
+plot( zz, renderType='contour>levels=+10/+1', xrange=[5,35], yrange=[5,28] )
