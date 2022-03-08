@@ -138,9 +138,14 @@ def doDigitize( ds, xrange, wpmm, action ):
         
     yt= ytags(ds)
     
+    ytr2 = yt.rank()==2
+    
     for i in rt:
         
-        rf= wpmm.whereWithin( xt[i], yt )
+        if ( ytr2 ):
+            rf= wpmm.whereWithin( xt[i], yt[i] )
+        else:
+            rf= wpmm.whereWithin( xt[i], yt )
 
         sl= ds[i]
         sl1= sl[rf]
@@ -150,7 +155,10 @@ def doDigitize( ds, xrange, wpmm, action ):
         elif action=='manual':
             j= len(rf)/2  # bias towards lower points
         
-        yy= yt[rf[j]]
+        if ( ytr2 ):
+            yy= yt[i,rf[j]]
+        else:
+            yy= yt[rf[j]]
         xx= xt[i]
         
         # we ask the question, is the peak N sigmas greater than the bottom 3/4 of the data?
