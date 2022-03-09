@@ -34,6 +34,7 @@ if ( dirp==None or not File( dirp, 'ro_cache.txt' ).exists() ):
     raise Exception('unable to find ro_cache.txt file')
     
 ss= FileUtil.readFileToString( File( dirp, 'ro_cache.txt' ) )
+ss= ss.strip()
 
 print File( dirp, 'ro_cache.txt' )
 print ss
