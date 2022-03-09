@@ -35,5 +35,6 @@ if ( dirp==None or not File( dirp, 'ro_cache.txt' ).exists() ):
     
 ss= FileUtil.readFileToString( File( dirp, 'ro_cache.txt' ) )
 
+print File( dirp, 'ro_cache.txt' )
 print ss
 print child
