@@ -1,4 +1,4 @@
-# demo completions
+setScriptDescription('demo new contour renderer feature where levels can have minor levels spec (+10/+1)')
 
 tr= getParam( 'timerange', '2014-12-31', 'Timerange to load' )
 
