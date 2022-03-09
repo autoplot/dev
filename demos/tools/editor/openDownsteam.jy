@@ -38,3 +38,5 @@ ss= FileUtil.readFileToString( File( dirp, 'ro_cache.txt' ) )
 print File( dirp, 'ro_cache.txt' )
 print ss
 print child
+
+getApplication().getScriptPanel().filename= ss + '/' + child
