@@ -10,9 +10,6 @@ from java.util.regex import Pattern
 from org.das2.util.filesystem import FileSystem
 from javax.swing import JOptionPane
 
-# git config --get remote.origin.url
-# git worktree list
-
 script= File( getApplication().getScriptPanel().getFilename() )
 
 print '*****'
