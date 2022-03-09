@@ -40,7 +40,7 @@ cb.saveState()
 # this must be free to set the canvas size, so it must not be
 # fitted.
 setLayoutOverplot(2)
-ds= getDataSet( PWD+'/circleIllumn.jyds' )
+ds= getDataSet( PWD+'/circleIllum.jyds' )
 plot(0,ds)
 ds= getDataSet( 'vap+inline:ripples(5,5)' )
 plot(1,ds)
