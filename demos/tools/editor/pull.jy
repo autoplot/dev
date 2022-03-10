@@ -3,7 +3,7 @@ print '****'
 print 'This is pull.jy, an editor action.'
 
 setScriptTitle('Git Pull')
-setScriptDescription('Run the git pull command.  This assumes that the git commands are available at the command line.')
+setScriptDescription('Run the git pull command.  This assumes that the git commands are available at the command line.  TODO: make a ro_cache.txt link.')
 
 logger= LoggerManager.getLogger('jython.actions')
 
