@@ -13,6 +13,7 @@ if ( script==None ):
     raise Exception('No file loaded')
 
 def runCommand( cmd, cmdid ):
+    'spawn command using ProcessBuilder logging its output to cmdid.txt'
     from java.lang import ProcessBuilder
     
     print '# runCommand'
@@ -85,3 +86,8 @@ else:
     showMessageDialog(msg)
 
     setStatus( "Commit complete, see " + str(log) )
+    editor= getApplication().getScriptPanel().getEditorPanel()
+    from org.autoplot.scriptconsole import ScriptPanelSupport
+    f= File( script )
+    count= ScriptPanelSupport.markChanges( editor.getEditorAnnotationsSupport(), f )
+    
