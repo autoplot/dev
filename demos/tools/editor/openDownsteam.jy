@@ -12,9 +12,9 @@ from javax.swing import JOptionPane
 
 script= File( getApplication().getScriptPanel().getFilename() )
 
-print '******'
+print '*****'
 print script
-print '******'
+print '*****'
 
 child= script.getName();
 dirp= script.getParentFile()
