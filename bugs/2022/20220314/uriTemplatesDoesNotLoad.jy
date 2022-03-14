@@ -1,5 +1,5 @@
 setScriptDescription('''Demo URITemplates, but more importantly this shows where Jython doesn't find 
-inner class in single-jar version.''')
+inner class in single-jar version.  (And now it works fine...)''')
 
 from java.util import HashMap
 
@@ -8,7 +8,7 @@ import sys
 addToSearchPath( sys.path,lib,monitor)  # caution: this only loads once!!!!!
 
 def vprint( expr, result ):
-    'print the expr but throw an error if the result doesn\'t match'
+    'print the expr but verify that the result is produced.  This allows the script to be reviewed without running it.'
     ss= str(expr)
     print ss
     if ( ss.strip()!=result.strip() ):
@@ -17,7 +17,6 @@ def vprint( expr, result ):
 from org.hapiserver import TimeUtil
 vprint( TimeUtil.reformatIsoTime('2020-01-01T00:00Z', '2020-112Z'), "2020-04-21T00:00Z" )
 
-from org.hapiserver.URITemplate import SubsecFieldHandler
 from org.hapiserver import URITemplate
 
 vprint( URITemplate.VERSION, "20201007a" )
