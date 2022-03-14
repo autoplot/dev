@@ -1,0 +1,28 @@
+setScriptDescription('''Demo URITemplates, but more importantly this shows where Jython doesn't find 
+inner class in single-jar version.''')
+
+from java.util import HashMap
+
+lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
+import sys
+addToSearchPath( sys.path,lib,monitor)  # caution: this only loads once!!!!!
+
+def vprint( expr, result ):
+    'print the expr but throw an error if the result doesn\'t match'
+    ss= str(expr)
+    print ss
+    if ( ss.strip()!=result.strip() ):
+        raise Exception('expr did not print expected result')
+
+from org.hapiserver import TimeUtil
+vprint( TimeUtil.reformatIsoTime('2020-01-01T00:00Z', '2020-112Z'), "2020-04-21T00:00Z" )
+
+from org.hapiserver.URITemplate import SubsecFieldHandler
+from org.hapiserver import URITemplate
+
+vprint( URITemplate.VERSION, "20201007a" )
+
+ut= URITemplate("/tmp/$Y$m$d_$(v,name=sc).dat")
+filen1= "/tmp/20220314_3.dat"
+itimeRange= ut.parse( filen1, HashMap() )
+vprint( itimeRange, "array('i',[2022, 3, 14, 0, 0, 0, 0, 2022, 3, 15, 0, 0, 0, 0])" )
