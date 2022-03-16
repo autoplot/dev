@@ -1,0 +1,38 @@
+from java.awt.geom import GeneralPath,Line2D,RoundRectangle2D
+from org.das2.graph import Painter
+
+reset()
+
+# https://stackoverflow.com/questions/1734745/how-to-create-circle-with-b%C3%A9zier-curves
+def drawBezierOvalQuarter(centerX, centerY, sizeX, sizeY):
+    ctx= GeneralPath()
+    ctx.moveTo(
+        centerX - (sizeX),
+        centerY - (0)
+    )
+    ctx.curveTo(
+        centerX - (sizeX),
+        centerY - (0.552 * sizeY),
+        centerX - (0.552 * sizeX),
+        centerY - (sizeY),
+        centerX - (0),
+        centerY - (sizeY)
+    )
+    #ctx.closePath()
+    return ctx
+
+def circlePainter( g ):
+    print 'here painter'
+    gp= GeneralPath()
+    g.translate( 200, 200 )
+    gp.moveTo( 0, 0 )
+    gp.quadTo( 0,100, 100, 100 )
+    #gp.closePath()
+    g.draw( gp )
+    
+    g.draw( drawBezierOvalQuarter( 0, 0, 100, 100 ) )
+    g.draw( drawBezierOvalQuarter( 0, 0, 100, -100 ) )
+    g.draw( drawBezierOvalQuarter( 0, 0, -100, -100 ) )
+    g.draw( drawBezierOvalQuarter( 0, 0, -100, 100 ) )
+    
+addTopDecoration( dom.canvases[0], circlePainter )
