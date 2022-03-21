@@ -1,0 +1,11 @@
+p= getParam( 'p', 50, 'p param', { 'min':0, 'max':100 } )
+
+x= accum( randu(50) )
+x[0:25]= x[0:25] + p
+y= randn(50)
+
+z1= Units.nominal().createDatum('X')
+z= replicate( dataset(z1), 50 )
+plot( x, y, z, renderType='digital' )
+ 
+setOutputParam('dout',p+3,'p plus 3',{ 'min':3, 'max':103 } )

@@ -1,0 +1,13 @@
+reset()
+
+from org.autoplot import RenderType
+b= ripplesVectorTimeSeries(10000)
+bx= unbundle(b, 0)
+plot( 2, b )
+plot( 1, bx )
+plot( 0, fftPower( bx, 512, monitor ) )
+
+dom.plotElements[1].component= '|fftPower(512)'
+dom.plotElements[3].component= 'X|fftPower(512)'
+
+#dom.plotElements[3].renderType=RenderType.nnSpectrogram
