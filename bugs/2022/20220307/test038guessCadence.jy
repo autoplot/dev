@@ -1,0 +1,40 @@
+from java.util import HashMap
+setScriptDescription('The xaxis autoranging has suddenly changed.  When and why?')
+
+doPlot= getParam( 'doPlot', True, 'plot the data', [ True, False ] )
+
+from org.autoplot import RenderType,AutoRangeUtil
+ds= getDataSet( PWD + '/output_background_removal_wfr.dat?bundle=:' )
+print xtags(ds).property(QDataSet.SCALE_TYPE)
+
+from org.das2.qds import DataSetUtil
+
+cadence = DataSetUtil.guessCadenceNew( xtags(ds), ds )
+if ( cadence!=None and 'log'==cadence.property( QDataSet.SCALE_TYPE ) ):
+    print cadence
+    print 'this is xlog cadence, why?'
+else:
+    print 'cadence looks good'
+    
+if ( not doPlot ):
+
+   yy=  AutoRangeUtil.autoRange(ds,mm,True)
+   print yy, yy.property( QDataSet.SCALE_TYPE )
+   
+   xx= xtags( ds )
+   print xx, xx.property( QDataSet.SCALE_TYPE )
+   
+   mm= HashMap()
+   ard=  AutoRangeUtil.autoRange(xx,mm,True)
+   print ard.log, ard.range
+   
+else:
+   plot( ds[:,0], ds[:,1], ds[:,2] )
+   waitUntilIdle()
+
+# The problem is this resolves to log now.
+
+#dom.plots[0].xaxis.log=False
+#dom.plotElements[0].renderType= RenderType.valueOf('digital')
+#dom.plotElements[0].renderControl= 'format=%d&fontSize=0.6em'
+
