@@ -1,5 +1,5 @@
 from java.util import HashMap
-setScriptDescription('The xaxis autoranging has suddenly changed.  When and why?')
+setScriptDescription('The xaxis autoranging has suddenly changed.  When and why?  See https://sourceforge.net/p/autoplot/bugs/1582/')
 
 doPlot= getParam( 'doPlot', True, 'plot the data', [ True, False ] )
 
