@@ -1,0 +1,213 @@
+from java.awt import BasicStroke,Rectangle
+from org.das2.event import BoxRenderer
+from java.awt.event import InputEvent
+from org.das2.qds.util import Reduction
+setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
+run this script to digitize the only plot.''')
+
+demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
+
+constraints= {
+   'examples':[0,5,11],
+   'min':0,
+   'max':101
+}
+smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', constraints )
+
+nsigma= getParam( 'nsigma', 20, 'number of MAD deviations above the mean required' )
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from java.awt.geom import Ellipse2D,Line2D,Rectangle2D,GeneralPath
+
+if (demoData):
+    dummyData= link( linspace( '2022-02-28T00:00', '2022-02-28T24:00', 1441 ),
+                     logspace( 10,100,39 ),
+                     randn( 1441, 39 ) )
+    
+    dummyData[ findgen(1441), floor( 20 + sin( linspace(0,TAU,1441 ) ) * 10 ) ]= 10 + 10 * sin( linspace(0,TAU,1441 ) ) + randn(1441)
+    dummyData[ 100:400,: ] = randn( 300, 39 )
+    dummyData[ 800:1000,: ] = randn( 200, 39 )
+    dummyData[ findgen(600)+600, floor( 30 + sin( linspace(PI,3*PI/2,600 ) ) * 10 ) ]= 30 * sin( linspace(0,PI,600) ) + randn(600)
+    
+    plot( dummyData, ylog=True, yrange=[10,100] )
+
+dpr= DataPointRecorder()
+
+addTab( 'digitizer', dpr )
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+         ds= dpr.getSelectedDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 
+dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter() )
+#dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
+
+# we need to listen for updates from the DataPointRecorder, when the selection changes.
+from org.das2.dataset import DataSetUpdateListener
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self, e ):
+        dom.plots[0].controller.dasPlot.invalidateCacheImage()
+        dom.canvases[0].controller.dasCanvas.repaint()
+        
+dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
+
+def getDigitizeAction():
+    '''Return string indicating the action to take, one of peak, manual, or select. A modal dialog is displayed allowing the scientist to pick the action.'''
+    p= getApplication()
+    from javax.swing import JOptionPane, JPanel, JComboBox
+    from java.awt import BorderLayout
+    panel= JPanel()
+    panel.setLayout(BorderLayout())
+                
+    cb2= JComboBox( [ 'peak', 'manual', 'select' ] )
+    
+    cb2.selectedItem= 'peak'
+    
+    panel.add( cb2, BorderLayout.SOUTH )
+    
+    if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),panel,'auto digitize',JOptionPane.OK_CANCEL_OPTION) ):
+        return str(cb2.getSelectedItem())
+    else:
+        return 'cancel'
+
+def doDigitize( ds, xrange, yrange ):
+    if ( smoothx!=0 ):
+        ds= smooth(ds,smoothx)
+        
+    xt= xtags(ds)    
+    rt= where( within( xt, xrange ) )
+        
+    yt= ytags(ds)
+    rf= where( within( yt, yrange ) )
+    
+    for i in rt:
+        sl= ds[i]
+        sl1= sl[rf]
+        j= imax( sl1 )
+        
+        yy= yt[rf[j]]
+        xx= xt[i]
+        
+        # we ask the question, is the peak N sigmas greater than the bottom 3/4 of the data?
+        s= sort( sl1 )
+        np= len(sl1) * 3 / 4
+        s= s[0:np]
+        
+        avg= mean(sl1[s])
+        mad= meanAverageDeviation(sl1[s])
+        
+        zpeak= ds[i,rf[j]]
+        print zpeak, ( avg + nsigma*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
+        
+        if zpeak > ( avg + nsigma*mad ):
+            rec= bundle( xt[i], yt[rf[j]], 
+                dataset( zpeak, name='peak' ), 
+                dataset( np, name='numpoints' ), 
+                dataset( avg, name='avg' ),
+                dataset( mad, name='deviation' ),
+                dataset( ( zpeak - avg ) / mad, name='sigmas' ) )
+            dpr.addDataPoint( rec )
+
+
+def boxLookup( evt ):
+    ds= dom.plotElements[0].controller.dataSet
+        
+    if ( ds==None ): 
+        showMessageDialog( "No data loaded in plotElements[0]" )
+        return
+
+    xt= xtags(ds)
+    
+    rt= where( within( xt, evt.getXRange() ) )
+    if ( len(rt)==0 ):
+        setStatus( "No records within interval "+str(evt.getXRange()) )
+        return
+    
+    yt= ytags(ds)
+    ry= where( within( yt, evt.getYRange() ) )
+    if ( len(ry)==0 ):
+        setStatus( "No records within y range select "+str(evt.getYRange()) )
+        return
+    
+    action= getDigitizeAction()
+    
+    if ( action=='select' ):
+        dpr.select( evt.getXRange(), evt.getYRange() )     
+        
+    elif ( action=='manual' ):
+        ir= len(ry)/2
+        j= ry[ir]
+        for i in xrange(len(rt)):
+            zpeak= ds[i,j]
+            rec= bundle( xt[rt[i]], yt[j], 
+                dataset( zpeak, name='peak' ), 
+                dataset( len(ry), name='numpoints' ), 
+                dataset( 0, name='avg' ),
+                dataset( 0, name='deviation' ),
+                dataset( 0, name='sigmas' ) )
+            dpr.addDataPoint( rec )
+    elif ( action=='cancel' ):
+        setStatus( 'cancel pressed' )
+    else:
+        doDigitize( ds, evt.getXRange(), evt.getYRange() )
+    
+    #dom.plots[0].controller.dasPlot.revalidate()
+    #dom.plots[0].controller.dasPlot.repaint()  # TODO: wha? look into this!
+    #dom.canvases[0].controller.dasCanvas.repaint()
+
+angleSelect= False
+boxWidth= 0
+
+class BoxAngleDragRenderer( BoxRenderer ):
+    def __init__( self, parent ):
+        BoxRenderer.__init__( self,parent )
+        
+    def renderDrag( self, g, p1, p2 ):
+
+        if not angleSelect:
+            w= abs( p1.y - p2.y )
+            r = Rectangle(p1.x, p1.y-w, p2.x - p1.x, 2*w )
+        
+        color0= g.getColor()
+        g.setColor(Color(255,255,255,100))
+        g.setStroke(BasicStroke( 3.0, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ))
+        
+        g.draw(r)
+        
+        g.setStroke(BasicStroke())
+        g.setColor(color0)
+        
+        g.draw(r)
+        
+        dirtyBounds= r
+
+        return [ dirtyBounds ]
+        
+ 
+mm= addMouseModule( dom.plots[0], 'Digitize Peak', boxLookup )
+#mm.keyEvents= True
+#mm.releaseEvents= True
+
+#mm.dragRenderer= BoxAngleDragRenderer( dom.plots[0].controller.dasPlot )

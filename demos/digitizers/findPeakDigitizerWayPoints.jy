@@ -1,0 +1,237 @@
+from org.das2.util import ColorUtil
+
+from javax.swing import JOptionPane,BoxLayout,ButtonGroup,JCheckBox,JTextField,JLabel,BorderFactory
+from javax.swing.border import AbstractBorder
+from java.util import ArrayList
+from java.awt import BasicStroke,Rectangle,Component,Color
+from org.das2.event import BoxRenderer,WaypointsMouseModule
+from java.awt.event import InputEvent
+from org.das2.qds.util import Reduction
+setScriptDescription('''Digitizer selects the peak within the selected interval.  Load your data, and then 
+run this script to digitize the only plot.  This uses the WaypointsMouseModule code which was
+introduced in 20220302a/v2022a_3.''')
+
+# The check below doesn't work, unfortunately, because the import of WaypointsMouseModule
+from org.autoplot import APSplash
+vv= APSplash.getVersion()
+if ( vv[0]=='v' ):
+    if ( vv<'v2022a_3' ):
+        raise Exception('This script only runs with v2022a_3 and newer.')
+elif ( vv[0]!='(' ):
+    if ( vv<'20220302a' ):
+        raise Exception('This script only runs with 20220302a and newer.')
+
+demoData= getParam( 'demoData', False, 'load dummy data set', [ True,False] )
+
+constraints= {
+   'examples':[0,3,5,9,15,25],
+   'min':0,
+   'max':101
+}
+smoothx= getParam( 'smoothx',0, 'smooth data in X before digitizing', constraints )
+
+nsigma= getParam( 'nsigma', 10, 'number of MAD deviations above the mean required' )
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from java.awt.geom import Ellipse2D,Line2D,Rectangle2D,GeneralPath
+
+if (demoData):
+    dummyData= link( linspace( '2022-02-28T00:00', '2022-02-28T24:00', 1441 ),
+                     logspace( 10,100,39 ),
+                     randn( 1441, 39 ) )
+    
+    dummyData[ findgen(1441), floor( 20 + sin( linspace(0,TAU,1441 ) ) * 10 ) ]= 10 + 10 * sin( linspace(0,TAU,1441 ) ) + randn(1441)
+    dummyData[ 100:400,: ] = randn( 300, 39 )
+    dummyData[ 800:1000,: ] = randn( 200, 39 )
+    dummyData[ findgen(600)+600, floor( 30 + sin( linspace(PI,3*PI/2,600 ) ) * 10 ) ]= 30 * sin( linspace(0,PI,600) ) + randn(600)
+    
+    plot( dummyData, ylog=True, yrange=[10,100] )
+
+dpr= DataPointRecorder()
+
+addTab( 'digitizer', dpr )
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-3, y-3, 7, 7 ) )
+         ds= dpr.getSelectedDataPoints()
+         if ( ds!=None ): 
+             for d in ds:
+                 x= d[0]
+                 y= d[1]
+                 x= dom.plots[0].controller.dasPlot.getXAxis().transform( x )
+                 y= dom.plots[0].controller.dasPlot.getYAxis().transform( y )
+                 g.color= Color( 200, 200,140,200)
+                 g.fill( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 g.color= Color.BLACK
+                 g.draw( Ellipse2D.Double( x-7, y-7, 14, 14 ) )
+                 
+dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter() )
+
+# we need to listen for updates from the DataPointRecorder, when the selection changes.
+from org.das2.dataset import DataSetUpdateListener
+class MyDataSetUpdateListener( DataSetUpdateListener ):
+    def dataSetUpdated( self, e ):
+        dom.plots[0].controller.dasPlot.invalidateCacheImage()
+        dom.canvases[0].controller.dasCanvas.repaint()
+        
+dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
+
+def getDigitizeAction():
+    '''Return string indicating the action to take, one of peak, manual, or select. A modal dialog is displayed allowing the scientist to pick the action.'''
+    global nsigma
+    p= getApplication()
+    from javax.swing import JOptionPane, JPanel, JComboBox
+    from java.awt import BorderLayout
+    panel= JPanel()
+    panel.setLayout(BorderLayout())
+
+    panel2= JPanel(alignmentY=Component.TOP_ALIGNMENT)
+    panel2.setLayout( BoxLayout(panel2,BoxLayout.X_AXIS) )
+    
+    bg= ButtonGroup()
+    b1= JCheckBox('peak',selected=True, actionCommand='peak')
+    bg.add( b1 )
+    b2= JCheckBox('manual', actionCommand='manual', alignmentY=Component.TOP_ALIGNMENT )
+    bg.add( b2 )
+    b3= JCheckBox('select', actionCommand='select', alignmentY=Component.TOP_ALIGNMENT )
+    bg.add( b3 )
+
+    panel3= JPanel(alignmentY=Component.TOP_ALIGNMENT ) # all components need to have the same alignment!
+    panel3.setLayout(BoxLayout(panel3,BoxLayout.Y_AXIS ) )
+    panel3.add( b1 )
+    sigmaLbl= JLabel('N Sigma:',toolTipText='Number of deviations away from the mean of the bottom 75%')
+    panel3.add( sigmaLbl )
+    sigmaTf= JTextField(str(nsigma),5)
+    panel3.add( sigmaTf )
+    
+    panel2.add( panel3 )
+    panel2.add( b2 )
+    panel2.add( b3 )
+        
+    panel.add( panel2, BorderLayout.CENTER )
+    
+    if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),panel,'auto digitize',JOptionPane.OK_CANCEL_OPTION) ):
+        nsigma= int(sigmaTf.text)
+        return str(bg.selection.actionCommand)
+    else:
+        return 'cancel'
+
+def doDigitize( ds, xrange, wpmm, action ):
+    'for each record of ds within range, select the point in Y which is the maximum and significantly above other points.  action==manual just picks the middle'
+    if ( smoothx!=0 ):
+        ds= smooth(ds,smoothx)
+        
+    xt= xtags(ds)    
+    rt= where( within( xt, xrange ) )
+        
+    yt= ytags(ds)
+    
+    ytr2 = yt.rank()==2
+    
+    for i in rt:
+        
+        if ( ytr2 ):
+            rf= wpmm.whereWithin( xt[i], yt[i] )
+        else:
+            rf= wpmm.whereWithin( xt[i], yt )
+
+        sl= ds[i]
+        sl1= sl[rf]
+        
+        if action=='peak':
+            j= imax( sl1 )
+        elif action=='manual':
+            j= len(rf)/2  # bias towards lower points
+        
+        if ( ytr2 ):
+            yy= yt[i,rf[j]]
+        else:
+            yy= yt[rf[j]]
+        xx= xt[i]
+        
+        # we ask the question, is the peak N sigmas greater than the bottom 3/4 of the data?
+        s= sort( sl1 )
+        np= len(sl1) * 3 / 4
+        s= s[0:np]
+        
+        avg= mean(sl1[s])
+        mad= meanAverageDeviation(sl1[s])
+        
+        zpeak= ds[i,rf[j]]
+        
+        if zpeak > ( avg + nsigma*mad ) or action=='manual':
+            rec= bundle( xx, yy, 
+                dataset( zpeak, name='peak' ), 
+                dataset( np, name='numpoints' ), 
+                dataset( avg, name='avg' ),
+                dataset( mad, name='deviation' ),
+                dataset( ( zpeak - avg ) / mad, name='sigmas' ) )
+            dpr.addDataPoint( rec )
+
+def boxLookup( evt ):
+    global wpmm
+    ds= dom.plotElements[0].controller.dataSet
+        
+    if ( ds==None ): 
+        showMessageDialog( "No data loaded in plotElements[0]" )
+        return
+
+    xt= xtags(ds)
+    
+    rt= where( within( xt, evt.getXRange() ) )
+    if ( len(rt)==0 ):
+        setStatus( "No records within interval "+str(evt.getXRange()) )
+        return
+    
+    yt= ytags(ds)
+    ry= where( within( yt, evt.getYRange() ) )
+    if ( len(ry)==0 ):
+        setStatus( "No records within y range select "+str(evt.getYRange()) )
+        return
+    
+    action= getDigitizeAction()
+    
+    if ( action=='select' ):
+        pp= dpr.getDataPoints()
+        lst= ArrayList()
+        for i in xrange(pp.length()):
+            p= pp[i]
+            rr= wpmm.whereWithin( p[0], p[1] )
+            if ( rr!=None and len(rr)==1 ):
+                lst.add(i)
+        dpr.select(lst)
+        if  JOptionPane.YES_OPTION==JOptionPane.showConfirmDialog( getApplication(), 
+            'Delete selected points (%d)?' % len(lst),
+            'delete points', JOptionPane.YES_NO_OPTION ):
+                dpr.deleteRows(lst)
+
+    elif ( action=='peak' ):
+        doDigitize( ds, evt.getXRange(), wpmm, action )
+        
+    elif ( action=='manual' ):
+        doDigitize( ds, evt.getXRange(), wpmm, action )
+        
+    else:
+        setStatus( 'cancel pressed' )
+    
+    #dom.plots[0].controller.dasPlot.revalidate()
+    #dom.plots[0].controller.dasPlot.repaint()  # TODO: wha? look into this!
+    #dom.canvases[0].controller.dasCanvas.repaint()
+
+wpmm= WaypointsMouseModule( dom.plots[0].controller.dasPlot, 'Digitize Peak' )
+#dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().addMouseModule(wpmm)
+dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().primaryModule= wpmm
+
+wpmm.boxSelected= boxLookup

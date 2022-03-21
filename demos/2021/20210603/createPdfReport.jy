@@ -27,7 +27,9 @@ document.add( p1 )
 rectangle= Rectangle( 6*72., 4*72. )
 document.add( rectangle );
 
-p1= Paragraph( "Call createGraphics to get a graphics context onto which Autoplot can print." )
+p1= Paragraph( """Call createGraphics to get a graphics context where Autoplot can draw graphics.
+The real trick will be getting to to calculate the position of the box it should write on.  Presently
+this just is hard coded to print at 5 inches from the top.''' )
 document.add( p1 )
 
 cb = writer.getDirectContent()
@@ -40,7 +42,7 @@ cb.saveState()
 # this must be free to set the canvas size, so it must not be
 # fitted.
 setLayoutOverplot(2)
-ds= getDataSet( PWD+'/circleIllumn.jyds' )
+ds= getDataSet( PWD+'/circleIllum.jyds' )
 plot(0,ds)
 ds= getDataSet( 'vap+inline:ripples(5,5)' )
 plot(1,ds)

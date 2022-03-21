@@ -1,0 +1,10 @@
+setScriptDescription('Study ticks calculation in orbit renderer')
+
+tt= linspace( '2022-3-4T00:00','2022-3-4/24:00', 86401 )
+rr= linspace( 1,80, 86401 )
+
+xx= rr * ( cos( ( tt - '2022-3-4T00:00' ) / '9hr' * TAU ) + cos( ( tt - '2022-3-4T00:00' ) / '4hr' * TAU ) / 4 )
+yy= rr * ( sin( ( tt - '2022-3-4T00:00' ) / '9hr' * TAU ) + cos( ( tt - '2022-3-4T00:00' ) / '4hr' * TAU ) / 4 )
+
+#plot( xx, yy, tt, symbolSize=20 )
+plot( link(tt,xx), link(tt,yy), tt, renderType='orbitPlot>tickValues=+12min/+.05hr' )

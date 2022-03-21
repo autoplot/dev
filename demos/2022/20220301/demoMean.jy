@@ -1,0 +1,17 @@
+N= getParam( 'N', 1000, 'The number of points' )
+
+bottomPercent= 75
+
+dd= randn(N)
+s= sort(dd)
+
+bottomPopulation= dd[s[0:(N*bottomPercent/100)]]
+
+mm= mean( bottomPopulation )
+vv= meanAverageDeviation( bottomPopulation )
+
+print 'N=', N
+print ( dd[s[-1]] - mm ) / vv, 'might be as high as five'
+print ( dd[s[N/2]] - mm ) / vv, 'should be about zero'
+
+plot( dd[s] )

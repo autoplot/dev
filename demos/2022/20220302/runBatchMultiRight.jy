@@ -1,0 +1,10 @@
+p1=getParam( 'p1', 1, 'p1', [1,2,3,4] )
+p2=getParam( 'p2', 6, 'p2', [6,7,8,9] )
+p3=getParam( 'p3', 'a', 'p3', ['a','b','c','d'] )
+p4=getParam( 'p4', 'x', 'p4', ['x','y','z'] )
+
+print p1, p2, p3, p4
+
+eu= Units.nominal()
+s= "%d %d<br>%s %s" % ( p1, p2, p3, p4 )
+plot( dataset( eu.createDatum(s) ), renderType='digital>fontSize=12em' )

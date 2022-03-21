@@ -1,0 +1,31 @@
+setScriptDescription('''Demonstrates new Waypoints Mouse Module, which allows a interval to be
+drawn through the data, possibly used to control a digitizer.''')
+
+from org.das2.event import BoxSelectionListener
+
+dummyData= link( linspace( '2022-02-28T00:00', '2022-02-28T24:00', 1441 ),
+                 logspace( 10,100,39 ),
+                 randn( 1441, 39 ) )
+
+dummyData[ findgen(1441), floor( 20 + sin( linspace(0,TAU,1441 ) ) * 10 ) ]= 10 + 10 * sin( linspace(0,TAU,1441 ) ) + randn(1441)
+dummyData[ 100:400,: ] = randn( 300, 39 )
+dummyData[ 800:1000,: ] = randn( 200, 39 )
+dummyData[ findgen(600)+600, floor( 30 + sin( linspace(PI,3*PI/2,600 ) ) * 10 ) ]= 30 * sin( linspace(0,PI,600) ) + randn(600)
+
+plot( dummyData, ylog=True, yrange=[10,100] )
+    
+from org.das2.event import WaypointsDragRenderer,WaypointsMouseModule,BoxSelectorMouseModule
+
+wpdr= WaypointsDragRenderer(dom.plots[0].controller.dasPlot)
+wpmm= WaypointsMouseModule( dom.plots[0].controller.dasPlot,wpdr,"digitize")
+
+dom.plots[0].controller.dasPlot.addMouseModule(wpmm)
+dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().primaryModule= wpmm
+
+class MyBoxSelectionListener(BoxSelectionListener):
+    def boxSelected( self,evt ):
+        for x in xtags( dummyData ):
+            rr= wpmm.whereWithin( x, ytags(dummyData) )
+            if rr!=None: print rr
+            
+wpmm.addBoxSelectionListener(MyBoxSelectionListener())

@@ -1,0 +1,33 @@
+setScriptDescription('Demo 1,000,000 point scatter using rgbColor units')
+setScriptTitle('Scatter with rgbColor Units')
+
+from java.lang import System
+print 'java.version=', System.getProperty('java.version')
+     
+N= getParam( 'N', 1000000, 'number of points' )
+size= getParam( 'symbolSize', 5, 'symbol size in pixels', { "min":1, "max":20 } )
+
+img= getDataSet( PWD + 'extentionCords.png' )
+imgx= linspace( -5,5, img.length() )
+imgy= linspace( -5,5, img.length(0) )
+img= link( imgx, imgy, img )
+
+randomSeed(0)
+
+x= randn(N)
+y= randn(N)
+
+zr= interpolate( img[:,:,0], findex( imgx, x ), findex( imgy, y ) )
+zg= interpolate( img[:,:,1], findex( imgx, x ), findex( imgy, y ) )
+zb= interpolate( img[:,:,2], findex( imgx, x ), findex( imgy, y ) )
+
+z= rgbColorDataset( zr, zg, zb )
+
+r= where( abs( atan2( y, x ) ).lt( PI/16 ) )
+z[r]= Color.BLUE.RGB
+
+annotation( 0, text='%d colored points' % N, anchorPosition='outsideNNW',
+            anchorType='canvas', anchorOffset='0em,0em' )
+ 
+plot( x, y, z, symbolSize=size )
+dom.plots[0].zaxis.visible=False

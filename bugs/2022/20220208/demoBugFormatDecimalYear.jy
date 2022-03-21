@@ -1,0 +1,12 @@
+setScriptDescription('''Demos problem with decimal year handling.
+See https://sourceforge.net/p/autoplot/bugs/2432/.''')
+
+decimalYear1= 2019.99
+decimalYear2= 2021.01
+
+print '####'
+dtm= Units.decimalYear.createDatum(decimalYear1)
+print dtm.isFill()
+print dtm
+print DatumRange.newDatumRange(decimalYear1, decimalYear2, Units.decimalYear );
+print '####'

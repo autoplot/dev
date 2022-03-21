@@ -1,0 +1,40 @@
+from org.das2.util import FileUtil
+setScriptDescription('''Look for a rocache.txt file that points to the local clone
+of this repo.  This assumes the editor has a file like 
+"/home/jbf/autoplot_data/fscache/https/github.com/autoplot/dev/ loaded, and 
+marches up the fscache tree looking for the rocache.txt file.''')
+
+from java.lang import ProcessBuilder
+from java.io import File, InputStreamReader, BufferedReader
+from java.util.regex import Pattern
+from org.das2.util.filesystem import FileSystem
+from javax.swing import JOptionPane
+
+script= File( getApplication().getScriptPanel().getFilename() )
+
+print '******'
+print script
+print '******'
+
+child= script.getName();
+dirp= script.getParentFile()
+
+while ( not File( dirp, 'ro_cache.txt' ).exists() ):
+    child= dirp.getName() + "/" + child;
+    dirp= dirp.getParentFile()
+    if ( dirp==None ):
+        break
+    if ( FileSystem.settings().localCacheDir.equals(dirp) ):
+        break
+        
+if ( dirp==None or not File( dirp, 'ro_cache.txt' ).exists() ):
+    raise Exception('unable to find ro_cache.txt file')
+    
+ss= FileUtil.readFileToString( File( dirp, 'ro_cache.txt' ) )
+ss= ss.strip()
+
+print File( dirp, 'ro_cache.txt' )
+print ss
+print child
+
+getApplication().getScriptPanel().filename= ss + '/' + child

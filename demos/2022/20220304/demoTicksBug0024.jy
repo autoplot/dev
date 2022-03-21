@@ -1,0 +1,25 @@
+setScriptDescription('Demos new bug with https://github.com/das-developers/das2java/issues/24#issuecomment-1059541723')
+
+from org.das2.graph import GraphUtil
+
+ticks= GraphUtil.calculateManualTicks( '+3hr/+0.05hr',datumRange('2022-03-04'),False)
+print ticks.getMinorTicks().getLength()
+print ticks.getMajorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(1)  #2022-03-04T00:00:00.000Z
+stop
+
+ticks= GraphUtil.calculateManualTicks( '+3hr/+1hr',datumRange('2022-03-04'),False)
+print ticks.getMajorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(0)  #2044-05-05T00:00:00.000Z
+print ticks.getMinorTicks().get(1)  #2044-05-05T01:00:00.000Z
+
+ticks= GraphUtil.calculateManualTicks( '+3hr/3',datumRange('2022-03-04'),False)
+print ticks.getMajorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(1)  #2022-03-04T01:00:00.000Z
+
+ticks= GraphUtil.calculateManualTicks( '+3hr/0,1,2',datumRange('2022-03-04'),False)
+print ticks.getMajorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(0)  #2022-03-04T00:00:00.000Z
+print ticks.getMinorTicks().get(1)  #2022-03-04T00:00:00.000Z

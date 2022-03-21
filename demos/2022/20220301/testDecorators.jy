@@ -1,0 +1,46 @@
+setScriptDescription('shows how updates work with top and bottom decorators')
+
+from java.beans import PropertyChangeListener
+from javax.swing import JSlider,JPanel,JLabel
+from org.das2.util import ColorUtil
+from org.das2.graph import Painter
+from java.awt import BasicStroke
+from java.awt.geom import Line2D
+plot( randn(2000), randn(2000), symbolSize=20 )
+
+topPos= JSlider(200,400,200)
+bottomPos= JSlider(200,400,300)
+canvasPos= JSlider(200,400,400)
+
+class FeedbackPainter( Painter ):
+    def __init__(self,color,slider):
+        self.color= color
+        self.slider= slider
+    def paint( self, g ):
+        g.color= self.color
+        g.stroke= BasicStroke(20)
+        r= self.slider.value + float( randu()*20 )
+        g.draw( Line2D.Double( r, 0, r, 1000 ) )
+                 
+dom.plots[0].controller.dasPlot.setTopDecorator( FeedbackPainter(Color.BLUE, topPos ) )
+dom.plots[0].controller.dasPlot.setBottomDecorator( FeedbackPainter(ColorUtil.DARK_VIOLET, bottomPos ) )
+dom.canvases[0].controller.dasCanvas.removeTopDecorators()
+dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter(ColorUtil.CHOCOLATE, canvasPos ) )
+
+panel= JPanel()
+panel.add( JLabel('bottom:') )
+panel.add( bottomPos )
+panel.add( JLabel('top:') )
+panel.add( topPos )
+panel.add( JLabel('canvas:') )
+panel.add( canvasPos )
+
+getApplication().setBottomPanel(panel)
+                
+def stateChanged(e):
+   dom.plots[0].controller.dasPlot.invalidateCacheImage()  # <-- this is the trick...
+   dom.canvases[0].controller.dasCanvas.repaint()
+   
+topPos.stateChanged= stateChanged
+bottomPos.stateChanged= stateChanged
+canvasPos.stateChanged= stateChanged

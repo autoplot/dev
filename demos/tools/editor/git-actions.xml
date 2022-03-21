@@ -36,6 +36,11 @@
                 <description>Open the upstream version of the file to confirm that changes where pushed properly.</description>
             </bookmark>
             <bookmark>
+                <title>Open Local clone</title>
+                <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/openDownstream.jy</uri>
+                <description>Open the local clone which is pointed to by ro_cache.txt.</description>
+            </bookmark>            
+            <bookmark>
                 <title>Open Terminal</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/openTerminal.jy</uri>
             </bookmark>

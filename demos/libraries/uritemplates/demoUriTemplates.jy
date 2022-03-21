@@ -1,0 +1,17 @@
+from org.das2.jythoncompletion import JavadocLookup
+setScriptDescription('''Download the jar file for URITemplates and show its use.''')
+
+lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import URITemplate
+#URITemplate('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)').format
+#print URITemplate.formatRange(String,String,String)
+
+print URITemplate('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)').format('2020-10-30','2020-10-30')
+print (URITemplate.formatRange('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-01)','2020-01-03','2020-01-04'))[0]
+
+# see https://github.com/hapi-server/uri-templates/issues/7
