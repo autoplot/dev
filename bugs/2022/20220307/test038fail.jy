@@ -1,9 +1,28 @@
+from java.util import HashMap
 setScriptDescription('The xaxis autoranging has suddenly changed.  When and why?')
 
-from org.autoplot import RenderType
+doPlot= getParam( 'doPlot', True, 'plot the data', [ True, False ] )
+
+from org.autoplot import RenderType,AutoRangeUtil
 ds= getDataSet( PWD + '/output_background_removal_wfr.dat?bundle=:' )
-plot( ds[:,0], ds[:,1], ds[:,2] )
-waitUntilIdle()
+print xtags(ds).property(QDataSet.SCALE_TYPE)
+
+
+if ( not doPlot ):
+
+   yy=  AutoRangeUtil.autoRange(ds,mm,True)
+   print yy, yy.property( QDataSet.SCALE_TYPE )
+   
+   xx= xtags( ds )
+   print xx, xx.property( QDataSet.SCALE_TYPE )
+   
+   mm= HashMap()
+   ard=  AutoRangeUtil.autoRange(xx,mm,True)
+   print ard.log, ard.range
+   
+else:
+   plot( ds[:,0], ds[:,1], ds[:,2] )
+   waitUntilIdle()
 
 # The problem is this resolves to log now.
 
