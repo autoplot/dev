@@ -1,0 +1,18 @@
+from org.das2.qds import DataSetOps,DataSetUtil
+# See https://sourceforge.net/p/autoplot/bugs/1582/
+# See sftp://jfaden.net/home/jbf/ct/autoplot/u/2022/jonn/20220223/het_dth_comparison.vap
+# See https://github.com/autoplot/dev/tree/master/bugs/2022/20220307
+# see https://github.com/autoplot/dev/tree/master/bugs/sf/1582
+
+print '|Case|id|expected|got|'
+print '|----|--|----|----|'
+
+c1= getDataSet( 'file:///home/jbf/ct/jenkins/data.backup/cdf/cadence/psp_isois-epihi_l2-het-rates60_20211028_v0.0.0.cdf?A_H_Flux' )
+yy= c1.property( QDataSet.DEPEND_1 )
+s1= DataSetUtil.guessCadenceNew(yy,None)
+print '|1|Jonn|log|%s|' % s1
+
+ds= getDataSet( 'https://github.com/autoplot/dev/blob/master/bugs/2022/20220307/output_background_removal_wfr.dat?bundle=:' )
+s1= DataSetUtil.guessCadenceNew(xtags(ds),None)
+print '|2|test038|lin|%s|' % s1
+
