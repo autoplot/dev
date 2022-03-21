@@ -1,0 +1,13 @@
+setScriptDescription('The xaxis autoranging has suddenly changed.  When and why?')
+
+from org.autoplot import RenderType
+ds= getDataSet( PWD + '/output_background_removal_wfr.dat?bundle=:' )
+plot( ds[:,0], ds[:,1], ds[:,2] )
+waitUntilIdle()
+
+# The problem is this resolves to log now.
+
+#dom.plots[0].xaxis.log=False
+#dom.plotElements[0].renderType= RenderType.valueOf('digital')
+#dom.plotElements[0].renderControl= 'format=%d&fontSize=0.6em'
+
