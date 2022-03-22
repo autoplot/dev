@@ -1,0 +1,26 @@
+setScriptDescription('Shows but where zero-length dataset is part of join')
+
+showBug= getParam( 'showBug', True, 'show the bug or false to just iterate', [ True,False] )
+
+ds1= randn(10,30)
+ds2= randn(0,20)
+ds3= randn(12,25)
+
+dss= join( join( ds1, ds2 ), ds3 )
+
+from org.das2.qds import QubeDataSetIterator
+it= QubeDataSetIterator(dss);
+
+i=0
+while it.hasNext():
+    it.next()
+    
+    if showBug:
+        print it.index(0), it.index(1), it.index(2), it.getValue(dss)
+    else:
+        print it.index(0), it.index(1), it.index(2) 
+    i=i+1
+    
+print i, 10*30 + 12 * 25
+
+
