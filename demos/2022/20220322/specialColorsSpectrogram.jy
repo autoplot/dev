@@ -1,0 +1,31 @@
+setScriptDescription('''Demonstrates new specialColors control for the spectrogram renderer.  The control
+specialColors is a comma-separated list of constraints and color to paint cells matching the constraint.
+Constraints can be:<ul>
+<li>just a number, and values equal to this are painted with the color.
+<li>gt(n),lt(n),eq(n): comparisons
+<li>within(0+to+10): within test.
+<li>without(0+to+10): outside of range
+</ul>
+The tests are evaluated in order.
+''')
+
+ds= distance( 300,300, 150,150, 25,25 ) \
+    + distance( 300,300, 250,150, 25,25 ) \
+    + distance( 300,300, 150,100, 25,25 )
+c= zeros(300,300)
+
+r= where( ds.lt(30) )
+c[r]= 1
+
+r= where( ds.lt(20) )
+c[r]= 2
+
+r= where( ds.lt(10) )
+c[r]= 3
+
+setLayout(2,3)
+plot( 0, ds )
+plot( 1, c )
+plot( 2, c, renderType='spectrogram>specialColors=3:blue,2:lightBlue,1:gray&rebin=lanlNearestNeighbor' )
+plot( 3, ds, renderType='spectrogram>specialColors=lt(30):blue,lt(20):lightBlue,lt(10):gray&rebin=lanlNearestNeighbor' )
+plot( 4, ds, renderType='spectrogram>specialColors=within(20+to+30):blue,within(10+to+20):lightBlue,within(0to10):gray&rebin=lanlNearestNeighbor' )
