@@ -1,0 +1,16 @@
+from org.das2.qds import DataSetUtil
+
+cache= getParam( 'cache', False, 'use cached data', [ True, False ] )
+
+if (cache):
+   # wget -O - 'http://voparis-das-maser.obspm.fr/das2/server?server=dataset&start_time=2017-05-09T06%3A50%3A00.000Z&end_time=2017-05-09T07%3A11%3A00.000Z&dataset=Cassini-RPWS-HFR%2Fn3e%2Fkronos_n3e_v' > /tmp/cached/Cassini-RPWS-HFR.d2s
+   ds= getDataSet( '/tmp/cached/Cassini-RPWS-HFR.d2s' )
+else:
+   ds= getDataSet( 'vap+das2server:http://voparis-das-maser.obspm.fr/das2/server?dataset=Cassini-RPWS-HFR/n3e/kronos_n3e_v&start_time=2017-05-09T06:50:00.000Z&end_time=2017-05-09T07:11:00.000Z' )
+   #formatDataSet(ds,'/tmp/cached/Cassini-RPWS-HFR.d2s' )
+   
+from org.das2.qds import LengthsDataSet
+
+lds= LengthsDataSet(ds)
+
+print DataSetUtil.totalLength(ds)
