@@ -1,0 +1,49 @@
+# Is QubeDataSetIterator really just for qubes?  This demonstrates that the iterator
+# worked for non-Qubes as well, which was my recollection.
+
+ds= ripplesJoinSpectrogramTimeSeries(40)
+
+for ds1 in ds:
+    print ds1
+    
+from org.virbo.dataset import QubeDataSetIterator
+iter= QubeDataSetIterator(ds)
+
+n1=0
+check1= 0.
+while ( iter.hasNext() ):
+    iter.next()
+    if ( iter.getValue(ds)>-100 ):
+        check1= check1+ iter.getValue( ds )
+    n1=n1+1
+print 'Using QubeDataSetIterator: ', n1, check1  
+
+n2=0
+check2= 0.
+for i in xrange(ds.length()):
+    print  ds.length(i), ds.length(i,1)
+    n2= n2 + ds.length(i) * ds.length(i,1)
+    ds2= ds.slice(i)
+    iter2= QubeDataSetIterator(ds2)
+    while ( iter2.hasNext() ):
+        iter2.next()
+        if ( iter2.getValue(ds2)>-100 ):
+            check2= check2+ iter2.getValue( ds2 )
+print 'counting up each of the qubes: ', n2, check2
+
+                        #dsb= DataSetBuilder(0)
+                        #dsb.putValue(-1,123)
+                        #dsb.nextRecord()
+                        #dsb.putProperty( QDataSet.UNITS, Units.euros )
+from org.virbo.dataset import DataSetUtil
+ds0= DataSetUtil.asDataSet( 123, Units.euros )
+
+n0=0
+check0= 0.
+iter0= QubeDataSetIterator(ds0)
+while ( iter.hasNext() ):
+    iter.next()
+    check0= check0+ iter.getValue( ds )
+    n0= n0+1
+
+print 'ERROR>>>>  Rank 0 Using QubeDataSetIterator: ', n0, check0  
