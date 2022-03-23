@@ -1,4 +1,4 @@
-setScriptDescription('Shows but where zero-length dataset is part of join')
+setScriptDescription('Shows where zero-length dataset is part of join is working with data set iterator')
 
 showBug= getParam( 'showBug', False, 'show the bug or false to just iterate', [ True,False] )
 constraints={ 'values':[0,1,2,3,4,5,6,7], 'labels':['deft','rank1','rank2','sl1_ds','case4','vop','vopok','case4s'] }
