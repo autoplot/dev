@@ -99,12 +99,9 @@
         <property class="PlotElement" length="1" name="plotElements">
             <PlotElement id="plotElement_0">
                 <property name="active" type="Boolean" value="true"/>
-                <property default="false" name="autoComponent"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoLabel"
-                    type="Boolean" value="true"/>
-                <property default="false" name="autoRenderType"
-                    type="Boolean" value="true"/>
+                <property name="autoComponent" type="Boolean" value="false"/>
+                <property name="autoLabel" type="Boolean" value="false"/>
+                <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
                 <property default="" name="dataSourceFilterId"
@@ -279,7 +276,7 @@
                 <property name="legendPosition"
                     type="enum:org.das2.graph.LegendPosition" value="NE"/>
                 <property default="" name="rowId" type="String" value="row_1"/>
-                <property default="" name="ticksURI" type="String" value="file:/home/jbf/ct/autoplot/git/dev/bugs/2022/20220324/slowEphemeris.jyds?timerange=Oct+2016"/>
+                <property default="" name="ticksURI" type="String" value="%{PWD}/slowEphemeris.jyds?timerange=Oct+2016"/>
                 <property default="" name="title" type="String" value="OMNI (1AU IP Data)  Dst - 1-hour Dst index (1963/001-2014/366), Provisional Dst (2015/001-2017/366), Quick-look Dst (2018/001-2022/075), from WDC Kyoto"/>
                 <property name="visible" type="Boolean" value="true"/>
                 <property name="xaxis" type="DomNode">
@@ -345,7 +342,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.13860 (dimensionless)"/>
+                            name="scale" type="datum" value="0.1386 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property default="true" name="visible"
                             type="Boolean" value="false"/>
