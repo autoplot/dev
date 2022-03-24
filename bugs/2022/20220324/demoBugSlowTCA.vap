@@ -45,7 +45,7 @@
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+cdaweb:ds=OMNI2_H0_MRG1HR&amp;id=DST1800&amp;timerange=Oct+2016"/>
+                <property name="uri" type="String" value=""/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
@@ -110,7 +110,7 @@
                 <property default="" name="dataSourceFilterId"
                     type="String" value="data_0"/>
                 <property name="displayLegend" type="Boolean" value="false"/>
-                <property default="" name="legendLabel" type="String" value="1-h Dst (nT)"/>
+                <property name="legendLabel" type="String" value=""/>
                 <property name="parent" type="String" value=""/>
                 <property name="plotDefaults" type="DomNode">
                     <Plot id="plot_defaults_0">
@@ -258,7 +258,8 @@
         </property>
         <property class="Plot" length="1" name="plots">
             <Plot id="plot_0">
-                <property name="autoBinding" type="Boolean" value="false"/>
+                <property default="false" name="autoBinding"
+                    type="Boolean" value="true"/>
                 <property default="false" name="autoLabel"
                     type="Boolean" value="true"/>
                 <property name="background" type="color" value="#00000000"/>
@@ -294,7 +295,7 @@
                         <property name="log" type="Boolean" value="false"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="us2000" value="Oct 2016"/>
+                            <datumRange units="us2000" value="Dec 2016"/>
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
@@ -353,7 +354,7 @@
             </Plot>
         </property>
         <property name="timeRange" type="datumRange">
-            <datumRange units="us2000" value="Oct 2016"/>
+            <datumRange units="us2000" value="Dec 2016"/>
         </property>
     </Application>
 </vap>
