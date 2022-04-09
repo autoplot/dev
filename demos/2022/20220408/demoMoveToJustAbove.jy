@@ -1,0 +1,20 @@
+from org.autoplot.dom import DomUtil
+randomSeed(0)
+
+from org.das2.util import ColorUtil
+from java.awt import Color
+setLayoutOverplot(4)
+
+colors= [ ColorUtil.BROWN, ColorUtil.HOT_PINK, ColorUtil.CADET_BLUE, ColorUtil.CORNFLOWER_BLUE ]
+for i in xrange(4):
+   plot( i, randn(100) + 0.4*i, lineThick=20, color=colors[i] )
+   
+dom2= dom.copy()
+DomUtil.moveToJustBelow( dom2, dom2.plotElements[1].id, dom2.plotElements[3].id )
+dom.syncTo( dom2 )
+
+dom2= dom.copy()
+DomUtil.moveToJustAbove( dom2, dom2.plotElements[3].id, dom2.plotElements[1].id )
+dom.syncTo( dom2 )
+
+dom.plots[0].controller.moveToJustAbove( dom2.plotElements[1], dom2.plotElements[3] )
