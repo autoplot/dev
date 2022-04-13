@@ -1,7 +1,8 @@
 from org.das2.graph.SpectrogramRenderer import RebinnerEnum
 from org.autoplot.imagedatasource import ImageDataSourceFormat
 from org.das2.graph import DasColorBar
-setScriptDescription('reverse the color transform so that the correct colorbar is used to show each rebin mode')
+
+setScriptDescription('paint a tiny 16x16 icon for particular rebin mode and colortable.')
 
 #tt= DasColorBar.Type
 #print tt.parse('black_blue')
