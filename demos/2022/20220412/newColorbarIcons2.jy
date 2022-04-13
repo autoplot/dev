@@ -1,0 +1,29 @@
+from org.das2.graph.SpectrogramRenderer import RebinnerEnum
+from org.autoplot.imagedatasource import ImageDataSourceFormat
+from org.das2.graph import DasColorBar
+setScriptDescription('reverse the color transform so that the correct colorbar is used to show each rebin mode')
+
+#tt= DasColorBar.Type
+#print tt.parse('black_blue')
+#vv= map( str, tt.getAllTypes() )
+#print vv[0]
+vv= ['color_wedge', 'apl_rainbow_black0', 'apl_rainbow_white0', 'gsfc_rp_special', 'matlab_jet', 'matlab_jet_black0', 'matlab_hsv', 'blue_to_orange', 'grayscale', 'inverse_grayscale', 'wrapped_color_wedge', 'blue_black_red', 'blue_white_red', 'black_red', 'black_green', 'black_blue', 'white_blue_black', 'inverse_white_blue_black', 'violet_yellow', 'scipy_plasma', 'aj4co_rainbow']
+ct= getParam( 'ct', 'grayscale', 'color table', vv )
+
+vv= [ 'binAverage' , 'nearestNeighbor' , 'lanlNearestNeighbor' , 'noInterpolate' , 'noInterpolateNoEnlarge' , 'binXinterpY' , 'interpXThenInterpY' , 'scatter' , 'triScat' , 'nnTriScat' ] 
+interp= getParam( 'interp', vv[0], 'interpolate type', vv )
+
+cb= dom.plots[0].getController().getDasColorBar()
+
+ttt= cb.getType()
+
+randomSeed(4006)
+
+zz= rand(8,8)+distance( 8, 8, 4, 15, 2, 2 )
+
+setCanvasSize(30,30)
+#setCanvasSize(300,300)
+
+plot( zz, xpos='10px,26px', ypos='10px,26px', colorTable=ct, renderType='spectrogram>rebin='+interp, xrange=[0,7], yrange=[0,7] )
+
+waitUntilIdle()
