@@ -1,0 +1,8 @@
+xx= randn(100)
+yy= randn(100)
+zz= exp( -sqrt( xx**2 + yy**2 ) )
+
+setLayout(2)
+
+plot( 0, xx, yy, zz, symbolSize=20 )
+plot( 1, xx, yy, symbolSize=20 )
