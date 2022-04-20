@@ -27,13 +27,16 @@ zz= rand(8,8)+distance( 8, 8, 4, 15, 2, 2 )
 #setCanvasSize(30,30)
 setCanvasSize(300,300)
 
-plot( zz, xpos='10px,26px', ypos='10px,26px', colorTable=ct, renderType='spectrogram>rebin='+interp, 
+plot( zz, xpos='9px,26px', ypos='9px,26px', colorTable=ct, renderType='spectrogram>rebin='+interp, 
       xrange=[0,7], yrange=[0,7], zrange=[5,10] )
 
 im= writeToBufferedImage()
 im2= im.getSubimage( 10,10,16,16 )
 
-f= '/tmp/ap/20220420/rebin_cb_%s_%s.png' % ( interp, ct )
+f= '/tmp/ap/20220420/rebin/cb_%s_%s.png' % ( interp, ct )
 
 writeToPng(im2,f,None)
+setStatus('wrote to '+f)
+print f
+
 waitUntilIdle()
