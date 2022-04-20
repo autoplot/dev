@@ -1,0 +1,33 @@
+setLayout( 3,3 )
+
+randomSeed(0)
+ds= link( rand(20), rand(20), rand(20) )
+plot( 0, ds )
+
+randomSeed(0)
+ds= link( rand(200), rand(200), rand(200) )
+plot( 1, ds, symbolSize=1  )
+
+randomSeed(0)
+ds= link( rand(20), rand(20), rand(20) )
+plot( 2, ds, symbolSize=10 )
+
+randomSeed(0)
+ds= link( rand(20), rand(20) )
+plot( 3, ds, symbolSize=10, lineStyle=None  )
+
+randomSeed(0)
+ds= link( rand(200), rand(200) )
+plot( 4, ds, symbolSize=1, lineStyle=None  )
+
+randomSeed(0)
+ds= link( rand(20), rand(20), rand(20) )
+plot( 6, ds, symbolSize=10, symbol='stars' )
+
+randomSeed(0)
+ds= link( rand(20), rand(20) )
+plot( 7, ds, symbolSize=10, lineStyle=None, symbol='stars'  )
+
+randomSeed(0)
+ds= link( rand(200), rand(200) )
+plot( 8, ds, symbolSize=1, lineStyle=None, symbol='stars'  )
