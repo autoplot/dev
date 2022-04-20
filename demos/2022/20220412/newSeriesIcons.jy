@@ -2,32 +2,32 @@ setLayout( 3,3 )
 
 randomSeed(0)
 ds= link( rand(20), rand(20), rand(20) )
-plot( 0, ds )
+plot( 0, ds, legendLabel='data' )
 
 randomSeed(0)
 ds= link( rand(200), rand(200), rand(200) )
-plot( 1, ds, symbolSize=1  )
+plot( 1, ds, symbolSize=1, legendLabel='data'  )
 
 randomSeed(0)
 ds= link( rand(20), rand(20), rand(20) )
-plot( 2, ds, symbolSize=10 )
+plot( 2, ds, symbolSize=10, legendLabel='data' )
 
 randomSeed(0)
 ds= link( rand(20), rand(20) )
-plot( 3, ds, symbolSize=10, lineStyle=None  )
+plot( 3, ds, symbolSize=10, lineStyle=None, legendLabel='data'  )
 
 randomSeed(0)
 ds= link( rand(200), rand(200) )
-plot( 4, ds, symbolSize=1, lineStyle=None  )
+plot( 4, ds, symbolSize=1, lineStyle=None, legendLabel='data'  )
 
 randomSeed(0)
 ds= link( rand(20), rand(20), rand(20) )
-plot( 6, ds, symbolSize=10, symbol='stars' )
+plot( 6, ds, symbolSize=10, symbol='stars', legendLabel='data' )
 
 randomSeed(0)
 ds= link( rand(20), rand(20) )
-plot( 7, ds, symbolSize=10, lineStyle=None, symbol='stars'  )
+plot( 7, ds, symbolSize=10, lineStyle=None, symbol='stars', legendLabel='data' )
 
 randomSeed(0)
 ds= link( rand(200), rand(200) )
-plot( 8, ds, symbolSize=1, lineStyle=None, symbol='stars'  )
+plot( 8, ds, symbolSize=1, lineStyle=None, symbol='stars', legendLabel='data'  )
