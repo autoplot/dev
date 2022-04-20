@@ -1,3 +1,4 @@
+from javax.imageio import ImageIO
 from org.das2.graph.SpectrogramRenderer import RebinnerEnum
 from org.autoplot.imagedatasource import ImageDataSourceFormat
 from org.das2.graph import DasColorBar
@@ -20,11 +21,19 @@ ttt= cb.getType()
 
 randomSeed(4006)
 
+#zz= rand(8,8)+distance( 8, 8, 4, 15, 1.0, 1.0 )
 zz= rand(8,8)+distance( 8, 8, 4, 15, 2, 2 )
 
-setCanvasSize(30,30)
-#setCanvasSize(300,300)
+#setCanvasSize(30,30)
+setCanvasSize(300,300)
 
-plot( zz, xpos='10px,26px', ypos='10px,26px', colorTable=ct, renderType='spectrogram>rebin='+interp, xrange=[0,7], yrange=[0,7] )
+plot( zz, xpos='10px,26px', ypos='10px,26px', colorTable=ct, renderType='spectrogram>rebin='+interp, 
+      xrange=[0,7], yrange=[0,7], zrange=[5,10] )
 
+im= writeToBufferedImage()
+im2= im.getSubimage( 10,10,16,16 )
+
+f= '/tmp/ap/20220420/rebin_cb_%s_%s.png' % ( interp, ct )
+
+writeToPng(im2,f,None)
 waitUntilIdle()
