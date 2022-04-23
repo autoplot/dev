@@ -1,0 +1,4 @@
+t= getParam( 'tr', '2019-12-04', 'interval', [ '2019-12-01', '2019-12-02', '2019-12-04', '2019-12-05', '2019-12-07' ] )
+rbspa= getDataSet('vap+hapi:http://hapi-server.org/servers/SSCWeb/hapi?id=rbspa&parameters=Time,X_GEO,Y_GEO,Z_GEO',t)
+rbspa.putProperty( QDataSet.DEPEND_0, None )
+plot( rbspa, renderType='colorScatter', symbolSize=10 )

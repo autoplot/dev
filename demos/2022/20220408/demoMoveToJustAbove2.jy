@@ -1,0 +1,28 @@
+from javax.swing import JOptionPane
+from org.autoplot.dom import DomUtil
+
+from org.das2.util import ColorUtil
+from java.awt import Color
+setLayoutOverplot(4)
+
+colors= [ ColorUtil.BROWN, ColorUtil.HOT_PINK, ColorUtil.CADET_BLUE, ColorUtil.CORNFLOWER_BLUE ]
+for i in xrange(4):
+    a= toRadians( i * 30 )
+    ds= link( cos(a)*[-1,0,1,2,3], sin(a)*[-1,0,1,2,3] )
+    plot( i, ds, lineThick=20, color=colors[i] )
+   
+x= JOptionPane.showConfirmDialog(getApplication(),'Move 3 just below 1')
+
+dom2= dom.copy()
+DomUtil.moveToJustBelow( dom2, dom2.plotElements[1].id, dom2.plotElements[3].id )
+dom.syncTo( dom2 )
+
+x= JOptionPane.showConfirmDialog(getApplication(),'Move 1 just below 3')
+
+dom2= dom.copy()
+DomUtil.moveToJustAbove( dom2, dom2.plotElements[3].id, dom2.plotElements[1].id )
+dom.syncTo( dom2 )
+
+x= JOptionPane.showConfirmDialog(getApplication(),'controller Move 3 just above 1')
+
+dom.plots[0].controller.moveToJustAbove( dom2.plotElements[1], dom2.plotElements[3] )

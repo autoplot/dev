@@ -1,0 +1,93 @@
+setScriptDescription('Shows where zero-length dataset is part of join is working with data set iterator')
+
+showBug= getParam( 'showBug', False, 'show the bug or false to just iterate', [ True,False] )
+constraints={ 'values':[0,1,2,3,4,5,6,7], 'labels':['deft','rank1','rank2','sl1_ds','case4','vop','vopok','case4s'] }
+case= getParam( 'case', 7, 'the case number', constraints )
+if case==0:
+    rank= getParam( 'rank', 2, 'The rank of each bundled dataset', [ 1, 2 ] )
+
+if ( case==0 ):
+    if rank==1:
+        ds1= zeros(3)
+        ds2= zeros(0)
+        ds3= zeros(2)
+    else:
+        ds1= zeros(3,4)
+        ds2= zeros(0,3)
+        ds3= zeros(2,5)
+    dss= join( join( ds1, ds2 ), ds3 )
+elif ( case==1 ):
+    ds1= zeros(3)
+    ds2= zeros(0)
+    ds3= zeros(2)    
+    dss= join( join( ds1, ds2 ), ds3 )
+elif ( case==2 ):
+    ds1= zeros(3,4)
+    ds2= zeros(0,3)
+    ds3= zeros(2,5)    
+    dss= join( join( ds1, ds2 ), ds3 )
+elif ( case==3 ):
+    ds1= zeros(3,0)
+    ds2= zeros(3,0)
+    ds3= zeros(2,5)
+    dss= join( join( ds1, ds2 ), ds3 )
+elif ( case==4 ):
+    ds1= zeros(0,4)
+    ds2= zeros(3,0)
+    ds3= zeros(2,5)
+    dss= join( join( ds1, ds2 ), ds3 )
+elif ( case==5 ):
+    #dss= getDataSet( 'vap+das2server:http://voparis-das-maser.obspm.fr/das2/server?dataset=Cassini-RPWS-HFR/n3e/kronos_n3e_v&start_time=2017-05-09T06:50:00.000Z&end_time=2017-05-09T07:11:00.000Z' )
+    ds1= zeros( 0,  17 )
+    ds2= zeros( 2,  21 )
+    ds3= zeros( 0,  16 )
+    ds4= zeros( 0,  46 )
+    dss= join( join( join( ds1, ds2 ), ds3 ), ds4 )
+elif ( case==6 ):
+    #dss= getDataSet( 'vap+das2server:http://voparis-das-maser.obspm.fr/das2/server?dataset=Cassini-RPWS-HFR/n3e/kronos_n3e_v&start_time=2017-05-09T06:50:00.000Z&end_time=2017-05-09T07:11:00.000Z' )
+    ds1= zeros( 0,  17 )
+    ds2= zeros( 2,  21 )
+    ds3= zeros( 0,  16 )
+    ds4= zeros( 1,  21 )
+    dss= join( join( join( ds1, ds2 ), ds3 ), ds4 )
+elif ( case==7 ):
+    ds1= zeros(0,4)
+    ds2= zeros(2,5)
+    dss= join( ds1, ds2 )
+from org.das2.qds import QubeDataSetIterator,DataSetUtil
+it= QubeDataSetIterator(dss);
+
+rank=dss.rank()
+
+print 'dss,rank=', dss, rank
+for i in range(dss.length()):
+    print dss[i]
+    if i>6:
+        print '...'
+        break
+        
+itertot=0
+while it.hasNext():
+    it.next()
+    itertot=itertot+1
+    if itertot<66:
+        if showBug:
+            if rank==2:
+                print it.index(0), it.index(1), it.getValue(dss)
+            elif rank==3:
+                print it.index(0), it.index(1), it.index(2), it.getValue(dss)
+        else:
+            if rank==2:
+                print it.index(0), it.index(1)
+            elif rank==3:
+                print it.index(0), it.index(1), it.index(2) 
+    
+tot= 0
+for i in xrange(len(dss)):
+    tot= tot + DataSetUtil.product( DataSetUtil.qubeDims(dss[i]) )
+print itertot, tot, 'itertot,tot'
+
+if ( itertot!=tot ):
+    raise Exception("incorrect iterator total")
+    
+

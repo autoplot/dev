@@ -1,0 +1,42 @@
+setScriptTitle('Demo Params 20190726')
+setScriptDescription('Demonstration of how different parameters are used to create a plot.  This is of fake data, showing enumerations and continuous parameters.')
+
+nc= getParam( 'nc', 3, 'number of centers', [ 1,2,3,4,5 ] )
+noise= getParam( 'noise', 0.4, 'noise level' )
+size= getParam( 'size', 400, 'number of cells', [ 100,400 ] )
+interference= getParam( 'interference', 'F', 'add interference line', ['T','F'] )
+sc= getParam( 'sc', 'Z1', 'the spacecraft name', ['Z1','Z2','Z3'] )
+font= getParam( 'font', 'xkcd Script', 'font to use', ['xkcd Script','sans','Scheme Bk', 'Roboto' ] )
+
+print xrange(10)
+
+reset()
+dom.options.canvasFont= font + '-16'
+setCanvasSize(800,600)
+
+if ( sc=='Z1' ):
+    randomSeed(0)
+elif ( sc=='Z2' ):
+    randomSeed(1)
+elif ( sc=='Z3' ):
+    randomSeed(2)
+
+result= rand(size,size)*noise
+for i in xrange(nc):
+    x= randn()*40 + size/2 
+    y= randn()*40 + size/2 
+    result= result + 1/exp(distance( size, size, float(x), float(y), 10, 10 ))
+
+if ( interference=='T' ):
+    result[:,size*4/5]= 3.4
+
+for i in xrange(size):
+     result[ i,i ] = 1
+    
+plot( result, title='Fake Data From '+sc )
+
+def xrange(i):
+    print 'new xrange'
+    
+print xrange(10)
+

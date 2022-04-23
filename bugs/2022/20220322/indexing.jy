@@ -1,0 +1,181 @@
+setScriptDescription('''demo of different indexing.  I couldn't find a good script to do this, so I'm writing a new one.  It should validate each branch in PyQDataSet.__getitem__.''')
+
+getDocumentModel().getOptions().setAutolayout(False)
+getDocumentModel().getCanvases(0).getMarginColumn().setRight("100%-10em")
+setCanvasSize( 400, 400 );
+            
+ds2= ripples(40,40)
+ds1= ripples(40)
+ds3= ripplesJoinSpectrogramTimeSeries(40)
+
+# rank 1 list of indices are used to index rank 1 dataset
+r_1= where( ds1.gt(0) )
+print r_1
+print ds1[r_1]
+ds1c= copy(ds1)
+ds1c[r_1]= -2
+plotx( ds1c, title='rank1 indices'  )
+writeToPng('test037_indexing_001.png')
+formatDataSet(ds1c,'test037_indexing_001.qds')
+
+# rank 2 bundle of indices
+r_2= where( ds2.gt(0) )
+print r_2
+print ds2[r_2]
+ds2c= copy(ds2)
+ds2c[r_2]= -2
+plotx( ds2c, title='rank2 indices' )
+writeToPng('test037_indexing_002.png')
+formatDataSet(ds2c,'test037_indexing_002.qds')
+
+## rank 3 join dataset
+#r_3= where( ds3.gt(0) )
+#print r_3
+#print ds3[r_3]
+#ds3c[r_3]= 0
+#plot( ds3c )
+#writeToPng('test003.png')
+#formatDataSet(ds3c,'test_003.qds')
+
+# test all, index
+ds2c= copy(ds2)
+ds2c[:,3]= -2
+plot( ds2c )
+writeToPng('test037_indexing_004.png' )
+formatDataSet(ds2c,'test037_indexing_004.qds' )
+
+# test all, index list
+ds2c= copy(ds2)
+ds2c[:,r_1]= -2
+plotx( ds2c, title='all, index list' )
+writeToPng('test037_indexing_005.png')
+formatDataSet(ds2c,'test037_indexing_005.qds')
+
+# test index list, all
+ds2c= copy(ds2)
+ds2c[r_1,:]= -2
+plotx( ds2c, title='index list, all' )
+writeToPng('test037_indexing_006.png')
+formatDataSet(ds2c,'test037_indexing_006.qds')
+
+# test two index lists with the same length
+ds2c= copy(ds2)
+ds2c[r_1,r_1]= 0
+plotx( ds2c, title='two index lists with the same length' )
+writeToPng('test037_indexing_020.png')
+
+
+# test two index lists assign
+ds2c= copy(ds2)
+plot( ds2c[r_1,r_1] )
+writeToPng('test037_indexing_021.png')
+
+# other tests below.
+ds2c= copy(ds2)
+ds2c[13:15,:]= -2
+plotx( ds2c, title='slice, all' )
+writeToPng('test037_indexing_007.png')
+formatDataSet(ds2c,'test037_indexing_007.qds')
+
+ds2c= copy(ds2)
+ds2c[:,13:15]= -2
+plotx( ds2c, title='all, slice' )
+writeToPng('test037_indexing_008.png')
+formatDataSet(ds2c,'test037_indexing_008.qds')
+
+ds2c= copy(ds2)
+ds2c[:,13:30:4]= -2
+plotx( ds2c, title='all, slice with skip' )
+writeToPng('test037_indexing_009.png')
+formatDataSet(ds2c,'test037_indexing_009.qds')
+
+ds2c= copy(ds2)
+ds2c[13:30,13:30:4]= -2
+plotx( ds2c, title='slice, slice with skip' )
+writeToPng('test037_indexing_010.png')
+formatDataSet(ds2c,'test037_indexing_010.qds')
+
+ds2c= copy(ds2)
+ds2c[14,13:30:4]= -2
+plotx( ds2c, title='index, slice with skip' )
+writeToPng('test037_indexing_011.png')
+formatDataSet(ds2c,'test037_indexing_011.qds')
+
+ds2c= copy(ds2)
+ds2c[14:20,13:19]=transpose(ds2c[1:7,2:8])-2
+plotx( ds2c, title='getitem,setitem' )
+writeToPng('test037_indexing_012.png')
+formatDataSet(ds2c,'test037_indexing_012.qds')
+
+# The following 4 modes have issues!
+
+# getitem with dataset array
+ds1c= copy(ds1)
+idx= dataset([13,14,15,16])
+plotx( ds1c[idx], title='getitem with dataset array' )
+writeToPng('test037_indexing_013.png')
+formatDataSet(ds1c,'test037_indexing_013.qds')
+
+# getitem with python array.  See https://sourceforge.net/p/autoplot/bugs/1623/
+ds1c= copy(ds1)
+idx= [13,14,15,16]
+plotx( ds1c[idx], title='getitem with python array' )
+writeToPng('test037_indexing_014.png')
+formatDataSet(ds1c[idx],'test037_indexing_014.qds')
+
+# setitem with dataset array
+ds1c= copy(ds1)
+idx= dataset( [13,14,15,16] )
+ds1c[idx]=-2
+plotx( ds1c, title='setitem with dataset array' )
+writeToPng('test037_indexing_015.png')
+formatDataSet(ds1c,'test037_indexing_015.qds')
+
+# setitem with python array.  See https://sourceforge.net/p/autoplot/bugs/1623/
+ds1c= copy(ds1)
+idx= [13,14,15,16]
+ds1c[idx]=-2
+plotx( ds1c, title='setitem with python array' )
+writeToPng('test037_indexing_016.png')
+formatDataSet(ds1c,'test037_indexing_016.qds')
+
+# negative indices with setItem
+ds2c= zeros(10,10)
+ds2c[-1,:]= 1
+ds2c[-2,[2,3,4,5]]= 2
+ds2c[:,-3]= 3
+plot( ds2c, title='setitem with python array' )
+writeToPng('test037_indexing_017.png')
+formatDataSet( ds2c,'test037_indexing_017.qds')
+
+# negative indices with getItem
+ds=getDataSet('http://autoplot.org/data/14MB.qds',monitor)
+r=where(ds.gt(1e5))
+plot(ds[r],title='My Data')
+print ds[r[0,0],r[0,1]]
+print r[-1]
+print r[-1,0],r[-1,1]
+print ds[r[-1,0],r[-1,1]]
+print ds[r[-1]]
+
+# https://sourceforge.net/p/autoplot/bugs/2134/ negative increment means reverse array
+randomSeed(0)
+ds= distance( 20,300, 150,150, 25,30 ) + randn(20,300)/10
+ds= link( indgen(20), linspace(15,30,300), ds )
+ds= ds[:,::-1]
+plot( ds )
+formatDataSet(ds,'test037_indexing_018.qds')
+
+ds= getDataSet( 'https://jfaden.net/git/jbfaden/public/blob/master/u/jeremy/2020/20200105/Screenshot_20200101.png' )
+
+setLayout(2,2)
+plot(0,ds)
+plot(1,ds[::-1],renderType='image')
+plot(2,ds[:,::-1],renderType='image')
+plot(3,ds[::-1,::-1],renderType='image')
+writeToPng('test037_indexing_019.png')
+
+# indexing is just slicing, so you can have fewer indices than are needed
+ds= getDataSet( 'https://jfaden.net/git/jbfaden/public/blob/master/u/jeremy/2020/20200105/Screenshot_20200101.png' )
+print ds[188,192], 'result is rank 1 slice'
+

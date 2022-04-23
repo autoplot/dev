@@ -1,0 +1,25 @@
+from java.awt import BorderLayout
+from javax.swing import JSlider,JPanel,BoxLayout,JLabel
+randomSeed(0)
+
+rt= getParam( 'rt', 'nnSpectrogram', 'Render Type', ['nnSpectrogram','spectrogram'] )
+
+def adjust(evt):
+    dt= jslider.value/100.
+    ds= randn(300,30)
+    yy= findgen(30)
+    yy[0]= yy[0]-dt
+    yy[-1]= yy[-1]+dt
+    xx= linspace( 0, 1, 300 )
+    plot( xx, yy, ds, renderType=rt )
+
+panel= JPanel()
+panel.setLayout( BoxLayout(panel,BoxLayout.X_AXIS ) )
+panel.add( JLabel("first and last offset" ) )
+jslider= JSlider(0,100,stateChanged=adjust)
+panel.add(jslider)
+getApplication().setBottomPanel(panel)
+
+adjust(None)
+
+

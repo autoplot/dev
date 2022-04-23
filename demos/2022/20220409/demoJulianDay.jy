@@ -1,0 +1,17 @@
+setScriptDescription( 'https://core2.gsfc.nasa.gov/time/mjd2000.html' )
+
+lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+julday= getParam( 'julday', 2451545, 'the julian day' )
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import TimeUtil
+
+print 'input julian day is %d' % julday
+time=TimeUtil.fromJulianDay( julday )
+print time
+print TimeUtil.julianDay( time[0], time[1], time[2] )
+

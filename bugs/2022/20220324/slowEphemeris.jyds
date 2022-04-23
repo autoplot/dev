@@ -1,0 +1,17 @@
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+
+dst= getDataSet( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800',tr )
+kp1= getDataSet( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=KP1800',tr )
+
+tt= xtags( dst )
+
+r= where( within( tt, tr ) )
+
+tt= tt[r]
+dst= dst[r]
+kp1= kp1[r]
+
+sleep(10000)
+
+result= link( dst.property(QDataSet.DEPEND_0), bundle( dst, kp1 ) )
+
