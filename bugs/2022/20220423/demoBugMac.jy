@@ -1,8 +1,10 @@
+from java.io import File
 setScriptDescription('''We've noticed that a FileChooser dialog cannot be used to open files
 in /Users/jbf/Desktop (or other mac people's computers).  This shows that it's apparently
 a Java/Mac problem, because there's no misconfiguration done here.''')
 
 from javax.swing import JFileChooser
 jfc= JFileChooser()
+jfc.currentDirectory= File( '/Users/jbf/Desktop' )
 jfc.showOpenDialog(getApplication())
 print jfc.selectedFile
