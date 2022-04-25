@@ -1,0 +1,12 @@
+reset()
+
+randomSeed(0)
+ds1= accum( randn(100) ) + randn()*10
+
+randomSeed(1)
+ds2= accum( randn(100) ) + 10
+
+
+p,pe= plot( 0, ds1, symbol=None, legendLabel='data' )
+plot( 1, ds2, lineThick=3, symbol=None, legendLabel='data', overplotOf=p  )
+
