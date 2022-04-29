@@ -1,0 +1,35 @@
+setScriptDescription('''Experiment with https://localcoder.org/jfilechooser-cannot-select-desktop-when-selection-mode-is-file-and-directories''')
+
+
+from java.beans import PropertyChangeListener
+from javax.swing import JFileChooser
+from java.io import File
+
+from javax.swing import JFileChooser
+jfc= JFileChooser()
+
+class MyPCL(PropertyChangeListener): 
+    def propertyChange(self,e):
+        prop = e.getPropertyName()
+        
+        if (JFileChooser.DIRECTORY_CHANGED_PROPERTY==prop):
+            fileChooser =e.getSource()
+            currentDirectory = e.getNewValue()
+            
+            directory = currentDirectory.toString()
+            print directory
+            if (directory.endswith("Desktop")
+                or  directory.endswith("My Documents")):
+                selectedFile = fileChooser.getSelectedFile()
+                print '***', selectedFile
+                if (selectedFile == None or not selectedFile.equals(currentDirectory)):
+                    fileChooser.removePropertyChangeListener( self )
+                    fileChooser.setSelectedFile( currentDirectory )
+                    fileChooser.addPropertyChangeListener( self )
+                
+
+jfc.currentDirectory= File( '/Users/jbf/Desktop' )
+jfc.addPropertyChangeListener( MyPCL() )
+
+jfc.showOpenDialog(getApplication())
+print jfc.selectedFile
