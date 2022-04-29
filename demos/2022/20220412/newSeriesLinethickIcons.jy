@@ -9,4 +9,8 @@ ds2= accum( randn(100) ) + 10
 
 p,pe= plot( 0, ds1, symbol=None, legendLabel='data' )
 plot( 1, ds2, lineThick=3, symbol=None, legendLabel='data', overplotOf=p  )
+plot( 2, 'vap+inline:_=randomSeed(0)&x=linspace(40,80,5)&y=randn(5)+7&x,y', overplotOf=p,
+         color='Sienna', lineStyle='none', symbolSize=8, symbol='stars',legendLabel='data'  )
 
+plot( 3, 'vap+inline:_=randomSeed(0)&x=linspace(40,80,15)&y=randn(15)+7&x,y', overplotOf=p,
+         color='Sienna', lineStyle='none', symbolSize=5, symbol='stars', legendLabel='data'  )
