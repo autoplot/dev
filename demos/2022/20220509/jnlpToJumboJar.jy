@@ -4,8 +4,13 @@
 from java.io import File,FileOutputStream
 import re                       
                 
-doc= { 'examples':[ 'http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp'] }
-resourceURI= getParam( 'resourceURI', 'http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp', 'jnlp file', doc )
+setScriptDescription('''This tool will download the jnlp specification and use it to create a single jar
+(aka "jumbojar") file.  Each jar is loaded and minor corrections made to META_INF.  NOTE THIS
+WILL OFTEN NOT WORK, as only some jnlp files would support a jumbojar.''')
+setScriptTitle('Make jumbojar')
+
+doc= { 'examples':[ 'file:/home/jbf/tmp/MarsisIonogramSurvey.jnlp','http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp'] }
+resourceURI= getParam( 'resourceURI', 'file:/home/jbf/tmp/MarsisIonogramSurvey.jnlp', 'jnlp file', doc )
 defaultName=  re.search('.*\/(.*)\.jnlp',resourceURI ).group(1)
 jarFileOut= getParam( 'jarFileOut', defaultName+'.jar' )
 
@@ -79,10 +84,13 @@ codebase= re.search('\"(.*)\"',codebase.toString()).group(1)
 codebaseUrl= URL(codebase)
 jars= xpath.evaluate( '/jnlp/resources/jar/@href', initialDocument, XPathConstants.NODESET )
 mainClass= xpath.evaluate( '/jnlp/application-desc/@main-class', initialDocument, XPathConstants.NODE )
+args= xpath.evaluate( '/jnlp/application-desc/argument[*]/text()', initialDocument, XPathConstants.NODE )
 
 print '# The JNLP file'
 print resourceURI
 print 'codebase: ', codebase
+print 'args: ', args
+print ''
 
 print '# main-class'
 print mainClass
@@ -105,8 +113,12 @@ for i in range( jars.getLength() ):
    if ( monitor.isCancelled() ):  raise Exception("cancel pressed")
    monitor.setTaskProgress(i)
    print '  * download ', URL( codebaseUrl, v )
-   jarf= getFile( URL( codebaseUrl, v ), monitor.getSubtaskMonitor(i,i+1,v) )
-   unzipJar( jarf, outf )
+   try:
+       jarf= getFile( URL( codebaseUrl, v ), monitor.getSubtaskMonitor(i,i+1,v) )
+       unzipJar( jarf, outf )
+   except:
+       'Unable to find ', URL( codebaseUrl, v )
+   
 print ''
 
 # re-write the manifest
@@ -127,7 +139,7 @@ FileSystemUtil.zip(File(jarFileOut),outf)
 
 print '# The output'
 print 'wrote '+File(jarFileOut).getAbsolutePath()
-
+print 'java -cp '+str(File(jarFileOut).getAbsolutePath())+' '+mainClass + ' ' + str(args)
 #print '** Now execute: **'
 #print 'cd '+outf.toString()
 #print 'rm -f META-INF/*.DSA'
