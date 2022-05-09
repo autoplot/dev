@@ -1,0 +1,20 @@
+setScriptDescription('''Demonstrates new specialColors control for the series renderer.  The control
+specialColors is a comma-separated list of constraints and color to paint cells matching the constraint.
+Constraints can be:<ul>
+<li>just a number, and values equal to this are painted with the color.
+<li>gt(n),lt(n),eq(n): comparisons
+<li>within(0+to+10): within test.
+<li>without(0+to+10): outside of range
+</ul>
+The tests are evaluated in order.
+''')
+
+randomSeed(0)
+
+x= randn( 10000 )
+y= randn( 10000 )
+z= -1 * sqrt( x**2 + y**2 )
+
+plot( x, y, z, renderType='colorScatter>symbolSize=10', zrange=[-12,0] )
+#plot( x, y, z, renderType='colorScatter>specialColors=within(-2+to-1):gray&symbolSize=10', zrange=[-12,0] )
+

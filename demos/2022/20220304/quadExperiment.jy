@@ -1,0 +1,19 @@
+reset()
+
+
+from org.das2.graph import Painter
+class MyPainter(Painter):
+  def paint(self,g):
+    from java.awt.geom import GeneralPath
+    from java.awt.geom import Arc2D
+    p2 = GeneralPath()
+    p2.moveTo(0,0)
+    p2.quadTo(30,30,50,50)
+    p2.quadTo(80,80,100,100)
+    p2.quadTo(50,-50,0,0)
+    p2.closePath()
+    g.translate(500,500)
+    g.setColor(Color.RED)
+    g.fill(p2) 
+
+dom.canvases[0].controller.dasCanvas.addTopDecorator(MyPainter()) 

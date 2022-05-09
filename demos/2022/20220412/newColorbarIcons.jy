@@ -1,0 +1,55 @@
+from org.autoplot.imagedatasource import ImageDataSourceFormat
+from org.das2.graph import DasColorBar
+setScriptDescription('reverse the color transform so that the correct colorbar is used to show each rebin mode')
+
+resourceURI= getParam( 'resourceURI', 'file:/home/jbf/temp/autoplot/das2java/dasCore/src/images/icons/rebin.nnTriScat.png', 'example file to load' )
+ds= getDataSet( resourceURI )
+
+minn= datum(0)
+maxx= datum(10)
+
+cb= dom.plots[0].getController().getDasColorBar()
+
+ttt= cb.getType()
+nc= ttt.colorCount
+
+rrr= zeros( nc )
+ggg= zeros( nc )
+bbb= zeros( nc )
+
+hhh= zeros( nc )
+sss= zeros( nc )
+vvv= zeros( nc )
+
+for i in xrange( nc ):
+    rgb= ttt.getRGB(i)
+    rrr[i]= rgb & 0xff0000 >> 16
+    ggg[i]= rgb & 0x00ff00 >> 8
+    bbb[i]= rgb & 0x0000ff
+    #hsv= [ 0.0, 0.0, 0.0 ]
+    #Color.RGBtoHSB( rrr[i], ggg[i], bbb[i], hsv )
+    #hhh[i]= hsv[0]
+    #sss[i]= hsv[1]
+    #vvv[i]= hsv[2]
+
+def closestValue( rgb ):
+    red= rgb[0]
+    gre= rgb[1]
+    blu= rgb[2]
+    #hsv= [ 0.0, 0.0, 0.0 ]
+    #Color.RGBtoHSB( red, gre, blu, hsv )
+    dist= ( rrr - red )**2 + ( ggg - gre )**2 + ( bbb-blu)**2 
+    #dist= ( rrr - red )**2 + ( ggg - gre )**2 + ( bbb-blu)**2 
+    idx= imin( dist )
+    print dist[idx]
+    return idx
+    
+result= zeros(16,16)
+
+for i in xrange(16):
+    for j in xrange(16):
+        idx= closestValue( ds[i,j] )
+        result[i,j] = idx
+        
+plot( result,zrange=[0,120], renderType='nnSpectrogram' )
+

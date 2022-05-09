@@ -1,0 +1,5 @@
+setScriptDescription('demo new contour renderer quad mode')
+
+zz= distance( 100,100, 25,25, 10, 10 ) + distance( 100,100, 35,20, 10, 10 )
+
+plot( zz, renderType='contour>levels=+0.1' )
