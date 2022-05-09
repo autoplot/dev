@@ -4,7 +4,8 @@
 from java.io import File,FileOutputStream
 import re                       
                 
-resourceURI= getParam( 'resourceURI', 'http://www-pw.physics.uiowa.edu/das2/apps/GalileoBrowse/jnlp-20100423/galileo.20100423.jnlp', 'jnlp file' )
+doc= { 'examples':[ 'http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp'] }
+resourceURI= getParam( 'resourceURI', 'http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp', 'jnlp file', doc )
 defaultName=  re.search('.*\/(.*)\.jnlp',resourceURI ).group(1)
 jarFileOut= getParam( 'jarFileOut', defaultName+'.jar' )
 
@@ -60,8 +61,13 @@ monitor.started()
 f= getFile( resourceURI, monitor.getSubtaskMonitor('get jnlp') )
 myin= FileInputStream( f )
 
-builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+docBuilder= DocumentBuilderFactory.newInstance()
+docBuilder.setValidating(False)  # doesn't work, still checks.  Had to download the jnlp and remove reference.
+docBuilder.setNamespaceAware(False) 
+
+builder = docBuilder.newDocumentBuilder()
 source = InputSource( myin )
+
 initialDocument = builder.parse(source)
 
 factory= XPathFactory.newInstance()
@@ -74,21 +80,38 @@ codebaseUrl= URL(codebase)
 jars= xpath.evaluate( '/jnlp/resources/jar/@href', initialDocument, XPathConstants.NODESET )
 mainClass= xpath.evaluate( '/jnlp/application-desc/@main-class', initialDocument, XPathConstants.NODE )
 
-mkdir('/tmp/ap/')
-outf= File( '/tmp/ap/' )
+print '# The JNLP file'
+print resourceURI
+print 'codebase: ', codebase
+
+print '# main-class'
+print mainClass
+print ''
+
+mkdir('/tmp/ap/jnlpToJar/')
+outf= File( '/tmp/ap/jnlpToJar/' )
+
+print '# Output'
+print outf
+print ''
+
+print '# jars'
 
 monitor.setTaskSize( jars.getLength() )
-for i in []: #range( jars.getLength() ):
+for i in range( jars.getLength() ):
    value = jars.item(i).toString()  # how to unpack this!?!?!?
+   print '* ', value
    v= re.search('\"(.*)\"',value).group(1)
    if ( monitor.isCancelled() ):  raise Exception("cancel pressed")
    monitor.setTaskProgress(i)
+   print '  * download ', URL( codebaseUrl, v )
    jarf= getFile( URL( codebaseUrl, v ), monitor.getSubtaskMonitor(i,i+1,v) )
-   print 'unzip %s to %s' % ( jarf, outf )
    unzipJar( jarf, outf )
+print ''
 
 # re-write the manifest
 mainClass= re.search('\"(.*)\"',mainClass.toString()).group(1)
+mkdir('/tmp/ap/jnlpToJar/META-INF/')
 f= open( outf.toString()+'/META-INF/MANIFEST.MF', 'w' )
 f.write( 'Manifest-Version: 1.0\n' )
 f.write( 'Main-Class: '+mainClass + '\n' )
@@ -102,6 +125,7 @@ FileSystemUtil.deleteAllFiles( File(outf,'META-INF'), Glob.getRegex( '*.DSA' ) )
 FileSystemUtil.deleteAllFiles( File(outf,'META-INF'), Glob.getRegex( '*.SF' ) )
 FileSystemUtil.zip(File(jarFileOut),outf)
 
+print '# The output'
 print 'wrote '+File(jarFileOut).getAbsolutePath()
 
 #print '** Now execute: **'
