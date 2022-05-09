@@ -20,6 +20,6 @@ plot( 1, bundle( cos(MLT)*L1, sin(MLT)*L1 ), renderType='series' )
 annotation( text= 'Y Axis auto-ranging is incorrect',
     borderType='rounded_rectangle',
     anchorPosition='NE', plotId=dom.plots[1], 
-    rowId=dom.plots[1].rowId, columnId=dom.plots[1].columnId,
-     ) 
+    rowId=dom.plots[1].rowId, columnId=dom.plots[1].columnId ) 
     
+plot( 2, bundle( MLT, L1 ), renderType='polar' )

@@ -1,3 +1,4 @@
+from org.das2.util.filesystem import FileSystem
 from java.awt import FlowLayout
 from org.das2.util import LoggerManager
 print '****'
@@ -25,8 +26,10 @@ dia.add( JLabel( '<html><em>This will create the repo folder within the local fo
 
 icon= ImageIcon( URL( PWD + 'Git-Icon-1788C_48px.png' ) )
 target= JOptionPane.showConfirmDialog(getApplication(),dia,'Clone Repo',JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,icon)
+
 if ( target==JOptionPane.CANCEL_OPTION ):
     setStatus( 'git clone cancelled.' )
+    
 elif( target==JOptionPane.OK_OPTION ):
     exe= 'git clone '+ repoTF.text
 
@@ -57,4 +60,7 @@ elif( target==JOptionPane.OK_OPTION ):
         showMessageDialog('See local clone, '+repoTF.text )
         
     setStatus( "Clone complete, see " + str(log) )
+    
+    if JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog( getApplication(),'Also link to remote?' ):
+        getApplication().runScriptTools( PWD + 'linkToUpstream.jy' )
 

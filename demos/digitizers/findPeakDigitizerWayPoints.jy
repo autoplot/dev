@@ -128,6 +128,7 @@ def getDigitizeAction():
     else:
         return 'cancel'
 
+# here is a change
 def doDigitize( ds, xrange, wpmm, action ):
     'for each record of ds within range, select the point in Y which is the maximum and significantly above other points.  action==manual just picks the middle'
     if ( smoothx!=0 ):
@@ -183,6 +184,9 @@ def doDigitize( ds, xrange, wpmm, action ):
 def boxLookup( evt ):
     global wpmm
     ds= dom.plotElements[0].controller.dataSet
+    if ( ds.rank()==3 ):
+        ds= getDataSet( 'file:///home/jbf/ct/autoplot/screenshots/2022-03-21T11-26-20.png?channel=greyscale' )
+        ds= -ds
         
     if ( ds==None ): 
         showMessageDialog( "No data loaded in plotElements[0]" )

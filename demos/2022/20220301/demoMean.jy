@@ -1,4 +1,4 @@
-N= getParam( 'N', 1000, 'The number of points' )
+N= getParam( 'N', 1000000, 'The number of points' )
 
 bottomPercent= 75
 

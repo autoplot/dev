@@ -8,6 +8,13 @@ ds2= ripples(40,40)
 ds1= ripples(40)
 ds3= ripplesJoinSpectrogramTimeSeries(40)
 
+ds2c= copy(ds2)
+x= ds2c[1:7,2:8]
+ds2c[14:20,13:19]=x
+plotx( ds2c, title='getitem,setitem' )
+writeToPng('test037_indexing_012.png')
+formatDataSet(ds2c,'test037_indexing_012.qds')
+
 # rank 1 list of indices are used to index rank 1 dataset
 r_1= where( ds1.gt(0) )
 print r_1

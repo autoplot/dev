@@ -13,7 +13,7 @@ def grid( g ):
         g.draw( Line2D.Double( 0, i, 1000, i ) )
         g.drawString(str(i),i,14)
         
-addBottomDecoration( dom.canvases[0],grid)
+addBottomDecoration( dom.canvases[0],grid )
 
 #ds= mod(findgen(1000),2)
 ds= dataset( [0,1,-1000,1,0] )

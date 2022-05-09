@@ -16,8 +16,8 @@ plot( dummyData, ylog=True, yrange=[10,100] )
     
 from org.das2.event import WaypointsDragRenderer,WaypointsMouseModule,BoxSelectorMouseModule
 
-wpdr= WaypointsDragRenderer(dom.plots[0].controller.dasPlot)
-wpmm= WaypointsMouseModule( dom.plots[0].controller.dasPlot,wpdr,"digitize")
+wpmm= WaypointsMouseModule( dom.plots[0].controller.dasPlot,"digitize")
+wpdr= wpmm.dragRenderer
 
 dom.plots[0].controller.dasPlot.addMouseModule(wpmm)
 dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().primaryModule= wpmm

@@ -8,6 +8,12 @@ plot( 1, bx )
 plot( 0, fftPower( bx, 512, monitor ) )
 
 dom.plotElements[1].component= '|fftPower(512)'
-dom.plotElements[3].component= 'X|fftPower(512)'
+#dom.plotElements[3].component= 'X|fftPower(512)'
+
+dom.controller.deletePlotElement(dom.plotElements[5])
+dom.controller.deletePlotElement(dom.plotElements[4])
+
+#stop
 
 #dom.plotElements[3].renderType=RenderType.nnSpectrogram
+#dom.plotElements[2].component= 'X|fftPower(512)'

@@ -11,7 +11,7 @@ tt= tt[r]
 dst= dst[r]
 kp1= kp1[r]
 
-sleep(10000)
+sleep(2000)
 
 result= link( dst.property(QDataSet.DEPEND_0), bundle( dst, kp1 ) )
 

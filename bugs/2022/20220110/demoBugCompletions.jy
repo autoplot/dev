@@ -2,6 +2,7 @@
 # incorrectly left in the code for completions.  When there are two plots on the canvas
 # already, completions work, but when there is just one, there's an error.
 
+
 setLayout(2)
 dom.plots[1].rowId= dom.plots[0].rowId
 

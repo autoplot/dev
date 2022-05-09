@@ -8,9 +8,31 @@ if (cache):
 else:
    ds= getDataSet( 'vap+das2server:http://voparis-das-maser.obspm.fr/das2/server?dataset=Cassini-RPWS-HFR/n3e/kronos_n3e_v&start_time=2017-05-09T06:50:00.000Z&end_time=2017-05-09T07:11:00.000Z' )
    #formatDataSet(ds,'/tmp/cached/Cassini-RPWS-HFR.d2s' )
-   
+
+print '-----'
+print 'cache=', cache
+print ds
+print '-----'
+
 from org.das2.qds import LengthsDataSet
 
 lds= LengthsDataSet(ds)
+lds= copy(lds)
 
+print 'lds.rank(): ', lds.rank()
+print 'lds.length(): ', lds.length()
+if lds.rank()==1:
+    print 'lds.value(0): ', lds.value(0)
+else:
+    for i in range(len(lds)):
+        print 'lds[%d]: %s' % ( i, lds[i] )
+
+i=0
+for d in lds:
+    if d.rank()==1:
+        for d2 in d:
+            i=i+d2
+    else:
+        i=i+d
+print i    
 print DataSetUtil.totalLength(ds)
