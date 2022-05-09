@@ -6,7 +6,7 @@ import re
                 
 resourceURI= getParam( 'resourceURI', 'http://www-pw.physics.uiowa.edu/das2/apps/GalileoBrowse/jnlp-20100423/galileo.20100423.jnlp', 'jnlp file' )
 defaultName=  re.search('.*\/(.*)\.jnlp',resourceURI ).group(1)
-jarFileOut= getParam( PWD + 'jarFileOut', defaultName+'.jar' )
+jarFileOut= getParam( 'jarFileOut', defaultName+'.jar' )
 
 # unjar the jar file. See http://www.programcreek.com/2012/08/unzip-a-jar-file-in-java-program/
 def unzipJar( jarFile, destinationDir ):
