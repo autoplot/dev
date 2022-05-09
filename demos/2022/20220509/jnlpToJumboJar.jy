@@ -1,0 +1,111 @@
+# project taken from sftp://nudnik.physics.uiowa.edu/home/jbf/project/galileo/study/20170125/jnlpToJumboJar.jy
+# unpack javaws application into a single-jar file.
+
+from java.io import File,FileOutputStream
+import re                       
+                
+resourceURI= getParam( 'resourceURI', 'http://www-pw.physics.uiowa.edu/das2/apps/GalileoBrowse/jnlp-20100423/galileo.20100423.jnlp', 'jnlp file' )
+defaultName=  re.search('.*\/(.*)\.jnlp',resourceURI ).group(1)
+jarFileOut= getParam( PWD + 'jarFileOut', defaultName+'.jar' )
+
+# unjar the jar file. See http://www.programcreek.com/2012/08/unzip-a-jar-file-in-java-program/
+def unzipJar( jarFile, destinationDir ):
+    from java.util.jar import JarFile,JarEntry
+    jar= JarFile(jarFile)
+    
+    for entry in jar.entries():
+        fileName = destinationDir.toString() + File.separator + entry.getName()
+        f = File(fileName)
+
+        if ( fileName.endswith("/") ):
+            f.mkdirs();
+                
+        #now create all files
+    for entry in jar.entries():
+        fileName = destinationDir.toString() + File.separator + entry.getName()
+        f = File(fileName)
+
+        if ( not fileName.endswith("/") ) :
+            ins = jar.getInputStream(entry)
+            fos = FileOutputStream(f)
+ 
+                        # write contents of 'is' to 'fos'
+            while (ins.available() > 0) :
+                fos.write(ins.read())
+
+            fos.close();
+            ins.close();
+
+#def zipJar( jarFile, sourceDir ):
+#    from java.io import URI
+#    from java.util import HashMap
+#    from java
+#    env = HashMap()
+#    env.put("create", "true")
+#    uri = URI.create("jar:file:/tmp/zipfstest.zip");
+#    zipfs = FileSystems.newFileSystem(uri, env)
+
+x= URI(resourceURI)
+
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPath
+from javax.xml.xpath import XPathExpressionException
+from javax.xml.xpath import XPathFactory
+from javax.xml.xpath import XPathConstants
+from org.xml.sax import InputSource
+from java.io import FileInputStream
+
+monitor.started()
+
+f= getFile( resourceURI, monitor.getSubtaskMonitor('get jnlp') )
+myin= FileInputStream( f )
+
+builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+source = InputSource( myin )
+initialDocument = builder.parse(source)
+
+factory= XPathFactory.newInstance()
+xpath= factory.newXPath()
+
+codebase= xpath.evaluate( '/jnlp/@codebase', initialDocument, XPathConstants.NODE )
+codebase= re.search('\"(.*)\"',codebase.toString()).group(1)
+
+codebaseUrl= URL(codebase)
+jars= xpath.evaluate( '/jnlp/resources/jar/@href', initialDocument, XPathConstants.NODESET )
+mainClass= xpath.evaluate( '/jnlp/application-desc/@main-class', initialDocument, XPathConstants.NODE )
+
+mkdir('/tmp/ap/')
+outf= File( '/tmp/ap/' )
+
+monitor.setTaskSize( jars.getLength() )
+for i in []: #range( jars.getLength() ):
+   value = jars.item(i).toString()  # how to unpack this!?!?!?
+   v= re.search('\"(.*)\"',value).group(1)
+   if ( monitor.isCancelled() ):  raise Exception("cancel pressed")
+   monitor.setTaskProgress(i)
+   jarf= getFile( URL( codebaseUrl, v ), monitor.getSubtaskMonitor(i,i+1,v) )
+   print 'unzip %s to %s' % ( jarf, outf )
+   unzipJar( jarf, outf )
+
+# re-write the manifest
+mainClass= re.search('\"(.*)\"',mainClass.toString()).group(1)
+f= open( outf.toString()+'/META-INF/MANIFEST.MF', 'w' )
+f.write( 'Manifest-Version: 1.0\n' )
+f.write( 'Main-Class: '+mainClass + '\n' )
+f.write( 'X-CreatedBy: jnlpToJumboJar\n' )
+f.close()
+
+
+# now rejar everthing
+from org.das2.util.filesystem import FileSystemUtil,Glob
+FileSystemUtil.deleteAllFiles( File(outf,'META-INF'), Glob.getRegex( '*.DSA' ) )
+FileSystemUtil.deleteAllFiles( File(outf,'META-INF'), Glob.getRegex( '*.SF' ) )
+FileSystemUtil.zip(File(jarFileOut),outf)
+
+print 'wrote '+File(jarFileOut).getAbsolutePath()
+
+#print '** Now execute: **'
+#print 'cd '+outf.toString()
+#print 'rm -f META-INF/*.DSA'
+#print 'rm -f META-INF/*.SF'
+#print 'jar cmf META-INF/MANIFEST.MF /tmp/'+ jarFileOut + ' *'
