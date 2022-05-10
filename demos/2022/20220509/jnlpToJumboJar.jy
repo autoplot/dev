@@ -10,7 +10,7 @@ WILL OFTEN NOT WORK, as only some jnlp files would support a jumbojar.''')
 setScriptTitle('Make jumbojar')
 
 doc= { 'examples':[ 'file:/home/jbf/tmp/MarsisIonogramSurvey.jnlp','http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp'] }
-resourceURI= getParam( 'resourceURI', 'file:/home/jbf/tmp/MarsisIonogramSurvey.jnlp', 'jnlp file', doc )
+resourceURI= getParam( 'resourceURI', 'http://space.physics.uiowa.edu/plasma-wave/marsx/webstart/MarsisIonogramSurvey.jnlp', 'jnlp file', doc )
 defaultName=  re.search('.*\/(.*)\.jnlp',resourceURI ).group(1)
 jarFileOut= getParam( 'jarFileOut', defaultName+'.jar' )
 
