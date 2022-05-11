@@ -132,8 +132,11 @@ class BoxMouseAdapter( MouseAdapter ):
         dd0= singlePngWalkView.clickDigitizer.pixelToDataTransform( int(r.x), int(r.y) )
         dd1= singlePngWalkView.clickDigitizer.pixelToDataTransform( int(r.x+r.width), int(r.y+r.height) )
         pn=dd0.property( "PlotNumber")
-        if ( pn==None or pn!=0 ):
-            setStatus( 'not the right plot, click on the other one' )
+        if ( pn==-99 ):
+            JOptionPane.showMessageDialog( getApplication(), 'the png does not contain axis info, see http://autoplot.org/richPng' )
+            return
+        if ( pn!=0 ):
+            JOptionPane.showMessageDialog( getApplication(), 'not the right plot, click on the other one' )
             return
         digitize= p
         global clickDigitizer
