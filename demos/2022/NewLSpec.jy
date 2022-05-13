@@ -1,0 +1,54 @@
+setScriptDescription('''Revisit the LSpec routine, because for RBSP (Van Allen Probes) LANL has identified the sweeps and this 
+part of LSpec was always a little flakey.''')
+
+tr= getParam( 'timerange', '2018-02-13 to 2018-02-18', 'parameter timerange' )
+sc= getParam('sc', 'B', 'Spacecraft', ['A','B'])
+lowsc=sc.lower()
+
+sweep  = getDataSet('https://emfisis.physics.uiowa.edu/Flight/RBSP-%s/LANL/MagEphem/$Y/rbsp%s_def_MagEphem_OP77Q_$Y$m$d_v$(v,sep).txt?column=InOut&timerange=%s' %(sc, lowsc, tr) , monitor )
+density= getDataSet('https://emfisis.physics.uiowa.edu/Flight/RBSP-%s/L4/$Y/$m/$d/rbsp-%s_density_emfisis-L4_$Y$m$d_v$(v,sep).cdf?timerange=%s&density' %(sc, lowsc, tr) , monitor )
+l= getDataSet('https://rbsp-ect.newmexicoconsortium.org/data_pub/rbsp%s/mageis/level2/sectors/$Y/rbsp%s_rel04_ect-mageis-L2_$Y$m$d_v$(v,sep).cdf?L&timerange=%s' % (lowsc, lowsc, tr), monitor )
+(l,sweep)= synchronizeNN( density,[l,sweep] )
+tt= density.property( QDataSet.DEPEND_0 )
+
+lgrid= putProperty( linspace( 2, 6, 40 ), QDataSet.UNITS, l.property(QDataSet.UNITS) )
+
+rr= where( diff(sweep).ne(0) )
+res= putProperty( zeros( len(rr), len(lgrid) ), QDataSet.UNITS, density.property( QDataSet.UNITS ) )
+num= zeros( len(rr), len(lgrid) )
+times= zeros( len(rr) )
+
+for i in range(len(rr)):
+    if ( i==0 ):
+        idxs= indgen(int(rr[0]))
+    else:
+        idxs= indgen(int(rr[i]-rr[i-1])) + rr[i-1]
+    l1= l[idxs]
+    nl1= len(l1)
+    print nl1, 'number in this sweep'
+    times[i]= mean( tt[idxs] )
+    for i1 in range(nl1):
+        ff= round( findex( lgrid, l1[i1] ) )
+        if ( valid(ff) and ff>=0 and ff<len(lgrid)):
+            res[i,ff]= res[i,ff]+density[idxs[i1]]
+            num[i,ff]= num[i,ff]+1
+
+reset()
+lspec= link( times, lgrid, res/num )
+p,pe= plot( lspec, renderType='nnSpectrogram', ytitle='L(R_E)', ztitle='Density (cm**-3)' )
+plot( 1, tt, l, density, overplotOf=p )
+plot( 2, l )
+plot( 3, density )
+
+#from org.virbo.dsutil import LSpec
+#
+#lspec= LSpec.rebin( l, density, lgrid, 1 )
+#
+#ttag= lspec.property( QDataSet.DEPEND_0 )
+#ttag= collapse1(ttag)
+#lspec= link( ttag, lspec.property( QDataSet.DEPEND_1 ), lspec )
+#
+#
+#plot(lspec, renderType='nnSpectrogram')
+#plot(1, l)
+#plot(2, density)
