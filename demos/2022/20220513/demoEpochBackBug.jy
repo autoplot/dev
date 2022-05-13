@@ -1,0 +1,25 @@
+from java.util import Arrays
+setScriptDescription('''Ivar had a case where data would fail to append because though the 
+data was one type, the timetags were not.  Surprisingly this wasn't checked for, and this
+script is to confirm this finding.''')
+
+from org.das2.qds import ArrayDataSet
+
+ds1= zeros(50)
+tt1= lonarr(50)
+for i in range(50):
+    tt1[i]= i * 1000000000
+tt1.putProperty(QDataSet.UNITS,Units.cdfTT2000 )
+    
+ds2= zeros(50) + 1
+tt2= fltarr(50)
+for i in range(50):
+    tt2[i]= ( 50 + i ) * 1000000000
+tt2.putProperty(QDataSet.UNITS,Units.cdfTT2000 )
+
+plot( 0, link( tt1, ds1 ) )
+plot( 1, link( tt2, ds2 ) )
+
+# this failed before 2022513a
+plot( 2, append( link( tt1, ds1 ), link( tt2, ds2 ) ) )
+
