@@ -1,3 +1,7 @@
+setScriptDescription('''Demonstrate how slice actions can be added which slice two plots at
+once.  Note the copies in doSlice are there to quiet annoying and unhelpful mutability messages.
+It's also hard to know which MouseModule to extend to get the functionality.''')
+
 from org.das2.event import VerticalSliceSelectionRenderer,MouseModule,CrossHairMouseModule
 
 ds= getDataSet( 'https://lasp.colorado.edu/mms/sdc/public/data/mms1/fgm/srvy/l2/2021/01/mms1_fgm_srvy_l2_20210102_v5.278.0.cdf?mms1_fgm_b_gse_srvy_l2' )
@@ -5,8 +9,9 @@ ds= getDataSet( 'https://lasp.colorado.edu/mms/sdc/public/data/mms1/fgm/srvy/l2/
 bx= fftPower( ds[:,0], 512, None ) 
 bz= fftPower( ds[:,2], 512, None ) 
 
-plot( 0, bx )
-plot( 1, bz )
+reset()
+plot( 0, bx, ytitle='FFT Bx' )
+plot( 1, bz, ytitle='FFT Bz' )
 
 sl= None  # reference to the slice window
 
@@ -16,9 +21,9 @@ def doSlice(x):
     d0= getApplication()
     setApplication(sl)
     sl0= copy( slice0( copy(bx),x ) )  # extra copies are to avoid strange error about mutability
-    plot(0, copy(sl0), color='black', yrange=[1e-2,1e2] )
+    plot(0, copy(sl0), color='black', yrange=[1e-2,1e2], legendLabel='FFT Bx' )
     sl1= copy( slice0( copy(bz),x ) )
-    plot(1, copy(sl1), color='red' )
+    plot(1, copy(sl1), color='red', legendLabel='FFT Bz' )
     setApplication(d0)
         
 def mouseAction(evt):
