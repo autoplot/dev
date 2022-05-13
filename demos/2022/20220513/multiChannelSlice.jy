@@ -1,0 +1,39 @@
+from org.das2.event import VerticalSliceSelectionRenderer,MouseModule,CrossHairMouseModule
+
+ds= getDataSet( 'https://lasp.colorado.edu/mms/sdc/public/data/mms1/fgm/srvy/l2/2021/01/mms1_fgm_srvy_l2_20210102_v5.278.0.cdf?mms1_fgm_b_gse_srvy_l2' )
+
+bx= fftPower( ds[:,0], 512, None ) 
+bz= fftPower( ds[:,2], 512, None ) 
+
+plot( 0, bx )
+plot( 1, bz )
+
+sl= None  # reference to the slice window
+
+def doSlice(x):
+    'Do the slice action off of the event thread'
+    global sl
+    d0= getApplication()
+    setApplication(sl)
+    sl0= copy( slice0( copy(bx),x ) )  # extra copies are to avoid strange error about mutability
+    plot(0, copy(sl0), color='black', yrange=[1e-2,1e2] )
+    sl1= copy( slice0( copy(bz),x ) )
+    plot(1, copy(sl1), color='red' )
+    setApplication(d0)
+        
+def mouseAction(evt):
+    global sl
+    if (sl==None):
+       sl= newApplication('slice')
+       setApplication(sl)
+       setLayoutOverplot(2)
+       print 'new window'
+    invokeLater( doSlice, dataset(evt.x) )
+    
+
+for p in [ dom.plots[0].controller.dasPlot, dom.plots[1].controller.dasPlot ]:
+   mm= CrossHairMouseModule(p,p.getXAxis(),p.getYAxis())
+   mm.dataPointSelected= mouseAction
+   mm.label= 'slices'    
+   mm.dragRenderer= VerticalSliceSelectionRenderer(p)
+   p.dasMouseInputAdapter.primaryModule= mm
