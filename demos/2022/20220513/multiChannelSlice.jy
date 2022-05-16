@@ -20,9 +20,9 @@ def doSlice(x):
     global sl
     d0= getApplication()
     setApplication(sl)
-    sl0= copy( slice0( copy(bx),x ) )  # extra copies are to avoid strange error about mutability
+    sl0= slice0( copy(bx),x )  # extra copies are to avoid strange error about mutability
     plot(0, copy(sl0), color='black', yrange=[1e-2,1e2], legendLabel='FFT Bx' )
-    sl1= copy( slice0( copy(bz),x ) )
+    sl1= slice0( copy(bz),x ) 
     plot(1, copy(sl1), color='red', legendLabel='FFT Bz' )
     setApplication(d0)
         
