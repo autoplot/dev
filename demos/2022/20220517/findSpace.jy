@@ -1,0 +1,15 @@
+setScriptDescription('Scan CDAWeb for Datasets containing a space.')
+
+from java.io import ByteArrayInputStream
+from org.das2.stream import StreamTool
+from org.das2.util import FileUtil
+dss= getCompletions('vap+cdaweb:ds=')
+
+for ds in dss:
+    if ds.find('ISEE')>-1:
+        ids= getCompletions( ds + '&id=')
+        lc= len(ds + '&id=')
+        for id in ids:
+            i= id[lc:]
+            if i.find('NSX')>-1:
+                print id
