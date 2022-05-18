@@ -1,4 +1,5 @@
-setScriptDescription('Scan CDAWeb for datasets containing id with NSX.')
+setScriptDescription('''Scan CDAWeb for datasets containing id with space.  The space
+was actually found with the HAPI server index, but this could have found one as well.''')
 
 from java.io import ByteArrayInputStream
 from org.das2.stream import StreamTool
@@ -6,10 +7,12 @@ from org.das2.util import FileUtil
 dss= getCompletions('vap+cdaweb:ds=')
 
 for ds in dss:
-    if ds.find('ISEE')>-1:
+    if ds.find('SE_K0_FPI')>-1:   # constrain search to particular dataset for speed
         ids= getCompletions( ds + '&id=')
         lc= len(ds + '&id=')
         for id in ids:
             i= id[lc:]
-            if i.find('NSX')>-1:
+            if i.find(' ')>-1:
+                print '*** >%s<' % id
+            else:
                 print id
