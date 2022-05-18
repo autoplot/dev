@@ -1,4 +1,4 @@
-setScriptDescription('Scan CDAWeb for Datasets containing a space.')
+setScriptDescription('Scan CDAWeb for datasets containing id with NSX.')
 
 from java.io import ByteArrayInputStream
 from org.das2.stream import StreamTool
