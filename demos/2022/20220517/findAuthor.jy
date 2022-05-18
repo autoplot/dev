@@ -1,0 +1,17 @@
+setScriptDescription('Scan a Das2Server for IDs with with a particular contact.')
+
+from java.io import ByteArrayInputStream
+from org.das2.stream import StreamTool
+from org.das2.util import FileUtil
+dss= getCompletions('vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=')
+l= len('vap+das2server:http://jupiter.physics.uiowa.edu/das/server?dataset=')
+for d in dss:
+    d= d[l:]
+    if not d.endswith('/'):
+        ff= downloadResourceAsTempFile(URL('http://jupiter.physics.uiowa.edu/das/server?dataset='+d+'&server=dsdf'),None)
+        ss= FileUtil.readFileToString(ff)
+        if ( ss.find("faden")>-1 ):
+            print d + " faden"
+        elif ( ss.find("piker")>-1 ):
+            print "."
+        
