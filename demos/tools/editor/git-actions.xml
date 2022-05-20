@@ -8,7 +8,7 @@
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/diff.jy</uri>
             </bookmark>            
             <bookmark>
-                <title>Clone</title>
+                <title>Clone...</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/clone.jy</uri>
             </bookmark>
             <bookmark>
@@ -16,7 +16,7 @@
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/linkToUpstream.jy</uri>
             </bookmark>      
             <bookmark>
-                <title>Commit</title>
+                <title>Commit...</title>
                 <uri>https://github.com/autoplot/dev/blob/master/demos/tools/editor/commit.jy</uri>
                 <description>Commit the version to the file with a comment to the local repository.  Add is done automatically.  Often this is followed by a pull and push.</description>
             </bookmark>
