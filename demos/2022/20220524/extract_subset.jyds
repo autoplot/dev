@@ -8,7 +8,7 @@ stop= getParam('stop','100','last record plus one')
 varss= getParam('varss','data','The variables')
 lib= getParam( 'lib', '/home/jbf/local/cdf/lib/', 'directory containing libcdf.so' )
 
-pyn= str(getFile( 'file:/home/jbf/ct/autoplot/u/2022/kristoff/20220524/extract_subset.py' ))
+pyn= str(getFile( PWD + 'extract_subset.py' ))
 
 cmd= ["python", str(pyn), URI(fln).path, start, stop, varss ]
 print ' '.join(cmd)
