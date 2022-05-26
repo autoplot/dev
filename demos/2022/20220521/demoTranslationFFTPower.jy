@@ -8,18 +8,30 @@ setScriptDescription('''Displays spectra created from Cluster WBD waveform data,
 tr= getParam( 'timerange', '2020-07-08+3:00:00+to+3:30:00', 'timerange to load' )
 sc= getParam( 'sc', 1, 'Cluster Spacecraft', [ 1,2,3,4 ] )
 
+monitor.setTaskSize(100)
+monitor.started()
+
 home= 'https://cdaweb.gsfc.nasa.gov/pub/data/cluster/c%d/wbd_bm2/' % sc
 ff= home + '$Y/$m/c%d_waveform_wbd_bm2_$Y$m$d$H$(M;span=4)_v$v.cdf' % sc
-wbd_elec = getDataSet(  ff + '?WBD_Elec', tr )
-translation= getDataSet(ff + '?Translation', tr )
+wbd_elec = getDataSet(  ff + '?WBD_Elec', tr, monitor.getSubtaskMonitor(0,25,'Load Elec') )
+translation= getDataSet(ff + '?Translation', tr, monitor.getSubtaskMonitor(25,50,'Load Translation') )
 
 userProps= HashMap()
 userProps.put( "FFT_Translation", translation )
 
 wbd_elec.putProperty( QDataSet.USER_PROPERTIES, userProps )
 
+reset()
+
 plot( wbd_elec )
 plot( 1, translation )
-ff= fftPower( wbd_elec, 1090, monitor  )
 
-plot( 2, ff )
+ff= fftPower( wbd_elec, 1090, monitor.getSubtaskMonitor(50,100,'FFT Power')  )
+
+t= ff.property(QDataSet.DEPEND_0)
+t= putProperty( t,QDataSet.CADENCE,'200ms')
+ff= putProperty( ff, QDataSet.DEPEND_0, t )
+
+plot( 2, ff, ytitle='Frequency (%{UNITS})' )
+
+monitor.finished()
