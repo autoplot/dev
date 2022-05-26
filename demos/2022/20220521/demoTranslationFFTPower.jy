@@ -1,6 +1,8 @@
 from org.das2.qds import DataSetUtil
 from java.util import HashMap
 
+setScriptDescription('''Displays spectra created from Cluster WBD waveform data, implementing the frequency shift identified in the file.''')
+
 #&where=Translation.gt(500)
 
 tr= getParam( 'timerange', '2020-07-08+3:00:00+to+3:30:00', 'timerange to load' )
