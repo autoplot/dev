@@ -1,16 +1,23 @@
 from org.das2.qds import DataSetUtil
 from java.util import HashMap
-wbd_elec= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/cluster/c1/wbd_bm2/$Y/$m/c1_waveform_wbd_bm2_$Y$m$d$H$(M;span=4)_v$v.cdf?WBD_Elec&where=Translation.gt(500)&timerange=2020-07-08+3:00:00+to+3:30:00')
-translation= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/cluster/c1/wbd_bm2/$Y/$m/c1_waveform_wbd_bm2_$Y$m$d$H$(M;span=4)_v$v.cdf?Translation&where=Translation.gt(500)&timerange=2020-07-08+3:00:00+to+3:30:00')
+
+#&where=Translation.gt(500)
+
+tr= getParam( 'timerange', '2020-07-08+3:00:00+to+3:30:00', 'timerange to load' )
+sc= getParam( 'sc', 1, 'Cluster Spacecraft', [ 1,2,3,4 ] )
+
+home= 'https://cdaweb.gsfc.nasa.gov/pub/data/cluster/c%d/wbd_bm2/' % sc
+ff= home + '$Y/$m/c%d_waveform_wbd_bm2_$Y$m$d$H$(M;span=4)_v$v.cdf' % sc
+wbd_elec = getDataSet(  ff + '?WBD_Elec', tr )
+translation= getDataSet(ff + '?Translation', tr )
 
 userProps= HashMap()
 userProps.put( "FFT_Translation", translation )
 
 wbd_elec.putProperty( QDataSet.USER_PROPERTIES, userProps )
+
 plot( wbd_elec )
 plot( 1, translation )
 ff= fftPower( wbd_elec, 1090, monitor  )
-
-DataSetUtil.validate(ff,None)
 
 plot( 2, ff )
