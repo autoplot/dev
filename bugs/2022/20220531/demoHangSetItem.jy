@@ -1,0 +1,12 @@
+setScriptDescription('''v2022a_5 and earlier showed a bug where this assignment would hang, because there
+are more spaces to put numbers than number to put in''')
+
+SPE= zeros(100,10,14)
+
+print 'start...'
+for j in xrange(100):
+   for i in xrange(10):
+       SPE[j,i,:]= ones(13) * j
+print 'stop...'
+
+print SPE
