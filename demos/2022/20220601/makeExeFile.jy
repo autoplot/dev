@@ -1,0 +1,16 @@
+setScriptDescription('This demos how to make a file executable.')
+
+from java.io import File,FileOutputStream
+from java.nio.file.attribute import PosixFilePermissions
+from java.nio.file import Files
+rr= File('runme')
+if rr.exists():
+    rr.delete()
+
+fo= FileOutputStream(rr)
+fo.write('echo 1\n')
+fo.close()
+
+print rr.absolutePath
+Files.setPosixFilePermissions( rr.toPath(), PosixFilePermissions.fromString("rwxr-xr-x"))
+
