@@ -1,0 +1,8 @@
+load('file:///home/jbf/ct/hudson/vap/errorSubmissions.vap')
+print dom.controller.isPendingChanges()
+print dom.controller.mutatorLock().isLocked()
+
+load('file:///home/jbf/ct/hudson/vap/usageMap.JanMar2018.vap')
+print dom.controller.isPendingChanges()
+print dom.controller.mutatorLock().isLocked()
+
