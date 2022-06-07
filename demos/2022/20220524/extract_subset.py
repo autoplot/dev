@@ -10,7 +10,14 @@ def do_extract_subset( fln, start, stop, varss ):
     cdf = pycdf.CDF( fln )
     if ( os.path.exists( outfiln ) ):
         os.remove( outfiln )
-        
+    
+    addus= []
+    for v in varss:
+        dep0= cdf[v].attrs['DEPEND_0']
+        print( 'dep0='+dep0 )
+        addus.append(dep0)
+    addus.extend(varss)
+    varss= addus
     cdfout= pycdf.CDF( outfiln,'')
     for v in varss:
          vdata= cdf[v][start:stop]
