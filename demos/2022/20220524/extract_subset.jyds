@@ -14,7 +14,7 @@ print ' '.join(cmd)
 builder= ProcessBuilder(cmd)
 
 if ( System.getenv().get('CDF_LIB')==None ):
-    raise Exception('CDF_LIB is not set.')
+    raise Exception('CDF_LIB is not set, which will prevent Python from working.')
 
 process= builder.start()
 assert isinstance( process, Process )
