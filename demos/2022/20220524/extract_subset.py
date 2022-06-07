@@ -5,9 +5,9 @@ import os, sys
 
 # export CDF_LIB='/home/jbf/local/cdf/lib/'
 
-def do_extract_subset( flname, start, stop, varss ):
-    outfiln= flname[:-4] + '.' + str(start) + '.' + str(stop) + '.cdf' 
-    cdf = pycdf.CDF( flname )
+def do_extract_subset( fln, start, stop, varss ):
+    outfiln= fln[:-4] + '.' + str(start) + '.' + str(stop) + '.cdf' 
+    cdf = pycdf.CDF( fln )
     if ( os.path.exists( outfiln ) ):
         os.remove( outfiln )
         
@@ -25,8 +25,20 @@ if __name__=='__main__':
         sys.exit(-1)
     
     fln= sys.argv[1]
+
+    if sys.argv[4]=='*':
+        cdf = pycdf.CDF( fln )
+        varss1= ''
+        for k in cdf:
+            varss1= varss1 + ',' + k
+        cdf.close()
+        varss1= varss1[1:] # remove the comma
+        varss= varss1.split(',')
+    else:
+        varss= sys.argv[4].split(',')
+        
     start= int(sys.argv[2])
     stop= int(sys.argv[3])
-    varss= sys.argv[4].split(',')
+
     newf= do_extract_subset( fln, start, stop, varss )
     print( newf )
