@@ -13,9 +13,12 @@ def do_extract_subset( fln, start, stop, varss ):
     
     addus= []
     for v in varss:
-        dep0= cdf[v].attrs['DEPEND_0']
-        print( 'dep0='+dep0 )
-        addus.append(dep0)
+        try:
+            dep0= cdf[v].attrs['DEPEND_0']
+            print( 'dep0='+dep0 )
+            addus.append(dep0)
+        except:
+            continue
     addus.extend(varss)
     varss= addus
     cdfout= pycdf.CDF( outfiln,'')
