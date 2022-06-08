@@ -3,18 +3,26 @@ from java.lang import ProcessBuilder,Process,System
 setScriptDescription('''jyds script calls native python to get part of a CDF file''')
 
 fln= getParam('resourceURI', 'file:/home/jbf/ct/autoplot/u/2022/kristoff/20220524/MyCDF.cdf' )
-start= getParam('start','0','first record')
-stop= getParam('stop','100','last record plus one')
 
-def getVariables(cdf): # experiment with allowing function call to get completions
-    return 'mms4_hpca_azimuth_decimation_factor,mms4_hpca_energy_decimation_factor'.split(',')
-    
-varss= getParam('varss','data','The variables',getVariables(fln))
+start= getParam('start','0','first record')
+stop= getParam('stop','0','last record plus one')
+
+tr= getParam( 'timerange', '2022-02-24T00:38/2022-02-24T00:47', 'timerange to load' )
+
+varss= getParam('varss','DATA','The variables',['data','DATA'])
 
 pyn= str(getFile( PWD + 'extract_subset.py' ))
 
 fln= str(getFile(fln,monitor))
 
+if ( start=='0' and stop=='0' ):
+    start= str(datumRange(tr).min())
+    stop= str(datumRange(tr).max())
+    start= start[:-1]  # Python isotime parser doesn't accept Z, strangely 
+    stop= stop[:-1]  # Python isotime parser doesn't accept Z, strangely
+    
+    print 'resetting to times ', start, stop
+    
 cmd= ["python", str(pyn), fln, start, stop, varss ]
 print ' '.join(cmd)
 builder= ProcessBuilder(cmd)
@@ -37,7 +45,10 @@ outs= process.getOutputStream()
 
 i= process.waitFor()
 
-newf= ins.readLine()
+x= ins.readLine()
+while ( x!=None ):
+    newf=x
+    x= ins.readLine()
 print newf
 
 newf= File( newf ).absolutePath
