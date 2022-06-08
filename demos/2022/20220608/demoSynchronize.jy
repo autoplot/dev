@@ -13,4 +13,4 @@ plot( 0, lon )
 plot( 1, lon80 )
 
 annotation( 0, text='Undesired!cInterpolation Here', pointAtX='2022-06-08T00:01:30.634Z',
-            pointAtY=215 )
+            pointAtY=215, anchorType='data', anchorPosition='SW' )
