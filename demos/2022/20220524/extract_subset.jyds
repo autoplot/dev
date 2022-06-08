@@ -5,11 +5,17 @@ setScriptDescription('''jyds script calls native python to get part of a CDF fil
 fln= getParam('resourceURI', 'file:/home/jbf/ct/autoplot/u/2022/kristoff/20220524/MyCDF.cdf' )
 start= getParam('start','0','first record')
 stop= getParam('stop','100','last record plus one')
-varss= getParam('varss','data','The variables')
+
+def getVariables(cdf): # experiment with allowing function call to get completions
+    return 'mms4_hpca_azimuth_decimation_factor,mms4_hpca_energy_decimation_factor'.split(',')
+    
+varss= getParam('varss','data','The variables',getVariables(fln))
 
 pyn= str(getFile( PWD + 'extract_subset.py' ))
 
-cmd= ["python", str(pyn), URI(fln).path, start, stop, varss ]
+fln= str(getFile(fln,monitor))
+
+cmd= ["python", str(pyn), fln, start, stop, varss ]
 print ' '.join(cmd)
 builder= ProcessBuilder(cmd)
 
