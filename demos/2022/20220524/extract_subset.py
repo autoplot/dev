@@ -61,8 +61,15 @@ if __name__=='__main__':
     else:
         varss= sys.argv[4].split(',')
         
-    start= int(sys.argv[2])
-    stop= int(sys.argv[3])
-
+    try:
+        start= int(sys.argv[2]) # an index
+    except:
+        start= sys.argv[2] # a time
+        
+    try:
+        stop= int(sys.argv[3])
+    except:
+        stop= sys.argv[3]
+        
     newf= do_extract_subset( fln, start, stop, varss )
     print( newf )
