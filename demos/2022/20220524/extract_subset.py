@@ -15,18 +15,32 @@ def do_extract_subset( fln, start, stop, varss ):
     for v in varss:
         try:
             dep0= cdf[v].attrs['DEPEND_0']
-            print( 'dep0='+dep0 )
+            #TODO: handle no DEPEND_0
             addus.append(dep0)
         except:
             continue
     addus.extend(varss)
     varss= addus
     cdfout= pycdf.CDF( outfiln,'')
+    
+    import bisect
+    if isinstance( start, str ):
+       start = bisect.bisect_left(cdf['Epoch'], datetime.datetime.fromisoformat(start) )
+    if isinstance( stop, str ):
+       stop = bisect.bisect_left(cdf['Epoch'], datetime.datetime.fromisoformat(stop) ) 
+
     for v in varss:
+         if start<0:
+            start= start + len(cdf[v])
+         if stop<0:
+            stop= stop + len(cdf[v])
          vdata= cdf[v][start:stop]
          cdfout[v]= vdata
          cdfout[v].attrs= cdf[v].attrs
-    cdf.close()     
+
+    cdf.close()
+    cdfout.close()
+    
     return outfiln
 
 if __name__=='__main__':
