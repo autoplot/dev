@@ -2,7 +2,8 @@ from java.io import BufferedWriter,BufferedInputStream,BufferedReader,InputStrea
 from java.lang import ProcessBuilder,Process,System
 setScriptDescription('''jyds script calls native python to get part of a CDF file''')
 
-fln= getParam('resourceURI', 'file:/home/jbf/ct/autoplot/u/2022/kristoff/20220524/MyCDF.cdf' )
+fln= getParam('resourceURI', 'file:///net/spot8/data4/jeremy/data/u/kristoff/20220519/bigcdf.cdf' )
+#fln= getParam('resourceURI', 'file:/home/jbf/ct/autoplot/u/2022/kristoff/20220524/MyCDF.cdf' )
 
 start= getParam('start','0','first record')
 stop= getParam('stop','0','last record plus one')
