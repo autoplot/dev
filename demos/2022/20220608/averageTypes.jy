@@ -1,0 +1,19 @@
+# geometric mean
+x1= 10
+x2= 1000
+print sqrt( x1*x2 )
+
+# linear mean
+x1= 10
+x2= 20
+print (x1+x2)/2
+
+# mod360 mean
+x1= 359
+x2= 3
+print mod( (x1+(x2+360))/2., 360 )
+
+# none mean 
+x1= 359
+x2= 3
+print x1

@@ -1,0 +1,18 @@
+from java.lang import System,Double
+setScriptDescription('check performance with AVERAGE_TYPE support.')
+
+fill= Double.NaN
+
+lon= dataset( [ 358, 359, 0, 1, fill, 3 ], averageType=QDataSet.VALUE_AVERAGE_TYPE_NONE )
+t= linspace( '2022-06-08T00:00', '2022-06-08T00:05', 6 )
+
+lon= link( t, lon )
+
+t2= linspace( '2022-06-08T00:00', '2022-06-08T00:09', 500000 )
+
+t0= System.currentTimeMillis()
+lon80= synchronize( t2, lon )
+System.err.println("Time to execute:"+str(System.currentTimeMillis()-t0))
+
+plot( 0, lon )
+plot( 1, lon80 )
