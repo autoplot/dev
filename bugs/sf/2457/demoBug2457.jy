@@ -1,4 +1,5 @@
-setScriptDescription('Demo synchronize bug where mod360 data is interpolated.')
+setScriptDescription('''Demo synchronize bug where mod360 data is interpolated.
+See https://sourceforge.net/p/autoplot/bugs/2457/''')
 
 setCanvasSize(800,400)
 setLayout(2)
