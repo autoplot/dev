@@ -34,21 +34,10 @@ for i in range(len(rr)):
             num[i,ff]= num[i,ff]+1
 
 reset()
-lspec= link( times, lgrid, res/num )
+result= res/num
+lspec= link( times, lgrid, result )
 p,pe= plot( lspec, renderType='nnSpectrogram', ytitle='L(R_E)', ztitle='Density (cm**-3)' )
 plot( 1, tt, l, density, overplotOf=p )
 plot( 2, l )
 plot( 3, density )
 
-#from org.virbo.dsutil import LSpec
-#
-#lspec= LSpec.rebin( l, density, lgrid, 1 )
-#
-#ttag= lspec.property( QDataSet.DEPEND_0 )
-#ttag= collapse1(ttag)
-#lspec= link( ttag, lspec.property( QDataSet.DEPEND_1 ), lspec )
-#
-#
-#plot(lspec, renderType='nnSpectrogram')
-#plot(1, l)
-#plot(2, density)
