@@ -14,7 +14,7 @@ tt= density.property( QDataSet.DEPEND_0 )
 lgrid= dataset( linspace( 2, 6, 40 ), units=l.property(QDataSet.UNITS) )
 
 rr= where( diff(sweep).ne(0) )
-res= putProperty( zeros( len(rr), len(lgrid) ), QDataSet.UNITS, density.property( QDataSet.UNITS ) )
+res= dataset( zeros( len(rr), len(lgrid) ), units=density.property( QDataSet.UNITS ) ) 
 num= zeros( len(rr), len(lgrid) )
 times= zeros( len(rr) )
 
