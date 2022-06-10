@@ -22,14 +22,10 @@ annotation( 0, text='Undesired!cInterpolation Here', pointAtX='2022-06-08T00:01:
 
 # ~~~~
 
-lon= dataset( [ 358, 359, 0, 1 ] )
-lon.putProperty( QDataSet.AVERAGE_TYPE, 'mod360' )
+lon= dataset( [ 358, 359, 0, 1 ], averageType='mod360', typicalMin=0, typicalMax=360 )
 t= linspace( '2022-06-08T00:00', '2022-06-08T00:03', 4 )
 
 lon= link( t, lon )
-lon.putProperty( QDataSet.AVERAGE_TYPE, 'mod360' )
-lon.putProperty( QDataSet.TYPICAL_MIN, 0 )
-lon.putProperty( QDataSet.TYPICAL_MAX, 360 )
 
 t2= linspace( '2022-06-08T00:00', '2022-06-08T00:03', 80 )
 
