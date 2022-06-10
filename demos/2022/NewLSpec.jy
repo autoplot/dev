@@ -11,7 +11,7 @@ l= getDataSet('https://rbsp-ect.newmexicoconsortium.org/data_pub/rbsp%s/mageis/l
 (l,sweep)= synchronizeNN( density,[l,sweep] )
 tt= density.property( QDataSet.DEPEND_0 )
 
-lgrid= putProperty( linspace( 2, 6, 40 ), QDataSet.UNITS, l.property(QDataSet.UNITS) )
+lgrid= dataset( linspace( 2, 6, 40 ), units=l.property(QDataSet.UNITS) )
 
 rr= where( diff(sweep).ne(0) )
 res= putProperty( zeros( len(rr), len(lgrid) ), QDataSet.UNITS, density.property( QDataSet.UNITS ) )
