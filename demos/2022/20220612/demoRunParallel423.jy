@@ -1,0 +1,17 @@
+setScriptDescription('Demo runInParallel to run independent tasks at the same time')
+
+from java.util import Arrays
+def runone(dateYYYYmm):
+    parseArgs='time=field0&timeFormat=$Y+$j&validMax=99998&column=field17&label=E-W+Flow+Angle'
+    dir='https://cdaweb.gsfc.nasa.gov/pub/data/wind/swe/ascii/2-min/'
+    ds= getDataSet( 'vap+dat:'+dir+'wind_swe_2m_sw'+dateYYYYmm+'.asc?'+parseArgs )
+    s= sort(ds)
+    ds= ds[s]
+    mkdir( '/tmp/ap/data/' )
+    formatDataSet( ds, '/tmp/ap/data/wind_swe_2m_sw_'+dateYYYYmm+'.cdf' )
+
+#runone('199501')
+
+dates= generateTimeRanges('$Y$m','1998')
+
+runInParallel( runone, Arrays.asList(dates), monitor )
