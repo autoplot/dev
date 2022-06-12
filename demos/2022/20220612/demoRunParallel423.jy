@@ -1,4 +1,5 @@
-setScriptDescription('Demo runInParallel to run independent tasks at the same time')
+setScriptDescription('''Demo runInParallel to run independent tasks at the same time.  See
+https://sourceforge.net/p/autoplot/feature-requests/423/''')
 
 from java.util import Arrays
 def runone(dateYYYYmm):
