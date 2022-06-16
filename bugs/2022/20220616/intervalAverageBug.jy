@@ -1,0 +1,15 @@
+setScriptDescription( '''Jon N pointed out this bug, which prevents interval average from working.''')
+
+ds= getDataSet( 'https://spp-isois.sr.unh.edu/data/EPILo/level2/psp_isois-epilo_l2-ic_$Y$m$d_v$(v,sep).cdf?H_CountRate_ChanT&timerange=2021+Nov+20' )
+
+ds= slice1( ds, 39 )
+
+print ds, ds.property(QDataSet.DEPEND_0)
+
+ds= trim( ds,400,500)
+
+print ds, ds.property(QDataSet.DEPEND_0)
+
+ds= reduceMean( ds, 0 )
+
+print ds, ds.property(QDataSet.DEPEND_0)
