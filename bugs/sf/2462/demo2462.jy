@@ -1,0 +1,2 @@
+print dataset('2022-01-02')
+print dataset('2022-01-02/P1D')
