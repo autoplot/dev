@@ -1,2 +1,11 @@
-print dataset('2022-01-02')
-print dataset('2022-01-02/P1D')
+def dstest(ds):
+    print ds.rank(), ds, ds.property(QDataSet.UNITS)
+    
+dstest( dataset('2022-01-02') )
+dstest(dataset('2022-01-02/P1D') )
+dstest(dataset('2022-01-02T00:00Z' ))
+dstest(dataset('2022-01-02TZ'))
+dstest(dataset('5'))
+dstest(dataset('2005'))
+dstest(dataset('5 Kg'))
+dstest(dataset('Chicago'))
