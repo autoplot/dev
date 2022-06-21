@@ -1,0 +1,7 @@
+setScriptDescription('''This is a script which takes arguments and prints a result''')
+
+a= getParam( 'sc', 'A', 'First Argument', ['A','B'] )
+b= getParam( 'date', '2020-02-02', 'Date', ['2020-02-02','2020-02-03'] )
+
+print( 'Spacecraft %s on %s' % ( a,b ) )
+
