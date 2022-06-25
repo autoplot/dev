@@ -1,0 +1,62 @@
+# Demonstrate how format would be implemented
+def formatParam( t, spec, o ):
+    if spec[0]=='$':
+        tr= datumRange(o)
+        return TimeParser.create(spec).format( tr )
+    else:
+        return t(spec % o)
+
+print formatParam( float, '%f', 3 )
+print formatParam( int, '%05d', 3 )
+print formatParam( float, '%.1f', 3 )
+print formatParam( float, '%.1e', 3000 )
+print formatParam( str, '$Y-$j', '2022-06-25' )
+#print format( '$Y-$jT$H:$M:$S', '2022-06-25T01:02:03' )  # TODO: instant
+
+_paramMap = {}
+_paramSort = []
+
+params = { 'tr':'2022-06', 'rl':'3.14' }
+
+# name is the name of the input parameter.
+# deflt is the default value for the input parameter.
+# doc is any documentation for the parameter.
+# constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with VALID_MIN, VALID_MAX and other relevant QDataSet properties.
+def getParam(name, deflt, doc='', constraint=''):
+    """<html>get the parameter from the URI<ul>
+  <li>name is the name of the input parameter.
+  <li>deflt is the default value for the input parameter.
+  <li>doc is any documentation for the parameter.
+  <li>constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with VALID_MIN, VALID_MAX and other relevant QDataSet properties.<ul>
+  """
+    if type(name).__name__ == 'int':
+        name = 'arg_%d' % name
+    _paramMap[name] = [name, deflt, doc, constraint]
+    _paramSort.append(name)
+    if type(params) is dict:
+        if name in params:
+            t = type(deflt)  # Ed demonstrated this allows some pretty crazy things, e.g. open file, so be careful...
+            v = t(params[name])
+            if isinstance(constraint, list):
+                if v not in constraint:
+                    raise Exception('value is not one of allowed values: %s %s' % (name, v))
+            elif isinstance(constraint, dict):
+                if 'regex' in constraint:
+                    if not re.match(constraint['regex'], v):
+                        raise Exception('value does not match regular expression: %s %s' % (name, v))
+                if 'format' in constraint:
+                    f= constraint['format']
+                    v= formatParam( t, f, v )
+                if 'min' in constraint and v < constraint['min']:
+                    raise Exception('value is less than minimum: %s %s' % (name, v))
+                if 'max' in constraint and v > constraint['max']:
+                    raise Exception('value is greater than maximum: %s %s' % (name, v))
+            return v
+        else:
+            return deflt
+    else:
+        print('in jython script, variable params was overriden.')
+        return deflt
+        
+print getParam( 'tr', '2022-06-25', 'the day to run', { 'format':'$Y-$jT$H:$M/$(Y;end)-$jT$H:$M' } )
+print getParam( 'rl', 5.4, 'real number with .1 resolution', { 'format':'%.1f' } )
