@@ -21,13 +21,19 @@ params = { 'tr':'2022-06', 'rl':'3.14' }
 # name is the name of the input parameter.
 # deflt is the default value for the input parameter.
 # doc is any documentation for the parameter.
-# constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with VALID_MIN, VALID_MAX and other relevant QDataSet properties.
+# constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with constraints.
 def getParam(name, deflt, doc='', constraint=''):
     """<html>get the parameter from the URI<ul>
   <li>name is the name of the input parameter.
   <li>deflt is the default value for the input parameter.
   <li>doc is any documentation for the parameter.
-  <li>constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with VALID_MIN, VALID_MAX and other relevant QDataSet properties.<ul>
+  <li>constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with constraints.<ul>
+  The constraints are:<ul>
+     <li>min - the minimum allowed value
+     <li>max - the maximum allowed value (inclusive)
+     <li>regex - value must match this regular expression (regex must work in Python and Java)
+     <li>format - the value is reformatted to this before passed into routine.  Examples include %.2f and $Y-$m-$d
+  </ul>
   """
     if type(name).__name__ == 'int':
         name = 'arg_%d' % name
