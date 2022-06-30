@@ -1,0 +1,11 @@
+setScriptDescription('''This is a script which takes arguments and prints a result''')
+
+a= getParam( 'sc', 'A', 'RBSP Spacecraft', ['A','B'] )
+b= getParam( 'date', '2017-02-02', 'Date to process', ['2017-02-02','2017-02-03'] )
+
+print( 'Spacecraft %s on %s' % ( a,b ) )
+
+ymd= b[0:4]+b[5:7]+b[8:10]
+ds= getDataSet('https://emfisis.physics.uiowa.edu/Flight/RBSP-%s/LANL/MagEphem/2017/rbsp%s_def_MagEphem_OP77Q_%s_v3.0.0.h5?DipoleTiltAngle' % ( a, a.lower(), ymd ) )
+
+print 'Min=%.2f Mean=%.2f Max=%.2f' % ( reduceMin(ds,0), mean(ds), reduceMax(ds,0) )

@@ -1,0 +1,23 @@
+setScriptDescription('''Demos dataset property format with DataPointRecorder, new in v2022a_6''')
+
+from org.das2.components import DataPointRecorder
+dpr= DataPointRecorder()
+
+addTab('digitize',dpr)
+
+tt= linspace('2020-02-02T00:00','2020-02-03T00:00',2500)
+
+temperature= dataset( 70 + accum(randn(2500)), format='%.4f', name='temperature' )
+
+rain= dataset( greaterOf( dataset(0), accum(randn(2500) ) ), name='rain' )
+
+pressure= dataset( 760 + accum(randn(2500))*10, format='%d', name='pressure' )
+
+conditions= labelsDataset(['calm']*2500)
+conditions[30:50]= labelsDataset(['cloudy']*20)
+conditions= dataset( conditions, name='conditions' )
+
+ds= bundle( tt, temperature, rain, pressure, conditions )
+
+dpr.addDataPoints(ds)
+
