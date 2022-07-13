@@ -1,15 +1,21 @@
 ds= getDataSet('https://jfaden.net/~jbf/autoplot/demos/2022/20220517/2022-05-17T11-06-04.png')
 dsn= zeros(ds.length(),ds.length(0))
 
-r= where( ds[:,:,0].gt(170) 
-    .and( ds[:,:,1].gt(170) )
-    .and( ds[:,:,2].gt(170) ) )
+r= where( ds[:,:,0].gt(180) 
+    .and( ds[:,:,1].gt(180) )
+    .and( ds[:,:,2].gt(180) ) )
 dsn[r]= 0.5
 
 r= where( ds[:,:,0].gt(200) 
     .and( ds[:,:,1].gt(200) )
     .and( ds[:,:,2].gt(200) ) )
 dsn[r]= 1.0
+
+r= where( ds[:,:,0].gt(220) 
+    .and( ds[:,:,1].gt(220) )
+    .and( ds[:,:,2].gt(220) ) )
+dsn[r]= 2.0
+
 
 plot( dsn, colorTable='grayscale', zrange=[0,1], isotropic=True )
 dom.plots[0].zaxis.visible= False

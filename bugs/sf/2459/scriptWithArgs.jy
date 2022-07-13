@@ -2,6 +2,7 @@ setScriptDescription('''This is a script which takes arguments and prints a resu
 
 a= getParam( 'sc', 'A', 'RBSP Spacecraft', ['A','B'] )
 b= getParam( 'date', '2017-02-02', 'Date to process', ['2017-02-02','2017-02-03'] )
+print datum(b)
 
 print( 'Spacecraft %s on %s' % ( a,b ) )
 

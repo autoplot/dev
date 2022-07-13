@@ -4,12 +4,12 @@ ds= getDataSet( 'https://spp-isois.sr.unh.edu/data/EPILo/level2/psp_isois-epilo_
 
 ds= slice1( ds, 39 )
 
-print ds, ds.property(QDataSet.DEPEND_0)
+print 'slice1', ds, ds.property(QDataSet.DEPEND_0)
 
 ds= trim( ds,400,500)
 
-print ds, ds.property(QDataSet.DEPEND_0)
+print 'trim', ds, ds.property(QDataSet.DEPEND_0)
 
 ds= reduceMean( ds, 0 )
 
-print ds, ds.property(QDataSet.DEPEND_0)
+print 'reduceMean', ds, ds.property(QDataSet.DEPEND_0)

@@ -6,7 +6,7 @@ t= linspace( '2022-06-08T00:00', '2022-06-08T00:03', 4 )
 
 lon= link( t, lon )
 
-t2= linspace( '2022-06-08T00:00', '2022-06-08T00:03', 50000000 )
+t2= linspace( '2022-06-08T00:00', '2022-06-08T00:03', 20000000 )
 
 t0= System.currentTimeMillis()
 lon80= synchronize( t2, lon )
