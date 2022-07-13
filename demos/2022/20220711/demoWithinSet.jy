@@ -1,0 +1,10 @@
+ds= dataset( [ 1,2,3,2,1,2,3,4,5,6,7,4,2] , units= Units.eV)
+
+ii= withinSet(ds,dataset([1,2,3] ) )
+for i in xrange(len(ds)):
+    print ds[i], '\t',
+print ''
+for i in xrange(len(ds)):
+    print ii[i], '\t',
+print ''
+
