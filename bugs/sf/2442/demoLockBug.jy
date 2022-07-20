@@ -1,0 +1,10 @@
+dasAxis = dom.plots[0].controller.dasPlot.getXAxis()
+dasCanvas = dom.plots[0].controller.dasPlot.canvas
+print dasCanvas.isPendingChanges()
+
+client= dasAxis
+lock= 'LOCK'
+
+#dasCanvas.registerPendingChange( client, lock )
+#dasCanvas.performingChange( client, lock )
+dasCanvas.changePerformed( client, lock )

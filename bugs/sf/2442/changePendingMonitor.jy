@@ -1,0 +1,11 @@
+from javax.swing import JTextArea
+ta= JTextArea()
+
+addTab( 'Changes', ta )
+
+while ( True ):
+    sleep(500)
+    mm = dom.controller.dasCanvas.getChangesSupport().getChangesPending()
+    ta.setText( mm.toString() )
+    
+    

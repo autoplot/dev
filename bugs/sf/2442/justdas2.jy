@@ -1,0 +1,100 @@
+from javax.swing import JPanel
+from javax.swing import BoxLayout
+from org.das2.graph import DasCanvas
+from java.lang import RuntimeException
+from org.das2.graph import DasPlot, GraphUtil
+from org.das2.graph import  DasColumn, DasRow
+from org.das2.qds import AbstractQFunction, QFunction
+from org.das2.qds import JoinDataSet, BundleDataSet, DataSetUtil, DDataSet
+from java.lang import IllegalArgumentException, Thread
+from javax.swing import JFrame
+
+width = 500
+height = 400
+
+panel = JPanel()
+panel.setLayout(BoxLayout(panel, BoxLayout.X_AXIS))
+
+canvas1 = DasCanvas(width, height)
+canvas1.setDasName("canvas1")
+
+panel.add(canvas1)
+
+# read data
+yds = sin( linspace(0, 10, 1000))
+tds = timegen("2010-01-01T00:00", "1 s", 1000)
+
+ds = link(tds, yds)
+
+# here's some old das2 autoranging, works for this case
+xaxis = GraphUtil.guessXAxis(ds)
+yaxis = GraphUtil.guessYAxis(ds)
+
+plot = DasPlot(xaxis, yaxis)
+# here's autoplot as of 2005
+r = GraphUtil.guessRenderer(ds)
+plot.addRenderer(r)
+
+class AbstractQFunction( QFunction) :
+        
+        def value( self, parm) :
+            if (parm.rank() == 1) :
+                parm = JoinDataSet(parm)
+            else :
+                raise IllegalArgumentException("rank should be 1")
+            
+            result = values(parm)
+            
+            return result.slice(0)
+        
+        
+        def values(self, parms) :
+            
+            outbds1 = BundleDataSet.createRank1Bundle()
+            
+            sec = DDataSet.createRank1(len(parms))
+            sec.putProperty(QDataSet.LABEL, "Sec")
+            rand1 = DDataSet.createRank1(len(parms))
+            rand1.putProperty(QDataSet.LABEL, "Rand")
+            rand1.putProperty(QDataSet.FORMAT, "%5.2f")
+            rand2 = DDataSet.createRank1(len(parms))
+            rand2.putProperty(QDataSet.LABEL, "Rand2")
+            rand2.putProperty(QDataSet.FORMAT, "%5.3f")
+            
+            for i in xrange(len(parms)):
+                parm = parms.slice(i)
+                
+                time = parm.slice(0)
+                
+                sec.putValue(i, mod(time, DataSetUtil.asDataSet(3600, Units.seconds)).value())
+                rand1.putValue(i, randu(1).slice(0).value())
+                rand2.putValue(i, randu(1).slice(0).value())
+                
+            
+            
+            outbds1.bundle(sec)
+            outbds1.bundle(rand1)
+            outbds1.bundle(rand2)
+            
+            Thread.sleep(1000)            
+            
+            return outbds1
+        
+        def exampleInput( self ) :
+            inbds = BundleDataSet.createRank0Bundle()
+            dd = DataSetUtil.asDataSet(0, Units.t2000)
+            dd.putProperty(QDataSet.LABEL, "Time")
+            inbds.bundle(dd)
+            return inbds
+
+xaxis.setTcaFunction( AbstractQFunction() )
+
+xaxis.setDrawTca(True)
+
+canvas1.add(plot, DasRow.create(canvas1, None, "0%+2em", "100%-7em"), DasColumn.create(canvas1, None, "0%+5em", "100%-7em"))
+
+frame = JFrame()
+frame.getContentPane().add(panel)
+frame.pack()
+
+frame.setVisible(True)
