@@ -3,6 +3,10 @@ setScriptDescription('''Enter a number and Autoplot will show a number of interp
 num= getParam('number',1658361600012)
 
 uu= [ Units.ms1970, Units.t1970, Units.us2000, Units.t2000 ]
-
-for u in uu:
-    print u, u.createDatum(num)
+dd= [ 'milliseconds since 1970-01-01T00:00Z',
+    'seconds since  1970-01-01T00:00Z',
+    'microseconds since 2000-01-01T00:00Z', 
+    'seconds since 2000-01-01T00:00Z' ]
+    
+for i in xrange(4):
+    print uu[i], '\t', dd[i], '\t', uu[i].createDatum(num)
