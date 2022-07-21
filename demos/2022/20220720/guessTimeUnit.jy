@@ -1,0 +1,8 @@
+setScriptDescription('''Enter a number and Autoplot will show a number of interpretations of it.''')
+
+num= getParam('number',1658361600012)
+
+uu= [ Units.ms1970, Units.t1970, Units.us2000, Units.t2000 ]
+
+for u in uu:
+    print u, u.createDatum(num)
