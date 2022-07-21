@@ -1,11 +1,17 @@
+setScriptDescription('''Continuously checks the pendingChanges status and reports
+results to Changes tab.''')
+
+from java.util import HashMap
 from javax.swing import JTextArea
+
 ta= JTextArea()
 
 addTab( 'Changes', ta )
 
 while ( True ):
     sleep(500)
-    mm = dom.controller.dasCanvas.getChangesSupport().getChangesPending()
+    mm= HashMap()
+    dom.controller.dasCanvas.pendingChanges(mm)
     ta.setText( mm.toString() )
     
     
