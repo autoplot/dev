@@ -1,0 +1,27 @@
+from org.das2.qds import DataSetOps,DataSetUtil,DDataSet
+from org.das2.qds import QubeDataSetIterator
+
+tr = getParam( 'timerange', '2021-01-18T12:00 to 2021-01-18T18:00', 'Timerange to load' )
+
+yy= getDataSet( 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/dfb_dbm_dvac/$Y/psp_fld_l2_dfb_dbm_dvac_$Y$m$d$H_v02.cdf?doDep=no&interpMeta=no&psp_fld_l2_dfb_dbm_dvac12' , tr)
+tt= getDataSet( 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/dfb_dbm_dvac/$Y/psp_fld_l2_dfb_dbm_dvac_$Y$m$d$H_v02.cdf?doDep=no&interpMeta=no&psp_fld_l2_dfb_dbm_dvac_time_series_TT2000',tr )
+
+def myFlatten(ds):
+    if ( ds.rank()==1 ):
+        return ds
+    else:
+        nn= DataSetUtil.totalLength(ds)
+        result= DDataSet.createRank1(nn)
+        it= QubeDataSetIterator(ds)
+        i=0
+        while it.hasNext():
+            it.next()
+            result[i]= it.getValue(ds)
+            i=i+1
+        DataSetUtil.copyDimensionProperties( ds,result )
+        return result
+
+yy= myFlatten(yy)
+tt= myFlatten(tt)
+
+plot( tt, yy )
