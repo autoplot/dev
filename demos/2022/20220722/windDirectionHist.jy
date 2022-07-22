@@ -1,0 +1,9 @@
+tr= getParam( 'timerange', '2022-01-06', 'timerange to load' )
+windSpeed34803= getDataSet('vap+hapi:https://jfaden.net/HapiServer/hapi?id=WindSpeed34803',tr)
+d= windSpeed34803[:,1]
+h= histogram(d,0,360,10)
+
+
+reset()
+plot( h, yrange=[0,10000], ylog=False )
+
