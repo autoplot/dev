@@ -8,5 +8,5 @@ uu= HtmlUtil.getDirectoryListing(URL('http://autoplot.org/Special:Allpages'),ins
 for u in uu:
     m= p.matcher(str(u))
     if m.matches():
-        print 'wget -O %s http://autoplot.org/wiki/index.php?title=%s&action=raw' % ( m.group(1), m.group(1) )
+        print 'wget -O %s \"http://autoplot.org/wiki/index.php?title=%s&action=raw\"' % ( m.group(1), m.group(1) )
     
