@@ -1,0 +1,8 @@
+setScriptDescription('It takes a surprising amount of time to find the extent of 46M numbers.  Why?')
+from java.lang import System
+
+randomSeed(0)
+ds = randn(46000000)
+t0= System.currentTimeMillis()
+print extent(ds,None,None)
+print System.currentTimeMillis()-t0
