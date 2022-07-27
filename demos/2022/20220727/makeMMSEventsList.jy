@@ -1,0 +1,39 @@
+setScriptDescription('''find gaps in MMS Data, identifying continous burst intervals''')
+
+tr= getParam( 'timerange', '2015-10-25', 'timerange to load' )
+sc= getParam( 'mmssc', 1, 'MMS Spacecraft Number', [ 1,2,3,4 ] )
+trout= TimeParser.create('%Y%m%d').format(datumRange(tr))
+
+# vap+cdaweb:ds=MMS1_EDP_BRST_L2_DCE&filter=mms1_edp_brs&id=mms1_edp_quality_brst_l2&timerange=2015-10-25
+
+# ds= getDataSet('vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi?id=MMS1_EDP_BRST_L2_DCE&parameters=Time,mms1_edp_quality_brst_l2',tr)
+
+ds= getDataSet('vap+cdaweb:ds=MMS%d_EDP_BRST_L2_DCE&id=mms%d_edp_quality_brst_l2' % (sc,sc),tr)
+tt= xtags(ds)
+
+plot( ds )
+
+m= reduceMin(diff(tt),0)
+print m
+
+evt= None
+
+r1= where( diff(tt).gt(1.5*m) )
+r= [-1]
+for r11 in r1:
+    r.append(r11)
+r.append(len(tt))
+
+print r
+for i in range(0,len(r)-1):
+    tr1= '%s/%s' % ( tt[r[i]+1].svalue(), tt[r[i+1]-1].svalue() )
+    evt= createEvent( evt, datumRange( tr1 ), Color.BLUE.RGB, 'evt%03d'%i )
+    
+plot( 1, evt, renderType='eventsBar>gantt=T' )
+
+formatDataSet( evt, '/tmp/jbf/ap/%s/mms%d_%s.dat' % (trout[0:4],sc,trout) ) 
+writeToPng( '/tmp/jbf/ap/%s/mms%d_%s.png'% (trout[0:4],sc,trout) )
+
+print 'done'
+
+
