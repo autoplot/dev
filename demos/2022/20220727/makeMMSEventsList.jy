@@ -1,17 +1,19 @@
 setScriptDescription('''find gaps in MMS Data, identifying continous burst intervals''')
 
-tr= getParam( 'timerange', '2015-10-25', 'timerange to load' )
+tr= getParam( 'timerange', '2015-11-01', 'timerange to load' )
 sc= getParam( 'mmssc', 1, 'MMS Spacecraft Number', [ 1,2,3,4 ] )
-trout= TimeParser.create('%Y%m%d').format(datumRange(tr))
+trout= TimeParser.create('%Y%m%d_%H').format(datumRange(tr))
 
 # vap+cdaweb:ds=MMS1_EDP_BRST_L2_DCE&filter=mms1_edp_brs&id=mms1_edp_quality_brst_l2&timerange=2015-10-25
 
 # ds= getDataSet('vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi?id=MMS1_EDP_BRST_L2_DCE&parameters=Time,mms1_edp_quality_brst_l2',tr)
 
 ds= getDataSet('vap+cdaweb:ds=MMS%d_EDP_BRST_L2_DCE&id=mms%d_edp_quality_brst_l2' % (sc,sc),tr)
+print 'read in %d points for day %s' % ( ds.length(), tr )
+
 tt= xtags(ds)
 
-plot( ds )
+plot( ds, xrange=tr )
 
 m= reduceMin(diff(tt),0)
 print m
