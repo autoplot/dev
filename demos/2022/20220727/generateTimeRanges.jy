@@ -1,0 +1,5 @@
+tr= datumRange('2015-11-01T00:00/12:00')
+while ( tr.min().lt(datum('2015-12-01T00:00')) ):
+    print tr
+    tr= tr.next()
+    
