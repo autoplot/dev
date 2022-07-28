@@ -4,8 +4,8 @@ tr= getParam( 'timerange', '2015-11-01', 'timerange to load' )
 sc= getParam( 'mmssc', 1, 'MMS Spacecraft Number', [ 1,2,3,4 ] )
 trout= TimeParser.create('%Y%m%d_%H').format(datumRange(tr))
 
-outfile= '/tmp/jbf/ap/%s/mms%d_%s.dat' % (trout[0:4],sc,trout)'
-if ( file_exists(outfile) ):
+outfile= '/tmp/jbf/ap/%s/mms%d_%s.dat' % (trout[0:4],sc,trout)
+if ( fileExists(outfile) ):
     print 'file exists already: '+outfile
     stop
     
