@@ -1,0 +1,31 @@
+# run through a set of files collating them into the output, sorted.
+
+ff= [ 'f1.dat', 'f2.dat', 'f3.dat' ]
+
+numIn= len(ff)
+fin= [0] * numIn
+nextRecs= [''] * numIn
+nextTime= [datum(0)] * numIn
+
+numDone=0
+
+for i in xrange(len(ff)):
+    fin[i]= open( str( getFile( PWD + ff[i] ) ) )
+    nextRecs[i]= fin[i].readline() 
+    nextTime[i]= datum( nextRecs[i] )
+
+for i in xrange(len(fin)):
+    print nextRecs[i]            
+
+
+while numDone<numIn:
+    im = imin( nextRecs )
+    theNextRec= nextRecs[im]
+    print theNextRec
+    nextRecs[im]= fin[im].readline()
+    if len(nextRecs[im])>1:
+        nextTime[im]= datum( nextRecs[im] )
+    else:
+        del fin[im]
+        del nextRecs[im]
+        numDone= numDone + 1
