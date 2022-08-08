@@ -4,6 +4,11 @@ tr= getParam( 'timerange', '2015-11-01', 'timerange to load' )
 sc= getParam( 'mmssc', 1, 'MMS Spacecraft Number', [ 1,2,3,4 ] )
 trout= TimeParser.create('%Y%m%d_%H').format(datumRange(tr))
 
+outfile= '/tmp/jbf/ap/%s/mms%d_%s.dat' % (trout[0:4],sc,trout)
+if ( fileExists(outfile) ):
+    print 'file exists already: '+outfile
+    stop
+    
 # vap+cdaweb:ds=MMS1_EDP_BRST_L2_DCE&filter=mms1_edp_brs&id=mms1_edp_quality_brst_l2&timerange=2015-10-25
 
 # ds= getDataSet('vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi?id=MMS1_EDP_BRST_L2_DCE&parameters=Time,mms1_edp_quality_brst_l2',tr)
@@ -33,9 +38,7 @@ for i in range(0,len(r)-1):
     
 plot( 1, evt, renderType='eventsBar>gantt=T' )
 
-formatDataSet( evt, '/tmp/jbf/ap/%s/mms%d_%s.dat' % (trout[0:4],sc,trout) ) 
+formatDataSet( evt, outfile ) 
 writeToPng( '/tmp/jbf/ap/%s/mms%d_%s.png'% (trout[0:4],sc,trout) )
 
 print 'done'
-
-

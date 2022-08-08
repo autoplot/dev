@@ -9,6 +9,9 @@ dr= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/'
 ff= listDirectory( dr + '*.cdf' )
 ff.append('file:/home/jbf/ct/autoplot/data.backup/cas_rpws_wbrfull_20040102T002600_20040102T002631_325KH_VZ.cdf')
 
+# ff=['https://cdaweb.gsfc.nasa.gov/sp_phys/data/mms/mms1/edp/brst/l2/dce/2016/02/mms1_edp_brst_l2_dce_20160207203014_v2.2.0.cdf',
+#     'https://cdaweb.gsfc.nasa.gov/sp_phys/data/mms/mms1/edp/brst/l2/dce/2016/02/mms1_edp_brst_l2_dce_20160209205154_v2.2.0.cdf']
+
 outw= open( URI(PWD).path + 'output.md', 'w' )
 
 outw.write( '# Introduction\n' )
@@ -42,14 +45,14 @@ monitor.setTaskSize(len(ff))
 monitor.started()
 for f in ff:
     print f, type(f)
-    if ( f.find('bigcdf')==-1 ):
-        continue
-        
+
     outw.write('<a name=\''+f+'\'>\n' )
     monitor.setTaskProgress(monitor.getTaskProgress()+1)
     monitor.setProgressMessage(f)
 
     if ( f.startswith('file') ):
+        fl= getFile( f, False, monitor.getSubtaskMonitor('read file') )
+    elif ( f.startswith('https') ):
         fl= getFile( f, False, monitor.getSubtaskMonitor('read file') )
     else:
         fl= getFile( dr + f, False, monitor.getSubtaskMonitor('read file') )
@@ -111,5 +114,6 @@ for i in xrange(64):
         else:
             outw.write( '|'+n+'|'+str(types.get(n))+'|\n' )
 
-print 'closing file.'
+print 'closing file ', URI(PWD).path + 'output.md'
+
 outw.close()
