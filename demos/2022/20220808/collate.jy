@@ -12,16 +12,15 @@ numDone=0
 for i in xrange(len(ff)):
     fin[i]= open( str( getFile( PWD + ff[i] ) ) )
     nextRecs[i]= fin[i].readline() 
-    nextTime[i]= datum( nextRecs[i] )
-
-for i in xrange(len(fin)):
-    print nextRecs[i]            
+    nextTime[i]= datum( nextRecs[i] )   
 
 
+inumTime=0
+lastTime=''
 while numDone<numIn:
     im = imin( nextRecs )
     theNextRec= nextRecs[im]
-    print theNextRec
+    print theNextRec.strip(), ',', ff[im]
     nextRecs[im]= fin[im].readline()
     if len(nextRecs[im])>1:
         nextTime[im]= datum( nextRecs[im] )
