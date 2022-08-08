@@ -1,4 +1,4 @@
-# run through a set of files collating them into the output, sorted.
+setScriptDescription( '''Run through a set of sorted files, collating them into the console, sorted.''')
 
 ff= [ 'f1.dat', 'f2.dat', 'f3.dat' ]
 
