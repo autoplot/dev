@@ -1,4 +1,5 @@
-setScriptDescription( '''Run through a set of sorted files, collating them into the console, sorted.''')
+setScriptDescription( '''Run through a set of sorted files, collating them into the console, sorted.
+This assumes each file contains at least one record and is sorted.''')
 
 ff= [ 'f1.dat', 'f2.dat', 'f3.dat' ]
 
