@@ -1,0 +1,15 @@
+setScriptDescription('demo bug with off-screen error message')
+
+x= [1,2,3,4,5]
+y= [1,2,1,2,1]
+
+plot( x, y, xrange=[7,12] )
+
+annotation(text='Note the error message is useful')
+
+sleep(1000)
+
+for i in xrange(170):
+    dom.plots[0].xaxis.range=datumRange([7-i/12.,12-i/12.])
+    sleep(10)
+annotation(text='bad error message')
