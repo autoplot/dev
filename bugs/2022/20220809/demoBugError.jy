@@ -1,13 +1,23 @@
 setScriptDescription('demo bug with off-screen error message')
 
+reset()
+
 x= [1,2,3,4,5]
 y= [1,2,1,2,1]
 
-plot( x, y, xrange=[7,12] )
+plot( x, y )
+sleep(1000)
+annotation(text='Watch the error bubbles')
 
+for i in xrange(170):
+    dom.plots[0].xaxis.range= dom.plots[0].xaxis.range.rescale(0.02,1.02) 
+    sleep(10)
+    
 annotation(text='Note the error message is useful')
 
 sleep(1000)
+
+annotation(text='but look at this...')
 
 for i in xrange(170):
     dom.plots[0].xaxis.range=datumRange([7-i/12.,12-i/12.])
