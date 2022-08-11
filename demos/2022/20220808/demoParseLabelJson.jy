@@ -1,0 +1,13 @@
+ds= getDataSet('http://solar.physics.montana.edu/FIREBIRD_II/Data/FU_3/hires/FU3_Hires_2018-10-01_L2.txt?column=Col_counts')
+
+u= Units.keV
+
+dd= dataset( zeros(6), units=u )
+
+for i in xrange( ds.length(0) ):
+    try:
+        dd[i] = u.parse(unbundle(ds,i).property(QDataSet.LABEL))
+    except:
+        dd[i] = u.parse( unbundle(ds,i).property(QDataSet.LABEL)[1:] )
+    
+plot( dd )
