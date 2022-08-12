@@ -1,0 +1,5 @@
+up= {}
+up['ENERGY_WIDTH']= [4.5,5.7,6.9,8.0]
+
+ds= dataset( randn(60), userProperties=up )
+plot(ds)
