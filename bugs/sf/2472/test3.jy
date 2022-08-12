@@ -1,0 +1,10 @@
+setScriptDescription( 'test of plot( bundle( x,y,z ) )' )
+
+x= randn(1000)
+y= randn(1000)
+r= sqrt( x**2 + y**2 )
+z= -1/exp( r ) * cos(r*9) 
+
+xyz= bundle( x,y,z )
+
+plot( xyz )

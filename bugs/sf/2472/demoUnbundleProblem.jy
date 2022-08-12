@@ -1,0 +1,8 @@
+col_counts= getDataSet('file:///home/jbf/ct/jenkins/data.backup/dat/rich/FU3_Hires_2018-10-01_L2.truc.txt?column=Col_counts')
+print col_counts.property( QDataSet.DEPENDNAME_0 )
+print col_counts.property( QDataSet.USER_PROPERTIES )
+print col_counts
+bdesc= col_counts.property( QDataSet.BUNDLE_1 )
+print bdesc.property(QDataSet.DEPENDNAME_0)
+print bdesc.property( QDataSet.DEPENDNAME_0,bdesc.length()-1 )
+plot( col_counts )
