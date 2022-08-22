@@ -1,0 +1,2 @@
+ds= dataset( ones(51), validMax=0 )
+plot( ds )
