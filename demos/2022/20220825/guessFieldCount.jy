@@ -1,0 +1,23 @@
+from org.das2.qds.util import AsciiParser
+
+print 'guessFieldCount only works when all fields are numbers.'
+ur= 'http://autoplot.org/data/autoplot.dat'
+ff= str(getFile(ur))
+
+nf= AsciiParser.guessFieldCount(ff)
+print 'The file %s has %d fields' % ( ur, nf )
+
+print 'One can also split the file to count the records.'
+
+ur= 'http://autoplot.org/data/autoplot.csv'
+ff= str(getFile(ur))
+
+f= open( ff, 'r' )
+s= f.readline() # skip first line of header
+s= f.readline() # skip second line of header
+s= f.readline()
+
+f.close()
+
+nf= len(s.split(','))
+print 'The file %s has %d fields, including the last which is empty.' % ( ur, nf )
