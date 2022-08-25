@@ -1,3 +1,7 @@
+setScriptDescription('''Demo how an ASCII file is read to get the number of columns (a.k.a. fields).  Autoplot's
+documentation uses the parlance records and fields.  A record is typically one line of an ASCII file,
+and the fields are each of datums, often delimited by a comma or a tab.''')
+
 from org.das2.qds.util import AsciiParser
 
 print 'guessFieldCount only works when all fields are numbers.'
