@@ -1,10 +1,13 @@
+setScriptDescription('''There are a number of bugs where DEPEND_0 with a bins dimension was not 
+handled properly.  Try slicing this spectrogram.''')
+
 from org.das2.graph.SpectrogramRenderer import RebinnerEnum
 from org.autoplot import RenderType
-zz= randn(16,16)
+zz= randn(16,16) + 5*sin(linspace(0,PI,16))
 
 xx= accum( randn(17)+10 )
 xx= bundle( xx[0:16], xx[1:17] )
-yy= dataset( xx, bins1='min,max' )
+xx= dataset( xx, bins1='min,max' )
 
 yy= accum( randn(17)+10 )
 yy= bundle( yy[0:16], yy[1:17] )
