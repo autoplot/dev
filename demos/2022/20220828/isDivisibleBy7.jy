@@ -1,0 +1,28 @@
+setScriptDescription('''Is a number divisible by 7?  See 
+<a href="https://www.youtube.com/watch?v=UDQjn_-pDSs">this video</a>''')
+
+n= getParam( 'n', 35, 'number' )
+
+if n<0:
+    raise Exception('Number must be positive')
+    
+s= str(n)
+
+d7s= ( '7','14','28','49','56','63','70','77' )
+
+def isD7(s):
+    print s
+    if s in d7s:
+        return True
+    else:
+        if len(s)<2: return False
+        y= int(s[-1])
+        d= 5 * y + int(s[0:-1])
+        return isD7(str(d))
+
+if isD7(s):
+    print 'yes'
+else:
+    print 'no'    
+    
+        
