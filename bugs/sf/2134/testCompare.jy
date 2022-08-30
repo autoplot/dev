@@ -1,0 +1,21 @@
+ds= linspace(0,10,11)
+ds[3]= -99
+ds= dataset( ds, validMin=-98 )
+
+plot( ds )
+
+xx= ds.ge(1)
+for x in xx:
+    print x
+
+r= where( ds.ge(1) )
+print r, ' of ', len(ds), ' ge 0'
+
+r= where( ds.lt(1) )
+print r, ' of ', len(ds), ' lt 0'
+
+print 'Note that "or" still returns fill even with or(True):'
+xx= ds.ge(1).or(dataset(True))
+for x in xx:
+    print x
+
