@@ -1,0 +1,15 @@
+from java.lang import Double
+
+ds= randn(20,5)
+
+r= dataset([1,2,3])
+
+ds[r]= Double.NaN
+plot( 0, ds )
+
+ds= randn(20,5)
+r= dataset([1,2,3])
+
+plot( 1, ds[r] )
+
+bind( dom.plots[0].xaxis, 'range', dom.plots[1].xaxis, 'range' )
