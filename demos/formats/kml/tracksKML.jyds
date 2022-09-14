@@ -1,4 +1,6 @@
-# read GPX file created by MyTracks app.
+setScriptDescription('Reads KML files produced by My Tracks and Geo Tracker apps')
+
+# read KML file created by MyTracks app.
 
 from javax.xml.parsers import ParserConfigurationException
 from javax.xml.parsers import DocumentBuilderFactory
@@ -11,7 +13,7 @@ from org.das2.qds import DDataSet
 
 from java.io import File, FileInputStream
 
-resourceURI= getParam( 'resourceURI', 'http://jfaden.net/~jbf/autoplot/data/xml/kml/doc.kml', 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'http://jfaden.net/~jbf/autoplot/data/xml/kml/doc.kml', 'KML file to load' )
 
 ff= downloadResourceAsTempFile(URL(resourceURI),monitor)
 
