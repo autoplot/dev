@@ -1,0 +1,51 @@
+# read GPX file created by MyTracks app.
+
+from javax.xml.parsers import ParserConfigurationException
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPath
+from javax.xml.xpath import XPathExpressionException
+from javax.xml.xpath import XPathFactory
+from javax.xml.xpath import XPathConstants
+from org.xml.sax import InputSource
+from org.das2.qds import DDataSet
+
+from java.io import File, FileInputStream
+
+resourceURI= getParam( 'resourceURI', 'http://jfaden.net/~jbf/autoplot/data/xml/kml/doc.kml', 'example file to load' )
+
+ff= downloadResourceAsTempFile(URL(resourceURI),monitor)
+
+myin= FileInputStream( ff )
+
+builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+source = InputSource( myin )
+initialDocument = builder.parse(source)
+
+factory= XPathFactory.newInstance()
+xpath= factory.newXPath()
+
+coords= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/coord/text()', initialDocument, XPathConstants.NODESET )
+times= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/when/text()', initialDocument, XPathConstants.NODESET )
+
+dsb= DataSetBuilder( 2, times.length, 4 )
+dsb.setName(0,'time'); dsb.setUnits(0,Units.t2000)
+dsb.setName(1,'alt');  dsb.setUnits(1,Units.meters)
+dsb.setName(2,'lat');  dsb.setUnits(2,Units.degrees)
+dsb.setName(3,'lon');  dsb.setUnits(3,Units.degrees)
+dsb.setFillValue(-9999)
+
+for i in xrange(times.length):
+    rec= coords.item(i).nodeValue
+    fields= rec.split()
+    if ( len(fields)==3 ):
+        dsb.nextRecord( [ times.item(i).nodeValue,
+                          fields[2], 
+                          fields[1], 
+                          fields[0] ] )
+
+ds= dsb.getDataSet()
+alt= link( ds[:,0], ds[:,1] )
+lat= link( ds[:,0], ds[:,2] )
+lon= link( ds[:,0], ds[:,3] )
+result= link( lon, lat )
+
