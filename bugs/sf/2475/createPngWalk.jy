@@ -1,0 +1,13 @@
+setScriptDescription('Create files for https://sourceforge.net/p/autoplot/bugs/2475/')
+
+eu= Units.nominal()
+
+d= datum('2022-09-16')
+tf= TimeParser.create('$Y-$m-$d')
+while ( d.lt(datum('2022-09-22')) ):
+    for i in xrange(4):
+        plot( eu.createDatum('%s %d' % ( tf.format(d), i ) ), 
+              renderType='digital>fontSize=4em' )
+        writeToPng('/tmp/ap/%s_%d.png' % ( tf.format(d), i ) )
+        sleep(100)
+    d = datum( d + '24hrs' )
