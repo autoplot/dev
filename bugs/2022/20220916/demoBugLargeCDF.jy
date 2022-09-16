@@ -1,0 +1,20 @@
+# Kristoff reported a bug where writing large CDF files fails.  My understanding
+# is that the file cannot be greater than 2GB.  When reading a CDF file, no
+# variable within the CDF can be more than 2GB, but the entire file may be.  The
+# goal is writing CDF files should have the same constraints.
+
+setScriptDescription('Test large cdf export')
+
+varsize= getParam( 'varsize', 80000000, 'Size of each variable, in doubles (8 bytes/double)' )
+varcount= getParam( 'varcount', 4, 'number of variables', [ 1,2,3,4,5,6,7,8] )
+
+mkdir('/tmp/ap/')
+
+for i in xrange(varcount):
+    var= dataset( zeros(varsize), name='var%d'%i )  # 800MB
+    if i==0:
+        formatDataSet( var, '/tmp/ap/largecdf.cdf' )
+    else:
+        formatDataSet( var, '/tmp/ap/largecdf.cdf?append=T' )
+
+
