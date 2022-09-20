@@ -2,6 +2,11 @@ from java.nio import ByteBuffer
 from gov.nasa.gsfc.spdf.cdfj import CDFWriter,CDFDataType
 # Can the CDF/Java library be made to write large files with three 1-GB datasets?
 
+setScriptDescription('''
+Create a CDF by calling the CDF library directly.  This demonstrates that as long as 
+each variable is less than 2Gb, you can write arbitrarily large files.
+''')
+
 import jarray
 
 data= jarray.zeros(2*1023*1024*1024,'b')
