@@ -5,15 +5,16 @@
 
 setScriptDescription('Test large cdf export')
 
-varsize= getParam( 'varsize', 80000000, 'Size of each variable, in doubles (8 bytes/double)' )
-varcount= getParam( 'varcount', 4, 'number of variables', [ 1,2,3,4,5,6,7,8] )
+varsize= getParam( 'varsize', 160000000, 'Size of each variable, in doubles (8 bytes/double)' )
+varcount= getParam( 'varcount', 6, 'number of variables', [ 1,2,3,4,5,6,7,8] )
 
 mkdir('/tmp/ap/')
 
 for i in xrange(varcount):
-    var= dataset( zeros(varsize), name='var%d'%i )  # 800MB
+    var= dataset( zeros(varsize), name='var_%d'%i )  # 800MB
+    var[1:100:2]= (i+10)
     if i==0:
-        formatDataSet( var, '/tmp/ap/largecdf.cdf' )
+        formatDataSet( var, '/tmp/ap/largecdf.cdf?type=' )
     else:
         formatDataSet( var, '/tmp/ap/largecdf.cdf?append=T' )
 
