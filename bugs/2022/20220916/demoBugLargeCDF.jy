@@ -17,5 +17,6 @@ for i in xrange(varcount):
         formatDataSet( var, '/tmp/ap/largecdf.cdf?type=' )
     else:
         formatDataSet( var, '/tmp/ap/largecdf.cdf?append=T' )
+    print( 'wrote var_%d of /tmp/ap/largecdf.cdf' % i )
 
 
