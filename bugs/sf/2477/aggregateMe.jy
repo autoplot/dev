@@ -1,0 +1,8 @@
+reset()
+
+ds= getDataSet( 'vap+cdaweb:ds=AC_K1_SWE&id=Np&timerange=2022-01-01' )
+plot( ds )
+
+plot( 1, 'https://cdaweb.gsfc.nasa.gov/pub/data/ace/mag/level_2_cdaweb/mfi_k2/2022/ac_k2_mfi_20220101_v03.cdf?Magnitude' )
+plot( 2, 'https://cdaweb.gsfc.nasa.gov/pub/data/ace/orbit/level_2_cdaweb/def_at/2022/ac_at_def_20220101_v01.cdf?GCI_ATT' )
+
