@@ -6,7 +6,8 @@ from java.nio import ByteBuffer,ByteOrder
 from java.io import FileInputStream
 import jarray,array
 
-setScriptDescription('Unpack a cdf into its blocks.  This plots the cdf as colored blocks showing its components.')
+setScriptDescription('''Unpack a cdf into its blocks.  This plots the cdf as colored blocks showing its components.  
+TODO: use FileChannel and NIO to allow CDFs>2GB.''')
 
 resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2018/rbsp-a_density_emfisis-l4_20180119_v1.5.16.cdf', 'example file to load' )
 
