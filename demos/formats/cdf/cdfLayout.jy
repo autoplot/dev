@@ -1,6 +1,5 @@
 from org.das2.util import ColorUtil
 from java.lang import String
-from gsfc.nssdc.cdf import CDF
 from gov.nasa.gsfc.spdf.cdfj import CDFDataType
 from java.nio.channels import Channels
 from java.nio import ByteBuffer,ByteOrder
@@ -10,8 +9,6 @@ import jarray,array
 setScriptDescription('Unpack a cdf into its blocks.  This plots the cdf as colored blocks showing its components.')
 
 resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2018/rbsp-a_density_emfisis-l4_20180119_v1.5.16.cdf', 'example file to load' )
-
-ds= getDataSet( 'vap+bin:'+resourceURI )
 
 ff= getFile(resourceURI,monitor)
 
@@ -73,6 +70,8 @@ def getCString( bbuf, isptr):
     
 def followChain( bbuf, iptr, dsb, context=None ):
    
+   if (iptr==0): return # empty chain
+   
    lastPointer=-1
    while (True):
        if ( iptr==lastPointer ): stop
@@ -83,8 +82,8 @@ def followChain( bbuf, iptr, dsb, context=None ):
        print styp, iptr, context
        if styp=='CDR': # CDR
            offs= bbuf.getLong(iptr+12)
-           iptr= offs
            dsb.nextRecord([iptr,iptr+siz,CDR_COLOR, 'CDR'] )
+           iptr= offs
        elif styp=='GDR': # GDR
            dsb.nextRecord([iptr,iptr+siz,GDR_COLOR, 'GDR'] )
            zVDRhead= bbuf.getLong(iptr+20)
@@ -112,16 +111,16 @@ def followChain( bbuf, iptr, dsb, context=None ):
            if vdrnext==0:
                break
            iptr= vdrnext
-       elif typ==7: # VVR
+       elif styp=='VVR': # VVR
            dsb.nextRecord([iptr,iptr+siz,VVR_COLOR, 'VVR:'+context] )
            break
-       elif typ==13: # CVVR
+       elif styp=='CVVR': # CVVR
            dsb.nextRecord([iptr,iptr+siz,CVVR_COLOR, 'CVVR:'+context] )
            break
-       elif typ==6: # VXR
+       elif styp=='VXR': # VXR
            nentries=bbuf.getInt(iptr+20)
            nusedentries=bbuf.getInt(iptr+24)
-           s= 'VXR:%s uses %d of %d block(s)' % ( context,nusedentries,nentries )
+           s= 'VXR:%s uses %d of %d blocks' % ( context,nusedentries,nentries )
            dsb.nextRecord([iptr,iptr+siz,VXR_COLOR, s ] )
            for j in xrange(nusedentries):
                ptr= bbuf.getLong(iptr+28+8*nentries+j*8)
