@@ -1,0 +1,4 @@
+setScriptDescription('Print the location of the local file cache on the server.  I can't figure out why it seems to run an old version.')
+
+from org.das2.util.filesystem import FileSystem
+print FileSystem.settings().localCacheDir
