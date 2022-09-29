@@ -1,23 +1,26 @@
-setScriptDescription('Reads KML files produced by My Tracks and Geo Tracker apps')
+setScriptDescription('Reads KML and KMZ files produced by My Tracks and Geo Tracker apps')
 
 # read KML file created by MyTracks app.
 
-from javax.xml.parsers import ParserConfigurationException
 from javax.xml.parsers import DocumentBuilderFactory
-from javax.xml.xpath import XPath
-from javax.xml.xpath import XPathExpressionException
 from javax.xml.xpath import XPathFactory
 from javax.xml.xpath import XPathConstants
 from org.xml.sax import InputSource
-from org.das2.qds import DDataSet
+from java.io import FileInputStream
+from zipfs import ZipFileSystemFactory
 
-from java.io import File, FileInputStream
-
+#resourceURI= getParam( 'resourceURI', 'file:///home/jbf/googledrive/Tracks/2022-09-13_Sep_13,_2022_12_06_03_PM.kml', 'KML file to load' )
 resourceURI= getParam( 'resourceURI', 'http://jfaden.net/~jbf/autoplot/data/xml/kml/doc.kml', 'KML file to load' )
+uri= URI(resourceURI)
+print uri.path
 
-ff= downloadResourceAsTempFile(URL(resourceURI),monitor)
-
-myin= FileInputStream( ff )
+if URI(resourceURI).path.endswith('.kmz' ): # A kmz file is just a zip file containing a .kml file.
+    myfs= ZipFileSystemFactory().createFileSystem( uri )
+    kmlfo= myfs.getFileObject('doc.kml')
+    myin= kmlfo.getInputStream()
+else:
+    ff= downloadResourceAsTempFile(URL(resourceURI),monitor)
+    myin= FileInputStream( ff )
 
 builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
 source = InputSource( myin )
@@ -28,6 +31,9 @@ xpath= factory.newXPath()
 
 coords= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/coord/text()', initialDocument, XPathConstants.NODESET )
 times= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/when/text()', initialDocument, XPathConstants.NODESET )
+speeds= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/ExtendedData/SchemaData/SimpleArrayData[@name="speed"]/value/text()', initialDocument, XPathConstants.NODESET )
+
+print times.length, speeds.length
 
 dsb= DataSetBuilder( 2, times.length, 4 )
 dsb.setName(0,'time'); dsb.setUnits(0,Units.t2000)
@@ -35,6 +41,9 @@ dsb.setName(1,'alt');  dsb.setUnits(1,Units.meters)
 dsb.setName(2,'lat');  dsb.setUnits(2,Units.degrees)
 dsb.setName(3,'lon');  dsb.setUnits(3,Units.degrees)
 dsb.setFillValue(-9999)
+speedBuilder= DataSetBuilder( 1, times.length )
+
+haveSpeed = speeds.length==times.length 
 
 for i in xrange(times.length):
     rec= coords.item(i).nodeValue
@@ -44,10 +53,18 @@ for i in xrange(times.length):
                           fields[2], 
                           fields[1], 
                           fields[0] ] )
+    if ( haveSpeed ):
+        speedBuilder.nextRecord( speeds.item(i).nodeValue )
 
 ds= dsb.getDataSet()
-alt= link( ds[:,0], ds[:,1] )
-lat= link( ds[:,0], ds[:,2] )
-lon= link( ds[:,0], ds[:,3] )
+times= ds[:,0]
+alt= link( times, ds[:,1] )
+lat= link( times, ds[:,2] )
+lon= link( times, ds[:,3] )
 result= link( lon, lat )
 
+if ( haveSpeed ):
+    speed= link( times, speedBuilder.getDataSet() )
+else:
+    speed= None
+    
