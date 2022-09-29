@@ -9,8 +9,8 @@ from org.xml.sax import InputSource
 from java.io import FileInputStream
 from zipfs import ZipFileSystemFactory
 
-#resourceURI= getParam( 'resourceURI', 'file:///home/jbf/googledrive/Tracks/2022-09-13_Sep_13,_2022_12_06_03_PM.kml', 'KML file to load' )
-resourceURI= getParam( 'resourceURI', 'http://jfaden.net/~jbf/autoplot/data/xml/kml/doc.kml', 'KML file to load' )
+resourceURI= getParam( 'resourceURI', 'file:///home/jbf/googledrive/Tracks/2022-09-13_Sep_13,_2022_12_06_03_PM.kml', 'KML file to load' )
+#resourceURI= getParam( 'resourceURI', 'http://jfaden.net/~jbf/autoplot/data/xml/kml/doc.kml', 'KML file to load' )
 uri= URI(resourceURI)
 print uri.path
 
@@ -31,9 +31,9 @@ xpath= factory.newXPath()
 
 coords= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/coord/text()', initialDocument, XPathConstants.NODESET )
 times= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/when/text()', initialDocument, XPathConstants.NODESET )
-speeds= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/ExtendedData/SchemaData/SimpleArrayData[@name="speed"]/value/text()', initialDocument, XPathConstants.NODESET )
+speeds=      xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/ExtendedData/SchemaData/SimpleArrayData[@name="speed"]/value/text()', initialDocument, XPathConstants.NODESET )
 
-print times.length, speeds.length
+courseNodes= xpath.evaluate( '/kml/Document/Placemark/MultiTrack/Track/ExtendedData/SchemaData/SimpleArrayData[@name="course"]/value/text()', initialDocument, XPathConstants.NODESET )
 
 dsb= DataSetBuilder( 2, times.length, 4 )
 dsb.setName(0,'time'); dsb.setUnits(0,Units.t2000)
@@ -41,9 +41,6 @@ dsb.setName(1,'alt');  dsb.setUnits(1,Units.meters)
 dsb.setName(2,'lat');  dsb.setUnits(2,Units.degrees)
 dsb.setName(3,'lon');  dsb.setUnits(3,Units.degrees)
 dsb.setFillValue(-9999)
-speedBuilder= DataSetBuilder( 1, times.length )
-
-haveSpeed = speeds.length==times.length 
 
 for i in xrange(times.length):
     rec= coords.item(i).nodeValue
@@ -53,9 +50,20 @@ for i in xrange(times.length):
                           fields[2], 
                           fields[1], 
                           fields[0] ] )
-    if ( haveSpeed ):
-        speedBuilder.nextRecord( speeds.item(i).nodeValue )
 
+speedBuilder= DataSetBuilder( 1, speeds.length )
+speedBuilder.putProperty( QDataSet.UNITS, Units.mps )
+
+for i in xrange(speeds.length):
+    speedBuilder.nextRecord( speeds.item(i).nodeValue )
+
+print 'courseNodes.length', courseNodes.length 
+courseBuilder= DataSetBuilder( 1, courseNodes.length )
+courseBuilder.putProperty(QDataSet.UNITS,Units.degrees)
+
+for i in xrange(courseNodes.length):
+    courseBuilder.nextRecord( Units.radians.parse(courseNodes.item(i).nodeValue) )
+    
 ds= dsb.getDataSet()
 times= ds[:,0]
 alt= link( times, ds[:,1] )
@@ -63,8 +71,13 @@ lat= link( times, ds[:,2] )
 lon= link( times, ds[:,3] )
 result= link( lon, lat )
 
-if ( haveSpeed ):
-    speed= link( times, speedBuilder.getDataSet() )
-else:
-    speed= None
+speed= speedBuilder.getDataSet() 
+if ( speed.length()==times.length() ):
+    speed= link( times,speed )
+
+course= courseBuilder.getDataSet()
+if ( course.length()==times.length() ):
+    course= link( times, courseBuilder.getDataSet() )
     
+setOutputParam( 'course', course, 'The direction over time' )    
+setOutputParam( 'speed', speed, 'The speed over time' )
