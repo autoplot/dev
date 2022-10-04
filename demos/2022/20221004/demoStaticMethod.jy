@@ -1,0 +1,12 @@
+setScriptDescription('Conversion of Java utilities class to Jython shows that static methods are tricky.')
+
+class F:
+    CONS1= 1
+    def method1(name):
+        print('hello, ' + name)
+        print('static field: %d' % F.CONS1)
+    method1= staticmethod(method1)
+    
+print F.CONS1
+F().method1('Jeremy')
+F.method1('Jeremy')
