@@ -59,7 +59,7 @@ print 'cwd: ', cwd
 print 'path: ', path
 print 'name: ', File( script ).name
 
-pat= Pattern.compile( '[a-z]*@([a-zA-Z\.a-z]+):(.+)\.git' )
+pat= Pattern.compile( '[a-z]*@([a-zA-Z\.a-z\-]+):(.+)\.git' )
 matcher= pat.matcher( gitRemote )
 
 from org.autoplot.datasource import DataSourceUtil
@@ -70,5 +70,5 @@ if ( matcher.matches() ):
     print remote
     DataSourceUtil.openBrowser( remote )
 else:
-    raise Exception('expected match for "[a-z]*@([a-zA-Z\.a-z]+):(.+)\.git", got '+gitRemote) 
+    raise Exception('expected match for "[a-z]*@([a-zA-Z\.a-z\-]+):(.+)\.git", got '+gitRemote) 
     
