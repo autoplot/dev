@@ -52,6 +52,7 @@ localRoot= File(localRoot).getCanonicalPath()
 cwd= File(cwd.path).getCanonicalPath()
 path= cwd[len(localRoot):]
 
+print 'browseUpstream: 0'
 print 'gitRemote: ', gitRemote
 print 'branch: ', branch
 print 'localRoot: ', localRoot
