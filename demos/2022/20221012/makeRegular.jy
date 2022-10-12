@@ -1,0 +1,33 @@
+setScriptDescription('smooth out example data which is irregularly spaced')
+
+monitor.taskSize= 10000
+monitor.started()
+
+ds= linspace(PI/8,7*PI/8,10000)
+t= dataset( 1 + cos(ds), units='s' ) + '2022-10-12T00:00'
+
+ds= ones(10000) + randn(10000)/10
+
+plot( t, ds )
+
+plot( 1, t )
+
+#plot( t, smooth( ds, '5 min' ) )
+
+dsb = DataSetBuilder(2,100,2)
+ndsb= DataSetBuilder(2,100,2)
+
+for i in xrange(len(t)):
+    monitor.taskProgress= i
+    t0= t[i]
+    r= where( t.ge(t0).and( t.lt(t0+'100ms') ) )
+    t1= mean( t[r] )
+    y1= mean( ds[r] )
+    dsb.nextRecord( [ t1, y1 ] )
+    ndsb.nextRecord( [ t1, r.length() ] )
+    print i
+monitor.finished()
+
+newds= dsb.getDataSet()
+plot( newds )
+plot( 1, ndsb.getDataSet() )
