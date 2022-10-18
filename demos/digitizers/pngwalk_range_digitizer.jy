@@ -15,7 +15,7 @@ from org.das2.graph import Painter
 from java.beans import PropertyChangeListener
 from javax.swing import JPanel,BoxLayout,JLabel,JComboBox,JOptionPane
 from org.autoplot.pngwalk import PngWalkTool
-pngw= PngWalkTool.start( PWD +'media/$Y-$m-$d.png', getApplication() )
+pngw= PngWalkTool.start( 'http://autoplot.org/data/pngwalk/product_$Y$m$d.png', getApplication() )
 assert isinstance( pngw, PngWalkTool )
 
 startSelect=None
