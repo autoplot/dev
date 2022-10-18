@@ -1,0 +1,124 @@
+setScriptDescription('''Demo digitizer for the PNGWalkTool, which shows how mouse events can 
+be handled by the script and images digitized to create a list of intervals.  The pngwalk
+can be reloaded and used as long as it uses rich PNG metadata.
+''')
+
+from org.das2.datum import EnumerationUnits,TimeUtil
+from org.das2.components import DataPointRecorder
+from java.awt.geom import Rectangle2D,Line2D,RoundRectangle2D
+from java.awt.event import MouseAdapter
+from java.awt import BasicStroke,Point
+from org.das2.dataset import DataSetUpdateListener
+
+from org.autoplot.pngwalk import SinglePngWalkView
+from org.das2.graph import Painter
+from java.beans import PropertyChangeListener
+from javax.swing import JPanel,BoxLayout,JLabel,JComboBox,JOptionPane
+from org.autoplot.pngwalk import PngWalkTool
+pngw= PngWalkTool.start( PWD +'media/$Y-$m-$d.png', getApplication() )
+assert isinstance( pngw, PngWalkTool )
+
+startSelect=None
+stopSelect=None
+
+singlePngTab= pngw.getTabs().getTabByTitle("Single")
+singlePngTab= singlePngTab.getViewport().getView()
+
+dpr= DataPointRecorder()
+pngw.getTabs().addTab( "Digitizer", dpr )
+
+global clickDigitizer
+clickDigitizer = singlePngTab.getClickDigitizer()
+
+# upon selection of a point, this listener points the pngwalk to the correct day
+class MyDataSetUpdateListener(DataSetUpdateListener):
+    def dataSetUpdated( self, evt ):
+        ds= dpr.getSelectedDataPoints()  
+        if ( ds==None ): return
+        if ( ds.length()==0 ): return
+        s= datumRange( [ TimeUtil.prevMidnight(datum(ds[0,0])), TimeUtil.nextMidnight(datum(ds[0,1])) ] )
+        pngw.setTimeRange( s )
+        pngw.repaint()
+dpr.addSelectedDataSetUpdateListener(MyDataSetUpdateListener())
+
+# upon adding a point to the list, update the display
+class MyDataSetUpdateListener2(DataSetUpdateListener):
+    def dataSetUpdated( self, evt ):
+        pngw.repaint()
+dpr.addDataSetUpdateListener(MyDataSetUpdateListener2())
+
+# paint a box and indicate selection.  TODO: how to get the height?
+def paintBars( g, startx, stopx, selected ):
+    height= 1000
+    
+    rectt= Rectangle2D.Double( startx, 0, stopx-startx, height )
+    if selected:
+        g.color= Color(184,207,229)
+        g.stroke= BasicStroke(11)
+        g.draw(rectt)
+        g.color= Color.GRAY
+        g.stroke= BasicStroke(3)
+        g.draw(rectt)
+    else:
+        g.color= Color.WHITE
+        g.stroke= BasicStroke(7)
+        g.draw(rectt)
+        g.color= Color.GRAY
+        g.stroke= BasicStroke(3)
+        g.draw(rectt)
+
+# draw the current selections onto the images    
+class BoxPainter( Painter ):
+    def paint( self, g ):
+        if ( startSelect!=None ):
+            paintBars( g, startSelect.x, stopSelect.x, False )
+                             
+        selectedRange= pngw.getTimeRange()
+        ds= dpr.getDataPoints()    
+        if ( ds!=None ):
+            for d in ds:
+                tr= datumRange( [d[0], d[1]] ) 
+                if ( selectedRange.contains(tr) ) :
+                    global clickDigitizer
+                    dd1= clickDigitizer.dataToPixelTransform( 1, bundle( d[0],dataset(0) ) )
+                    dd2= clickDigitizer.dataToPixelTransform( 1, bundle( d[1],dataset(0) ) )
+                    paintBars( g, float(dd1[0]), float(dd2[0]), False )
+
+        ds= dpr.getSelectedDataPoints()    
+        if ( ds!=None ): 
+            for d in ds:
+                tr= datumRange( [d[0], d[1]] ) 
+                if ( selectedRange.contains(tr) ):
+                    global clickDigitizer
+                    dd1= clickDigitizer.dataToPixelTransform( 1, bundle( d[0],dataset(0) ) )
+                    dd2= clickDigitizer.dataToPixelTransform( 1, bundle( d[1],dataset(0) ) )
+                    paintBars( g, float(dd1[0]), float(dd2[0]), True )
+pngw.addTopDecorator( BoxPainter() )
+
+# receive the mouse events (click, drag, and release) to make selection
+class BoxMouseAdapter( MouseAdapter ):
+    def mousePressed(self,evt):
+        global selectedName, startSelect, stopSelect
+        startSelect= evt.point
+        stopSelect= evt.point
+    def mouseDragged(self,evt):
+        global selectedName, startSelect, stopSelect
+        stopSelect= evt.point
+    def mouseReleased(self,evt):
+        global selectedName, startSelect, stopSelect
+        stopSelect= evt.point
+        r= Rectangle2D.Double( startSelect.x, startSelect.y, 0., 0. )
+        r.add( stopSelect )
+        singlePngWalkView= evt.source
+        assert isinstance( singlePngWalkView, SinglePngWalkView )
+        dd0= singlePngWalkView.clickDigitizer.pixelToDataTransform( int(r.x), int(r.y) )
+        dd1= singlePngWalkView.clickDigitizer.pixelToDataTransform( int(r.x+r.width), int(r.y+r.height) )
+        global clickDigitizer
+        clickDigitizer= singlePngWalkView.clickDigitizer
+
+        rec= bundle( dd0[0], dd1[0] )
+        dpr.addDataPoint( rec )
+        startSelect=None
+        stopSelect=None
+        
+pngw.setImageMouseAdapter(BoxMouseAdapter())
