@@ -1,0 +1,14 @@
+setScriptDescription('''
+Demo where integer multiples (1,2,3,...) of a cadence 
+fail to derive the GCD cadence (of 1).''')
+
+from org.das2.qds import DataSetUtil
+
+seed= getParam( 'seed', 4, 'random seed', [0,1,2,4] )
+
+randomSeed(seed)
+
+ds= accum( 1 + floor( randu(50) * 3 ) )
+plot(ds)
+
+print DataSetUtil.guessCadenceNew( ds, None )
