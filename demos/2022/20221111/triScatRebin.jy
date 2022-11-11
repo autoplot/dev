@@ -1,0 +1,7 @@
+from org.das2.graph.SpectrogramRenderer import RebinnerEnum
+x= randn(1000)
+y= randn(1000)
+z= exp( -1 * sqrt( x**2 + y**2 ) )
+plot( x,y,z, renderType='spectrogram>rebinner=triScat' )
+dom.plotElements[0].controller.renderer.rebinner= RebinnerEnum.triScat
+
