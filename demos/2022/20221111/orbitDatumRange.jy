@@ -1,0 +1,10 @@
+setScriptDescription('''It would be nice to see a string representing the time range for
+a S/C orbit.  You can't just format the datumRange, because it will print out the "orbit:...:..."
+notation.  The function rescale is used to force the special datum range to loose it\'s 
+identify''')
+
+tr='orbit:rbspa-pp:4'
+tr= datumRange(tr)
+print tr.rescale(0.0,1.0)
+
+
