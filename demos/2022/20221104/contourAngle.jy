@@ -1,0 +1,42 @@
+from org.autoplot import RenderType
+
+demoRound= getParam( 'demoRound', True, 'demo automatic round to make circuits', [ True,False ] )
+
+ens= linspace( 10,200,30 )
+
+if not demoRound:
+    # Note angles leaves the first record and last record the same, otherwise there will be a break in circuits
+    angles= toRadians( linspace( 0, 360, 361 ) )  
+    ds= 10 * ( cos( outerProduct( ones(361), 100 - abs( ens - 100 )/100  ) ) + cos( 5*angles )/10 )
+else: 
+    angles= toRadians( 0.5 + linspace( 0, 359, 360 ) )  
+    ds= 10 * ( cos( outerProduct( ones(360), 100 - abs( ens - 100 )/100  ) ) + cos( 5*angles )/10 )
+
+ds= link( angles, ens, ds )
+
+reset()
+setLayoutOverplot(2)
+
+plot( 0, ds + randn(ds.length(),ds.length(0)), renderType=RenderType.polar )
+
+if demoRound:
+    # suppose we didn't have the first and last record being the same. 
+    # This fixes:
+    ds= link( append( angles, angles[0] ),
+                ens,
+                append( ds, ds[0] ) )
+
+    
+# contour in the "angle space"
+c= contour( ds,dataset([2,4,6] ))  
+
+a= c[:,0]
+r= c[:,1]
+z= c[:,2]
+
+xx= cos( a ) * r
+yy= sin( a ) * r
+
+rectContours= dataset( xtags(c), bundle( xx, yy, z ) )
+plot( 1, rectContours, renderType=RenderType.contour )
+
