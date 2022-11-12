@@ -1,25 +1,26 @@
 from org.autoplot import RenderType
 
-demoRound= getParam( 'demoRound', True, 'demo automatic round to make circuits', [ True,False ] )
+demo= getParam( 'demo', True, 'demo automatic round to make circuits', [ True,False ] )
+nangle= getParam( 'nangle', 360, 'number of angle bins', [ 18, 90, 360]  )
 
 ens= linspace( 10,200,30 )
 
-if not demoRound:
+if not demo:
     # Note angles leaves the first record and last record the same, otherwise there will be a break in circuits
-    angles= toRadians( linspace( 0, 360, 361 ) )  
-    ds= 10 * ( cos( outerProduct( ones(361), 100 - abs( ens - 100 )/100  ) ) + cos( 5*angles )/10 )
+    angles= toRadians( linspace( 0, 360, nangle+1) )  
+    ds= 10 * ( cos( outerProduct( ones(nangle+1), 100 - abs( ens - 100 )/100  ) ) + cos( 5*angles )/10 )
 else: 
-    angles= toRadians( 0.5 + linspace( 0, 359, 360 ) )  
-    ds= 10 * ( cos( outerProduct( ones(360), 100 - abs( ens - 100 )/100  ) ) + cos( 5*angles )/10 )
+    angles= toRadians( 360/nangle * ( 0.5 + linspace( 0, nangle-1, nangle)  )  )
+    ds= 10 * ( cos( outerProduct( ones(nangle), 100 - abs( ens - 100 )/100  ) ) + cos( 5*angles )/10 )
 
 ds= link( angles, ens, ds )
 
 reset()
 setLayoutOverplot(2)
 
-plot( 0, ds + randn(ds.length(),ds.length(0)), renderType=RenderType.polar )
+plot( 0, ds + randn(ds.length(),ds.length(0))/10, renderType=RenderType.polar  )
 
-if demoRound:
+if demo:
     # suppose we didn't have the first and last record being the same. 
     # This fixes:
     ds= link( append( angles, angles[0] ),
