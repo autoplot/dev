@@ -1,5 +1,5 @@
-# title: Tool for drawing angles
-# label: Angle tool
+setScriptDescription('''Tool for drawing angles''')
+setScriptLabel('Angle tool')
 
 from org.das2.graph import Arrow,Painter
 from java.awt.geom import Point2D, Ellipse2D, Rectangle2D, Arc2D
