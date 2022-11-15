@@ -1,4 +1,8 @@
 # demonstration code for making a movie.
+setScriptDescription('''Demonstrates how a library can be downloaded and used
+to create a .mp4 movie file in /tmp/apmovie.mp4.  This loads the libraries from 
+maven.org, and though it works on my machine without ill effects, I cannot assure 
+that it is safe to run.''')
 
 import sys
 
