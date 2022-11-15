@@ -1,8 +1,9 @@
 # demonstration code for making a movie.
 
 import sys
-addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec-javase/0.2.2/jcodec-javase-0.2.2.jar',monitor.getSubtaskMonitor('jar1'))
-addToSearchPath(sys.path,'http://central.maven.org/maven2/org/jcodec/jcodec/0.2.2/jcodec-0.2.2.jar',monitor.getSubtaskMonitor('jar2'))
+
+addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/jcodec/jcodec-javase/0.2.5/jcodec-javase-0.2.5.jar',monitor.getSubtaskMonitor('jar1'))
+addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/jcodec/jcodec/0.2.5/jcodec-0.2.5.jar',monitor.getSubtaskMonitor('jar2'))
 
 from org.jcodec.api.awt import AWTSequenceEncoder
 from javax.imageio import ImageIO
