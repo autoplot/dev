@@ -1,3 +1,6 @@
+setScriptDescription('''Creates two pngwalk tools and binds the time ranges together.  Additionally,
+they are positioned adjacent to one another.''')
+
 from java.lang import Runnable
 from javax.swing import SwingUtilities
 from org.autoplot.pngwalk import PngWalkTool
