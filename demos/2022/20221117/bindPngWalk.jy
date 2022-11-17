@@ -1,0 +1,21 @@
+from java.lang import Runnable
+from javax.swing import SwingUtilities
+from org.autoplot.pngwalk import PngWalkTool
+ 
+p1='https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_19_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png'
+p2='https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_20_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png'
+
+app= getApplication()
+
+class MyRun(Runnable):
+    def run(self):
+        pngwalk1= PngWalkTool.start(p1,app)
+        pngwalk2= PngWalkTool.start(p2,app)
+        w1= SwingUtilities.windowForComponent(pngwalk1)
+        d= w1.size
+        w1.setLocation(0,0)
+        w2= SwingUtilities.windowForComponent(pngwalk2)
+        w2.setLocation(d.width,0)
+        bind( pngwalk1, 'timeRange', pngwalk2, 'timeRange' )
+
+SwingUtilities.invokeLater(MyRun())
