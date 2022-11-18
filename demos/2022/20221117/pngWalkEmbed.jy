@@ -1,0 +1,28 @@
+setScriptDescription("""Creates a new tab where two pngwalks are located side-by-side in a new tab called 'pngwalks'""")
+
+from java.lang import Runnable
+from javax.swing import SwingUtilities,BoxLayout,JPanel
+from org.autoplot.pngwalk import PngWalkTool
+from java.awt import Window,Dimension
+p1='https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_19_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png'
+p2='https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_20_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png'
+
+bothPngWalks= JPanel()
+bothPngWalks.setLayout( BoxLayout(bothPngWalks,BoxLayout.X_AXIS) )
+
+app= getApplication()
+
+class MyRun(Runnable):
+    def run(self):
+        pngwalk1= PngWalkTool.start(p1,app)
+        pngwalk2= PngWalkTool.start(p2,app)
+        w1= SwingUtilities.windowForComponent(pngwalk1)
+        w2= SwingUtilities.windowForComponent(pngwalk2)
+        bind( pngwalk1, 'timeRange', pngwalk2, 'timeRange' )
+        bothPngWalks.add( pngwalk1 )
+        bothPngWalks.add( pngwalk2 )
+        app.tabs.addTab('pngwalks',bothPngWalks)
+        w1.visible=False
+        w2.visible=False
+
+SwingUtilities.invokeLater(MyRun())
