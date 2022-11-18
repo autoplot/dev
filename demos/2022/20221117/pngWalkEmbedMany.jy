@@ -1,4 +1,4 @@
-setScriptDescription("""Creates a new tab where two pngwalks are located side-by-side in a new tab called 'pngwalks'""")
+setScriptDescription("""Creates a new tab where two by two pngwalks are located in a new tab called 'pngwalks'""")
 
 from java.lang import Runnable
 from javax.swing import SwingUtilities,BoxLayout,JPanel,JSplitPane,SwingConstants
