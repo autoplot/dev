@@ -1,0 +1,40 @@
+setScriptDescription("""Creates a new tab where two pngwalks are located side-by-side in a new tab called 'pngwalks'""")
+
+from java.lang import Runnable
+from javax.swing import SwingUtilities,BoxLayout,JPanel,JSplitPane,SwingConstants
+from org.autoplot.pngwalk import PngWalkTool
+from java.awt import Window,Dimension,BorderLayout,GridLayout,GridBagConstraints
+
+rows= 2
+cols= 2
+
+nn= [ 19,20,19,20 ]
+pp= [ '', '', '', '' ]
+for i in range(len(nn)):
+    pp[i]=  'https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_%d_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png' % nn[i]
+    
+bothPngWalks= JPanel()
+bothPngWalks.setLayout( GridLayout(rows,cols) )
+
+app= getApplication()
+
+class MyRun(Runnable):
+    def run(self):
+        w0=None
+        c = GridBagConstraints()
+        for i in range(len(nn)):
+            pngwalk1= PngWalkTool.start(pp[i],app)
+            w1= SwingUtilities.windowForComponent(pngwalk1)
+            if i==0:
+                pngwalk0= pngwalk1
+            else:
+                bind( pngwalk0, 'timeRange', pngwalk1, 'timeRange' )
+            fs1= pngwalk1.getTabs().getTabByTitle('Film Strip')
+            print fs1
+            c.gridx= i / cols
+            c.gridy= i % cols
+            bothPngWalks.add( fs1,c )
+            w1.visible=False
+        app.tabs.addTab('pngwalks',bothPngWalks)
+
+SwingUtilities.invokeLater(MyRun())
