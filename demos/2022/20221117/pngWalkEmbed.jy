@@ -1,14 +1,14 @@
 setScriptDescription("""Creates a new tab where two pngwalks are located side-by-side in a new tab called 'pngwalks'""")
 
 from java.lang import Runnable
-from javax.swing import SwingUtilities,BoxLayout,JPanel
+from javax.swing import SwingUtilities,BoxLayout,JPanel,JSplitPane,SwingConstants
 from org.autoplot.pngwalk import PngWalkTool
-from java.awt import Window,Dimension
+from java.awt import Window,Dimension,BorderLayout
 p1='https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_19_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png'
 p2='https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/SAM2_level_20_vTflux_$Y$m$(d,delta=7)_subtropicsnwp.png'
 
 bothPngWalks= JPanel()
-bothPngWalks.setLayout( BoxLayout(bothPngWalks,BoxLayout.X_AXIS) )
+bothPngWalks.setLayout( BorderLayout() )
 
 app= getApplication()
 
@@ -19,8 +19,11 @@ class MyRun(Runnable):
         w1= SwingUtilities.windowForComponent(pngwalk1)
         w2= SwingUtilities.windowForComponent(pngwalk2)
         bind( pngwalk1, 'timeRange', pngwalk2, 'timeRange' )
-        bothPngWalks.add( pngwalk1 )
-        bothPngWalks.add( pngwalk2 )
+        fs1= pngwalk1.getTabs().getTabByTitle('Film Strip')
+        fs2= pngwalk2.getTabs().getTabByTitle('Film Strip')
+        split= JSplitPane(JSplitPane.HORIZONTAL_SPLIT,fs1,fs2)
+        split.resizeWeight=.5
+        bothPngWalks.add( split, BorderLayout.CENTER )
         app.tabs.addTab('pngwalks',bothPngWalks)
         w1.visible=False
         w2.visible=False
