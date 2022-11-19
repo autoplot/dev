@@ -1,0 +1,8 @@
+xx= floor( randn(100)*10+50)
+xx= dataset( xx, units='Hamsters' )
+yy= randn(100)
+ds= join( extent( xx), extent(yy) )
+
+reset()
+p,pe= plot( 0, xx, yy, renderType='scatter>symbolSize=10' )
+plot( 1, ds, overplotOf=p )

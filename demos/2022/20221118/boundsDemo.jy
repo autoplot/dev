@@ -1,0 +1,9 @@
+xx= randn(100)*10 + 100
+yy= randn(100)
+
+bx= extent(xx)
+by= extent(yy)
+
+p,pe= plot( xx, yy )
+plot( 1, join( bx, by ), overplotOf= p )
+

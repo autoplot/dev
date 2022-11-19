@@ -1,0 +1,36 @@
+xx= floor( randn(100)*10 + 100 )
+xx= dataset( xx, units='Hamsters' )
+yy= randn(100)
+
+bx= extent(xx)
+by= extent(yy)
+
+xx2= floor(  randn(100)*12 + 170)
+xx2= dataset( xx2, units='Hamsters' )
+yy2= randn(100) + 2
+
+bx2= extent(xx2)
+by2= extent(yy2)
+
+xx3= floor(  randn(100)*12 + 140 )
+xx3= dataset( xx3, units='Hamsters' )
+yy3= randn(100) -1
+
+bx3= extent(xx3)
+by3= extent(yy3)
+
+bounds= join( join( bx, by ), join( bx2, by2 ) )
+bounds.join( join(bx3,by3 ) )
+
+from org.autoplot.dom import PlotElementController
+print PlotElementController.resolveRenderType(bounds)
+
+reset()
+p,pe= plot( xx, yy, renderType='scatter', color=Color.red, symbolSize=10 )
+p,pe= plot( xx2, yy2, overplotOf= p, renderType='scatter', color=Color.blue, symbolSize=10 )
+p,pe= plot( xx3, yy3, overplotOf= p, renderType='scatter', color=Color.green.darker(), symbolSize=10 )
+
+p,pe= plot( 1, bounds, overplotOf= p )
+pe.renderControl='fillTexture=hash'
+
+

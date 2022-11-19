@@ -1,0 +1,11 @@
+from org.das2.qds.examples import Schemes
+
+bounds= Schemes.arrayOfBoundingBox()
+
+from org.autoplot.dom import PlotElementController
+print PlotElementController.resolveRenderType(bounds)
+
+reset()
+
+plot( 0, bounds )
+
