@@ -1,0 +1,28 @@
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+ds= getDataSet( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Van_Allen_Probes/A/Ephemeris/Geomagnetic&interval=60', tr )
+
+mlt= ds[:,2]
+lshell= ds[:,3]
+
+aa= mlt * TAU / 24
+
+grid= histogram2d( mlt*360/24., lshell, [24,10], dataset([0,360]), dataset([0,10]) )
+
+reset()
+
+r= where(grid.gt(50))
+
+gridx= xtags(grid)
+gridy= ytags(grid)
+
+ds= zeros(r.length(),2,2)
+for i in range(r.length()):
+    mltb= gridx[r[i,0]] + dataset( [-0.5,.5] )*360/24.
+    mltb.putProperty( QDataSet.BINS_0, QDataSet.VALUE_BINS_MIN_MAX )
+    lshellb= gridy[r[i,1]] + dataset( [-0.5,.5] )
+    lshellb.putProperty( QDataSet.BINS_0, QDataSet.VALUE_BINS_MIN_MAX )
+    print mltb, lshellb
+    ds[i]= join( mltb*TAU/360, lshellb )
+
+plot( 0, ds, renderType='bounds>polar=T&fillTexture=hash', color=None )
+
