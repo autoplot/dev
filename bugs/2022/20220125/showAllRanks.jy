@@ -1,5 +1,10 @@
 from org.das2.qds import DataSetUtil
-setScriptDescription('''Get all dataset schemes and indicate rank''')
+setScriptDescription('''Get all dataset schemes and indicate rank and number of physical
+dimensions.  A rank 2 table might have 4 columns of time, bx, by, and bz, and though it 
+is rank 2 it has 4 physical dimensions.  This tabulates the dimensions of all the example
+data sets.  
+
+This also shows there's an error in this unused code.''')
 
 from org.das2.qds.examples import Schemes
 mm= dir( Schemes )
