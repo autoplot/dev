@@ -1,0 +1,14 @@
+setScriptDescription('''Get all dataset schemes and indicate rank''')
+
+mm= dir( Schemes )
+
+print '|name   |rank |'
+print '|-------|-----|'
+i=0
+for m in mm:
+if ( m[0:2]=='is' ):
+    continue
+else:
+    i=i+1
+    print '|'+str(m)+'|2|'
+    
