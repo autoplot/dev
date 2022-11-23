@@ -1,14 +1,18 @@
+from org.das2.qds import DataSetUtil
 setScriptDescription('''Get all dataset schemes and indicate rank''')
 
+from org.das2.qds.examples import Schemes
 mm= dir( Schemes )
 
-print '|name   |rank |'
-print '|-------|-----|'
+print '|name                          |rank |dimensions|'
+print '|------------------------------|-----|----------|'
 i=0
 for m in mm:
-if ( m[0:2]=='is' ):
-    continue
-else:
-    i=i+1
-    print '|'+str(m)+'|2|'
-    
+    if ( m[0:2]=='is' ):
+        continue
+    else:
+        i=i+1
+        method= getattr( Schemes, m )
+        ds= method()
+        physicalDimensions = dimensionCount(ds)
+        print '|%30s|%3d|%3d|' % ( str(m), ds.rank(), physicalDimensions )
