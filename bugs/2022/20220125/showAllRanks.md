@@ -1,6 +1,7 @@
 |name                          |rank |dimensions|
 |------------------------------|-----|----------|
 |             angleDistribution|  2|  3|
+|            arrayOfBoundingBox|  3|  3|
 |                   boundingBox|  2|  1|
 |                 bundleDataSet|  2|  5|
 |              bundleDescriptor|  2|  1|
