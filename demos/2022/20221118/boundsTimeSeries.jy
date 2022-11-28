@@ -1,0 +1,16 @@
+setScriptDescription('''This demos a bounding envelope.''')
+
+tt= linspace( '2002-02-02T00:02', '2002-02-02T09:59', 10000 )
+ss= sin( ( tt - '2002-02-02T00:02' ) / '10hr' * TAU )
+dd= randn(10000) * (0.1+abs(ss)) + ss 
+
+from org.das2.qds.util import Reduction
+bb= Reduction.reducex( link(tt,dd),dataset('10min') )
+
+setLayout(2)
+plot(tt,dd)
+plot(1,bb)
+
+newbounds= link( bb.property(QDataSet.DEPEND_0),
+                 bundle( bb.property(QDataSet.BIN_MIN), bb.property(QDataSet.BIN_MAX) ) )
+plot(2,newbounds,renderType='bounds>fillTexture=crosshash', color=Color.GRAY, fillColor=Color.LIGHT_GRAY)
