@@ -1,0 +1,18 @@
+setScriptDescription('''Demo use of trajectories from contour to fill in regions''')
+
+randomSeed(0)
+
+setLayoutOverplot(2)
+
+ds= exp(1-distance(50,50,13,13,5,5)) + exp(1-distance(50,50,33,39,5,5))
+ds= ds + randn(50,50)/13
+plot( ds )
+
+dsf= flatten(ds)
+s= sort(dsf[:,2])
+s= dsf[s[s.length()*7/8],2]
+#s= sort(ds)  # TODO: sort should support rank 2
+
+cc= contour( ds, s )
+
+plot( 1, cc, renderType='bounds' )
