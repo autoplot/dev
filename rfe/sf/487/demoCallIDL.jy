@@ -1,14 +1,11 @@
-# experiment with calling IDL script from Autoplot, so that it can be used with the run batch code.
-#
-# =discussion=
-# We have an IDL procedure which traces Juno footpoint using an IDL procedure.  It would be nice
-# if Autoplot's "Run Batch" feature could be used to manage many concurrent IDL sessions.
 
 from java.io import File
 
 cmd= 'myIdlProcedure'
+h= int( randu()*100000 )
 
-n= getParam( 'orbit', 20, 'orbit number' )
+tmpidl= '/tmp/ap/callMyIdlFunction.%010d.idl' % h
+n= getParam( 'orbit', 20, 'orbit number', [1,2,3,4,5,6,7,8,9,10] )
 
 fdir=File( '/tmp/ap' )
 fdir.mkdirs()
@@ -16,20 +13,20 @@ fdir.mkdirs()
 ff= getFile( PWD + cmd + '.pro', monitor.getSubtaskMonitor('read pro') )
 das2streamLib= getFile( PWD + 'das2stream.pro', monitor.getSubtaskMonitor('read das2stream.pro')  )
 mkdir('/tmp/ap/')
-f= open( '/tmp/ap/callMyIdlProcedure.idl','w')
+f= open( tmpidl,'w')
 f.write( '.comp '+ str(ff) + '\n' )
 f.write( cmd + ', ' + str(n) + '\n' )
 f.write( 'exit\n' )
 f.close()
 
 from java.lang import ProcessBuilder
-pb= ProcessBuilder(['idl','/tmp/ap/callMyIdlFunction.idl'])
+pb= ProcessBuilder(['idl',tmpidl])
 pb.directory(fdir)
-pb.redirectOutput(File(fdir,'output.txt'))
-pb.redirectErrorStream(True)
+pb.inheritIO()
 process= pb.start()
-process.waitFor()
+exit= process.waitFor()
 
-data= getDataSet( File(fdir,'/output.d2s').toString() )
-result= data
-
+if exit!=0:
+    raise Exception('error running IDL procedure for orbit=%d, see %s.' % ( n, str( File(fdir,'output.%010d.txt' % h) ) ) )
+    
+print 'done, see '+ str( File(fdir,'output.%010d.txt' % h ) )
