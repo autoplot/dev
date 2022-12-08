@@ -1,0 +1,25 @@
+from java.io import BufferedReader,InputStreamReader
+from java.util.stream import Collectors
+from java.nio.charset import Charset
+from java.lang import ProcessBuilder,String
+from java.util.concurrent import TimeUnit
+setScriptDescription('''Demo how to capture the output of a spawned process.''')
+
+exe= 'ls -l'
+
+pb= ProcessBuilder(exe.split(' '))
+
+process = pb.start()
+process.waitFor()
+
+br= BufferedReader( InputStreamReader( process.inputStream ) )
+line= br.readLine()
+while ( line!=None ):
+    print 'stdout: ', line
+    line= br.readLine()
+
+br= BufferedReader( InputStreamReader( process.errorStream ) )
+line= br.readLine()
+while ( line!=None ):
+    print 'stderr: ',  line
+    line= br.readLine()
