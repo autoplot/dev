@@ -1,0 +1,32 @@
+
+from java.io import File
+
+cmd= 'myIdlProcedure'
+h= int( randu()*100000 )
+
+tmpidl= '/tmp/ap/callMyIdlFunction.%010d.idl' % h
+n= getParam( 'orbit', 20, 'orbit number', [1,2,3,4,5,6,7,8,9,10] )
+
+fdir=File( '/tmp/ap' )
+fdir.mkdirs()
+
+ff= getFile( PWD + cmd + '.pro', monitor.getSubtaskMonitor('read pro') )
+das2streamLib= getFile( PWD + 'das2stream.pro', monitor.getSubtaskMonitor('read das2stream.pro')  )
+mkdir('/tmp/ap/')
+f= open( tmpidl,'w')
+f.write( '.comp '+ str(ff) + '\n' )
+f.write( cmd + ', ' + str(n) + '\n' )
+f.write( 'exit\n' )
+f.close()
+
+from java.lang import ProcessBuilder
+pb= ProcessBuilder(['idl',tmpidl])
+pb.directory(fdir)
+pb.inheritIO()
+process= pb.start()
+exit= process.waitFor()
+
+if exit!=0:
+    raise Exception('error running IDL procedure for orbit=%d, see %s.' % ( n, str( File(fdir,'output.%010d.txt' % h) ) ) )
+    
+print 'done, see '+ str( File(fdir,'output.%010d.txt' % h ) )
