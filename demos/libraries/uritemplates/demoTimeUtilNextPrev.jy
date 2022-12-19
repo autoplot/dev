@@ -1,0 +1,14 @@
+
+
+from org.das2.jythoncompletion import JavadocLookup
+setScriptDescription('''Demo TimeUtil class found in UriTemplates.jar.''')
+
+lib= 'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import TimeUtil
+print TimeUtil.nextRange([1922,1,1,0,0,0,0,1922,2,1,0,0,0,0])
+print TimeUtil.previousRange([1922,1,1,0,0,0,0,1922,2,1,0,0,0,0])
