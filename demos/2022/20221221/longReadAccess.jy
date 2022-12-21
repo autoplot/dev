@@ -1,0 +1,6 @@
+setScriptDescription('Demonstrate how LongReadAccess can access 64-bit long data')
+from org.das2.qds import LongReadAccess
+ds= getDataSet('vap+cdaweb:ds=RBSP-A_DENSITY_EMFISIS-L4&filter=rbsp&id=y&timerange=2019-10-12')
+tt= xtags(ds)
+ll= tt.capability(LongReadAccess)
+print ll.lvalue(0)
