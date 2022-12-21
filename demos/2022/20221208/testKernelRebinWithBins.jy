@@ -1,0 +1,6 @@
+zz= distance(100,10,5,5,30,2)
+xx= linspace(0,99,100)
+yy= outerSum( linspace(5,95,10), dataset([-5,5]) )
+yy.putProperty( QDataSet.BINS_1, QDataSet.VALUE_BINS_MIN_MAX )
+
+plot( link( xx, yy, zz ) )
