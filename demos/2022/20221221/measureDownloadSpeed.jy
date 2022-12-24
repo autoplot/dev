@@ -1,0 +1,20 @@
+import time
+import os
+
+url= URL( 'http://autoplot.org/data/dat/downloadSpeed.dat' )  # approx 1MB
+size= 3834946
+
+outputfile= open( '/tmp/downloadspeed.txt', 'w' )
+outputfile.write( 'time num dt(ms) speed(Mb/sec)\n' ) 
+print( 'time num dt(ms) speed(Mb/sec)\n' )
+for i in xrange(5):
+  t= time.time()
+  f= downloadResourceAsTempFile(url,None)
+  os.remove(f.toString())
+  dt= time.time() - t # sec
+  rec= '%s %d %9f %9.3f\n' % ( str(TimeUtil.now()), i, dt, size/1000000./dt) 
+  outputfile.write( rec ) 
+  outputfile.flush()
+  print rec
+  time.sleep(5)
+  
