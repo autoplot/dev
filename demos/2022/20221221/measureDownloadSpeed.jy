@@ -1,3 +1,7 @@
+setScriptDescription('''This script downloads a file of known size to report the
+download speed, typically used to monitor network performance.  (My network is half
+the speed it ought to be this morning.)''')
+
 import time
 import os
 
