@@ -8,8 +8,11 @@ import os
 #url= URL( 'http://autoplot.org/data/dat/downloadSpeed.dat' )
 #size= 3834946
 
-url= URL( 'http://www-pw.physics.uiowa.edu/~jbf/autoplot/vapCanBeZip.zip' )
-size= 1294922
+#url= URL( 'http://www-pw.physics.uiowa.edu/~jbf/autoplot/vapCanBeZip.zip' )
+#size= 1294922
+
+url= URL( 'http://www-pw.physics.uiowa.edu/~jbf/autoplot/data.nobackup/d2s/d2s/spectrogramColorTable.d2s.gz' )
+size= 7000000
 
 outputfile= open( '/tmp/downloadspeed.txt', 'w' )
 outputfile.write( 'time num dt(sec) speed(Mb/sec)\n' ) 
