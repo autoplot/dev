@@ -1,4 +1,4 @@
-|test name |2017 Desktop | M1 Laptop Emulation | BellSoft Native | 2021 Desktop | Windows VM on 2021 Desktop | Binus |
+|test name |2017 Desktop | M1 Laptop Emulation | BellSoft Native | 2021 Desktop | Windows VM<br>on 2021<br>Desktop | Binus |
 |---------------|--------|------|-----|-----|-----|-----|
 | generateRandn |   1039 |  425 | 645 | 312 | 438 |383 |
 | total         | 	 428 |  145 |  91 |  80 | 156 |141 |
