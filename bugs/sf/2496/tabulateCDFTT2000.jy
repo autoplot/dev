@@ -1,0 +1,21 @@
+setScriptDescription('Print the CDF TT2000 for each leap second')
+
+ds= getDataSet("https://cdf.gsfc.nasa.gov/html/CDFLeapSeconds.txt?timeFormat=$Y+$m+$d&column=field3&time=field0")
+
+t= xtags(ds)
+
+print 'private static String[] times = new String[] {',
+for i in xrange(14,len(t)):
+    print '"%s"' % t[i].svalue(),
+    if i<len(t)-1: print ', ',
+    if i%4==3: print ""
+print '}'
+
+print 'private static long[] tt2000s = new long[] {',
+for i in xrange(14,len(t)):
+    print '%dL' % long(Units.cdfTT2000.parse(t[i].svalue()).doubleValue(Units.cdfTT2000)),
+    if i<len(t)-1: print ', ',
+    if i%4==3: print ""
+print '}'
+
+    
