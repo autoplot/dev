@@ -1,4 +1,6 @@
-setScriptDescription('Print the CDF TT2000 for each leap second')
+setScriptDescription('''Print the CDF TT2000 for each leap second.  See
+https://github.com/das-developers/das2java/blob/main/dasCoreDatum/src/org/das2/datum/TimeUtil.java.
+''')
 
 ds= getDataSet("https://cdf.gsfc.nasa.gov/html/CDFLeapSeconds.txt?timeFormat=$Y+$m+$d&column=field3&time=field0")
 
