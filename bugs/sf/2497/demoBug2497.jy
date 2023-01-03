@@ -1,0 +1,7 @@
+#resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/rainfall_KIOW_20120522_0252.html', 'example file to load' )
+#resourceURI= getParam( 'resourceURI', 'file:/etc/bash.bashrc', 'example file to load' )
+#resourceURI= getParam( 'resourceURI', '/etc/bash.bashrc', 'example file to load' )
+resourceURI= getParam( 'resourceURI', PWD + 'demoBug2497.jy', 'example file to load' )
+additionalParameter = getParam( 'p1', 10 )
+
+print resourceURI
