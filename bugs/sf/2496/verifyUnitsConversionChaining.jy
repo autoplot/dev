@@ -1,0 +1,6 @@
+setScriptDescription('''Verify that once two converters are chained, then
+this is not done again.  This code should be run with a breakpoint in
+append, and then run twice.  It will hit the breakpoint the first time
+but not the second.''')
+
+print Units.ms1970.convertDoubleTo(Units.cdfEpoch,0)
