@@ -1,0 +1,14 @@
+t= linspace( '2000-01-01T00:00', '2000-01-02T00:00', 86401 )
+s= sin((t-t[0]-'15min')/'1hr'*TAU)
+d= link( t, s )
+
+r= where( d.lt(-0.7) )
+p,pe= plot( d[r] )
+
+annotation( 0, text='Number of points: %d' % len(r), plotId=p.id, anchorType='CANVAS', anchorPosition='NW' )
+
+p,pe= plot( 1, d[r], renderType='eventsBar' )
+numIntervals=24 # TODO: calculate 
+annotation( 1, text='Number of Intervals: %d' % numIntervals, plotId=p.id, anchorType='CANVAS', anchorPosition='NW' )
+
+# please create a list of intervals.
