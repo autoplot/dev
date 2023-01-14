@@ -1,0 +1,30 @@
+from java.io import ByteArrayInputStream,InputStreamReader
+from org.das2.qds.util import AsciiParser
+# why doesn't join(t) make a rank 0 dataset into a rank 1 dataset?
+# why can't QFunctions take rank 0 input and give rank 1 output?
+# how to easily add columns to bundle?  bundle( Rank2, Rank2 ) should result in Rank 2
+
+from java.lang import Double
+
+# Here's a way to embed a data set within a script by configuring an AsciiParser to read a string.
+dd= '''2013-02-11T00:00:59.996Z,14
+2014-03-11T00:00:59.996Z,15
+2015-04-11T00:00:59.996Z,16
+2016-05-11T00:00:59.996Z,17
+2017-06-11T00:00:59.996Z,18
+'''
+ap= AsciiParser()
+ap.setDelimParser(InputStreamReader(ByteArrayInputStream(dd)),',')  # this configures the parser
+dd= ap.readStream(InputStreamReader(ByteArrayInputStream(dd)),monitor)
+# end, Here's a way to embed a data set ...
+
+tt= dd[:,0]
+
+from org.autoplot.tca import UriTcaSource
+
+qf= UriTcaSource( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/1/Ephemeris/Heliographic_Inertial&interval=60&timerange=2020-001' )
+for i in range(len(tt)):
+    t= tt[i]
+    jj= dataset( [t] )  # join(t) doesn't work and makes opaque error
+    ephem= qf.value(jj)
+    print t, unbundle(ephem,'radius')
