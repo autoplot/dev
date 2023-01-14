@@ -20,8 +20,13 @@ dd= ap.readStream(InputStreamReader(ByteArrayInputStream(dd)),monitor)
 
 tt= dd[:,0]
 
-from org.autoplot.tca import UriTcaSource
+# A QFunction takes a QDataSet as input and returns a QDataSet output.  The UriTcaSource is
+# an example of this, which takes single-valued input (the time) and returns a multi-valued output
+# (the ephemerides).  This is a convenient way to look up data, but there are particulars to be
+# aware of.  For example, the single-valued input time cannot be rank 0, and must be a 1-element
+# rank 1 dataset.
 
+from org.autoplot.tca import UriTcaSource
 qf= UriTcaSource( 'vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Voyager/1/Ephemeris/Heliographic_Inertial&interval=60&timerange=2020-001' )
 for i in range(len(tt)):
     t= tt[i]
