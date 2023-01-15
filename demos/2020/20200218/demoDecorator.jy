@@ -16,11 +16,11 @@ class Washer( Painter ):
         clip= dom.plots[0].controller.dasPlot.getAxisClip()
                 
         s= RoundRectangle2D.Double(x-30,y-30,60,60,10,10)
-        sinside= RoundRectangle2D.Double(x-10,y-10,20,20,10,10)
+        inside= RoundRectangle2D.Double(x-10,y-10,20,20,10,10)
         
         a= Area(s)
         a.intersect( Area(clip) )
-        a.subtract( Area(sinside) )
+        a.subtract( Area(inside) )
         
         g.setClip(a)
         g.setStroke( BasicStroke(0.3) )
@@ -31,7 +31,7 @@ class Washer( Painter ):
             
         g.setClip(clip)
         g.draw(s)
-        g.draw(sinside)
+        g.draw(inside)
 
 w= Washer()
 dom.canvases[0].controller.dasCanvas.addBottomDecorator(w)
