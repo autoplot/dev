@@ -1,0 +1,19 @@
+setScripDescription('''JavaScript does not have floorDiv, so 
+verify that I have the logic right in my code.''')
+
+from java.lang import Math
+ii= linspace( -10,10,21 )
+rr= zeros(21)
+rr2= zeros(21)
+i=0
+for ndays in ii:
+    if ( ndays<0 ):
+        rr[i]= ( ndays + 1 ) // 4 - 1
+    else: 
+        rr[i]= ndays // 4
+    rr2[i]= Math.floorDiv(long(ndays),4)
+    i=i+1
+
+reset()
+plot( ii, rr )
+plot( 1, ii, rr2 )
