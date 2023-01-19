@@ -1,0 +1,18 @@
+setScriptDescription('''Make low-res map of the continents.  This reads the five cil files and
+conbines them into one.  This result is available at 
+https://cottagesystems.com/autoplot/data/annotations/all-coastlines.dat .''')
+
+ds= getDataSet( 'http://autoplot.org/data/coastlines.zip/coastlines/namer-cil.txt')
+print ds
+
+ss= [ 'namer-cil.txt', 'samer-cil.txt', 'africa-cil.txt', 'asia-cil.txt', 'europe-cil.txt' ]
+
+all= None
+
+for s in ss:
+    ds= getDataSet('http://autoplot.org/data/coastlines.zip/coastlines/' + s )
+    all= append( all, ds )
+
+plot( all )
+    
+formatDataSet( all, '/tmp/ap/all-coastlines.dat' )
