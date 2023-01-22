@@ -33,7 +33,7 @@ lbs= xx[1::4]
 cdw= xx[2::4]
 colors= xx[3::4]
 
-tr= getParam( 'timerange', '2011-10-20 T00:00 to 2011-10-28T00:00', 'timerange to load' )
+tr= getParam( 'timerange', '2011-10-20T00:00/2011-10-28T00:00', 'timerange to load' )
 
 stereoa=    getParam( scs[0], False, lbs[0], TF)
 stereob=    getParam( scs[1], False, lbs[1], TF)
