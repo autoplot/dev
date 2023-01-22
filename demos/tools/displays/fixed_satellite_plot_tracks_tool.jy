@@ -8,8 +8,6 @@ setScriptDescription('Spacecraft orbit plotter that uses the HELIO1DAY files at 
 logger= LoggerManager.getLogger('aaa')
 logger.info('Logging to aaa')
 
-TF= [ True, False ]
-
 # variable name, label, cdaweb variable
 xx= [ 'stereoa','Stereo A','STA', 'red',
       'stereob', 'Stereo B','STB','blue',
@@ -34,6 +32,8 @@ cdw= xx[2::4]
 colors= xx[3::4]
 
 tr= getParam( 'timerange', '2011-10-20T00:00/2011-10-28T00:00', 'timerange to load' )
+
+TF= [ True, False ]
 
 stereoa=    getParam( scs[0], False, lbs[0], TF)
 stereob=    getParam( scs[1], False, lbs[1], TF)
