@@ -1,3 +1,6 @@
+setScriptDescription('''Run through intentionally slow procedures so we can see
+how slow processes can be monitored.''')
+
 monitor.setTaskSize(200)                     # the number of steps (arbitrary units)
 monitor.started()                            # the task is started  
 
