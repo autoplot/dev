@@ -1,0 +1,4 @@
+global myImportableFunction
+def myImportableFunction():
+    print 'i''m imported'
+    

@@ -1,0 +1,34 @@
+from org.autoplot import AutoplotUtil
+# vap+hapi:https://imag-data-staging.bgs.ac.uk/GIN_V1/hapi?id=qsb/best-avail/PT1M/diff
+
+# get all the station IDs
+#zz= getCompletions( 'vap+hapi:https://imag-data-staging.bgs.ac.uk/GIN_V1/hapi?id=' )
+#ss= {}
+#for z in zz:
+#    print z
+#    sta= z[60:63]
+#    ss[sta]=sta
+#print ss
+#print '[',
+#for k in ss:
+#    print '\'%s\',' % k,
+#print ']'
+
+stations = [ 'tam', 'sua' ]
+station= getParam( 'station', 'tam', 'Station ID', stations )
+tr= getParam( 'timerange', '2019-12-01', 'timerange to load' )
+
+reset()
+
+uri= 'vap+hapi:https://imag-data-staging.bgs.ac.uk/GIN_V1/hapi?id=%s/definitive/PT1M/hdzf&parameters=Time,Field Vector&timerange=%s'  % ( station, tr )
+dom1 = loadVap( PWD + 'layoutMag.vap?timeRange=%s' %(tr) )
+print dom1.dataSourceFilters[0].uri 
+print uri
+dom1.dataSourceFilters[0].uri= uri
+dom1.timeRange=datumRange(tr)
+dom1.plots[0].title= 'Station ID '+station
+dom.syncTo(dom1)
+
+AutoplotUtil.resetZoomY( dom, dom.plots[0] )
+AutoplotUtil.resetZoomY( dom, dom.plots[1] )
+AutoplotUtil.resetZoomY( dom, dom.plots[2] )

@@ -1,0 +1,18 @@
+d = '/home/jbf/ct/autoplot/u/2023/sadie/20230113/'
+ff= listDirectory( d + '*.dat')
+
+tp= TimeParser.create('$Y$m01_000000_$(Y;end)$m01_000000.dat')
+
+evts= None
+
+plot( 0, None )
+i=1
+for f in ff:
+    ds= getDataSet( d + f )
+    plot( i, ds )
+    i=i+1
+    tr= tp.parse(f).timeRange
+    evt= identifyContinuousBlocks( datum('2s'),tr,evts,xtags(ds) )
+    evts= append( evts, evt )
+
+plot( 0, evts )

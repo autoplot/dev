@@ -1,14 +1,31 @@
-t= linspace( '2000-01-01T00:00', '2000-01-02T00:00', 86401 )
-s= sin((t-t[0]-'15min')/'1hr'*TAU)
-d= link( t, s )
+from org.das2.qds import DataSetUtil
 
-r= where( d.lt(-0.7) )
-p,pe= plot( d[r] )
+t1= linspace( '2000-01-01T00:00', '2000-01-02T00:00', 86401 )
+s1= sin((t1-t1[0]-'15min')/'1hr'*TAU)
+d1= link( t1, s1 )
+r1= where( d1.lt(-0.7) )
+d1= d1[r1]
 
-annotation( 0, text='Number of points: %d' % len(r), plotId=p.id, anchorType='CANVAS', anchorPosition='NW' )
+t2= linspace( '2000-01-02T00:00', '2000-01-03T00:00', 86401 )
+s2= sin((t2-t2[0]-'15min')/'1hr'*TAU)
+d2= link( t2, s2 )
+r2= where( d2.lt(-0.7) )
+d2= d2[r2]
 
-p,pe= plot( 1, d[r], renderType='eventsBar' )
-numIntervals=24 # TODO: calculate 
+reset()
+p,pe= plot( append( d1, d2 ) )
+annotation( 0, text='Number of points: %d' % ( len(r1)+len(r2) ), plotId=p.id, anchorType='CANVAS', anchorPosition='NW' )
+
+t= xtags(d1)
+cad= DataSetUtil.guessCadence(xtags(d1),d1)
+
+evts1= identifyContinuousBlocks(datum(cad),datumRange('2000-01-01'),None,xtags(d1))
+evts2= identifyContinuousBlocks(datum(cad),datumRange('2000-01-02'),evts1,xtags(d2))
+
+evts= append( evts1, evts2 )
+
+p,pe= plot( 1, evts, renderType='eventsBar' )
+numIntervals=len(evts)
 annotation( 1, text='Number of Intervals: %d' % numIntervals, plotId=p.id, anchorType='CANVAS', anchorPosition='NW' )
 
 # please create a list of intervals.

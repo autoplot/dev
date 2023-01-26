@@ -1,0 +1,14 @@
+def doExec():
+    ff= getFile(PWD + '/execFileVariable.jy')
+    execfile( str(ff) )
+    print g
+    
+doExec()
+print g
+
+def doExecFileForFunction():
+    execfile( str( getFile( PWD + '/execFileFunction.jy' ) ) )
+#execfile( str( getFile( PWD + '/execFileFunction.jy' ) ) )
+
+doExecFileForFunction()
+myImportableFunction()

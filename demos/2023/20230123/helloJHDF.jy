@@ -1,0 +1,15 @@
+from java.io import File
+import sys
+#addToSearchPath(sys.path,'https://repo1.maven.org/maven2/io/jhdf/jhdf/0.6.9/jhdf-0.6.9.jar','https://repo1.maven.org/maven2/io/jhdf/jhdf/0.6.9/jhdf-0.6.9-javadoc.jar',monitor)
+addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar',monitor.getSubtaskMonitor('apache'))
+addToSearchPath(sys.path,'file:/home/jbf/tmp/20230123/jhdf-0.6.9.jar','https://repo1.maven.org/maven2/io/jhdf/jhdf/0.6.9/jhdf-0.6.9-javadoc.jar',monitor.getSubtaskMonitor('jhdf'))
+
+from io.jhdf import HdfFile
+from io.jhdf.api import Dataset
+from java.nio.file import Paths
+
+from org.apache.commons.lang3.ClassUtils import primitiveToWrapper
+print primitiveToWrapper(HdfFile)
+
+hdfFile = HdfFile( File('/home/jbf/Downloads/example.h5') )
+print hdfFile
