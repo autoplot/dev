@@ -1,14 +1,27 @@
+setScriptTitle('Progress Monitor Demo')
 setScriptDescription('''Run through intentionally slow procedures so we can see
 how slow processes can be monitored.''')
+
+from java.lang import System
+
+t0= System.currentTimeMillis()
+print 'load file, which might be cached.'
 
 monitor.setTaskSize(200)                     # the number of steps (arbitrary units)
 monitor.started()                            # the task is started  
 
 d=getFile('http://autoplot.org/data/14MB.qds',monitor.getSubtaskMonitor(0,100,'load file'))
+
+print 'file loaded and available...%dms' % ( System.currentTimeMillis()-t0 )
+print 'begin slow loop simulation...'
+
 for i in xrange(100):                        # xrange(200) iterates through 0,1,...,198,199
    if ( monitor.isCancelled() ): break       # check to see if the task has been cancelled.
    monitor.setProgressMessage('at %d' % i)   # this describes actions done to perform the task.  
    monitor.setTaskProgress(i+100)
+   print '  slow loop...%dms '% ( System.currentTimeMillis()-t0 )
    sleep(100)                                # sleep for 100 milliseconds
+
+print 'ran through slow loop simulation...%dms' % ( System.currentTimeMillis()-t0 )
 
 monitor.finished()     # indicate the task is complete
