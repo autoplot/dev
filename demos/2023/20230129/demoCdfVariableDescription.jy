@@ -1,0 +1,18 @@
+from org.autoplot.cdf import CdfUtil
+from org.autoplot.cdf import CdfDataSource
+
+ff= getFile('http://virbo.org/ftp/LANL/LANL1991/SOPA+ESP/H0/LANL_1991_080_H0_SOPA_ESP_19920308_V01.cdf')
+f= str(ff)
+#f= '/home/jbf/tmp/ACESII_36359_l1_ILat_ILong_eepaa_playback_BSS_Card0_processedtm_20221120T170902_v00.cdf'
+cdf = CdfDataSource.getCdfFile(f)
+
+pp= CdfUtil.getPlottable( cdf,None )
+
+for p in pp:
+    print '# ' + p
+    px= pp.get(p)
+    print 'name: \t', px.name
+    print 'variableType: \t', px.variableType
+    print 'description: \t', px.description
+    print 'depend0Name: \t', px.depend0Name
+    
