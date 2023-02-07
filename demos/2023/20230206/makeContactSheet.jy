@@ -1,3 +1,4 @@
+from java.awt import Font,RenderingHints
 from javax.imageio import ImageIO
 from java.awt.image import BufferedImage
 from org.das2.util import ImageUtil
@@ -12,6 +13,8 @@ timerange='1900 to 2100'
 ncol= getParam( 'ncol', 5, 'Number of columns', { 'examples':[ 5,6,7,8,9,10] } )
 output= getParam( 'output', '/tmp/ap/output.png', 'Output file png' )
 
+labelHeight= 16
+
 from org.das2.fsm import FileStorageModel
 from org.das2.util.filesystem import FileSystem
 i= FileStorageModel.splitIndex( resourceURI )
@@ -24,6 +27,9 @@ fsm= FileStorageModel.create( fs, template )
 
 names= fsm.getNamesFor( DatumRangeUtil.parseTimeRange(timerange) )
 
+# for testing
+#names= names[0:100]
+
 im= ImageIO.read( getFile( root + names[0] ))
 if thumbSize>0:
     im= ImageUtil.getScaledInstance(im, thumbSize)
@@ -31,9 +37,16 @@ if thumbSize>0:
 nrow= int( ceil( len(names)/ncol ) )
 print nrow, ncol
 
-img = BufferedImage( ncol * im.width, nrow * im.height, BufferedImage.TYPE_INT_RGB )
+img = BufferedImage( ncol * im.width, nrow * ( im.height + labelHeight ), BufferedImage.TYPE_INT_RGB )
 g= img.createGraphics()
+g.font= Font.decode('sans-10')
+g.setRenderingHint( RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON )
 
+try: 
+    tp= TimeParser.create( template )
+except:
+    tp= None
+                            
 ii=0
 nn= len(names)
 print nn, len(names)
@@ -44,7 +57,15 @@ for irow in range(0,nrow):
         im1= ImageIO.read( getFile( root + names[i] ))
         if thumbSize>0:
             im1= ImageUtil.getScaledInstance(im1, thumbSize)
-        g.drawImage(im1, icol * im.width, irow * im.height, None )
+        g.drawImage(im1, icol * im.width, irow * ( im.height + labelHeight ), None )
+        g.color= Color.WHITE
+        g.fillRect( icol * im.width, irow * ( im.height + labelHeight ) + im.height, im.width, labelHeight )
+        g.color= Color.BLACK
+        if tp==None:
+            label= names[i]
+        else:
+            label= str( tp.parse(names[i]).getTimeRange() )
+        g.drawString( label, icol * im.width + labelHeight/2, irow * ( im.height + labelHeight ) + im.height + int( labelHeight*2/3. ) )
         i=i+1
 
 writeToPng( img, output,None )
