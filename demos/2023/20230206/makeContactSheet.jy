@@ -1,7 +1,11 @@
 from javax.imageio import ImageIO
 from java.awt.image import BufferedImage
+from org.das2.util import ImageUtil
+
 setScriptDescription('Make thumbnails')
-resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/pngwalks/2022/20221102/thumbs100/product_$Y$m$d-$H.png', 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/pngwalks/2022/20221102/product_$Y$m$d-$H.png', 'example file to load' )
+
+thumbSize= getParam( 'thumbSize', 200, 'norminal size to target thumbnails, 0 means no resize' )
 
 timerange='1900 to 2100' 
 
@@ -21,7 +25,9 @@ fsm= FileStorageModel.create( fs, template )
 names= fsm.getNamesFor( DatumRangeUtil.parseTimeRange(timerange) )
 
 im= ImageIO.read( getFile( root + names[0] ))
-
+if thumbSize>0:
+    im= ImageUtil.getScaledInstance(im, thumbSize)
+    
 nrow= int( ceil( len(names)/ncol ) )
 print nrow, ncol
 
@@ -29,10 +35,17 @@ img = BufferedImage( ncol * im.width, nrow * im.height, BufferedImage.TYPE_INT_R
 g= img.createGraphics()
 
 ii=0
+nn= len(names)
+print nn, len(names)
 for irow in range(0,nrow):
+    if i==nn: break
     for icol in range(0,ncol):
-        im1= ImageIO.read( getFile( root + names[0] ))
+        if i==nn: break
+        im1= ImageIO.read( getFile( root + names[i] ))
+        if thumbSize>0:
+            im1= ImageUtil.getScaledInstance(im1, thumbSize)
         g.drawImage(im1, icol * im.width, irow * im.height, None )
+        i=i+1
 
 writeToPng( img, output,None )
 showMessageDialog('Wrote to '+output)
