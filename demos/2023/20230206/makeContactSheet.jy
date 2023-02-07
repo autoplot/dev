@@ -1,0 +1,37 @@
+from javax.imageio import ImageIO
+from java.awt.image import BufferedImage
+setScriptDescription('Make thumbnails')
+resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/pngwalks/2022/20221102/thumbs100/product_$Y$m$d-$H.png', 'example file to load' )
+
+timerange='1900 to 2100' 
+
+ncol= 5
+
+from org.das2.fsm import FileStorageModel
+from org.das2.util.filesystem import FileSystem
+i= FileStorageModel.splitIndex( resourceURI )
+
+root= resourceURI[0:i]      # the static part of the name
+template= resourceURI[i:]   # the templated part of the name
+
+fs= FileSystem.create( root )
+fsm= FileStorageModel.create( fs, template )
+
+names= fsm.getNamesFor( DatumRangeUtil.parseTimeRange(timerange) )
+
+im= ImageIO.read( getFile( root + names[0] ))
+
+nrow= int( ceil( len(names)/ncol ) )
+print nrow, ncol
+
+img = BufferedImage( ncol * im.width, nrow * im.height, BufferedImage.TYPE_INT_RGB )
+g= img.createGraphics()
+
+ii=0
+for irow in range(0,nrow):
+    for icol in range(0,ncol):
+        im1= ImageIO.read( getFile( root + names[0] ))
+        g.drawImage(im1, icol * im.width, irow * im.height, None )
+
+writeToPng( img, '/tmp/ap/jeremy.png',None )
+
