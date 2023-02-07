@@ -1,0 +1,7 @@
+setScriptDescription('''Make placeholder for thin client''')
+
+reset()
+setCanvasSize(700,400)
+dom.options.foreground= Color.GRAY
+annotation(0,text='(Enter Autoplot URI below)', textColor=Color.GRAY, anchorPosition='NW', fontSize='1.0em' )
+writeToPng('/home/jbf/temp/autoplot/AutoplotServlet/web/thin/zoom/blank.png')

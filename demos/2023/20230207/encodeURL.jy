@@ -1,0 +1,3 @@
+from java.net import URLEncoder
+s='vap+cdaweb:ds=AC_H0_MFI&id=BGSEc&timerange=2022-12-19'
+print URLEncoder.encode(s)
