@@ -1,0 +1,49 @@
+from java.awt import Rectangle
+from org.das2.event import DragRenderer,LabelDragRenderer
+from java.lang import StringBuilder
+setScriptDescription('Fun binary slice shows interpretations of selected bytes')
+
+
+def doInterpret( xrange ):
+    ds= dom.plotElements[0].controller.dataSet
+    xt= xtags(ds)
+    r= where( within( xt,xrange ) )
+    sb=StringBuilder()
+    for r1 in r:
+        print r1, ds[r1], chr(int(ds[r1]))
+        sb.append( '%6d %3d (%x) %s<br>' % ( r1, ds[r1], ds[r1], chr(int(ds[r1])) ) )
+    if len(r)==4:
+        big= ds[r[0]] + 256 * ds[r[1]] + 256*256 * ds[r[2]] + 256*256*256 * ds[r[3]]
+        little= ds[r[3]] + 256 * ds[r[2]] + 256*256 * ds[r[1]] + 256*256*256 * ds[r[0]]
+        sb.append( '%8d %8d (big,little integers)<br>' % ( big,little ) )
+    elif len(r)==2:
+        big= ds[r[0]] + 256 * ds[r[1]] 
+        little= ds[r[1]] + 256 * ds[r[0]]
+        sb.append( '%8d %8d (big,little short)<br>' % ( big,little ) )
+    elif len(r)==8:
+        big1= ds[r[0]] + 256 * ds[r[1]] + 256*256 * ds[r[2]] + 256*256*256 * ds[r[3]]
+        big2= ds[r[4]] + 256 * ds[r[5]] + 256*256 * ds[r[6]] + 256*256*256 * ds[r[7]]
+        big= big1 + 2**32 * big2
+        little1= ds[r[7]] + 256 * ds[r[6]] + 256*256 * ds[r[5]] + 256*256*256 * ds[r[4]]
+        little2= ds[r[3]] + 256 * ds[r[2]] + 256*256 * ds[r[1]] + 256*256*256 * ds[r[0]]
+        little= little1 + 2**32 * little2
+        sb.append( '%16d %16d (big,little long)<br>' % ( big,little ) )
+        
+    return sb.toString()
+    
+class MyDragRenderer( LabelDragRenderer ):
+    def renderDrag( self, g, p1, p2 ):
+        x1= dom.plots[0].controller.dasPlot.getXAxis().invTransform(p1.x)
+        x2= dom.plots[0].controller.dasPlot.getXAxis().invTransform(p2.x)
+        if ( x1>x2 ):
+            x1,x2= x2,x1
+        rect= Rectangle(p1)
+        rect.add(p2)
+        g.draw(rect)
+        ll= doInterpret( datumRange([x1,x2]) )
+        self.setLabel( ''+ll )
+        
+        LabelDragRenderer.renderDrag(self,g,p1,p2)
+    
+mm= addMouseModule( dom.plots[0],'Bin Interpret',doInterpret)
+mm.dragRenderer= MyDragRenderer()
