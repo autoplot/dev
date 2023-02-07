@@ -5,7 +5,7 @@ from org.das2.util import ImageUtil
 setScriptDescription('Make thumbnails')
 resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/pngwalks/2022/20221102/product_$Y$m$d-$H.png', 'example file to load' )
 
-thumbSize= getParam( 'thumbSize', 200, 'norminal size to target thumbnails, 0 means no resize' )
+thumbSize= getParam( 'thumbSize', 200, 'nominal size to target thumbnails, 0 means no resize' )
 
 timerange='1900 to 2100' 
 
