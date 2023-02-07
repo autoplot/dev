@@ -5,7 +5,8 @@ resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/pngwalks
 
 timerange='1900 to 2100' 
 
-ncol= 5
+ncol= getParam( 'ncol', 5, 'Number of columns', { 'examples':[ 5,6,7,8,9,10] } )
+output= getParam( 'output', '/tmp/ap/output.png', 'Output file png' )
 
 from org.das2.fsm import FileStorageModel
 from org.das2.util.filesystem import FileSystem
@@ -33,5 +34,6 @@ for irow in range(0,nrow):
         im1= ImageIO.read( getFile( root + names[0] ))
         g.drawImage(im1, icol * im.width, irow * im.height, None )
 
-writeToPng( img, '/tmp/ap/jeremy.png',None )
+writeToPng( img, output,None )
+showMessageDialog('Wrote to '+output)
 
