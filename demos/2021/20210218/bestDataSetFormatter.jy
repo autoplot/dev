@@ -7,7 +7,7 @@ from org.virbo.dataset import SemanticOps
 
 def testDf( testNum, df, ds ):
     'we should be able to format and parse each datum of the dataset and get a close number'
-    print '--- %d ---' % testNum
+    print '--- test %d ---' % testNum
     print df
     u= SemanticOps.getUnits(ds)
     if ( ds.length()>1 ):
