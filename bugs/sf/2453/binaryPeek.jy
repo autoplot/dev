@@ -1,9 +1,16 @@
+from java.nio import ByteBuffer,ByteOrder
 from java.awt import Rectangle
 from org.das2.event import DragRenderer,LabelDragRenderer
 from java.lang import StringBuilder
 setScriptDescription('Fun binary slice shows interpretations of selected bytes')
 
-
+def getByte( d ):
+    d= int(d)
+    if ( d>127 ):
+        return d-256
+    else:
+        return d
+        
 def doInterpret( xrange ):
     ds= dom.plotElements[0].controller.dataSet
     xt= xtags(ds)
@@ -13,21 +20,39 @@ def doInterpret( xrange ):
         print r1, ds[r1], chr(int(ds[r1]))
         sb.append( '%6d %3d (%x) %s<br>' % ( r1, ds[r1], ds[r1], chr(int(ds[r1])) ) )
     if len(r)==4:
-        big= ds[r[0]] + 256 * ds[r[1]] + 256*256 * ds[r[2]] + 256*256*256 * ds[r[3]]
-        little= ds[r[3]] + 256 * ds[r[2]] + 256*256 * ds[r[1]] + 256*256*256 * ds[r[0]]
-        sb.append( '%8d %8d (big,little integers)<br>' % ( big,little ) )
+        little= ds[r[0]] + 256 * ds[r[1]] + 256*256 * ds[r[2]] + 256*256*256 * ds[r[3]]
+        bigg= ds[r[3]] + 256 * ds[r[2]] + 256*256 * ds[r[1]] + 256*256*256 * ds[r[0]]
+        sb.append( '%8d %8d (little,big integers)<br>' % ( little,bigg ) )
+        import jarray
+        bytes= jarray.zeros(4,'b')
+        bytes[0]= getByte( ds[r[0]] )
+        bytes[1]= getByte( ds[r[1]] )
+        bytes[2]= getByte( ds[r[2]] )
+        bytes[3]= getByte( ds[r[3]] )
+        bbuf= ByteBuffer.wrap(bytes)
+        try:
+            bbuf.order( ByteOrder.LITTLE_ENDIAN )
+            littlefs= '%f' % bbuf.getFloat(0)
+        except:
+            littlefs= 'xxx'
+        try:
+            bbuf.order( ByteOrder.BIG_ENDIAN )
+            bigfs= '%f' % bbuf.getFloat(0)
+        except:
+            bigfs= 'xxx'
+        sb.append( '%s %s (little, big float)<br>' % (  littlefs, bigfs ) )
     elif len(r)==2:
-        big= ds[r[0]] + 256 * ds[r[1]] 
-        little= ds[r[1]] + 256 * ds[r[0]]
-        sb.append( '%8d %8d (big,little short)<br>' % ( big,little ) )
+        little= ds[r[0]] + 256 * ds[r[1]] 
+        bigg= ds[r[1]] + 256 * ds[r[0]]
+        sb.append( '%8d %8d (little,big short)<br>' % ( little,bigg ) )
     elif len(r)==8:
-        big1= ds[r[0]] + 256 * ds[r[1]] + 256*256 * ds[r[2]] + 256*256*256 * ds[r[3]]
-        big2= ds[r[4]] + 256 * ds[r[5]] + 256*256 * ds[r[6]] + 256*256*256 * ds[r[7]]
-        big= big1 + 2**32 * big2
-        little1= ds[r[7]] + 256 * ds[r[6]] + 256*256 * ds[r[5]] + 256*256*256 * ds[r[4]]
-        little2= ds[r[3]] + 256 * ds[r[2]] + 256*256 * ds[r[1]] + 256*256*256 * ds[r[0]]
+        little1= ds[r[0]] + 256 * ds[r[1]] + 256*256 * ds[r[2]] + 256*256*256 * ds[r[3]]
+        little2= ds[r[4]] + 256 * ds[r[5]] + 256*256 * ds[r[6]] + 256*256*256 * ds[r[7]]
         little= little1 + 2**32 * little2
-        sb.append( '%16d %16d (big,little long)<br>' % ( big,little ) )
+        big1= ds[r[7]] + 256 * ds[r[6]] + 256*256 * ds[r[5]] + 256*256*256 * ds[r[4]]
+        big2= ds[r[3]] + 256 * ds[r[2]] + 256*256 * ds[r[1]] + 256*256*256 * ds[r[0]]
+        bigg= big1 + 2**32 * big2
+        sb.append( '%16d %16d (little,big long)<br>' % ( little,bigg ) )
         
     return sb.toString()
     
