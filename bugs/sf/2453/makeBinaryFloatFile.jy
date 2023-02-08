@@ -1,0 +1,2 @@
+ff= dataset( [ 6., 1, -2, 7.2, -13.4 ] )
+formatDataSet( ff, PWD + 'floatsInBinary.bin?type=float')
