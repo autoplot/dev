@@ -1,0 +1,64 @@
+from java.io import File,RandomAccessFile
+from java.nio import ByteBuffer,ByteOrder
+setScriptDescription('''GIS Shape File Reader.  See https://en.wikipedia.org/wiki/Shapefile 
+and also see https://github.com/GeospatialPython/pyshp/blob/master/shapefile.py.
+See https://www.esri.com/content/dam/esrisites/sitecore-archive/Files/Pdfs/library/whitepapers/pdfs/shapefile.pdf.''')
+
+resourceURI= getParam( 'resourceURI', '/home/jbf/public_html/autoplot/data/maps/naturalearthdata.com/ne_110m_graticules_20.shp', 'example file to load' )
+
+ff= RandomAccessFile( getFile(resourceURI,monitor), 'r' )
+
+inChannel= ff.getChannel()
+
+size= inChannel.size()
+
+buff = ByteBuffer.allocate(size)
+inChannel.read(buff)
+buff.flip()
+inChannel.close()
+
+fileCode= buff.getInt(0)
+
+fileLen= 2*buff.getInt(24) # File length (in 16-bit words, including the header)
+
+def getBox( bbuf ):
+    'returns a box [ xmin, ymin, xmax, ymax ]'
+    littlebuf= bbuf.slice( )
+    bbuf.position( bbuf.position()+32 )
+    littlebuf.order( ByteOrder.LITTLE_ENDIAN )
+    return [ littlebuf.getDouble(), littlebuf.getDouble(), littlebuf.getDouble(), littlebuf.getDouble() ]
+    
+def handlePolyline( shape, dsb ):
+    shape.position(4)
+    mbr= getBox( shape )
+    numberOfParts= shape.getInt()
+    numberOfPoints= shape.getInt()
+    print '     ', mbr, numberOfParts, numberOfPoints, shape.order()
+    
+dsb= DataSetBuilder(2,100,2)
+
+buff.position(0)
+buff.limit(100)
+header= buff.slice()
+buff.limit(buff.capacity())
+
+header.position( 36)
+print getBox(header)
+
+iptr= 100
+while ( iptr<fileLen ):
+    recordLength=  buff.getInt( iptr+4 ) *2 
+    pppp= buff.getInt( iptr+0 )
+    buff.position( iptr+8 )
+    buff.limit( iptr + recordLength )
+    #print 'ptr: %d  len: %d   buff: %s' % ( iptr, recordLength, str(buff) ),
+    shape= buff.slice(  )
+    buff.limit( fileLen )
+    shape.order( ByteOrder.LITTLE_ENDIAN )
+    shapeType= shape.getInt( 0 )
+    #print '   ' + str(shapeType) + ' ' + str(shape)
+    iptr= iptr + recordLength + 8
+    if ( shapeType==3 ):
+        handlePolyline( shape, dsb )
+
+    
