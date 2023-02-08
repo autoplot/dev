@@ -3,7 +3,8 @@ from org.das2.util import ColorUtil,LoggerManager
 from java.lang.Double import NaN
 
 setScriptTitle( 'Spacecraft Position Plotter' )
-setScriptDescription('Spacecraft orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.')
+setScriptDescription('''Spacecraft orbit plotter that uses the HELIO1DAY files at CDAWEB to locate spacecraft.  The orbits are drawn on 
+top of a Parker Spiral where the solar wind speed can be controlled.''')
 
 logger= LoggerManager.getLogger('aaa')
 logger.info('Logging to aaa')
