@@ -28,12 +28,24 @@ def getBox( bbuf ):
     littlebuf.order( ByteOrder.LITTLE_ENDIAN )
     return [ littlebuf.getDouble(), littlebuf.getDouble(), littlebuf.getDouble(), littlebuf.getDouble() ]
     
+def handlePoint( shape, dsb ):
+    x= shape.getDouble()
+    y= shape.getDouble()
+    #print x,y
+    dsb.nextRecord([x,y])
+    
 def handlePolyline( shape, dsb ):
     shape.position(4)
     mbr= getBox( shape )
     numberOfParts= shape.getInt()
     numberOfPoints= shape.getInt()
-    print '     ', mbr, numberOfParts, numberOfPoints, shape.order()
+    for ipart in xrange(numberOfParts):
+        part= shape.getInt()
+        #print 'part:' + str( part )
+    for ipoint in xrange(numberOfPoints):
+        #print ipoint,numberOfPoints,
+        handlePoint( shape, dsb )
+    #print '     ', mbr, numberOfParts, numberOfPoints, shape.order()
     
 dsb= DataSetBuilder(2,100,2)
 
@@ -50,7 +62,7 @@ while ( iptr<fileLen ):
     recordLength=  buff.getInt( iptr+4 ) *2 
     pppp= buff.getInt( iptr+0 )
     buff.position( iptr+8 )
-    buff.limit( iptr + recordLength )
+    buff.limit( iptr + recordLength + 8 )
     #print 'ptr: %d  len: %d   buff: %s' % ( iptr, recordLength, str(buff) ),
     shape= buff.slice(  )
     buff.limit( fileLen )
@@ -60,5 +72,10 @@ while ( iptr<fileLen ):
     iptr= iptr + recordLength + 8
     if ( shapeType==3 ):
         handlePolyline( shape, dsb )
+    else:
+        print 'Unhandled Shape Type: ', shapeType
+
+ds= dsb.getDataSet() 
+plot( ds[:,0], ds[:,1] )
 
     
