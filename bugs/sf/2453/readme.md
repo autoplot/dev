@@ -1,4 +1,4 @@
-Ticket 2453 is about supporting large CDF files, with data blocks larger than 1GB.  
+Ticket <a href="https://sourceforge.net/p/autoplot/bugs/2453/">2453</a> is about supporting large CDF files, with data blocks larger than 1GB.  
 
 This directory became the home for a useful mouse module which shows the int and 
 long numbers encoded as little and big endian numbers, where the developer can
