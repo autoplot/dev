@@ -1,0 +1,36 @@
+setScriptDescription('''This script demonstrates that power is preserved through the FFTPower operation,
+hopefully.  Every five years or so the question comes up, and thankfully I found this old 
+test script at http://www-pw.physics.uiowa.edu/~jbf/rbsp/script/chris/powerfft/checkPowerFFT.jy .  I'm
+copying it here so it will be easier to find in the future.''')
+
+nn= getParam( 'nn', 1024, 'timeseries size' )
+aa= getParam( 'aa', 1., 'amplitude multiplier' )
+ww= getParam( 'ww', 100.0, 'additional warble', { 'min':0, 'max':1.0 } )
+
+t= linspace( 0, 10, nn )
+warble= sin( linspace( 0, PI, nn ) ) * ww * ( 10./nn )
+signal= aa * 4 * sin( ( t + warble ) * 2 * PI * 5 ) + randomn(4335,nn)/2
+
+dc= reduceMean( signal,0 )
+signal= signal-dc
+signal= link( t, signal )
+
+dt= t[1]-t[0]
+
+reset()
+
+p0,_= plot( 0, t, signal, title='Time Domain' )
+
+s0=  'Total Power Time: %f' % ( dt * total( signal*signal ) )  
+
+p1,_= plot( 1, fftPower(signal), title='Frequency Domain' ) 
+
+s1= 'Total Power FFT:  %f ' % total( fftPower( signal ) ) 
+
+annotation( 0, plotId=p0.id, text=s0, anchorPosition='NE', columnId=dom.plots[0].columnId )
+annotation( 1, plotId=p1.id, text=s1, anchorPosition='NE', columnId=dom.plots[0].columnId )
+
+print s0
+print s1
+#Total Power Time: 164.755829
+#Total Power FFT:  164.755453 
