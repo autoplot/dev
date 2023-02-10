@@ -1,6 +1,11 @@
 from org.das2.datum import DatumRange
 from java.lang.Double import NaN
-setScriptDescription('Study the possibility of disallowing datumranges with fill')
+
+setScriptTitle('Fill DatumRange Study')
+setScriptDescription('''Study the possibility of disallowing datumranges with fill.  These have
+always been allowed, but there are many operations which result in NullPointerExceptions
+later.  These are difficult to debug, and it would be better to throw an error right away
+when the datumRange is created.''')
 
 dr= DatumRange.newDatumRange(NaN,NaN,Units.dimensionless)
 print dr.next()
