@@ -11,8 +11,10 @@ print 'this will soon no longer be allowed:.'
 dr= DatumRange.newDatumRange(NaN,NaN,Units.dimensionless)
 #print dr.next()
    
-print 'this too cannot be allowed.'
+print 'a fill datum will still be allowed.'
 d= Units.dimensionless.createDatum(NaN)
+
+print 'however a datumRange cannot contain fill'
 dr= DatumRange(d,d)
 
 
