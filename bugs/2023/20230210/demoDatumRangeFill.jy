@@ -7,13 +7,11 @@ always been allowed, but there are many operations which result in NullPointerEx
 later.  These are difficult to debug, and it would be better to throw an error right away
 when the datumRange is created.''')
 
-try:
-   dr= DatumRange.newDatumRange(NaN,NaN,Units.dimensionless)
-   print dr.next()
-except, e:
-   print e
+print 'this will soon no longer be allowed:.'
+dr= DatumRange.newDatumRange(NaN,NaN,Units.dimensionless)
+#print dr.next()
    
-try:
-   d= Units.dimensionless.createDatum(Double.NaN)
-   dr= DatumRange.newDatumRange(d,d)
-   print dr.next()
+print 'this too cannot be allowed.'
+d= Units.dimensionless.createDatum(NaN)
+dr= DatumRange(d,d)
+
