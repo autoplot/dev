@@ -1,0 +1,15 @@
+setScriptDescription('''Study the controls for annotations''')
+
+setLayout(3,2)
+
+annotation( 0, text='default annotation' )
+annotation( 1, plotId=dom.plots[3].id, text='attach to plot' )
+annotation( 2, plotId=dom.plots[2].id, xrange='20 to 25', yrange='40 to 45' )
+
+d= dataset
+dr= datumRange
+
+bb= join( d(dr('20 to 25')), d(dr('40 to 45')) )
+plot( 3, bb )
+
+#plot( 2, 'vap+inline:20+to+25;40+to+45' )
