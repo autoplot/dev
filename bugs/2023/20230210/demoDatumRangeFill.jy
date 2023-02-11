@@ -5,7 +5,10 @@ setScriptTitle('Fill DatumRange Study')
 setScriptDescription('''Study the possibility of disallowing datumranges with fill.  These have
 always been allowed, but there are many operations which result in NullPointerExceptions
 later.  These are difficult to debug, and it would be better to throw an error right away
-when the datumRange is created.''')
+when the datumRange is created.
+
+https://github.com/das-developers/das2java/issues/46
+''')
 
 print 'this will soon no longer be allowed:.'
 dr= DatumRange.newDatumRange(NaN,NaN,Units.dimensionless)
