@@ -1,0 +1,10 @@
+setScriptDescription('''Demonstrate bug where empty file is misread as nominal data''')
+
+e0= getDataSet('https://github.com/autoplot/dev/blob/master/bugs/sf/2507/empty.dat')
+e2= getDataSet('https://github.com/autoplot/dev/blob/master/bugs/sf/2507/two-records.dat')
+
+print e0
+print e2
+
+print "This should work, but doesn't because of the units"
+print concatenate( e0,e2 )
