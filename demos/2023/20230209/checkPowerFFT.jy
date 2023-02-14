@@ -24,8 +24,10 @@ p0,_= plot( 0, t, signal, title='Time Domain' )
 
 s0=  'Total Power Time: %f' % ( dt * total( signal**2 ) )  
 
-freqPower= fftPower(signal)
-p1,_= plot( 1, freqPower, title='Frequency Domain' ) 
+freqPower= fftPower(signal,len(signal),1,'Hann',monitor)
+freqPower= freqPower[0]
+
+p1,_= plot( 1, freqPower, title='Frequency Domain', ylog=False, renderType='stairSteps' ) 
 
 s1= 'Total Power FFT:  %f ' % total( freqPower ) 
 s2= 'Frequency: %f ' % ff
