@@ -9,6 +9,7 @@ from org.das2.util import GrannyTextRenderer
 from java.awt.geom import Rectangle2D
 
 s= '!(painter;image;https://das2.org/das2new-300.png;32)<br>The Das2 Logo'
+#s= '<img src="https://das2.org/das2new-300.png" width="32px"></img><br>The Das2 Logo' # To be supported soon
 from org.das2.util import ColorUtil
 
 class ImagePainter( GrannyTextRenderer.Painter ):
