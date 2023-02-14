@@ -3,22 +3,31 @@ hopefully.  Every five years or so the question comes up, and thankfully I found
 test script at http://www-pw.physics.uiowa.edu/~jbf/rbsp/script/chris/powerfft/checkPowerFFT.jy .  I'm
 copying it here so it will be easier to find in the future.''')
 
+from java.util import HashMap
+
 nn= getParam( 'nn', 1024, 'timeseries size' )
 aa= getParam( 'aa', 1., 'amplitude multiplier' )
 ww= getParam( 'ww', 100.0, 'additional warble', { 'min':0, 'max':1.0 } )
 ff= getParam( 'ff', 5.0, 'frequency' )
+tt= getParam( 'tt', 0.0, 'translation shift for the frequencies' )
 
 t= linspace( 0, 10, nn + 1)[0:nn]
 warble= sin( linspace( 0, PI, nn ) ) * ww * ( 10./nn )
 signal= aa * 4 * sin( ( t + warble ) * 2 * PI * ff ) + randomn(4335,nn)/2
 
+translation= replicate( tt, nn )
+userProps= HashMap()
+userProps.put( "FFT_Translation", translation )
+
 dc= reduceMean( signal,0 )
 signal= signal-dc
 signal= link( t, signal )
+signal.putProperty( QDataSet.USER_PROPERTIES, userProps )
 
 dt= t[1]-t[0]
 
 reset()
+
 
 p0,_= plot( 0, t, signal, title='Time Domain' )
 
