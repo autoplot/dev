@@ -6,10 +6,11 @@ copying it here so it will be easier to find in the future.''')
 nn= getParam( 'nn', 1024, 'timeseries size' )
 aa= getParam( 'aa', 1., 'amplitude multiplier' )
 ww= getParam( 'ww', 100.0, 'additional warble', { 'min':0, 'max':1.0 } )
+ff= getParam( 'ff', 5.0, 'frequency' )
 
-t= linspace( 0, 10, nn )
+t= linspace( 0, 10, nn + 1)[0:nn]
 warble= sin( linspace( 0, PI, nn ) ) * ww * ( 10./nn )
-signal= aa * 4 * sin( ( t + warble ) * 2 * PI * 5 ) + randomn(4335,nn)/2
+signal= aa * 4 * sin( ( t + warble ) * 2 * PI * ff ) + randomn(4335,nn)/2
 
 dc= reduceMean( signal,0 )
 signal= signal-dc
@@ -21,14 +22,16 @@ reset()
 
 p0,_= plot( 0, t, signal, title='Time Domain' )
 
-s0=  'Total Power Time: %f' % ( dt * total( signal*signal ) )  
+s0=  'Total Power Time: %f' % ( dt * total( signal**2 ) )  
 
-p1,_= plot( 1, fftPower(signal), title='Frequency Domain' ) 
+freqPower= fftPower(signal)
+p1,_= plot( 1, freqPower, title='Frequency Domain' ) 
 
-s1= 'Total Power FFT:  %f ' % total( fftPower( signal ) ) 
-
-annotation( 0, plotId=p0.id, text=s0, anchorPosition='NE', columnId=dom.plots[0].columnId )
-annotation( 1, plotId=p1.id, text=s1, anchorPosition='NE', columnId=dom.plots[0].columnId )
+s1= 'Total Power FFT:  %f ' % total( freqPower ) 
+s2= 'Frequency: %f ' % ff
+annotation( 0, plotId=p0.id, text=s0, anchorPosition='NE', anchorType='CANVAS' )
+annotation( 1, plotId=p1.id, text=s1, anchorPosition='NE', anchorType='CANVAS' )
+annotation( 2, plotId=p1.id, text=s2, anchorPosition='SE', columnId=dom.plots[0].columnId )
 
 print s0
 print s1
