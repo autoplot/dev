@@ -1,0 +1,15 @@
+c1= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=0&table=0')
+c2= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=3&table=0')
+c3= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=6&table=0')
+c4= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=9&table=0')
+y1= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=1&table=0')
+y2= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=4&table=0')
+y3= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=7&table=0')
+y4= getDataSet('vap+html:https://shackellpianos.co.uk/steinway-serial-no?column=10&table=0')
+
+c= append( append( append( c1,c2 ),c3) ,c4 )
+y= append( append( append( y1,y2 ),y3), y4 )
+
+plot( y, c, title='Steinway Serial Number vs Year' )
+
+
