@@ -1,4 +1,4 @@
-load( PWD + 'applayout.vap' )
+load( PWD + 'demoapp.vap' )
 
 platform= getParam('platform','2903326','Platform Number',['2903326','3901160'] )
 tr= getParam( 'timerange', '2019', 'time range to load' )
