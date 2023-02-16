@@ -11,7 +11,7 @@ plot( 1, ds, color='blue', xrange=xr, yrange=yr )
 
 w= newApplication('Pressure')
 setApplication(w)
-setLayout(1,2)
+load( PWD + 'temperature-salinity.vap' )
 setDefaultApplication()
 
 #addTab('slice',w.getCanvas())
