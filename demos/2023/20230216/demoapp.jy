@@ -4,11 +4,12 @@ platform= getParam('platform','2903326','Platform Number',['2903326','3901160'] 
 tr= getParam( 'timerange', '2019', 'time range to load' )
 
 plot( 0, 'vap+jyds:https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_coastline.zip/ne_110m_coastline.shp?script=https://github.com/autoplot/dev/blob/master/demos/2023/20230206/shapeFile.jyds' )
-ds= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?LATITUDE&where=PLATFORM_NUMBER.eq(%s)&x=LONGITUDE&timerange=%s' % ( platform, tr ) )
+ds= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?LATITUDE&where=PLATFORM_NUMBER.eq(%s)&x=LONGITUDE&timerange=%s' % ( platform, tr ), monitor )
 xr= rescaleRange( extent(xtags(ds)),-1,2 )
 yr= rescaleRange( extent(ds), -1,2 )
 plot( 1, ds, color='blue', xrange=xr, yrange=yr )
-
+dom.plots[1].xaxis.range=  datumRange( rescaleRange( extent(xtags(ds)),-10,11 ) )
+dom.plots[1].yaxis.range=  datumRange( rescaleRange( extent(ds),-10,11 ) )
 w= newApplication('Pressure')
 setApplication(w)
 load( PWD + 'temperature-salinity.vap' )
@@ -30,9 +31,11 @@ def ff(evt):
     print r
     print pres, temp
     setApplication(w)
-    plot( 0, dataset( reform(pres[r]),reform(temp[r]) ), title='Temperature @<br>%s<br>%s' % ( yy[r],xx[r] ) )
-    plot( 1, dataset( reform(pres[r]),reform(psal[r]) ), title='Practical Salinity @<br>%s<br>%s' % ( yy[r], xx[r] ) )
+    p,_= plot( 0, dataset( reform(temp[r]), reform(pres[r]) ), title='Temperature @ %s<br>%s<br>%s' % ( platform, yy[r],xx[r] ) )
+    p.yaxis.flipped=True
+    p,_= plot( 1, dataset( reform(psal[r]), reform(pres[r]) ), title='Practical Salinity @ %s<br>%s<br>%s' % ( platform, yy[r], xx[r] ) )
     setDefaultApplication()
+    p.yaxis.flipped=True
     
 mm= addMouseModule( dom.plots[0],'plot depths',ff)
 dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().primaryModule= mm
