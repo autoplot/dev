@@ -1,13 +1,19 @@
+from java.awt import Color
 load( PWD + 'demoapp.vap' )
 
 platform= getParam('platform','2903326','Platform Number',['2903326','3901160'] )
 tr= getParam( 'timerange', '2019', 'time range to load' )
 
 plot( 0, 'vap+jyds:https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_coastline.zip/ne_110m_coastline.shp?script=https://github.com/autoplot/dev/blob/master/demos/2023/20230206/shapeFile.jyds' )
-ds= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?LATITUDE&where=PLATFORM_NUMBER.eq(%s)&x=LONGITUDE&timerange=%s' % ( platform, tr ), monitor )
+ds= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?LATITUDE&where=PLATFORM_NUMBER.eq(%s)&x=LONGITUDE&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('reading lat longs') )
+temp= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?TEMP&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('reading temperatures') )
+t1= temp[:,0,0]
+
 xr= rescaleRange( extent(xtags(ds)),-1,2 )
 yr= rescaleRange( extent(ds), -1,2 )
-plot( 1, ds, color='blue', xrange=xr, yrange=yr )
+plot( 1, link( xtags(ds), ds, t1 ), xrange=xr, yrange=yr, 
+            color=Color.lightGray, lineStyle='solid', symbolSize=7, ztitle='Temperature at Surface' )
+
 dom.plots[1].xaxis.range=  datumRange( rescaleRange( extent(xtags(ds)),-10,11 ) )
 dom.plots[1].yaxis.range=  datumRange( rescaleRange( extent(ds),-10,11 ) )
 w= newApplication('Pressure')
@@ -16,9 +22,8 @@ load( PWD + 'temperature-salinity.vap' )
 setDefaultApplication()
 
 #addTab('slice',w.getCanvas())
-pres= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?PRES&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ) )
-temp= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?TEMP&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ) )
-psal= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?PSAL&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ) )
+pres= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?PRES&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('read pressure') )
+psal= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?PSAL&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('read salinity') )
 
 def ff(evt):
     xrange= evt.getXRange()
