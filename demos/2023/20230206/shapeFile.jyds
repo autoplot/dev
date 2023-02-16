@@ -43,7 +43,6 @@ def handlePolyline( shape, dsb ):
     numberOfPoints= shape.getInt()
     for ipart in xrange(numberOfParts):
         part= shape.getInt()
-        print 'part:' + str( part )
     for ipoint in xrange(numberOfPoints):
         #print ipoint,numberOfPoints,
         handlePoint( shape, dsb )
