@@ -7,6 +7,7 @@ tr= getParam( 'timerange', '2019', 'time range to load' )
 plot( 0, 'vap+jyds:https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_coastline.zip/ne_110m_coastline.shp?script=https://github.com/autoplot/dev/blob/master/demos/2023/20230206/shapeFile.jyds' )
 ds= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?LATITUDE&where=PLATFORM_NUMBER.eq(%s)&x=LONGITUDE&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('reading lat longs') )
 temp= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?TEMP&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('reading temperatures') )
+time= getDataSet('https://hpfx.collab.science.gc.ca/~jmb001/Jeremy/autoplot/ARGO/$Y$m$d_prof.nc?JULD&where=PLATFORM_NUMBER.eq(%s)&timerange=%s' % ( platform, tr ), monitor.getSubtaskMonitor('reading times') )
 t1= temp[:,0,0]
 
 xr= rescaleRange( extent(xtags(ds)),-1,2 )
@@ -36,9 +37,10 @@ def ff(evt):
     print r
     print pres, temp
     setApplication(w)
-    p,_= plot( 0, dataset( reform(temp[r]), reform(pres[r]) ), title='Temperature @ %s<br>%s<br>%s' % ( platform, yy[r],xx[r] ) )
+    trs= str((xtags(temp))[r])
+    p,_= plot( 0, dataset( reform(temp[r]), reform(pres[r]) ), title='Temperature @ %s<br>%s<br>%s<br>%s' % ( platform, trs, yy[r],xx[r] ) )
     p.yaxis.flipped=True
-    p,_= plot( 1, dataset( reform(psal[r]), reform(pres[r]) ), title='Practical Salinity @ %s<br>%s<br>%s' % ( platform, yy[r], xx[r] ) )
+    p,_= plot( 1, dataset( reform(psal[r]), reform(pres[r]) ), title='Practical Salinity @ %s<br>%s<br>%s<br>%s' % ( platform, trs, yy[r], xx[r] ) )
     setDefaultApplication()
     p.yaxis.flipped=True
     
