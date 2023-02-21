@@ -1,0 +1,29 @@
+setScriptDescription('''This demos behavior when cadence shifts.
+See also https://github.com/autoplot/dev/blob/master/demos/2023/20230209/checkPowerFFT.jy''')
+
+tt1= linspace( '2023-02-21T00:00', '2023-02-21T01:00', 512*30 )
+tt2= linspace( '2023-02-21T01:00', '2023-02-21T02:00', 512*20 )
+tt= append( tt1, tt2 )
+
+wav= sin(  ( (tt-'2023-02-21T00:00') / '1000ms'  )  * TAU ) + 10
+wav= dataset( tt, wav, units='mV/m' )
+
+dt= diff(tt)
+dt= append( dt, dt[-1] )
+dt= convertUnitsTo(dt,Units.seconds)
+
+dc= mean( wav )
+wav_power= total( (wav-dc)**2 * dt ) 
+
+pwav,_= plot( 0, wav )
+
+ffp= fftPower( wav, 512, 1, 'Hann', monitor  )
+p,_= plot( 1, ffp[:,1:] )
+
+freq_power = total( ffp[:,1:] )
+s2= 'Total PSD FFT (mV^2 / m^2 Hz):  %e ' % freq_power 
+s3= 'Total Power (mV^2 / m^2 Hz): %e' % wav_power
+
+annotation( 2, plotId=p.id, text=s2, anchorPosition='NE', anchorType='CANVAS' )
+annotation( 3, plotId=pwav.id, text=s3, anchorPosition='NE', anchorType='CANVAS' )
+
