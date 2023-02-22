@@ -1,0 +1,4 @@
+setScriptDescription('This shows how the axes tab becomes huge when a long title is used.')
+s= 'very, very '
+t= s*30 + 'title'
+plot( circle(20), title=t )
