@@ -1,0 +1,20 @@
+from java.awt import BorderLayout
+from javax.swing import JSlider,JPanel,JLabel,BoxLayout
+
+reset()
+setCanvasSize(800,600)
+plot( None, ytitle='My Axis Label' )
+
+def ch(evt):
+    global sl
+    print sl.value
+    dom.plots[0].yaxis.controller.dasAxis.axisOffset='%.1fem' % ( sl.value / 10. )
+    
+p= JPanel( BorderLayout() )    
+sl= JSlider(0,20,stateChanged=ch)
+p.add(sl,BorderLayout.CENTER)
+p.add(JLabel('Adjust slider to set axisOffset' ), BorderLayout.NORTH )
+
+getApplication().setBottomPanel(p)
+
+annotation( text='Adjust slider at the bottom to set axisOffset', anchorPosition='center', pointAtX=20, pointAtY=5 )
