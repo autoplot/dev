@@ -3,12 +3,14 @@ from javax.swing import JSlider,JPanel,JLabel,BoxLayout
 
 reset()
 setCanvasSize(800,600)
-plot( None, ytitle='My Axis Label' )
+
+plot( None, ytitle='My Y Axis Label', xtitle='My X Axis Label'  )
 
 def ch(evt):
     global sl
     print sl.value
     dom.plots[0].yaxis.controller.dasAxis.axisOffset='%.1fem' % ( sl.value / 10. )
+    dom.plots[0].xaxis.controller.dasAxis.axisOffset='%.1fem' % ( sl.value / 10. )
     
 p= JPanel( BorderLayout() )    
 sl= JSlider(0,20,stateChanged=ch)
