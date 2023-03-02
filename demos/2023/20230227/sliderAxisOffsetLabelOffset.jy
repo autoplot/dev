@@ -1,5 +1,8 @@
 from java.awt import BorderLayout
 from javax.swing import JPanel,JSlider,JLabel
+
+setScriptDescription('Verify correctness of labelOffset and axisOffset properties')
+
 reset()
 dom.canvases[0].font='sans-16'
 
