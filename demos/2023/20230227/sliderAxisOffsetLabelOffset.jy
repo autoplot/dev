@@ -1,0 +1,41 @@
+from java.awt import BorderLayout
+from javax.swing import JPanel,JSlider,JLabel
+reset()
+dom.canvases[0].font='sans-16'
+
+dom.plots[0].yaxis.label= '&#9636;__xxxxx__&#9636;'
+dom.plots[0].xaxis.label= '&#9636;__xxxxx__&#9636;'
+
+da= dom.plots[0].yaxis.controller.dasAxis
+da.labelOffset='1em'
+da.axisOffset='5em'
+da= dom.plots[0].xaxis.controller.dasAxis
+da.labelOffset='1em'
+da.axisOffset='5em'
+
+def setAnnotationText():
+    global ann
+    da= dom.plots[0].xaxis.controller.dasAxis
+    ann.text= 'Adjust slider at the bottom to<br>set axisOffset and labelOffset<br>' + 'axisOffset=' + da.axisOffset + '  labelOffset='+da.labelOffset   
+            
+def ch(evt):
+    global sl1,sl2
+    print sl1.value,sl2.value
+    dom.plots[0].yaxis.controller.dasAxis.axisOffset='%.1fem' % ( sl1.value / 5. )
+    dom.plots[0].xaxis.controller.dasAxis.axisOffset='%.1fem' % ( sl1.value / 5. )    
+    dom.plots[0].yaxis.controller.dasAxis.labelOffset='%.1fem' % ( sl2.value / 5. )
+    dom.plots[0].xaxis.controller.dasAxis.labelOffset='%.1fem' % ( sl2.value / 5. )
+    setAnnotationText()
+
+p= JPanel( BorderLayout() ) 
+
+sl1= JSlider(0,20,stateChanged=ch)
+sl2= JSlider(0,20,stateChanged=ch)
+p.add(sl1,BorderLayout.CENTER)
+p.add(sl2,BorderLayout.EAST)
+p.add(JLabel('Adjust sliders to set axisOffset and labelOffset' ), BorderLayout.NORTH )
+
+getApplication().setBottomPanel(p)
+
+ann= annotation( text='', anchorPosition='center', pointAtX=20, pointAtY=5 )
+setAnnotationText()
