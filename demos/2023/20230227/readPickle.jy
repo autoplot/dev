@@ -1,0 +1,20 @@
+from java.io import FileOutputStream
+from java.util import LinkedList,HashMap
+import sys
+import jarray
+
+addToSearchPath( sys.path,'https://jfaden.net/~jbf/autoplot/lib/pickle-1.4-SNAPSHOT.jar',monitor)
+from net.razorvine.pickle import Pickler
+from net.razorvine.pickle import Unpickler
+
+unpickler = Unpickler()
+
+# this is a simple pickle file
+result = unpickler.load(open(URI(PWD).path + 'from_python.pickle','rb'))
+print result
+
+rr= zeros(len(result))
+for i in xrange(len(result)):
+    rr[i]= result[i]
+plot( rr )
+
