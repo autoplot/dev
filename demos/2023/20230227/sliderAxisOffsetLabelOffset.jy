@@ -7,16 +7,16 @@ dom.plots[0].yaxis.label= '&#9636;__xxxxx__&#9636;'
 dom.plots[0].xaxis.label= '&#9636;__xxxxx__&#9636;'
 
 da= dom.plots[0].yaxis.controller.dasAxis
-da.labelOffset='1em'
-da.axisOffset='5em'
+da.labelOffset='2em'
+da.axisOffset='2em'
 da= dom.plots[0].xaxis.controller.dasAxis
-da.labelOffset='1em'
-da.axisOffset='5em'
+da.labelOffset='2em'
+da.axisOffset='2em'
 
 def setAnnotationText():
     global ann
     da= dom.plots[0].xaxis.controller.dasAxis
-    ann.text= 'Adjust slider at the bottom to<br>set axisOffset and labelOffset<br>' + 'axisOffset=' + da.axisOffset + '  labelOffset='+da.labelOffset   
+    ann.text= 'Adjust sliders at the bottom to<br>set axisOffset and labelOffset<br>' + 'axisOffset=' + da.axisOffset + '  labelOffset='+da.labelOffset   
             
 def ch(evt):
     global sl1,sl2
