@@ -1,0 +1,3 @@
+a= annotation( text='Here annotation!c_!c_', rowId='', columnId='', anchorType='canvas', anchorPosition='NW', anchorOffset='',
+                        fontSize='1em', borderType='rounded_rectangle' )
+a.controller.dasAnnotation.rotate=-90

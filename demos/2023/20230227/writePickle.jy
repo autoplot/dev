@@ -1,0 +1,30 @@
+from java.io import FileOutputStream
+from java.util import LinkedList,HashMap
+import sys
+import jarray
+
+addToSearchPath( sys.path,'/home/jbf/ct/autoplot/git-other/pickle/java/target/pickle-1.4-SNAPSHOT.jar',monitor)
+from net.razorvine.pickle import Pickler
+from net.razorvine.pickle import Unpickler
+
+
+
+ja= jarray.zeros(200,'d')
+ja[3]= 3
+
+map = HashMap()
+map['apple'] = 42
+map['microsoft'] = 'hello'
+map['ja']= ja
+
+# You can add many other types if you like. See the readme about the type mappings.
+pickleFilename = '/tmp/testpickle.dat'
+print('Writing pickle to \'' + pickleFilename + '\'')
+pickler = Pickler(True)
+fos = FileOutputStream(pickleFilename)
+pickler.dump(map, fos)
+fos.close()
+print('Done. Try unpickling it in python.\n')
+print('Reading a pickle created in python...')
+# it is this data:     [1, 2, 3, (11, 12, 13), {'banana', 'grape', 'apple'}]
+
