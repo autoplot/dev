@@ -1,0 +1,35 @@
+setScriptDescription( 'Play with simulating pencil lines for non-realistic rendering.')
+
+from java.lang import Math
+from java.awt.geom import Line2D
+from java.awt import BasicStroke
+from org.das2.graph import DasPlot,Painter,GraphUtil
+dp= dom.plots[0].controller.dasPlot
+#assert isinstance( dp, DasPlot )
+
+s5= BasicStroke(3,BasicStroke.CAP_ROUND,BasicStroke.JOIN_MITER)
+s3= BasicStroke(3,BasicStroke.CAP_ROUND,BasicStroke.JOIN_MITER, 1., [10,5], 0. )
+class PencilPainter( Painter ):
+    def paint( self, g ):
+        g.color= Color.gray
+        g.stroke= s5
+        ll= Line2D.Double(200,200, 300,250 )
+        ll1= GraphUtil.shortenLine(ll,1,1)
+        g.draw( ll )
+        g.color= Color.black
+        for i in xrange(3):
+            r0= Math.random() * 5 +5
+            r1= Math.random() * 5 +5
+            g.stroke= BasicStroke(3,BasicStroke.CAP_ROUND,BasicStroke.JOIN_MITER, 1., [10,r0], r1 )
+            r1= Math.random() - 0.5
+            r2= Math.random() - 0.5
+            r3= r1
+            r4= r2
+            r5= Math.random() - 0.5
+            r6= Math.random() - 0.5
+            ll1= GraphUtil.shortenLine(ll1,r5,r6)
+            ll1= Line2D.Double( ll1.x1+r1, ll1.y1+r2, ll1.x2+r3, ll1.y2+r4 )
+            g.draw( ll1 )
+        
+dp.setTopDecorator(PencilPainter())
+
