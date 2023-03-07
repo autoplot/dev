@@ -19,8 +19,8 @@ for i in xrange(3):
 
 sleep(100)
 for i in xrange(21):
-   dom.plots[0].xaxis.controller.dasAxis.axisOffset= '%.1fem' % ( i/20. )
-   dom.plots[0].yaxis.controller.dasAxis.axisOffset= '%.1fem' % ( i/20. )
+   dom.plots[0].xaxis.controller.dasAxis.axisOffset= '%.1fem' % ( i/10. )
+   dom.plots[0].yaxis.controller.dasAxis.axisOffset= '%.1fem' % ( i/10. )
    sleep(10)
 
 
