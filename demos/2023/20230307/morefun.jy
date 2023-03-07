@@ -1,0 +1,26 @@
+setScriptDescription( 'Show axis offset property and making plot invisible.')
+
+dom.plots[0].visible= True
+dom.plots[0].xaxis.controller.dasAxis.axisOffset= ''
+dom.plots[0].yaxis.controller.dasAxis.axisOffset= ''
+
+reset()
+
+ds= getDataSet( 'vap+inline:x=randn(10)&y=randn(10)&x,y' )
+plot( ds, symbolSize=10, symbol='stars', lineStyle=None )
+
+sleep(1000)
+
+for i in xrange(3):
+    dom.plots[0].visible= True
+    sleep(100)
+    dom.plots[0].visible= False
+    sleep(50)
+
+sleep(100)
+for i in xrange(21):
+   dom.plots[0].xaxis.controller.dasAxis.axisOffset= '%.1fem' % ( i/20. )
+   dom.plots[0].yaxis.controller.dasAxis.axisOffset= '%.1fem' % ( i/20. )
+   sleep(10)
+
+
