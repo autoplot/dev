@@ -1,12 +1,14 @@
 setScriptDescription( 'Show axis offset property and making plot invisible.')
 
+nstars= getParam('nstars',10,'number of stars')
+
 dom.plots[0].visible= True
 dom.plots[0].xaxis.controller.dasAxis.axisOffset= ''
 dom.plots[0].yaxis.controller.dasAxis.axisOffset= ''
 
 reset()
 
-ds= getDataSet( 'vap+inline:x=randn(10)&y=randn(10)&x,y' )
+ds= getDataSet( 'vap+inline:x=randn(%d)&y=randn(%d)&x,y' % ( nstars,nstars ) )
 plot( ds, symbolSize=10, symbol='stars', lineStyle=None )
 
 sleep(1000)
