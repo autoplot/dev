@@ -28,22 +28,12 @@ def getParam(name, deflt, doc='', constraint=''):
   <li>name is the name of the input parameter.
   <li>deflt is the default value for the input parameter.
   <li>doc is any documentation for the parameter.
-<<<<<<< HEAD
   <li>constraint is used to declare any constraints, presently one of either a list of enumerated values, or a dictionary with constraints.<ul>
   The constraints are:<ul>
   <li>min -- the minimum allowed value (number or string)
   <li>max -- the maximum allowed value (number or string)
   <li>regex -- the value must match this regular expression
   <li>format -- the value is reformatted using this spec before interpretation.  %.1f and $Y-$m-$d are examples.
-=======
-  <li>constraint is used to declare any constraints, presently one of: a list of enumerated values, or a dictionary with constraints.<ul>
-  The constraints are:<ul>
-     <li>min - the minimum allowed value
-     <li>max - the maximum allowed value (inclusive)
-     <li>regex - value must match this regular expression (regex must work in Python and Java)
-     <li>format - the value is reformatted to this before passed into routine.  Examples include %.2f and $Y-$m-$d
-  </ul>
->>>>>>> 78b022d5221232a04f1160401723f40463f6f1b8
   """
     if type(name).__name__ == 'int':
         name = 'arg_%d' % name
@@ -77,7 +67,4 @@ def getParam(name, deflt, doc='', constraint=''):
         
 print getParam( 'tr', '2022-06-25', 'the day to run', { 'format':'$Y-$jT$H:$M/$(Y;end)-$jT$H:$M' } )
 print getParam( 'rl', 5.4, 'real number with .1 resolution', { 'format':'%.1f' } )
-<<<<<<< HEAD
 print getParam( 'rg', 'Jeremy', 'Name starting with J', { 'regex': 'J.*' } )
-=======
->>>>>>> 78b022d5221232a04f1160401723f40463f6f1b8
