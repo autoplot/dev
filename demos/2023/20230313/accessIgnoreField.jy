@@ -1,0 +1,10 @@
+setScriptDescription('''Demonstrates how value in $x field can be accessed.''')
+from java.util import HashMap
+#ff= listDirectory( 'file:///home/jbf/ct/autoplot/u/2023/sadie/20230313/*_*.dat' )
+ff= [ '20170406_145903_20170406_235608.dat',  '20170406_145903_20170406_235608red.dat' ]
+tp = TimeParser.create('$Y$m$d_$H$M$S_$(Y;end)$m$d_$H$M$S$x.dat')
+for f in ff:
+    extra=HashMap()
+    print tp.parse(f,extra).getTimeRange()
+    print 'x field: ', extra['x']
+    
