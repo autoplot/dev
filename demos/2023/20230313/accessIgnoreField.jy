@@ -1,4 +1,4 @@
-setScriptDescription('''Demonstrates how value in $x field can be accessed.''')
+setScriptDescription('''Demonstrates how value in $x (ignore) field can be accessed.''')
 from java.util import HashMap
 #ff= listDirectory( 'file:///home/jbf/ct/autoplot/u/2023/sadie/20230313/*_*.dat' )
 ff= [ '20170406_145903_20170406_235608.dat',  '20170406_145903_20170406_235608red.dat' ]
