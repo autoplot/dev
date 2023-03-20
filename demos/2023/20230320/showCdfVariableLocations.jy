@@ -36,8 +36,10 @@ for v in vv:
     if nblock>1:
         cdfa[v+' has multiple blocks']= True
 
+print ''
 if len(cdfa)>0:
-     print ''
      print '# this is not a CDF-A:'
      for k in cdfa:
          print k  
+else:
+     print '# this is a CDF-A.'
