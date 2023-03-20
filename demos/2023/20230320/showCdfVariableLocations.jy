@@ -1,0 +1,43 @@
+setScriptDescription('Print CDF Variable locations')
+
+ff= 'https://cdaweb.gsfc.nasa.gov/pub/data/ace/mag/level_2_cdaweb/mfi_h0/2023/ac_h0_mfi_20230101_v07.cdf'
+ff= 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l1/efw/magnetometer/2012/rbsp-a_magnetometer_efw-l1_20120105_v1.2.1.cdf'
+
+resourceURI= getParam( 'resourceURI', ff, 'CDF file to load' )
+f= getFile(resourceURI)
+
+from gov.nasa.gsfc.spdf.cdfj import CDFFactory
+cdfr= CDFFactory.getCDF(str(f))
+vv= cdfr.getVariableNames()
+
+cdfa= {}
+
+print '#  CDFFile: ', ff
+
+
+for v in vv:
+    var= cdfr.getVariable(v)
+
+    compressed= ''
+    if ( var.compressed ):
+        compressed= '(compressed)'
+        cdfa[v+' is compressed']= True
+        
+    print '## ', v, compressed
+    
+    if ( var.locator==None ):
+        continue
+    nblock= len(var.locator.locations)
+    print 'numberOfRecords: ', var.numberOfValues
+    
+    for i in xrange(nblock):
+        print var.locator.locations[i][0], '-', var.locator.locations[i][1], ' @ byteoffset=', var.locator.locations[i][2]
+    
+    if nblock>1:
+        cdfa[v+' has multiple blocks']= True
+
+if len(cdfa)>0:
+     print ''
+     print '# this is not a CDF-A:'
+     for k in cdfa:
+         print k  
