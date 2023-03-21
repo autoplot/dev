@@ -1,0 +1,32 @@
+from org.das2.qds import DataSetUtil
+from org.das2.util import FileUtil
+from org.json import JSONObject
+setScriptDescription('Count the number of columns in a HAPI server')
+
+resourceURI= getParam( 'resourceURI', 'http://localhost:8080/HapiServer/hapi', 'HAPI server' )
+cc=getCompletions(resourceURI+'/info?id=')
+
+id= getParam('id','C4_CP_CIS-CODIF_HS_O1_PEF','The parameter id', cc )
+
+print resourceURI+'/info?id='+id
+
+info= downloadResourceAsTempFile(URL(resourceURI+'/info?id='+id),monitor)
+
+infojson= JSONObject(FileUtil.readFileToString(info))
+
+columns=0
+pps= infojson.getJSONArray('parameters')
+for i in xrange(pps.length()):
+     p= pps.getJSONObject(i)
+     
+     if ( p.has('size') ):
+         size= p.get('size')
+         size1= 1
+         for j in xrange(0,size.length()):
+             size1=size1*size.getInt(j)
+         print p.get('name') + '  nc=', size1, p.get('size')
+         columns= columns + size1
+     else:
+         columns=columns+1
+         print p.get('name') + '  nc=', 1
+print 'number of columns: ',columns
