@@ -1,0 +1,3 @@
+DatumRangeUtil.parseISO8601Duration("PT52.0006S")
+DatumRangeUtil.parseISO8601Duration("PT52.0S")
+DatumRangeUtil.parseISO8601Duration("PT.345S")
