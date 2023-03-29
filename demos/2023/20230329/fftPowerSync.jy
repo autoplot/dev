@@ -1,0 +1,14 @@
+bx= getDataSet('vap+cdaweb:ds=RBSP-A_MAGNETOMETER_4SEC-GEI_EMFISIS-L3&filter=rbsp&id=Mag[:,0]&timerange=2019-10-13')
+by= getDataSet('vap+cdaweb:ds=RBSP-A_MAGNETOMETER_4SEC-GEI_EMFISIS-L3&filter=rbsp&id=Mag[:,1]&timerange=2019-10-13')
+bz= getDataSet('vap+cdaweb:ds=RBSP-A_MAGNETOMETER_4SEC-GEI_EMFISIS-L3&filter=rbsp&id=Mag[:,2]&timerange=2019-10-13')
+bx= fftPower( bx,4096,8,'Hann',monitor.getSubtaskMonitor('bx fftpower'))
+by= fftPower( by,4096,8,'Hann',monitor.getSubtaskMonitor('by fftpower'))
+bz= fftPower( bz,4096,8,'Hann',monitor.getSubtaskMonitor('bz fftpower'))
+
+by= synchronizeNN( bx,by )
+bz= synchronizeNN( bx,bz )
+
+print bx,by,bz
+plot( 0, bx )
+plot( 1, by )
+plot( 2, bz )
