@@ -4,7 +4,7 @@ import gov.nasa.gsfc.spdf.cdfj.CDFWriter;
 import java.io.IOException;
 
 /**
- * demo insert of data into empty file.  This doesn't work for me, but we think it could be made to work.
+ * demo insert of data into empty file.  This works for me, but Autoplot's export can't get it to work.
  * @author jbf
  */
 public class Demo20230330 {
