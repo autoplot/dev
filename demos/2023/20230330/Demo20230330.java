@@ -1,4 +1,3 @@
-package test;
 
 import gov.nasa.gsfc.spdf.cdfj.CDFException;
 import gov.nasa.gsfc.spdf.cdfj.CDFWriter;
