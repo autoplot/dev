@@ -1,0 +1,13 @@
+setScriptDescription('''Test to see if CDFJ library can be used to insert data into a CDF.  Note
+the code demo20320330 which demonstrates this can be done.''')
+
+# test string format
+
+mkdir('/tmp/ap/')
+
+ds= indgen(12)
+
+# execute skeletoncdf to make empty file
+# unix> skeletoncdf test.skt testAutoplot.cdf
+
+formatDataSet( ds,PWD + 'testAutoplot.cdf?period&insert=T' )

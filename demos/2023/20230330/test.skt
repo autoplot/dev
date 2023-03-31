@@ -1,0 +1,198 @@
+! Skeleton table for the "test.cdf" CDF.
+! Generated: Monday, 27-Mar-2023 15:42:31
+! CDF created/modified by CDF V3.4.1
+! Skeleton table created by CDF V3.8.1_0
+
+#header
+
+                       CDF NAME: test.cdf
+                  DATA ENCODING: NETWORK
+                       MAJORITY: COLUMN
+                         FORMAT: SINGLE
+
+! Variables  G.Attributes  V.Attributes  Records  Dims  Sizes
+! ---------  ------------  ------------  -------  ----  -----
+    0/22          25            18         0/z      0
+! CDF_COMPRESSION: None
+! (Valid compression: None, GZIP.1-9, RLE.0, HUFF.0, AHUFF.0)
+! CDF_CHECKSUM: None
+! (Valid checksum: None, MD5)
+
+
+#GLOBALattributes
+
+! Attribute         Entry       Data
+! Name              Number      Type       Value
+! ---------         ------      ----       -----
+
+  "Logical_source"      1:    CDF_CHAR     { "cas_rpws" } .
+
+  "Rules_of_use"        1:    CDF_CHAR     { "Pre-released data, peer " -
+                                             "review pending, may " -
+                                             "include errors." } .
+
+  "HTTP_LINK"           1:    CDF_CHAR     { "http://dummy_page.org" } .
+
+  "Logical_source_description"
+                        1:    CDF_CHAR     { "CASSINI, xxxxxx " -
+                                             "xxxxxx" -
+                                             " xxxxx" } .
+
+  "spase_DatasetResourceID"
+                        1:    CDF_CHAR     { " " } .
+
+  "Project"             1:    CDF_CHAR     { "CAS>Cassini" } .
+
+  "File_naming_convention"
+                        1:    CDF_CHAR     { "project_descriptor_datetim" -
+                                             "e_mode_Vversion" } .
+
+  "Generated_by"        1:    CDF_CHAR     { "University of xxxxx" } .
+
+  "TEXT"                1:    CDF_CHAR     { "Cassini xxxxx." } .
+
+  "LINK_TITLE"          1:    CDF_CHAR     { "Cassini xxxxx Page at The " -
+                                             "University of xxxxx" } .
+
+  "Mission_group"       1:    CDF_CHAR     { "CASSINI-HUYGENS" } .
+
+  "Time_resolution"     1:    CDF_CHAR     { "variable" } .
+
+  "Instrument_type"     1:    CDF_CHAR     { "RPWS>Radio and Plasma " -
+                                             "Waves (space)" } .
+
+  "Data_version"        1:    CDF_CHAR     { "1" } .
+
+  "Text_supplement"     1:    CDF_CHAR     { "The Cassini-Huygens Radio " -
+                                             "Plasma Wave Science (RPWS)" -
+                                             " xxxx " -
+                                             "xxxx " }
+                        2:    CDF_CHAR     { "An automatic xxxx control " -
+                                             "is used to keep the xxxxx" -
+                                             " within the usable range " -
+                                             "of the xxxx digitization." } .
+
+  "LINK_TEXT"           1:    CDF_CHAR     { " " } .
+
+  "Logical_file_id"     1:    CDF_CHAR     { "cas_rpws_wbrfr__v01" } .
+
+  "Skeleton_version"
+                        1:    CDF_CHAR     { "10" } .
+
+  "Discipline"          1:    CDF_CHAR     { "Space " -
+                                             "Physics>Interplanetary " -
+                                             "Studies" } .
+
+  "PI_name"             1:    CDF_CHAR     { "J Faden" } .
+
+  "Data_type"           1:    CDF_CHAR     { "XXXX>XXXXX Full Rate" } .
+
+  "Descriptor"          1:    CDF_CHAR     { "XXXX>XXXX XX XX " } .
+
+  "PI_affiliation"      1:    CDF_CHAR     { "University of xxxxx" } .
+
+  "TITLE"               1:    CDF_CHAR     { "Cassini-Huygens, xxxxx " -
+                                             "xxxxx" } .
+
+  "Source_name"         1:    CDF_CHAR     { "CAS>xxxxx" } .
+
+
+#VARIABLEattributes
+
+  "FORMAT"
+  "FIELDNAM"
+  "DEPEND_0"
+  "CATDESC"
+  "VAR_TYPE"
+  "LABL_PTR_1"
+  "VALIDMIN"
+  "SCALETYP"
+  "FILLVAL"
+  "UNITS"
+  "VALIDMAX"
+  "SI_CONV"
+  "DEPEND_1"
+  "LABLAXIS"
+  "DISPLAY_TYPE"
+  "VAR_NOTES"
+  "TIME_BASE"
+  "MONOTON"
+
+
+#variables
+
+! No rVariables.
+
+
+#zVariables
+
+
+! Variable          Data      Number                 Record   Dimension
+! Name              Type     Elements  Dims  Sizes  Variance  Variances
+! --------          ----     --------  ----  -----  --------  ---------
+
+  "period"
+                  CDF_FLOAT      1       0              T
+
+  ! VAR_COMPRESSION: None
+  ! (Valid compression: None, GZIP.1-9, RLE.0, HUFF.0, AHUFF.0)
+  ! VAR_SPARSERECORDS: None
+  ! (Valid sparserecords: None, sRecords.PAD, sRecords.PREV)
+  ! VAR_PADVALUE: -1.0e+30
+
+  ! Attribute       Data
+  ! Name            Type       Value
+  ! --------        ----       -----
+
+    "FIELDNAM"    CDF_CHAR     { "Period" }
+    "DEPEND_0"    CDF_CHAR     { "Epoch" }
+    "CATDESC"     CDF_CHAR     { "Period" }
+    "VAR_TYPE"    CDF_CHAR     { "data" }
+    "VALIDMIN"    CDF_REAL4    { -4.50 }
+    "SCALETYP"    CDF_CHAR     { "linear" }
+    "FILLVAL"     CDF_REAL4    { -1.0e+31 }
+    "UNITS"       CDF_CHAR     { "microseconds" }
+    "VALIDMAX"    CDF_REAL4    { 136.00 }
+    "SI_CONV"     CDF_CHAR     { "1.0e-6>s" }
+    "LABLAXIS"    CDF_CHAR     { "Period" } .
+
+  ! RV values were not requested.
+
+
+! Variable          Data      Number                 Record   Dimension
+! Name              Type     Elements  Dims  Sizes  Variance  Variances
+! --------          ----     --------  ----  -----  --------  ---------
+
+  "Epoch"     CDF_TIME_TT2000     1       0              T
+
+  ! VAR_COMPRESSION: None
+  ! (Valid compression: None, GZIP.1-9, RLE.0, HUFF.0, AHUFF.0)
+  ! VAR_SPARSERECORDS: None
+  ! (Valid sparserecords: None, sRecords.PAD, sRecords.PREV)
+  ! VAR_PADVALUE: 0000-01-01T00:00:00.000000000
+
+  ! Attribute       Data
+  ! Name            Type       Value
+  ! --------        ----       -----
+
+    "FIELDNAM"    CDF_CHAR     { "Spacecraft Event Time" }
+    "CATDESC"     CDF_CHAR     { "Calibrated Spacecraft Event Time in " -
+                                 "UTC of the first capture of the " -
+                                 "xxxx" }
+    "VAR_TYPE"    CDF_CHAR     { "support_data" }
+    "VALIDMIN"
+              CDF_TIME_TT2000   { 1997-10-15T02:48:00.000000000 }
+    "SCALETYP"    CDF_CHAR     { "linear" }
+    "FILLVAL"
+              CDF_TIME_TT2000   { 9999-12-31T23:59:59.999999999 }
+    "UNITS"       CDF_CHAR     { "ns" }
+    "VALIDMAX"
+              CDF_TIME_TT2000   { 2017-09-15T11:55:39.000000000 }
+    "LABLAXIS"    CDF_CHAR     { "Time" }
+    "TIME_BASE"   CDF_CHAR     { "J2000" }
+    "MONOTON"     CDF_CHAR     { "INCREASE" } .
+
+  ! RV values were not requested.
+
+
+#end

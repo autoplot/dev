@@ -1,0 +1,8 @@
+setScriptDescription('Test to see if CDFJ library can be used to insert data into a CDF')
+
+# test string format
+ff= labelsDataset(['aaa','bbbb','ccccc'])
+ff= dataset( ff, name='labels' )
+
+mkdir('/tmp/ap/')
+formatDataSet( ff,'file:///tmp/ap/test.cdf?type=string' )
