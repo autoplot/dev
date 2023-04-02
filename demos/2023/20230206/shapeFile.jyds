@@ -6,7 +6,7 @@ setScriptDescription('''GIS Shape File Reader.  See https://en.wikipedia.org/wik
 and also see https://github.com/GeospatialPython/pyshp/blob/master/shapefile.py.
 See https://www.esri.com/content/dam/esrisites/sitecore-archive/Files/Pdfs/library/whitepapers/pdfs/shapefile.pdf.''')
 
-resourceURI= getParam( 'resourceURI', '/home/jbf/public_html/autoplot/data/maps/naturalearthdata.com/ne_110m_graticules_20.shp', 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'https://jfaden.net/~jbf/autoplot/data/maps/naturalearthdata.com/ne_110m_graticules_20.shp', 'example file to load' )
 
 ff= RandomAccessFile( getFile(resourceURI,monitor), 'r' )
 
