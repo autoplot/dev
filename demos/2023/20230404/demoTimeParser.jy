@@ -1,0 +1,2 @@
+tr= '2011 071 03/12 00:25'
+print TimeParser.create('$Y $j $m/$d $H:$M').parse(tr).getTimeDatum()
