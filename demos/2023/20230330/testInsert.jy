@@ -1,13 +1,19 @@
+from org.das2.qds import DDataSet,FDataSet,IDataSet
+
 setScriptDescription('''Test to see if CDFJ library can be used to insert data into a CDF.  Note
 the code demo20320330 which demonstrates this can be done.''')
 
-# test string format
+dd= dataset( [ 1,2,3,4,2,3,4,5,0,1,2,3 ] )
 
-mkdir('/tmp/ap/')
-
-ds= indgen(12)
+intData= dd*100
+floatData= dd*10+100
+doubleData= dd*0.01+100000
+ttData= '2023-04-04T17:20:00Z' + indgen(12) * '100s'
 
 # execute skeletoncdf to make empty file
-# unix> skeletoncdf test.skt testAutoplot.cdf
+# unix> ~/local/cdf/bin/skeletoncdf testAutoplot.skt testAutoplot.cdf
 
-formatDataSet( ds,PWD + 'testAutoplot.cdf?period&insert=T' )
+formatDataSet( intData,PWD + 'testAutoplot.cdf?intData&insert=T' )
+formatDataSet( floatData,PWD + 'testAutoplot.cdf?floatData&insert=T' )
+formatDataSet( doubleData,PWD + 'testAutoplot.cdf?doubleData&insert=T' )
+formatDataSet( ttData,PWD + 'testAutoplot.cdf?Epoch&insert=T' )
