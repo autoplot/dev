@@ -1,0 +1,70 @@
+import sys
+addToSearchPath(sys.path,
+      'https://repo1.maven.org/maven2/com/thizzer/jtouchbar/jtouchbar/1.0.0/jtouchbar-1.0.0.jar',
+      'https://repo1.maven.org/maven2/com/thizzer/jtouchbar/jtouchbar/1.0.0/jtouchbar-1.0.0-javadoc.jar',
+      monitor)
+
+from com.thizzer.jtouchbar import JTouchBar, JTouchBarItem
+
+jTouchBar = JTouchBar()
+jTouchBar.setCustomizationIdentifier("MySwingJavaTouchBar");
+
+JTouchBarItem
+jTouchBar.addItem(TouchBarItem)
+
+# flexible space
+jTouchBar.addItem(TouchBarItem(TouchBarItem.NSTouchBarItemIdentifierFlexibleSpace))
+
+# fixed space
+jTouchBar.addItem(TouchBarItem(TouchBarItem.NSTouchBarItemIdentifierFixedSpaceSmall))
+
+# button
+touchBarButtonImg = TouchBarButton()
+touchBarButtonImg.setTitle("Button 1");
+
+class MyTBVA(TouchBarViewAction):
+    def onCall( self, view ):
+       print("Clicked Button_1.")
+
+image = Image()
+img.setName(ImageName.NSImageNameTouchBarColorPickerFill);
+touchBarButtonImg.setImage(image);
+
+jTouchBar.addItem( TouchBarItem("Button_1", touchBarButtonImg, True));
+
+
+# label
+touchBarTextField = TouchBarTextField()
+touchBarTextField.setStringValue("TextField 1")
+
+jTouchBar.addItem(TouchBarItem("TextField_1", touchBarTextField, True))
+
+# scrubber
+class MyScrubberActionListener(ScrubberActionListener):
+    def didSelectItemAtIndex(self,scrubber,index):
+        print("Selected Scrubber Index: " + index)
+
+touchBarScrubber = TouchBarScrubber()
+touchBarScrubber.setActionListener(MyScrubberActionListener())
+
+class MyScrubberDataSource(ScrubberDataSource):
+    def getViewForIndex(self,scrubber,index) :
+        if index == 0 :
+            textItemView = ScrubberTextItemView()
+            textItemView.setIdentifier("ScrubberItem_1")
+            textItemView.setStringValue("Scrubber TextItem")
+            return textItemView
+        else:
+            imageItemView = ScrubberImageItemView()
+            imageItemView.setIdentifier("ScrubberItem_2")
+            imageItemView.setImage(Image(ImageName.NSImageNameTouchBarAlarmTemplate, False))
+            imageItemView.setAlignment(ImageAlignment.CENTER)
+
+    def getNumberOfItems( self,scrubber ):
+        return 2;
+
+touchBarScrubber.setDataSource(MyScrubberDataSource())
+
+jTouchBar.addItem( TouchBarItem("Scrubber_1", touchBarScrubber, True))
+
+
