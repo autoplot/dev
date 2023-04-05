@@ -1,4 +1,8 @@
 import sys
+from com.thizzer.jtouchbar import JTouchBar, JTouchBarItem
+from com.thizzer.jtouchbar.item.view import TouchBarScrubber, TouchBarTextField
+from com.thizzer.jtouchbar.item.scrubber import ScrubberDataSource, ScrubberActionListener
+
 
 setScriptDescription('''Demos how third-party library might be used to control the Mac Touch Bar.  See https://github.com/Thizzer/jtouchbar.''')
 addToSearchPath(sys.path,
@@ -6,7 +10,6 @@ addToSearchPath(sys.path,
       'https://repo1.maven.org/maven2/com/thizzer/jtouchbar/jtouchbar/1.0.0/jtouchbar-1.0.0-javadoc.jar',
       monitor)
 
-from com.thizzer.jtouchbar import JTouchBar, JTouchBarItem
 
 jTouchBar = JTouchBar()
 jTouchBar.setCustomizationIdentifier("MySwingJavaTouchBar");
