@@ -61,6 +61,7 @@ class MyScrubberDataSource(ScrubberDataSource):
             imageItemView.setIdentifier("ScrubberItem_2")
             imageItemView.setImage(Image(ImageName.NSImageNameTouchBarAlarmTemplate, False))
             imageItemView.setAlignment(ImageAlignment.CENTER)
+            return imageItemView
 
     def getNumberOfItems( self,scrubber ):
         return 2;
