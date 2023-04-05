@@ -4,24 +4,34 @@ setScriptDescription('''Tool for reformatting times''')
 informat= getParam( 'informat', '$y $j ($m $d) $H:$M', 'Input format' )
 outformat= getParam( 'outformat', '$Y-$jT$H:$M:$S.$(subsec,places=3)', 'Output format' )
 
-resourceURI= getParam( 'resourceURI', PWD + 'example.txt', 'ASCII file containing formatted times' )
+inline= getParam( 'inline', '', 'If non-empty, use this instead of reading from file' )
 
-fln= getFile(resourceURI,None)
+resourceURI= getParam( 'resourceURI', PWD + 'example.txt', 'ASCII file containing formatted times' )
 
 tp = TimeParser.create(informat)
 tpout= TimeParser.create(outformat)
 
-for inf1 in open(str(fln)).readlines():
-    d= None
+if inline=='':
+    fln= getFile(resourceURI,None)
+
+    for inf1 in open(str(fln)).readlines():
+        d= None
+        try:
+            d= tp.parse(inf1).getTimeDatum()
+        except:
+            print '** unable to parse: ', inf1
+            continue
+        try:
+            print tpout.format(d)
+        except:
+            print '** unable to format using: ', outformat
+            break
+else:
     try:
-        d= tp.parse(inf1).getTimeDatum()
-    except:
-        print '** unable to parse: ', inf1
-        continue
-    try:
-        print tpout.format(d)
-    except:
-        print '** unable to format using: ', outformat
-        break
-        
-  
+        d= tp.parse(inline).getTimeDatum()        
+        try:
+            print tpout.format(d)
+        except:
+            print '** unable to format using: ', outformat
+    except:   
+        print '** unable to parse: ', inline
