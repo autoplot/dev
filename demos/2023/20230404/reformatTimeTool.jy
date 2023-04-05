@@ -6,8 +6,6 @@ outformat= getParam( 'outformat', '$Y-$jT$H:$M:$S.$(subsec,places=3)', 'Output f
 
 resourceURI= getParam( 'resourceURI', PWD + 'example.txt', 'ASCII file containing formatted times' )
 
-infile= getParam( 'infile', URL( PWD + 'example.txt' ) )
-
 fln= getFile(resourceURI,None)
 
 tp = TimeParser.create(informat)
