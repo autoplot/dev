@@ -1,0 +1,16 @@
+setScriptDescription('''Tool for reformatting times''')
+
+informat= getParam( 'informat', '$y $j ($m $d) $H:$S', 'Input format' )
+outformat= getParam( 'outformat', '$Y-$jT$H:$M:$S.$(subsec,places=3)', 'Output format' )
+
+infile= getParam( 'infile', URL( PWD + 'example.txt' ) )
+
+fln= getFile(infile,None)
+
+tp = TimeParser.create(informat)
+for inf1 in open(str(fln)).readlines():
+    try:
+        print tp.parse(inf1).getTimeDatum()
+    except:
+        print '** unable to parse: ', inf1
+  
