@@ -1,8 +1,4 @@
 import sys
-from com.thizzer.jtouchbar import JTouchBar, JTouchBarItem
-from com.thizzer.jtouchbar.item.view import TouchBarScrubber, TouchBarTextField
-from com.thizzer.jtouchbar.item.scrubber import ScrubberDataSource, ScrubberActionListener
-
 
 setScriptDescription('''Demos how third-party library might be used to control the Mac Touch Bar.  See https://github.com/Thizzer/jtouchbar.''')
 addToSearchPath(sys.path,
@@ -10,12 +6,16 @@ addToSearchPath(sys.path,
       'https://repo1.maven.org/maven2/com/thizzer/jtouchbar/jtouchbar/1.0.0/jtouchbar-1.0.0-javadoc.jar',
       monitor)
 
+from com.thizzer.jtouchbar import JTouchBar
+from com.thizzer.jtouchbar.item import TouchBarItem
+from com.thizzer.jtouchbar.item.view import TouchBarScrubber, TouchBarTextField
+from com.thizzer.jtouchbar.scrubber import ScrubberDataSource, ScrubberActionListener
+from com.thizzer.jtouchbar.item.view import TouchBarButton
+from com.thizzer.jtouchbar.item.view.action import TouchBarViewAction
+from com.thizzer.jtouchbar.common import Image
 
 jTouchBar = JTouchBar()
 jTouchBar.setCustomizationIdentifier("MySwingJavaTouchBar");
-
-JTouchBarItem
-jTouchBar.addItem(TouchBarItem)
 
 # flexible space
 jTouchBar.addItem(TouchBarItem(TouchBarItem.NSTouchBarItemIdentifierFlexibleSpace))
@@ -72,5 +72,3 @@ class MyScrubberDataSource(ScrubberDataSource):
 touchBarScrubber.setDataSource(MyScrubberDataSource())
 
 jTouchBar.addItem( TouchBarItem("Scrubber_1", touchBarScrubber, True))
-
-
