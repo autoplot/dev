@@ -1,15 +1,23 @@
-setScriptDescription('''Tool for reformatting times''')
+setScriptDescription('''Tool for reformatting times.  This uses the URI_Templates library
+described at https://github.com/hapi-server/uri-templates/wiki/Specification.''')
 
 
 informat= getParam( 'informat', '$y $j ($m $d) $H:$M', 'Input format' )
-outformat= getParam( 'outformat', '$Y-$jT$H:$M:$S.$(subsec,places=3)', 'Output format' )
+outformat= getParam( 'outformat', '$Y-$jT$H:$M:$S.$(subsec;places=3)', 'Output format' )
 
 inline= getParam( 'inline', '', 'If non-empty, use this instead of reading from file' )
 
 resourceURI= getParam( 'resourceURI', PWD + 'example.txt', 'ASCII file containing formatted times' )
 
-tp = TimeParser.create(informat)
-tpout= TimeParser.create(outformat)
+import sys
+addToSearchPath( sys.path,
+     'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar',
+     monitor )
+     
+from org.hapiserver import URITemplate
+
+tp = URITemplate(informat)
+tpout= URITemplate(outformat)
 
 if inline=='':
     fln= getFile(resourceURI,None)
@@ -17,13 +25,14 @@ if inline=='':
     for inf1 in open(str(fln)).readlines():
         d= None
         try:
-            d= tp.parse(inf1).getTimeDatum()
+            d= tp.parse(inf1,None)
         except:
             print '** unable to parse: ', inf1
             continue
         try:
-            print tpout.format(d)
-        except:
+            print tpout.format(d[0:7],d[7:14])
+        except Exception,e:
+            print e
             print '** unable to format using: ', outformat
             break
 else:
