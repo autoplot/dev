@@ -1,0 +1,9 @@
+setScriptDescription('''Demo makeColorTable, for use with the spectrogram renderer''')
+
+#TODO: why must there be around 240 colors?  Is this a bug or misunderstanding of API?
+
+rgb=dataset( [ Color.RED.getRGB(), Color.CYAN.getRGB(), Color.BLUE.getRGB(), Color.YELLOW.getRGB(), Color.RED.getRGB() ], 
+             units=Units.rgbColor )
+colorBarType= makeColorTable( 'rcbyr7',dataset([0,60,120,180,240]), rgb )
+
+plot( ripples(50,50)+randn(50,50)/10, colorTable=colorBarType )
