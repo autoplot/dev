@@ -4,6 +4,7 @@ setScriptDescription('''Demo makeColorTable, for use with the spectrogram render
 
 rgb=dataset( [ Color.RED.getRGB(), Color.CYAN.getRGB(), Color.BLUE.getRGB(), Color.YELLOW.getRGB(), Color.RED.getRGB() ], 
              units=Units.rgbColor )
-colorBarType= makeColorTable( 'rcbyr7',dataset([0,60,120,180,240]), rgb )
+colorBarType= makeColorTable( 'rcbyr12',dataset([0,60,120,180,240]), rgb )
 
-plot( ripples(50,50)+randn(50,50)/10, colorTable=colorBarType )
+plot( toDegrees(atan2(distance(50,50,10,10,5,5),distance(50,50,20,20,5,5))), 
+      colorTable=colorBarType, zrange=['-180deg','180deg'] )
