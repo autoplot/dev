@@ -1,0 +1,18 @@
+ds= getDataSet('vap+txt:'+PWD+'/BluGrnWhtYlwRed.ascii?X=field0&Y=field1&Z=field2')
+print 'int [] red= { ',
+for i in xrange(len(ds)):
+    if ( i>0 ): print ',',
+    print int(ds[i,0]),
+print ' } ';
+
+print 'int [] green= { ',
+for i in xrange(len(ds)):
+    if ( i>0 ): print ',',
+    print int(ds[i,1]),
+print ' } ';
+
+print 'int [] blue= { ',
+for i in xrange(len(ds)):
+    if ( i>0 ): print ',',
+    print int(ds[i,2]),
+print ' } ';
