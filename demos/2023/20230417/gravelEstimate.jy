@@ -1,0 +1,27 @@
+setScriptDescription('''Calculate gravel needed to refresh drive.''')
+
+# from Sarah's notes and calculation
+carPark1141 = 20*21  # ft^2
+carPark1147_1 = 23*8/2
+carPark1147_2 = 36*15/2
+driveway= 166*15
+
+total= carPark1141 + carPark1147_1 + carPark1147_2 + driveway # ft^2
+
+depth= 1.0  # inches
+totalVolume= ( depth / 12 ) * total  # ft^3
+
+# S&G quoted 1.5Ton==yard^3
+totalVolumeYards3= totalVolume / 27 
+totalTons= totalVolumeYards3 / 1.5  # tons
+
+# Prices quotes by S&G Gravel, 2023-Apr-17, 46B River Rock, size 7/16in-3/4in 
+pricePerTon= 23.80 # U.S. Dollars
+priceGravel= pricePerTon * totalTons
+
+priceDelivery = 100.
+totalPrice =  priceGravel + priceDelivery
+
+print Units.dollars.createDatum(totalPrice)
+
+setOutputParam( 'totalPrice', totalPrice, 'Total price in Dollars' )
