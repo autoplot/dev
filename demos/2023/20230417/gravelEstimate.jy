@@ -1,4 +1,4 @@
-setScriptDescription('''Calculate gravel needed to refresh drive.''')
+setScriptDescription('''Calculate gravel needed to refresh driveway.''')
 
 # from Sarah's notes and calculation
 carPark1141 = 20*21  # ft^2
