@@ -24,4 +24,5 @@ totalPrice =  priceGravel + priceDelivery
 
 print Units.dollars.createDatum(totalPrice)
 
+setOutputParam( 'totalTons', totalTons, 'Total volume/weight of Order' )
 setOutputParam( 'totalPrice', totalPrice, 'Total price in Dollars' )
