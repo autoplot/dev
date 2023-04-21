@@ -2,11 +2,11 @@ from org.autoplot.pngwalk import PngWalkTool
 setScriptDescription('''Study Jenkins test results with three pngwalks: test, okay, and diff.
 Buttons are added to copy over artifacts to become new okay version.''')
 
-host= getParam( 'host', 'ci-pw', 'tests from this hist', [ 'ci-pw', 'spot5', 'spot8', 'spot8-private' ] )
+host= getParam( 'host', 'spot8', 'tests from this hist', [ 'ci-pw', 'spot8', 'spot8-private' ] )
 if ( host=='ci-pw' ):
-    test= getParam( 'test', '147')
+    test= getParam( 'test', '147', 'test number', { 'examples':['147'] } )
 else:
-    test= getParam( 'test', '018')
+    test= getParam( 'test', '140', 'test number', { 'examples':['005','009','012','015','017','018','099','140','147','148','141'] } )
     
 okayDir= '/home/jbf/ct/hudson/artifacts/'
 if ( test!='140' ):
@@ -20,16 +20,15 @@ if ( host=='ci-pw' ):
    okayDir= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/lastSuccessfulBuild/artifact/'
    okay= okayDir + 'test'+test+'*.png'
 elif ( host=='spot8' ):
-   tests= '/mynet/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/test*.png'
-   diffs=  '/mynet/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/diffs.test*.png'
+   tests= '/net/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/test*.png'
+   diffs=  '/net/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/diffs.test*.png'
 elif ( host=='spot8-private' ):
    test= '099'
    tests= '/home/jbf/ct/hudson/private/test/test'+test+'*.png'
    diffs= '/home/jbf/ct/hudson/private/diffs/diffs.test'+test+'*.png'
    okay= '/home/jbf/ct/hudson/private/artifacts/test'+test+'*.png'
 else: 
-   tests= '/mynet/spot6/var/local/hudson/jobs/autoplot-test'+test+'/workspace/test*.png'
-   diffs= '/mynet/spot6/var/local/hudson/jobs/autoplot-test'+test+'/workspace/diffs.test*.png'
+   raise Exception('not supported: '+host)
 
 from org.das2.util.FileUtil import fileCopy
 from java.io import File
@@ -37,8 +36,8 @@ from java.io import File
 w= getViewWindow()
 
 from org.autoplot.pngwalk import PngWalkTool
-from javax.swing import AbstractAction 
-from java.awt import Dimension
+from javax.swing import AbstractAction ,JPanel,JOptionPane
+from java.awt import Dimension,FlowLayout
 
 png1= PngWalkTool.start(okay,w)
 png2= PngWalkTool.start(tests,w)
@@ -81,3 +80,4 @@ png2.addFileAction( None, CopyAction() )
 png2.addFileAction( PngWalkTool.LOCAL_FILE_ENABLER, CopyAltAction() )
 png3.addFileAction( None, CopyAction() )
 png3.addFileAction( PngWalkTool.LOCAL_FILE_ENABLER, CopyAltAction() )
+
