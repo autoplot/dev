@@ -1,0 +1,3 @@
+rgb=dataset( [ Color.BLUE, Color.WHITE, Color.ORANGE ] )
+colorBarType= makeColorTable('funType3',dataset([0,100,200]),rgb)
+plot( ripples(50,50)+randn(50,50)/10, colorTable=colorBarType )

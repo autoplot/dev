@@ -1,0 +1,22 @@
+setLayout(2,2)
+
+plot( 0, toDegrees( atan2( outerProduct( ones(100), linspace(-100,100,100) ),
+                        outerProduct( linspace(-100,100,100), ones(100) ) ) ), 
+                        colorTable='red_cyan_blue_yellow_red', zrange=[-180,180],
+         title='red_cyan_blue_yellow_red' )
+                        
+dom.plots[0].zaxis.tickValues= '+30/3'
+
+plot( 1, toDegrees( atan2( outerProduct( ones(100), linspace(-100,100,100) ),
+                        outerProduct( linspace(-100,100,100), ones(100) ) ) ), 
+                        colorTable='blue_white_orange', zrange=[-180,180],
+         title='blue_white_orange' )
+                        
+dom.plots[1].zaxis.tickValues= '+30/3'
+
+plot( 2, toDegrees( atan2( outerProduct( ones(100), linspace(-100,100,100) ),
+                        outerProduct( linspace(-100,100,100), ones(100) ) ) ), 
+                        colorTable='blue_green_white_yellow_red', zrange=[-180,180],
+         title='blue_green_white_yellow_red' )
+                        
+dom.plots[2].zaxis.tickValues= '+30/3'
