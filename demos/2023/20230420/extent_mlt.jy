@@ -1,0 +1,60 @@
+setScriptDescription('''Find the longest interval in MLT, which is a modulo 24 space:
+23.5hr and 0.5hr are one hr apart.  This code will also allow a 1-hr gap, filling
+in the gap and counting it as one long interval.  Note this will not handle the
+case where all 24 hours are 1, but this is an unusual case and we might want it pointed
+out anyway with a runtime error.''')
+
+case= getParam('case',1,'test case number',[1,2,3])
+
+if case==1:
+    ds = [0,0,0,0,1,1,1,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0]  # two bumps (24 long), delta mlt = 5
+elif case==2:
+    ds = [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1]  # crosses 24 hour, delta mlt = 7
+elif case==3:
+    ds = [0,1,0,0,1,0,1,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0] # gaps that are wider than 1 don't make continuous, delta mlt = 4
+
+tt= linspace( 0.5, 23.5, 24 )
+ds= link( tt, ds )
+
+#ds= getDataSet('file:/Users/jbf/Desktop/Statistical_analysis/Coverage/20171205_102702_20171205_192407lower.dat?depend0=field0&rank2=field1-field5&skipLines=2')
+#ds= reduceMax( ds,1 )
+plot(ds)
+
+t= xtags(ds)
+
+# double up the data because MLT is a modulo 24 space.
+ds= append( ds, ds )
+ds=link( append( t, t+24 ), ds )
+
+# fill in any single-element gaps with a 1.
+r= where( ds[:-2].eq(1).and( ds[2:].eq(1) ).and( ds[1:-1].eq(0) ) )
+ds[r+1]=1
+
+#ds= ds[1:-1]
+t=xtags(ds)
+
+e= extent(t[where(ds.eq(1))])
+plot(1,ds,color=Color.RED)
+
+# find the number of consecutive "1" regions. make an array which is the size of each bump at the start of each bump
+lens= zeros(len(ds))
+lens= link(t, lens)
+l=0
+for i in xrange(len(ds)-1,0,-1):
+    if ds[i]==1: 
+        l=l+1
+        lens[i]=l
+    else: 
+        l=0
+
+plot(2,lens)
+
+istart= imax(lens)
+istop = istart + lens[istart]  # exclusive
+
+result= t[linspace( istart, istop-1, int(istop-istart) )]
+
+for r in result: print r % 24,  # 24 is "mod 24"
+print ''
+
+print 'delta mlt = %.1f' % ( t[istop] - t[istart] )
