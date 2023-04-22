@@ -1,0 +1,17 @@
+from org.das2.graph import DasCanvas,DasPlot,DasAxis,DasRow,DasColumn
+setScriptDescription('Demo bug https://github.com/das-developers/das2java/issues/51 where DataRange object is used to bind two log x-axes')
+
+c= DasCanvas(480,640)
+col= DasColumn.create( c, None, "20%", "90%" )
+
+yaxis1= DasAxis(datum(0),datum(100),DasAxis.VERTICAL,False)
+xaxis1= DasAxis(datum(1),datum(100),DasAxis.HORIZONTAL,True)
+p= DasPlot(xaxis1,yaxis1)
+c.add( p, DasRow.create( c, None, "10%", "40%" ), col )
+
+yaxis2= yaxis1.createAttachedAxis()
+xaxis2= xaxis1.createAttachedAxis()
+p= DasPlot(xaxis2,yaxis2)
+c.add( p, DasRow.create( c, None, "50%", "90%" ), col )
+
+addTab( "logX",c )
