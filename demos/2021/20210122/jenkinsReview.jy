@@ -59,6 +59,7 @@ class CopyAction( AbstractAction ):
         AbstractAction.__init__( self, 'Copy' )
         
     def actionPerformed( self, evt ):
+        print 'copy to ', okayDir
         if ( okayDir.startswith('/') ):
             print 'cp -f ', png2.getSelectedFile()[5:], ' ', okayDir
             fileCopy( File( png2.getSelectedFile()[5:] ), File( okayDir ) )
