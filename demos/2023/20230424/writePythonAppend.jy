@@ -1,0 +1,5 @@
+setScriptDescription('''Demo how to write and append to a text file using Jython/Python.''')
+mkdir('/tmp/20230424/')
+ff= open( '/tmp/20230424/text.dat', 'a' )  # append the data
+ff.write( '%s %5.2f\n' % ( str(TimeUtil.now()), randn()/10 ) )
+ff.close()
