@@ -1,0 +1,19 @@
+setScriptDescription('''Import new FITS library and demo its use.  See also https://github.com/nom-tam-fits/nom-tam-fits.''')
+# This shows problems with the addToSearchPath, where I can see that the class is in the jar file.
+
+import sys
+addToSearchPath(sys.path,
+    'https://repo1.maven.org/maven2/gov/nasa/gsfc/heasarc/nom-tam-fits/1.17.1/nom-tam-fits-1.17.1.jar',
+    'https://repo1.maven.org/maven2/gov/nasa/gsfc/heasarc/nom-tam-fits/1.17.1/nom-tam-fits-1.17.1-javadoc.jar',monitor)
+
+fitsfile= getFile('https://fits.gsfc.nasa.gov/samples/IUElwp25637mxlo.fits')
+
+from nom.tam.fits import Fits,BasicHDU,Header,Data
+from nom.tam.util import ByteFormatter,FitsOutputStream
+#f = Fits('/home/jbf/ct/jenkins/data/fits/FS58_3f3bff3-3f3cb91') 
+f = Fits(fitsfile) 
+cols = f.getHDU(1).getColumns()
+names = cols[0]
+for n in names:
+    print n
+    
