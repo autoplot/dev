@@ -10,10 +10,14 @@ fitsfile= getFile('https://fits.gsfc.nasa.gov/samples/IUElwp25637mxlo.fits')
 
 from nom.tam.fits import Fits,BasicHDU,Header,Data
 from nom.tam.util import ByteFormatter,FitsOutputStream
-#f = Fits('/home/jbf/ct/jenkins/data/fits/FS58_3f3bff3-3f3cb91') 
-f = Fits(fitsfile) 
+f = Fits('/home/jbf/ct/jenkins/data/fits/FS58_3f3bff3-3f3cb91') 
+#f = Fits(fitsfile) 
 cols = f.getHDU(1).getColumns()
-names = cols[0]
-for n in names:
-    print n
+
+setLayout(4,5)
+i=0
+for c in cols:
+    print c
+    plot( i, dataset(c) )
+    i=i+1
     
