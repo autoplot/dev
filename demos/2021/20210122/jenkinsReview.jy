@@ -17,7 +17,6 @@ else:
 if ( host=='ci-pw' ):
    tests= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/ws/test*.png'
    diffs= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/ws/diffs.test*.png'
-   okayDir= 'https://ci-pw.physics.uiowa.edu/job/autoplot-test'+test+'/lastSuccessfulBuild/artifact/'
    okay= okayDir + 'test'+test+'*.png'
 elif ( host=='spot8' ):
    tests= '/net/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/test*.png'
@@ -60,9 +59,14 @@ class CopyAction( AbstractAction ):
         AbstractAction.__init__( self, 'Copy' )
         
     def actionPerformed( self, evt ):
+        print 'copy to ', okayDir
         if ( okayDir.startswith('/') ):
-            print 'cp -f ', png2.getSelectedFile()[5:], ' ', okayDir
-            fileCopy( File( png2.getSelectedFile()[5:] ), File( okayDir ) )
+            if tests.startswith('http'):
+                print 'cd okayDir'
+                print 'wget -N '+png2.getSelectedFile()
+            else:
+                print 'cp -f ', png2.getSelectedFile()[5:], ' ', okayDir
+                fileCopy( File( png2.getSelectedFile()[5:] ), File( okayDir ) )
             png2.sequence.next()
         else:
             print 'wget -N ' + png2.getSelectedFile()
