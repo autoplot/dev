@@ -15,7 +15,7 @@ Units=jpype.JClass('org.das2.datum.Units')
 t0=DatumUtil.parse('2003-04-05T00:00Z')
 n=1000
 for i in range(n):
-   t= t0.add(Units.seconds.createDatum(i))
+   t= t0.add(Units.seconds.createDatum(float(i))
    dsb.nextRecord([t,random.gauss(1,2)])
 ds= dsb.getDataSet()
 
