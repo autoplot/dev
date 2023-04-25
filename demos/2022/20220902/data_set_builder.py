@@ -9,8 +9,14 @@ autoplot.javaaddpath()
 DataSetBuilder=jpype.JClass('org.das2.qds.util.DataSetBuilder')
 dsb=DataSetBuilder(2,100,2)
 
+DatumUtil=jpype.JClass('org.das2.datum.DatumUtil')
+Units=jpype.JClass('org.das2.datum.Units')
+
+t0=DatumUtil.parse('2003-04-05T00:00Z')
 n=1000
 for i in range(n):
-   dsb.nextRecord(['2003-04-05T00:00Z',random.gauss(1,2)])
+   t= t0.add(Units.seconds.createDatum(i))
+   dsb.nextRecord([t,random.gauss(1,2)])
 ds= dsb.getDataSet()
-applot(ds)
+
+ScriptContext=jpype.JClass('org.autoplot.ScriptContext')
