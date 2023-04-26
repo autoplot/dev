@@ -6,7 +6,7 @@ host= getParam( 'host', 'spot8', 'tests from this hist', [ 'ci-pw', 'spot8', 'sp
 if ( host=='ci-pw' ):
     test= getParam( 'test', '147', 'test number', { 'examples':['147'] } )
 else:
-    test= getParam( 'test', '140', 'test number', { 'examples':['005','009','012','015','017','018','099','140','147','148','141'] } )
+    test= getParam( 'test', '148', 'test number', { 'examples':['005','009','012','015','017','018','099','140','147','148','141'] } )
     
 okayDir= '/home/jbf/ct/hudson/artifacts/'
 if ( test!='140' ):
@@ -52,7 +52,9 @@ class MyConverter( Converter ):
         return s[6:]
         
 bind( png1,'selectedName',png2,'selectedName')
+png1.selectedName = MyConverter().convertReverse(png3.selectedName)
 bind( png1,'selectedName',png3,'selectedName',MyConverter())
+
 
 class CopyAction( AbstractAction ):
     def __init__( self ):
