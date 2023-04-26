@@ -1,0 +1,65 @@
+from org.das2.datum import LogLinDomainDivider
+
+setScriptDescription('Demo bug in DomainDivider')
+
+case= getParam('case',6,'case number',[1,2,3,4,5])
+finer= getParam('finer',True,'use finer divider',[True,False])
+
+if case==1:
+   minD= Units.dimensionless.createDatum(1.0)
+   maxD= Units.dimensionless.createDatum(1.1)
+elif case==2:
+   minD= Units.dimensionless.createDatum(1.0)
+   maxD= Units.dimensionless.createDatum(10.1)
+elif case==3:
+   minD= Units.dimensionless.createDatum(1.0)
+   maxD= Units.dimensionless.createDatum(100.1)
+elif case==4:
+   minD= Units.dimensionless.createDatum(0.9)
+   maxD= Units.dimensionless.createDatum(10.1)
+elif case==5:
+   minD= Units.dimensionless.createDatum(0.9)
+   maxD= Units.dimensionless.createDatum(100.1)
+elif case==6:
+   minD= Units.dimensionless.createDatum(9.7)
+   maxD= Units.dimensionless.createDatum(13.1)
+   
+print 'case=',case
+print 'min,max=', minD, maxD
+      
+dd= LogLinDomainDivider.create()
+if finer:
+    dd= dd.finerDivider(False)
+dv= dd.boundaries(minD, maxD)
+
+dsb= DataSetBuilder(1,dv.length)
+print dv
+error=False
+for i in xrange(dv.length):
+    dsb.nextRecord(dv.doubleValue(i,dv.units))
+    d= dv.get(i)
+    if ( d.lt(minD) or d.gt(maxD) ):
+        print '%d: %s ****' % ( i, d.doubleValue(dv.units) )
+        error=True
+    else:
+        print '%d: %s' % ( i, d.doubleValue(dv.units) )
+    
+
+ds= dsb.getDataSet()
+plot( dsb.getDataSet() )
+
+warn=''
+if ds[-1]==0: 
+    warn=warn +'<br>ends with zero'
+    r= where(ds.ne(0))
+    ds=ds[r]
+
+s= sort( ds )
+u= uniq( ds,s )
+if u.length()!=ds.length(): warn=warn+'<br>repeats'
+
+if error:
+    warn=warn + '<br>outside bounds'
+    
+if len(warn)>0: annotation(0,text=warn)
+
