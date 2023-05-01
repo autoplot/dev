@@ -2,9 +2,10 @@ from org.das2.datum import LogLinDomainDivider
 
 setScriptDescription('Demo bug in DomainDivider')
 
-case= getParam('case',6,'case number',[1,2,3,4,5])
-finer= getParam('finer',True,'use finer divider',[True,False])
+case= getParam('case',8,'case number',[1,2,3,4,5,6,7,8])
+finer= getParam('finer',False,'use finer divider',[True,False])
 
+dd=None
 if case==1:
    minD= Units.dimensionless.createDatum(1.0)
    maxD= Units.dimensionless.createDatum(1.1)
@@ -23,13 +24,25 @@ elif case==5:
 elif case==6:
    minD= Units.dimensionless.createDatum(9.7)
    maxD= Units.dimensionless.createDatum(13.1)
-   
+elif case==7:
+   minD= Units.dimensionless.createDatum(93.8)
+   maxD= Units.dimensionless.createDatum(164.2)
+   dd= LogLinDomainDivider.create()
+   dd= dd.finerDivider(True).finerDivider(False)
+elif case==8:
+   minD= datum(2.15750E5)
+   maxD= datum(5.39380E6)
+   dd= LogLinDomainDivider.create().coarserDivider(False)
+
 print 'case=',case
 print 'min,max=', minD, maxD
-      
-dd= LogLinDomainDivider.create()
-if finer:
-    dd= dd.finerDivider(False)
+
+if dd==None:      
+    dd= LogLinDomainDivider.create()
+    if finer:
+        dd= dd.finerDivider(False)
+print 'dd: '+str(dd)
+
 dv= dd.boundaries(minD, maxD)
 
 dsb= DataSetBuilder(1,dv.length)
@@ -61,5 +74,7 @@ if u.length()!=ds.length(): warn=warn+'<br>repeats'
 if error:
     warn=warn + '<br>outside bounds'
     
-if len(warn)>0: annotation(0,text=warn)
+if len(warn)>0: 
+    annotation(0,text=warn)
+    raise Exception(warn)
 
