@@ -1,3 +1,6 @@
+setScriptDescription('''Scans ~/autoplot_data/bookmarks/history.txt for all jython script references, and then 
+searches each for the search string.''')
+
 # grep all Jython scripts for string
 # see https://research-git.uiowa.edu/space-physics/rbsp/ap-script/-/blob/master/u/jeremy/20210921/myScriptGrep.jy which may be more complete.
 search= getParam('search', 'servers.json', 'string to search for' )
