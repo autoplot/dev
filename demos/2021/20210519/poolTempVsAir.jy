@@ -5,6 +5,9 @@ from javax.swing import JSlider,JLabel,JPanel,BoxLayout
 tr= getParam( 'timerange', '2021-Apr' )
 dom.timeRange= datumRange(tr)
 
+from org.das2.datum import UnitsConverter
+Units.fahrenheitDegrees.registerConverter(Units.fahrenheitScale,UnitsConverter.IDENTITY )
+
 airTemp=None
 poolTemp=None
         
