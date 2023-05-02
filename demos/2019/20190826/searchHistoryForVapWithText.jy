@@ -3,7 +3,7 @@ searches each for the search string.''')
 
 # grep all vap files scripts for string
 # see https://research-git.uiowa.edu/space-physics/rbsp/ap-script/-/blob/master/u/jeremy/20210921/myScriptGrep.jy which may be more complete.
-search= getParam('search', 'servers.json', 'string to search for' )
+search= getParam('search', 'Energy Flux', 'string to search for' )
 foldCase= getParam('foldCase', True, 'ignore case', [ True, False ] )
 
 from org.autoplot.datasource import AutoplotSettings
