@@ -1,0 +1,5 @@
+ds=randn(10,5)
+ds= round( ds, 2 ) # CSV has no format options!
+plot(ds)
+formatDataSet(ds,PWD + 'data.csv?format=%.2f')
+
