@@ -22,7 +22,8 @@ priceGravel= pricePerTon * totalTons
 priceDelivery = 100.
 totalPrice =  priceGravel + priceDelivery
 
-print Units.dollars.createDatum(totalPrice)
+print 'totalTons: %.2f' % totalTons
+print 'totalPrice: %.2f' % totalPrice
 
 setOutputParam( 'totalTons', totalTons, 'Total volume/weight of Order' )
 setOutputParam( 'totalPrice', totalPrice, 'Total price in Dollars' )
