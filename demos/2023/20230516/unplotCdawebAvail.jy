@@ -1,0 +1,21 @@
+# parse the avail.png file which shows when each product is available
+
+ds= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/avail.png?xaxis=[1960-001T00:00Z,371,2029-001T00:00Z,1065]')
+cc= getCompletions( 'vap+cdaweb:id=')
+names= [ 'WI_SW_ION_DIST_SWE_FARADAY', 'WI_STRAHL0_SWE', 'WI_SOSP_3DP', 'WI_SOSD_3DP' ]
+yyys= [ 90, 100, 110, 120 ]
+
+dates= ds.property(QDataSet.DEPEND_0)
+
+for i in xrange(len(names)):
+   y=yyys[i]
+   if i%3==0:
+       r= where( ds[:,y,0].eq(255).and( ds[:,y,1].lt(255) ) )
+   elif i%3==1:
+       r= where( ds[:,y,0].eq(70).and( ds[:,y,1].eq(130) ) )
+   elif i%3==2:
+       r= where( ds[:,y,0].eq(8).and( ds[:,y,1].eq(48) ) )
+   
+   ext= extent( dates[r] )
+   print names[i], ext[0], ext[1]
+   
