@@ -1,0 +1,7 @@
+setScriptDescription('Demo how to format numbers') 
+
+r0= dataset(45.6,Units.meters)
+r0.putProperty( QDataSet.NAME, 'distance' )
+print r0
+print '%6.3f' % r0.value()
+print '%6.3f' % r0
