@@ -5,3 +5,15 @@ r0.putProperty( QDataSet.NAME, 'distance' )
 print r0
 print '%6.3f' % r0.value()
 print '%6.3f' % r0
+
+d1= dataset(5,Units.seconds)
+d1.putProperty( QDataSet.FORMAT, '%04d' )
+
+print d1
+print '%d' % d1
+print '%05d' % d1
+
+# note the write command, used to write to a file, needs a newline.  It is added with '\n'.
+out= open('/tmp/foo.dat','w')
+out.write( '%d\n' % d1 )
+out.close()
