@@ -1,0 +1,14 @@
+setLayoutOverplot( 2 )
+plot( 0, dataset( randn(1000)+sin(linspace(0,PI,1000)), label='wow' ), color='blue', legendLabel='Plot 1' )
+plot( 1, dataset( 2+randn(1000)+sin(linspace(0,PI,1000)), label='wow' ), color='red', legendLabel='Plot 2'  )
+
+# here's the convert part
+
+ss= ''
+for i in xrange(len(dom.plotElements)):
+    ss= ss + '<psym>
+    if i>0:
+        ss = ss + '<br>'
+    ss= ss + dom.plotElements[i].legendLabel
+
+annotation( 0, anchorPosition='SE', text=ss, borderType='rectangle', fontSize='1em' ) 
