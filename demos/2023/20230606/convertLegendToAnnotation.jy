@@ -1,14 +1,30 @@
-setLayoutOverplot( 2 )
-plot( 0, dataset( randn(1000)+sin(linspace(0,PI,1000)), label='wow' ), color='blue', legendLabel='Plot 1' )
-plot( 1, dataset( 2+randn(1000)+sin(linspace(0,PI,1000)), label='wow' ), color='red', legendLabel='Plot 2'  )
+from org.das2.util import ColorUtil
+from org.autoplot import RenderType
+setLayoutOverplot( 4 )
+plot( 0, dataset( randn(1000)+sin(linspace(0,PI,1000)) ), color='blue', legendLabel='Plot 1' )
+plot( 1, dataset( 2+randn(1000)+sin(linspace(0,PI,1000)) ), color='red', legendLabel='Plot 2'  )
+plot( 2, randn(1000,6), legendLabel='Plot 3'  )
+
 
 # here's the convert part
 
 ss= ''
 for i in xrange(len(dom.plotElements)):
-    ss= ss + '<psym>
-    if i>0:
-        ss = ss + '<br>'
+    pe= dom.plotElements[i]
+    pc= pe.controller.renderer
+    if pc.isDrawLegendLabel()==False:
+        continue
+    if len(ss)>0: ss = ss + '<br>'
+    color= ColorUtil.nameForColor(pe.style.color)
+    size= '0.6em' 
+    if pe.renderType==RenderType.series:
+        ps= 'psym;' + str(pc.psym) + ';size='+size+';connect='+ str(pc.psymConnector)+';color='+color
+        color=''
+    else:
+        ps= 'block'
+    if color!='': ss= ss + '!(color;'+color+')'    
+    ss= ss + '!(painter;'+ps+') '
+    if color!='': ss= ss + '!(color)'    
     ss= ss + dom.plotElements[i].legendLabel
 
 annotation( 0, anchorPosition='SE', text=ss, borderType='rectangle', fontSize='1em' ) 
