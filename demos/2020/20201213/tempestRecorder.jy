@@ -1,4 +1,5 @@
-from org.das2.util import LoggerManager
+from org.autoplot import AutoplotUtil
+from org.das2.util import LoggerManager,AboutUtil
 from java.io import File
 from org.das2.util.filesystem import FileSystem
 from org.das2.fsm import FileStorageModel
@@ -21,6 +22,11 @@ from java.net import DatagramSocket,DatagramPacket
 from java.lang import String
 
 logger= LoggerManager.getLogger('tempest')
+
+pid= AutoplotUtil.getProcessId('*')
+o= open( dataHome + 'pid.txt', 'w' )
+o.write(pid)
+o.close()
 
 # port of Tempest
 PORT=50222        
@@ -132,3 +138,4 @@ while True:
 if socket!=None:
     socket.close()
     
+File( dataHome + 'pid.txt' ).delete()    
