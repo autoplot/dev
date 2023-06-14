@@ -1,7 +1,16 @@
+from org.das2.qds import JoinDataSet
 dd= randn(24,8).lt(0)
 aa= linspace(0,TAU,24)
 rr= linspace( 8.,28., 8 )
 dd= link( aa,rr,dd )
 
-plot( dd, renderType='bounds>fillTexture=hash&polar=T' )
+da= aa[1]-aa[0]
+dr= rr[1]-rr[0]
+
+bb= JoinDataSet(3)
+for i in xrange(len(aa)):
+    for j in xrange(len(rr)):
+        if ( dd[i,j]>0.5 ):
+            bb.join( boundsDataset('%f to %f;%f to %f' % ( aa[i]-da, aa[i]+da, rr[j]-dr, rr[j]+dr ) ) )
+plot( bb, renderType='bounds>fillTexture=hash&polar=T' )
 
