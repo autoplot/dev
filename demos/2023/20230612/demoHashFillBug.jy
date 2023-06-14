@@ -1,16 +1,17 @@
+tt= getParam('tt',1.0,'test limit',[-.5,-0.25,0,0.25,0.5,0.75,1.0,1.25,1.50])
 from org.das2.qds import JoinDataSet
 dd= randn(24,8)
 aa= linspace(0,TAU,24)
 rr= linspace( 8.,28., 8 )
 dd= link( aa,rr,dd )
 
-da= aa[1]-aa[0]
-dr= rr[1]-rr[0]
+da= ( aa[1]-aa[0]) /2 
+dr= (rr[1]-rr[0]) /2 
 
 bb= JoinDataSet(3)
 for i in xrange(len(aa)):
     for j in xrange(len(rr)):
-        if ( dd[i,j]>0.5 ):
+        if ( dd[i,j]>tt ):
             bb.join( boundsDataset('%f to %f;%f to %f' % ( aa[i]-da, aa[i]+da, rr[j]-dr, rr[j]+dr ) ) )
-plot( bb, renderType='bounds>fillTexture=hash&polar=T' )
+plot( bb, renderType='bounds>fillTexture=hash&polar=T', color=None )
 
