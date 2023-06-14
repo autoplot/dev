@@ -1,5 +1,5 @@
 from org.das2.qds import JoinDataSet
-dd= randn(24,8).lt(0)
+dd= randn(24,8)
 aa= linspace(0,TAU,24)
 rr= linspace( 8.,28., 8 )
 dd= link( aa,rr,dd )
