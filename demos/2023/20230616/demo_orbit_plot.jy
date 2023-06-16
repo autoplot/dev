@@ -1,0 +1,9 @@
+setScriptDescription('demo orbit plot')
+
+a= linspace(0,TAU,1000)
+x= cos(a) * ( 10+a )
+y= sin(a) * ( 10+a ) 
+t= linspace( '2023-06-16T00:00', '2023-06-16T24:00', len(a) )
+
+plot( bundle( t, x, y ), renderType='orbitPlot>tickValues=+2hr&tickStyle=both' )
+
