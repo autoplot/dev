@@ -1,0 +1,60 @@
+from org.das2.util import ColorUtil
+setScriptTitle('IText Meta')
+setScriptDescription('Demonstrates that rich PNG metadata could be embedded within PDFs')
+
+if ( PWD.startswith('file:') ):
+    filename= PWD[5:]+'graphPaper.pdf'
+else:
+    filename= '/tmp/autoplot/graphPaper.pdf'
+    mkdir('/tmp/autoplot/')
+filename= getParam( 'filename', filename )
+mm= getParam('meta','An Axis Title within PDF','metadata string to embed')
+
+s= 0.25
+pt= int(s*72)
+w= int(8.5*72)
+h= int(11.0*72)
+c= ColorUtil.CORNFLOWER_BLUE.getRGB()
+
+from org.das2.graph import Painter
+from java.awt.geom import Line2D,GeneralPath
+
+class SquarePainter( Painter ):
+    def paint( self, g ):
+        g.color= Color(c)
+        pt= int(s*72)
+        for i in xrange( 0, w, pt ):
+            g.drawLine( i, 0, i, h )
+        for j in xrange( 0, h, pt ):
+            g.drawLine( 0, j, w, j )                
+
+# now write PDF
+from com.itextpdf.text import Document,Rectangle,Paragraph
+from com.itextpdf.awt import PdfGraphics2D
+from com.itextpdf.text import PageSize
+from com.itextpdf.text.pdf import PdfWriter
+from com.itextpdf.text.pdf import PdfContentByte
+from java.io import FileOutputStream
+
+document = Document( Rectangle(8.5*72,11*72), 0,0,0,0 )
+
+out= FileOutputStream(filename)
+
+writer= PdfWriter.getInstance( document, out );
+
+document.open()
+document.addHeader("CreatorJBF","Autoplot")
+document.addHeader("MetadataJBF",mm)
+
+cb = writer.getDirectContent()
+cb.saveState()
+g= PdfGraphics2D( cb, w, h, True)
+
+SquarePainter().paint(g)
+
+g.dispose()
+cb.restoreState()
+
+document.close()
+
+setStatus( 'wrote to '+filename )
