@@ -1,0 +1,18 @@
+from javax.swing import JOptionPane,JFileChooser
+
+jj= JFileChooser()
+
+pj=14
+status = jj.showSaveDialog(getApplication())
+while status == JFileChooser.APPROVE_OPTION:
+    x= JOptionPane.showConfirmDialog(getApplication(),'Some of the data is outside of PJ'+str(pj)+'. Save anyway?')
+    if ( x==JOptionPane.NO_OPTION ):
+        status= jj.showSaveDialog(getApplication())
+    elif ( x==JOptionPane.CANCEL_OPTION ):
+        status= JFileChooser.CANCEL_OPTION 
+    else:
+        print 'use this filename...'
+        status= JOptionPane.CANCEL_OPTION
+
+    pathname= str(jj.getSelectedFile())
+    print pathname
