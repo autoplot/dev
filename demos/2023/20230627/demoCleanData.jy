@@ -1,0 +1,8 @@
+setScriptDescription('demo cleanData function')
+
+setLayoutOverplot(2)
+ds= getDataSet(PWD+'jeremydata.cdf?Variable_0')
+
+plot(ds,symbolSize=10,symbolFill='outline',ylog=False,yrange=[-1e-4,30e-4] )
+c= cleanData(ds,2,5)
+plot(1,c)
