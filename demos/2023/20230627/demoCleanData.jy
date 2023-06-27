@@ -1,8 +1,10 @@
 setScriptDescription('demo cleanData function')
 
 setLayoutOverplot(2)
-ds= getDataSet(PWD+'jeremydata.cdf?Variable_0')
 
-plot(ds,symbolSize=10,symbolFill='outline',ylog=False,yrange=[-1e-4,30e-4] )
-c= cleanData(ds,2,5)
+ds = getDataSet( '/home/jbf/ct/autoplot/git/dev/demos/2023/20230627/jeremydata.cdf?Variable_0' )
+
+plot(ds,symbolSize=10,symbolFill='outline',ylog=False )
+
+c= cleanData(ds,1.5,15)
 plot(1,c)
