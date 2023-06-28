@@ -1,0 +1,29 @@
+setScriptDescription('''Demo how library is able to read .ico files.''')
+
+from java.awt.image import BufferedImage
+from java.io import File
+from javax.swing import JLabel,ImageIcon,SwingConstants
+from javax.imageio import ImageIO
+import javax.swing
+
+import sys
+
+addToSearchPath( sys.path, 'https://cottagesystems.com/~jbf/autoplot/lib/image4j-0.7.2.jar', monitor )
+
+from net.sf.image4j.codec.ico import ICODecoder
+
+ico= getFile('https://cottagesystems.com/favicon.ico')
+
+bi = ICODecoder.read(ico)
+
+import java.awt
+print bi is java.awt.Image
+print bi is BufferedImage
+print bi, type(bi), bi[0]
+bi=bi[0]
+
+ico= ImageIcon(bi)
+
+label= JLabel('Cottage Systems Server',ico,SwingConstants.LEADING)
+
+getApplication().setBottomPanel(label)
