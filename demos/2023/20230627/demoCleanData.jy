@@ -1,10 +1,23 @@
 setScriptDescription('demo cleanData function')
 
-setLayoutOverplot(2)
+setLayoutOverplot(3)
 
 ds = getDataSet( '/home/jbf/ct/autoplot/git/dev/demos/2023/20230627/jeremydata.cdf?Variable_0' )
+xx= xtags(ds)
 
-plot(ds,symbolSize=10,symbolFill='outline',ylog=False )
+plot(0,ds,symbolSize=10,symbolFill='outline',ylog=False )
 
-c= cleanData(ds,1.5,15)
-plot(1,c)
+c= cleanData(ds,1.0,15)
+r= where( valid(c).eq(0) )
+rv= where( valid(c).eq(1) )
+
+c[r]= interpolate( c[rv], findex(xx[rv],xx[r]) )
+plot(1,c,color='blue' )
+#ds=c
+
+#c= cleanData(c,1.1,5)
+#plot(2,c,color='red')
+
+r= where( ds.gt(c) )
+plot(2,ds[r],color='red')
+
