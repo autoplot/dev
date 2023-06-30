@@ -1,0 +1,24 @@
+setScriptDescription('''Plot all vaps in a tree''')
+
+root= getParam('root','/home/jbf/project/juno/u/bill/2023/')
+out= getParam('out','/tmp/ap/20230630/')
+
+queue= []
+
+def dodir(ss):
+    ff= listDirectory(ss)
+    for f in ff:
+        if f.endswith('.vap'):
+            queue.append(ss+f)
+        elif f.endswith('/'):
+            dodir( ss + f )
+
+dodir( root )
+for p in queue:
+    print p
+    try:
+        load(p)
+        i= p.rindex('/')
+        writeToPng(out + p[i:])
+    except:
+        print 'except '+p
