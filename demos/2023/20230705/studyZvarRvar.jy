@@ -1,8 +1,9 @@
 from gov.nasa.gsfc.spdf.cdfj import CDFReader
 from gov.nasa.gsfc.spdf.cdfj import CDFFactory,CDFDataType
 
-ff='https://cdaweb.gsfc.nasa.gov/sp_phys/data/goes/goes13/orbit/2022/goes13_ephemeris_ssc_20220101_v01.cdf'
-ff=getFile(ff)
+resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/goes/goes13/orbit/2022/goes13_ephemeris_ssc_20220101_v01.cdf', 'CDF file' )
+
+ff=getFile(resourceURI)
 
 cdff= CDFFactory.getCDF( str(ff) )
 
