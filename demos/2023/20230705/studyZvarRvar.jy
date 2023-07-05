@@ -1,0 +1,23 @@
+from gov.nasa.gsfc.spdf.cdfj import CDFReader
+from gov.nasa.gsfc.spdf.cdfj import CDFFactory,CDFDataType
+
+ff='https://cdaweb.gsfc.nasa.gov/sp_phys/data/goes/goes13/orbit/2022/goes13_ephemeris_ssc_20220101_v01.cdf'
+ff=getFile(ff)
+
+cdff= CDFFactory.getCDF( str(ff) )
+
+vv= cdff.getVariableNames()
+
+
+for v in vv:
+    var = cdff.getVariable(v)
+    if var.isTypeR():
+        varType = 'R' 
+    else:
+        varType = 'Z'
+    if var.recordVariance():
+        recordVaries = 'varies'
+    else:
+        recordVaries = 'novary'
+        
+    print '%4d %s %s %s' % ( var.getNumber(), varType, recordVaries, v )
