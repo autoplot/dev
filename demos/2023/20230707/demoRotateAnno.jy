@@ -1,0 +1,15 @@
+setScriptDescription('''Demonstrate the Rotation property of DasAnnotation''')
+
+from javax.swing import JCheckBox
+anno= annotation(0,text="Test<br>String<br>___________________________",
+   anchorPosition='center' )
+
+def rot(evt):
+     global rotCB
+     if rotCB.selected:
+         anno.controller.dasAnnotation.rotate = -90
+     else:
+         anno.controller.dasAnnotation.rotate = 0
+
+rotCB= JCheckBox('rotate',actionPerformed=rot)
+getApplication().setBottomPanel(rotCB)
