@@ -1,0 +1,42 @@
+from java.awt import FlowLayout
+from javax.swing import JCheckBox,JPanel
+from org.das2.util import ColorUtil
+from java.awt.geom import Line2D
+from org.das2.graph import Painter
+setScriptDescription('''Write code independent of the annotation code demonstrating how the rotation will be done''')
+
+def update(evt):
+    dom.canvases[0].controller.dasCanvas.repaint()
+    
+controlPanel= JPanel()
+controlPanel.layout= FlowLayout()
+rot= JCheckBox('rotate',actionPerformed=update)
+controlPanel.add(rot)
+
+getApplication().setBottomPanel(controlPanel)
+
+def drawBox(g):
+    g.drawRect(0,-12,100,36)
+    g.drawLine(0,0,100,0)
+    g.drawString('Example Text',0,0)
+    
+from javax.swing import JCheckBox
+
+
+
+class AnnoPainter(Painter):
+    def paint(self,g):
+        g.color=ColorUtil.CORAL
+        g.drawRect(150,150,300,300)
+        if rot.selected:
+            g.translate(150,150)
+            g.rotate(TAU/4)
+            g.translate(0,-24)
+        else:
+            g.translate(150,150+12)
+        g.color=ColorUtil.BLACK
+        drawBox(g)
+
+dom.canvases[0].controller.dasCanvas.removeTopDecorators()
+dom.canvases[0].controller.dasCanvas.addTopDecorator(AnnoPainter())
+
