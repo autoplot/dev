@@ -1,5 +1,5 @@
 from java.awt import FlowLayout
-from javax.swing import JCheckBox,JPanel
+from javax.swing import JCheckBox,JPanel,JComboBox
 from org.das2.util import ColorUtil
 from java.awt.geom import Line2D
 from org.das2.graph import Painter
@@ -10,8 +10,10 @@ def update(evt):
     
 controlPanel= JPanel()
 controlPanel.layout= FlowLayout()
-rot= JCheckBox('rotate',actionPerformed=update)
+rot= JCheckBox('rotate',actionPerformed=update,selected=True)
 controlPanel.add(rot)
+pos=JComboBox(['nw','ne','center'],itemStateChanged=update)
+controlPanel.add(pos)
 
 getApplication().setBottomPanel(controlPanel)
 
@@ -19,21 +21,30 @@ def drawBox(g):
     g.drawRect(0,-12,100,36)
     g.drawLine(0,0,100,0)
     g.drawString('Example Text',0,0)
-    
-from javax.swing import JCheckBox
-
-
 
 class AnnoPainter(Painter):
     def paint(self,g):
         g.color=ColorUtil.CORAL
         g.drawRect(150,150,300,300)
-        if rot.selected:
-            g.translate(150,150)
-            g.rotate(TAU/4)
-            g.translate(0,-24)
+        print pos.selectedItem
+        if pos.selectedItem=='nw':
+            if rot.selected:
+                g.translate(150,150)
+                g.rotate(TAU/4)
+                g.translate(0,-24)
+            else:
+                g.translate(150,150+12)
+        elif pos.selectedItem=='ne':
+            if rot.selected:
+                g.translate(300+150-24,150)
+                g.rotate(TAU/4)
+                g.translate(0,-12)
+            else:
+                g.translate(300+150-100,150+12)
+        elif pos.selectedItem=='center':
+            g.translate(300-150,150+12)
         else:
-            g.translate(150,150+12)
+            print 'not supported yet'
         g.color=ColorUtil.BLACK
         drawBox(g)
 
