@@ -13,36 +13,49 @@ controlPanel.layout= FlowLayout()
 rot= JCheckBox('rotate',actionPerformed=update,selected=True)
 controlPanel.add(rot)
 pos=JComboBox(['nw','ne','center'],itemStateChanged=update)
+pos.selectedItem='center'
 controlPanel.add(pos)
 
 getApplication().setBottomPanel(controlPanel)
 
+ascentPixels=12
+decentPixels=24
+textw=100
+texth=36
+
+anchorx= 150
+anchory= 150
+anchorw= 300
+anchorh= 300
+
 def drawBox(g):
-    g.drawRect(0,-12,100,36)
-    g.drawLine(0,0,100,0)
-    g.drawString('Example Text',0,0)
+    g.drawRect(0,-ascentPixels,textw,texth)
+    g.drawLine(0,0,textw,0)
+    g.drawString('Baseline Text',0,0)
 
 class AnnoPainter(Painter):
     def paint(self,g):
         g.color=ColorUtil.CORAL
-        g.drawRect(150,150,300,300)
+        g.drawRect(anchorx,anchory,anchorw,anchorh)
+        g.drawLine(anchorx,anchory+anchorh/2,anchorx+anchorw,anchory+anchorh/2)
+        g.drawLine(anchorx+anchorw/2,anchory,anchorx+anchorw/2,anchory+anchorh)
         print pos.selectedItem
         if pos.selectedItem=='nw':
             if rot.selected:
-                g.translate(150,150)
+                g.translate(anchorx,anchory)
                 g.rotate(TAU/4)
-                g.translate(0,-24)
+                g.translate(0,-decentPixels)
             else:
-                g.translate(150,150+12)
+                g.translate(anchorx,anchory+ascentPixels)
         elif pos.selectedItem=='ne':
             if rot.selected:
-                g.translate(300+150-24,150)
+                g.translate(anchorw+anchorx-decentPixels,anchory)
                 g.rotate(TAU/4)
-                g.translate(0,-12)
+                g.translate(0,-ascentPixels)
             else:
-                g.translate(300+150-100,150+12)
+                g.translate(anchorx+anchorw-textw,anchory+ascentPixels)
         elif pos.selectedItem=='center':
-            g.translate(300-150,150+12)
+            g.translate(anchorx+anchorw/2-textw/2,anchory+anchorh/2-(decentPixels/2+ascentPixels/2))
         else:
             print 'not supported yet'
         g.color=ColorUtil.BLACK
