@@ -1,1 +1,11 @@
+setScriptDescription('Demo feature 806, where the setStatus message is preserved')
+
+initSleep= getParam('initSleep',1000,'sleep this many milliseconds before issuing status',[0,1000])
+postSleep= getParam('postSleep',1000,'sleep this many milliseconds after issuing status',[0,1000])
+
+sleep(initSleep)
+
 setStatus('file written: xxx')
+
+sleep(postSleep)
+
