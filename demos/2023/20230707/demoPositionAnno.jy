@@ -3,6 +3,7 @@ from javax.swing import JCheckBox,JPanel,JComboBox
 from org.das2.util import ColorUtil
 from java.awt.geom import Line2D
 from org.das2.graph import Painter
+
 setScriptDescription('''Write code independent of the annotation code demonstrating how the rotation will be done''')
 
 def update(evt):
@@ -12,8 +13,8 @@ controlPanel= JPanel()
 controlPanel.layout= FlowLayout()
 rot= JCheckBox('rotate',actionPerformed=update,selected=True)
 controlPanel.add(rot)
-pos=JComboBox(['nw','ne','center'],itemStateChanged=update)
-pos.selectedItem='center'
+pos=JComboBox(['nw','ne','center','sw','se'],itemStateChanged=update)
+pos.selectedItem='se'
 controlPanel.add(pos)
 
 getApplication().setBottomPanel(controlPanel)
@@ -55,7 +56,26 @@ class AnnoPainter(Painter):
             else:
                 g.translate(anchorx+anchorw-textw,anchory+ascentPixels)
         elif pos.selectedItem=='center':
-            g.translate(anchorx+anchorw/2-textw/2,anchory+anchorh/2-(decentPixels/2+ascentPixels/2))
+            if rot.selected:
+                g.translate(anchorx+anchorw/2,anchory+anchorh/2 )
+                g.rotate(TAU/4)
+                g.translate(-textw/2,+ ascentPixels - ( ascentPixels + decentPixels  ) /2 )
+            else:
+                g.translate(anchorx+anchorw/2-textw/2,anchory+anchorh/2 + ascentPixels - ( ascentPixels + decentPixels  ) /2 )
+        if pos.selectedItem=='sw':
+            if rot.selected:
+                g.translate(anchorx,anchory+anchorh)
+                g.rotate(TAU/4)
+                g.translate(-textw,-decentPixels)
+            else:
+                g.translate(anchorx,anchory+anchorh-decentPixels)
+        elif pos.selectedItem=='se':
+            if rot.selected:
+                g.translate(anchorx+anchorw-decentPixels,anchory+anchorh)
+                g.rotate(TAU/4)
+                g.translate(-textw,-ascentPixels)
+            else:
+                g.translate(anchorx+anchorw-textw,anchory+anchorh-decentPixels)
         else:
             print 'not supported yet'
         g.color=ColorUtil.BLACK
