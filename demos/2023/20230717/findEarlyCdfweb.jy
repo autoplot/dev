@@ -5,12 +5,12 @@ outf= open( URI(PWD).path + 'table.md', 'w' )
 from org.autoplot.cdaweb import CDAWebDB
 ids= CDAWebDB.getInstance().getServiceProviderIds()
 t1970= datum('1970-01-01T00:00Z')
-print '|id|start|stop|'
-print '|---|---|---|'
+outf.write( '|id|start|stop|\n' )
+outf.write( '|---|---|---|\n' )
 for i in ids:
     tr= datumRange(CDAWebDB().getInstance().getTimeRange(i))
     if ( tr.min().lt(t1970) ):
-        print '| %s | %s | %s |' % ( i, tr.min(), tr.max() )
+        print '%s\t%s\t%s\t' % ( i, tr.min(), tr.max() )
         outf.write( '| %s | %s | %s |\n' % ( i, tr.min(), tr.max() ) )
 
 outf.close()
