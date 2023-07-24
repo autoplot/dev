@@ -1,0 +1,4 @@
+setScriptDescription('''Demo new tcaRows property''')
+dom.plots[0].xaxis.controller.dasAxis.tcaLabels= 'X;Y;Z'
+dom.plots[0].xaxis.controller.dasAxis.drawTca=True
+dom.plots[0].xaxis.controller.dasAxis.tcaRows=5
