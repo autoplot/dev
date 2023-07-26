@@ -1,0 +1,14 @@
+setScriptDescription('''Study where NetCDF library is failing, and if a new version of the library can be used.''')
+
+from ucar.nc2.dataset import NetcdfDataset
+from ucar.nc2 import NetcdfFile
+
+plot( 'https://cdaweb.gsfc.nasa.gov/istp_public/data/icon/l2-5_fuv_night/2022/icon_l2-5_fuv_night_20220102_v05r001.nc?ICON_L25_Orbit_Number' )
+
+ff= getFile('https://cdaweb.gsfc.nasa.gov/istp_public/data/icon/l2-5_fuv_night/2022/icon_l2-5_fuv_night_20220201_v05r001.nc')
+ncf= NetcdfFile(str(ff))
+ff= getFile('https://cdaweb.gsfc.nasa.gov/istp_public/data/icon/l2-5_fuv_night/2022/icon_l2-5_fuv_night_20220202_v05r001.nc')
+ncf= NetcdfFile(str(ff))
+nc= NetcdfDataset(ncf)
+print nc
+nc.getVariables()
