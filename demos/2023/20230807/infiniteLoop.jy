@@ -1,3 +1,6 @@
+setScriptDescription('''Try to demo the bug James pointed out.  See 
+https://github.com/das-developers/das2java/issues/68''')
+
 ds= ripplesSpectrogramTimeSeries(100)
 xt= xtags(ds)
 xt.putProperty(QDataSet.DEPEND_0,xt)
