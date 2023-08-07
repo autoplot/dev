@@ -1,0 +1,7 @@
+ds= ripplesSpectrogramTimeSeries(100)
+xt= xtags(ds)
+xt.putProperty(QDataSet.DEPEND_0,xt)
+ds.putProperty(QDataSet.DEPEND_0,xt)
+
+plot(0,ds)
+plot(1,ds.slice(52))
