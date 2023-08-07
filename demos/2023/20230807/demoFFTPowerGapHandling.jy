@@ -1,4 +1,5 @@
-setScriptDescription('''Demo fftPower's handling of fill and timetags''')
+setScriptDescription('''Demo fftPower's handling of fill and timetags.  This does show a 
+bug where the first record seems to be dropped.''')
 
 rst= getParam( 'reset', True, 'Reset axes', [ True,False] )
 feat= getParam( 'feature', False, 'Include feature', [True,False] )
