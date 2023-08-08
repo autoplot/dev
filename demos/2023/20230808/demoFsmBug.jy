@@ -1,0 +1,7 @@
+setScriptDescription('''This demos where the FileStorageModel mishandles delta.''')
+
+from org.das2.util.filesystem import FileSystem
+from org.das2.fsm import FileStorageModel
+fsm= FileStorageModel.create(FileSystem.create('file:/tmp/jbf'),'$Y$m$d_$(H;delta=6)')
+print fsm.quantize(datumRange('2021-01-17T10:49 to 2021-01-17T10:50'))
+print '2021-01-17 06:00 to 12:00 it should be'
