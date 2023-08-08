@@ -1,0 +1,40 @@
+from org.json import JSONObject,JSONArray
+from java.io import File,FileInputStream,InputStreamReader
+from javax.xml.parsers import DocumentBuilderFactory
+from org.xml.sax import InputSource
+from javax.xml.xpath import XPathFactory,XPathConstants
+setScriptDescription('''Read all.xml to create catalog response for Nand HAPI server''')
+
+ff= getFile('https://cdaweb.gsfc.nasa.gov/pub/catalogs/all.xml')
+
+inputStream = FileInputStream(ff)
+
+builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+source = InputSource(InputStreamReader(inputStream))
+doc = builder.parse(source)
+inputStream.close()
+
+skips=[]
+            
+factory = XPathFactory.newInstance()
+xpath =  factory.newXPath()
+nodes =  xpath.evaluate( "//sites/datasite/dataset", doc, XPathConstants.NODESET )
+
+ic= 0
+catalog= JSONArray()
+for i in xrange(nodes.getLength()):
+    node= nodes.item(i)
+    attrs= node.getAttributes()
+
+    st= attrs.getNamedItem("timerange_start").getTextContent()
+    en= attrs.getNamedItem("timerange_stop").getTextContent()
+    nssdc_ID= attrs.getNamedItem("nssdc_ID").getTextContent()
+    if ( len(st)>1 and st[0].isdigit()
+             and len(en)>1 and en[0].isdigit()
+             and nssdc_ID.find("None")>-1 ) :
+        name= attrs.getNamedItem("serviceprovider_ID").getTextContent()
+
+        sourceurl= xpath.evaluate( 'mastercdf/@ID', node, XPathConstants.STRING );
+
+        print name, sourceurl
+        

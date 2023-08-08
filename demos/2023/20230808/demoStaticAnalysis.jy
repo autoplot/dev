@@ -1,0 +1,13 @@
+setScriptDescription('''Demo static code analysis, which is useful for finding bugs.  If
+a variable is assigned but never read, then it will be highlited.  This has been extracted
+from another script to verify the feature.  In the other script, the alt='UV' command is buried
+in code more than 30 lines away.  The bug is that the scientist would believe that alt
+is a parameter they can control, but ''')
+
+alt= getParam( 'alt', 'UV', 'altitude of footpoint projection', [ '', 'UV' ] )
+
+
+# lots of code here buring the assignment
+alt= 'UV'
+
+print ( 'alt is '+alt )

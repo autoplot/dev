@@ -1,0 +1,23 @@
+text= getParam('text','Here is some text which needs to be wrapped for markdown document')
+cols= getParam('columns',20)
+
+ss= text.split(' ')
+icol=0
+
+needspace=False
+
+for s in ss:
+    icol+=len(s)
+    if icol>cols:
+       print ''
+       print s,
+       icol= len(s)
+    else:
+       if needspace:
+           print ' ',
+           icol= icol+1
+       print s,
+       
+print ''
+
+    
