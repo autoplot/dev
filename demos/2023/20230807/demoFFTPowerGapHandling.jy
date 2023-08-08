@@ -1,0 +1,17 @@
+setScriptDescription('''Demo fftPower's handling of fill and timetags.  This does show a 
+bug where the first record seems to be dropped.''')
+
+rst= getParam( 'reset', True, 'Reset axes', [ True,False] )
+feat= getParam( 'feature', False, 'Include feature', [True,False] )
+
+from java.lang.Double import NaN
+ds= ripplesTimeSeries(10000) + randn(10000)
+
+ds[700:800]= NaN
+if feat:
+   ds[9000:9100]= 200 * randn(100)
+
+reset()
+plot( 0, ds)
+plot( 1, fftPower( ds,256,None ))
+#

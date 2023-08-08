@@ -1,0 +1,74 @@
+from java.io import File
+from org.das2.util import FileUtil
+from java.lang import ProcessBuilder,String
+import jarray
+
+setScriptDescription('''Write configuration files to build Autoplot .exe.  This is a multi-step process 
+which could probably be reduced to a two-step process that is less prone to error.''')
+
+dirs=getParam( 'dirs', 'C:/Users/jbf/bin/installers/javapackager/windows/' )
+vers= getParam( 'vers', 'v2023a_8', 'Autoplot release', { 'examples':['v2022a_12','v2022a_13','v2023a_1','20221207a'], 'regex':'[_0-9a-z]+' } )
+makeexe= getParam('makeexe', True, 'Make the exe file', [ True, False ] )
+copyexe= getParam('copyexe', True, 'Copy the exe', [ True, False ] )
+
+def makeExe():
+    template1= FileUtil.readFileToString( File( dirs,'make-exe-installer.template.bat' ) )
+    text1 = template1 % { 'VER': vers }
+    
+    template2= FileUtil.readFileToString( File( dirs+'package/windows/','Autoplot.template.iss' ) )
+    text2 = template2 % { 'VER': vers }
+    
+    FileUtil.writeStringToFile( File(dirs,"make-exe-installer.bat" ), text1 )
+    FileUtil.writeStringToFile( File(dirs+'package/windows/','Autoplot.iss' ), text2 )
+    
+    setStatus('run '+dirs+'make-exe-installer.bat')
+    showMessageDialog('run '+dirs+'make-exe-installer.bat')
+    
+    from java.lang import ProcessBuilder
+    pb= ProcessBuilder(['cmd.exe','/C','make-exe-installer.bat'])
+    pb.directory(File(dirs))
+    process= pb.start()
+    stdout= process.inputStream 
+    buff= jarray.zeros(1024,'b')
+        
+    while process.isAlive():
+        available= stdout.available()
+        if available>0:
+            read= stdout.read( buff, 0, min(1024,available) )
+            print String( buff, 0, read )
+        sleep(100)
+            
+    exit= process.waitFor()
+    
+    if exit!=0:
+        print 'something went wrong, maybe the version hasn''t been created.'
+    else:
+        print 'output written to C:\\Users\\jbf\\bin\\installers\\javapackager\\windows\\dist\\bundles'
+ 
+def copyExe():
+    ff=  dirs+'dist/bundles/'+'Autoplot-'+vers+'.exe'
+
+    pb= ProcessBuilder(['scp', '-o', 'port=22999', ff, 'nudnik.physics.uiowa.edu:/home/jbf/public_html/autoplot/tmp/x_Autoplot.exe'])
+    pb.directory(File(dirs))
+    process= pb.start()
+    stdout= process.inputStream 
+    buff= jarray.zeros(1024,'b')
+
+    while process.isAlive():
+        available= stdout.available()
+        if available>0:
+            read= stdout.read( buff, 0, min(1024,available) )
+            print String( buff, 0, read )
+        sleep(100)
+    exit= process.waitFor()
+    
+    if exit==0:
+        print 'copy seems to have worked, see nudnik.physics.uiowa.edu:/home/jbf/public_html/autoplot/tmp/x_Autoplot.exe '
+    else:
+        print 'copy returns non-zero exit code'
+        
+if makeexe: makeExe()
+if copyexe: copyExe()
+
+print 'done'
+

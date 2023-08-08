@@ -2,7 +2,9 @@ from java.nio import ByteBuffer,ByteOrder
 from java.awt import Rectangle
 from org.das2.event import DragRenderer,LabelDragRenderer
 from java.lang import StringBuilder
-setScriptDescription('Fun binary slice shows interpretations of selected bytes')
+
+setScriptDescription('''Fun binary slice shows interpretations of selected bytes.  Load rank 1 data, then drag a box to see various
+interpretations of the bytes within the box.''')
 
 def getByte( d ):
     d= int(d)
