@@ -13,7 +13,8 @@ introduced in 20220302a/v2022a_3.''')
 
 # The check below doesn't work, unfortunately, because the import of WaypointsMouseModule
 from org.autoplot import APSplash
-vv= APSplash.getVersion()
+#vv= APSplash.getVersion()
+vv = 'v2023a_8'
 if ( vv[0]=='v' ):
     if ( vv<'v2022a_3' ):
         raise Exception('This script only runs with v2022a_3 and newer.')
