@@ -12,11 +12,8 @@ Nout= getParam('Nout',150,'number of outliers' )
 
 # form the data
 randomSeed(0)
-
 data= randn(N) * MAD + Mean
-    
 iout= shuffle(indgen(len(data)))[0:Nout]
-
 data[iout]= randn(len(iout))*3+180 
 
 # plot the data
