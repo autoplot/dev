@@ -14,23 +14,9 @@ Nout= getParam('Nout',150,'number of outliers' )
 randomSeed(0)
 
 data= randn(N) * MAD + Mean
-
-def randomSubset( array, n ):
-   'return a random subset of the population.  Thanks Google Bard'
-   if n>len(array):
-       raise Exception('n cannot be greater than the length of the array: '+n)
-   subset = []
-   used = []
-   for i in range(n):
-     while True:
-       index = random.randint(0, len(array) - 1)
-       if index not in used:
-         used.append(index)
-         subset.append(array[index])
-         break
-   return subset
     
-iout= randomSubset( indgen(N), Nout )
+iout= shuffle(indgen(len(data)))[0:Nout]
+
 data[iout]= randn(len(iout))*3+180 
 
 # plot the data
