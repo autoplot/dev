@@ -1,0 +1,52 @@
+import random
+
+setScriptDescription('''Demonstrate a robust mean, where a loose characterization of the population is used
+to remove points which are obviously not part of the population we would like to characterize.  We 
+calculate the infected mean of the entire population, then consider only the points which are within three sigmas
+(mean average deviations) of the infected mean.''')
+
+N= getParam('N',1000,'size of population')
+Mean= getParam('mean',100,'mean of population', { 'min':50, 'max':150 } )
+MAD= getParam('mad',5,'mean average deviation')
+Nout= getParam('Nout',150,'number of outliers' )
+
+# form the data
+randomSeed(0)
+
+data= randn(N) * MAD + Mean
+
+def randomSubset( array, n ):
+   'return a random subset of the population.  Thanks Google Bard'
+   if n>len(array):
+       raise Exception('n cannot be greater than the length of the array: '+n)
+   subset = []
+   used = []
+   for i in range(n):
+     while True:
+       index = random.randint(0, len(array) - 1)
+       if index not in used:
+         used.append(index)
+         subset.append(array[index])
+         break
+   return subset
+    
+iout= randomSubset( indgen(N), Nout )
+data[iout]= randn(len(iout))*3+180 
+
+# plot the data
+plot( histogram(data,0,200,2), yrange=[0,200], xrange=[0,200], fillColor='lightBlue', color='darkBlue' ) 
+
+# echo inputs
+annotation(0,text='N: %d<br>&mu;: %.1f<br>&sigma;: %.1f' % ( N, Mean, MAD ),anchorPosition='NW' )
+
+# robust mean
+m= mean( data )
+annotation(1,text='simple mean',xrange=[m,m], yrange=[0,200],anchorType='data',fontSize='0.8em',
+           anchorBorderType='rectangle',anchorOffset='1px,1px',anchorPosition='NW')
+
+s= meanAverageDeviation( data )
+r= where( abs( data - m ).lt( s * 3 ) )
+
+m= mean( data[r] )
+annotation(2,text='robust mean',xrange=[m,m], yrange=[0,200],anchorType='data',fontSize='0.8em',
+           anchorBorderType='rectangle',anchorOffset='1px,1px')
