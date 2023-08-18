@@ -8,6 +8,8 @@ from org.das2.graph import Painter
 from org.das2.graph import Arrow
 from org.das2.graph import GraphUtil
 from org.das2.qds import DataSetUtil
+from org.das2.util import ColorUtil
+from java.awt import BasicStroke
 from java.awt.geom import Point2D
 from org.das2.util import GrannyTextRenderer
 
@@ -43,17 +45,17 @@ class FeedbackPainter( Painter ):
                  p1= Point2D.Double( x1, y1 )
                  p2= Point2D.Double( x2, y2 )
                                                    
-                 from org.das2.util import ColorUtil
-                 from java.awt import BasicStroke
-
-                 g.color= ColorUtil.decodeColor('lightBlue')
-                 g.stroke= BasicStroke(3)
-                 Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
-                 
-                 g.color= Color.GRAY
-                 g.stroke= BasicStroke(1)
-                 Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
-
+                 try:
+                     g.color= ColorUtil.decodeColor('lightBlue')
+                     g.stroke= BasicStroke(3)
+                     Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                     
+                     g.color= Color.GRAY
+                     g.stroke= BasicStroke(1)
+                     Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                 except:
+                     print 'oh no' # Bug observed with Java 17 and Java 20 on Masafumi's Mac
+                     
 dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
@@ -64,17 +66,18 @@ class MyDataSetUpdateListener( DataSetUpdateListener ):
 dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
 
 def lineSelected( ev ):
-    rec= bundle( dataset(ev.startX,name='X1'), 
-                 dataset(ev.startY,name='Y1'), 
+    rec= bundle( dataset(ev.startX,name='X1'), # ,format='$Y-$dT$H:$M:$S.$(subsec;places=9)' TODO: Fix this), 
+                 dataset(ev.startY,name='Y1',format='%.6f'), 
                  dataset(ev.finishX,name='X2'), 
-                 dataset(ev.finishY,name='Y2') )
+                 dataset(ev.finishY,name='Y2',format='%.6f') )
     if ( ev.getXRange().width().value()==0 ): return
+    
     if ( Units.hertz.isConvertibleTo(ev.getYRange().width().getUnits()) and 
          Units.seconds.isConvertibleTo(ev.getXRange().width().getUnits()) ):
-        slope= ev.getYRange().width().doubleValue( Units.hertz ) / ev.getXRange().width().doubleValue(Units.seconds) 
+        slope= ev.finishY.subtract(ev.startY).doubleValue( Units.hertz ) / ev.finishX.subtract(ev.startX).doubleValue(Units.seconds)
         slope= dataset( slope, units='s**-2', name='slope' )
     else:
-        slope= ev.getYRange().width().value( ) / ev.getXRange().width().value( ) 
+        slope= ev.finishY.subtract(ev.startY).value() / ev.finishX.subtract(ev.startX).value( )
         slope= dataset( slope, name='slope' )
     #length= dataset(length,name='len')
     rec= bundle( rec, slope )
@@ -91,22 +94,31 @@ vds= dom.plotElements[0].controller.dataSet
 xds= vds.property(QDataSet.DEPEND_0)
 yds= vds.property(QDataSet.DEPEND_1)
 
+
 class MyDragRenderer( AbstractDragRenderer ):
     def renderDrag( self, g, p1, p2 ):
         x = xa.invTransform(p1.x)
         y = ya.invTransform(p1.y)
         i = DataSetUtil.closestIndex( xds, x )
-        j = DataSetUtil.closestIndex( yds, y )
+        if yds.rank()==2:
+            yds1= yds[i]
+        else:
+            yds1=yds
+        j = DataSetUtil.closestIndex( yds1, y )
         x= xds[i]
-        y= yds[j]
+        y= yds1[j]
         p1.x= int(xa.transform(x))
         p1.y= int(ya.transform(y))
         x = xa.invTransform(p2.x)
         y = ya.invTransform(p2.y)
         i = DataSetUtil.closestIndex( xds, x )
-        j = DataSetUtil.closestIndex( yds, y )
+        if yds.rank()==2:
+            yds1= yds[i]
+        else:
+            yds1=yds
+        j = DataSetUtil.closestIndex( yds1, y )
         x= xds[i]
-        y= yds[j]
+        y= yds1[j]
         p2.x= int(xa.transform(x))
         p2.y= int(ya.transform(y))
         Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
