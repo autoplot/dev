@@ -7,6 +7,7 @@ from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
 from org.das2.graph import Arrow
 from org.das2.graph import GraphUtil
+from org.das2.qds import DataSetUtil
 from java.awt.geom import Point2D
 from org.das2.util import GrannyTextRenderer
 
@@ -15,6 +16,9 @@ dpr.setSorted(False)
 dpr.setTimeFormat('$Y-$m-$dT$H:$M:$S.$(subsec;places=6)')
 addTab( 'digitizer', dpr )
 
+if dom.plotElements[0].controller.dataSet==None:
+    raise Exception('Plot some spectral data first')
+    
 class FeedbackPainter( Painter ):
      def paint( self, g ):
          ds= dpr.getDataPoints()
@@ -81,8 +85,30 @@ mm= addMouseModule( dom.plots[0], 'digitize lines', lineSelected );
 
 from org.das2.event import AbstractDragRenderer
 
+xa= dom.plots[0].xaxis.controller.dasAxis
+ya= dom.plots[0].yaxis.controller.dasAxis
+vds= dom.plotElements[0].controller.dataSet
+xds= vds.property(QDataSet.DEPEND_0)
+yds= vds.property(QDataSet.DEPEND_1)
+
 class MyDragRenderer( AbstractDragRenderer ):
     def renderDrag( self, g, p1, p2 ):
+        x = xa.invTransform(p1.x)
+        y = ya.invTransform(p1.y)
+        i = DataSetUtil.closestIndex( xds, x )
+        j = DataSetUtil.closestIndex( yds, y )
+        x= xds[i]
+        y= yds[j]
+        p1.x= int(xa.transform(x))
+        p1.y= int(ya.transform(y))
+        x = xa.invTransform(p2.x)
+        y = ya.invTransform(p2.y)
+        i = DataSetUtil.closestIndex( xds, x )
+        j = DataSetUtil.closestIndex( yds, y )
+        x= xds[i]
+        y= yds[j]
+        p2.x= int(xa.transform(x))
+        p2.y= int(ya.transform(y))
         Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
 
 mm.setDragRenderer( MyDragRenderer() )
