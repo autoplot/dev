@@ -1,7 +1,7 @@
 setScriptTitle('slope digitizer')
 setScriptDescription('''Demo of how a digitizer which measures slope is created.  
 Reset and load the data, then run this script. click and drag to add a directed line 
-segment to the digitizer tab.''')
+segment to the digitizer tab.  This is modified to support microseconds.''')
 
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
@@ -12,7 +12,7 @@ from org.das2.util import GrannyTextRenderer
 
 dpr= DataPointRecorder()
 dpr.setSorted(False)
-
+dpr.setTimeFormat('$Y-$m-$dT$H:$M:$S.$(subsec;places=6)')
 addTab( 'digitizer', dpr )
 
 class FeedbackPainter( Painter ):
