@@ -55,6 +55,14 @@ class FeedbackPainter( Painter ):
                  p22= Point2D.Double( x2-2, y2+2 )
                  try:
                      g.color= ColorUtil.decodeColor('lightBlue')
+                     g.stroke= thickstroke
+                     Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                     g.color= Color.GRAY
+                     g.stroke= thinstroke
+                     Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                 except:
+                     print 'oh no' # Bug observed with Java 17 and Java 20 on Masafumi's Mac
+                     g.color= ColorUtil.decodeColor('lightBlue')
                      #g.stroke= thickstroke
                      Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
                      Arrow.paintArrow( g, p21, p11, 15, Arrow.HeadStyle.DRAFTING )
@@ -63,12 +71,6 @@ class FeedbackPainter( Painter ):
                      g.color= Color.GRAY
                      #g.stroke= thinstroke
                      Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
-                 except:
-                     import traceback
-                     traceback.print_exc()
-                     print Thread.currentThread().getName() 
-                     print 'oh no' # Bug observed with Java 17 and Java 20 on Masafumi's Mac
-                     
 dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
