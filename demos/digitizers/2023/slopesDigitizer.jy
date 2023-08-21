@@ -12,6 +12,7 @@ from org.das2.util import ColorUtil
 from java.awt import BasicStroke
 from java.awt.geom import Point2D
 from org.das2.util import GrannyTextRenderer
+from java.awt import Thread
 
 dpr= DataPointRecorder()
 dpr.setSorted(False)
@@ -54,6 +55,7 @@ class FeedbackPainter( Painter ):
                      g.stroke= BasicStroke(1)
                      Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
                  except:
+                     print Thread.currentThread().getName() 
                      print 'oh no' # Bug observed with Java 17 and Java 20 on Masafumi's Mac
                      
 dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
