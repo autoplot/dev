@@ -1,0 +1,26 @@
+b= getDataSet('vap+das2server:https://jupiter.physics.uiowa.edu/das/server?B&dataset=Juno/WAV/Survey&start_time=2020-07-25T07:02:00.000Z&end_time=2020-07-25T07:03:00.000Z')
+
+y= ytags(b)
+
+setLayoutOverplot(2)
+
+
+
+#plot(xtags(b),1/sqrt(y),b)
+plot(xtags(b),y,b)
+
+x1= dataset('2020-07-25T07:02:32.220Z')
+x2= dataset('2020-07-25T07:02:38.100Z')
+y1= 1/sqrt(dataset('10900 Hz'))
+y2= 1/sqrt(dataset('2470 Hz'))
+
+D= (y2-y1)/(x2-x1)
+D= putProperty(D,QDataSet.UNITS,None)
+
+tt= linspace(x1,x2,100)
+yy= linspace(y1,y2,100)
+
+t= putProperty(D/y1,QDataSet.UNITS,Units.seconds)+ x1
+
+
+plot( 1, tt, 1/yy**2, symbol=None, lineThick=1. )
