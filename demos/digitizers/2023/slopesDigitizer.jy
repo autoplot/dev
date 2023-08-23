@@ -12,11 +12,15 @@ from org.das2.util import ColorUtil
 from java.awt import BasicStroke
 from java.awt.geom import Point2D
 from org.das2.util import GrannyTextRenderer
+from java.lang import Thread
 
 dpr= DataPointRecorder()
 dpr.setSorted(False)
 dpr.setTimeFormat('$Y-$m-$dT$H:$M:$S.$(subsec;places=6)')
 addTab( 'digitizer', dpr )
+
+thinstroke= BasicStroke(1)
+thickstroke= BasicStroke(3)
 
 if dom.plotElements[0].controller.dataSet==None:
     raise Exception('Plot some spectral data first')
@@ -45,17 +49,28 @@ class FeedbackPainter( Painter ):
                  p1= Point2D.Double( x1, y1 )
                  p2= Point2D.Double( x2, y2 )
                                                    
+                 p11= Point2D.Double( x1+2, y1+2 )
+                 p21= Point2D.Double( x2+2, y2+2 )
+                 p12= Point2D.Double( x1-2, y1+2 )
+                 p22= Point2D.Double( x2-2, y2+2 )
                  try:
                      g.color= ColorUtil.decodeColor('lightBlue')
-                     g.stroke= BasicStroke(3)
+                     g.stroke= thickstroke
                      Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
-                     
                      g.color= Color.GRAY
-                     g.stroke= BasicStroke(1)
+                     g.stroke= thinstroke
                      Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
                  except:
                      print 'oh no' # Bug observed with Java 17 and Java 20 on Masafumi's Mac
+                     g.color= ColorUtil.decodeColor('lightBlue')
+                     #g.stroke= thickstroke
+                     Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+                     Arrow.paintArrow( g, p21, p11, 15, Arrow.HeadStyle.DRAFTING )
+                     Arrow.paintArrow( g, p22, p12, 15, Arrow.HeadStyle.DRAFTING )
                      
+                     g.color= Color.GRAY
+                     #g.stroke= thinstroke
+                     Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
 dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
