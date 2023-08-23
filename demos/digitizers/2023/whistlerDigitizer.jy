@@ -19,8 +19,8 @@ dpr.setSorted(False)
 dpr.setTimeFormat('$Y-$m-$dT$H:$M:$S.$(subsec;places=6)')
 addTab( 'digitizer', dpr )
 
-ds= getDataSet('vap+das2server:https://jupiter.physics.uiowa.edu/das/server?B&dataset=Juno/WAV/Survey&start_time=2020-07-25T07:02:00.000Z&end_time=2020-07-25T07:03:00.000Z' )
-plot( ds )
+#ds= getDataSet('vap+das2server:https://jupiter.physics.uiowa.edu/das/server?B&dataset=Juno/WAV/Survey&start_time=2020-07-25T07:02:00.000Z&end_time=2020-07-25T07:03:00.000Z' )
+plot( 'vap+das2server:https://jupiter.physics.uiowa.edu/das/server?B&dataset=Juno/WAV/Survey&start_time=2020-07-25T07:02:00.000Z&end_time=2020-07-25T07:03:00.000Z' )
 
 xa= dom.plots[0].xaxis.controller.dasAxis
 ya= dom.plots[0].yaxis.controller.dasAxis
@@ -46,7 +46,7 @@ class FeedbackPainter( Painter ):
          ds= dpr.getDataPoints()
          if ( ds!=None ):
              for d in ds:
-                 g.color= Color.PINK
+                 g.color= ColorUtil.decodeColor('lightBlue')
                  paintWhistler( g, d[0], d[1], d[2], d[3], 7 ) 
          dsSelect= dpr.getSelectedDataPoints()
          print 'data points ', ds, 'selected data points ', dsSelect
@@ -66,12 +66,24 @@ class MyDataSetUpdateListener( DataSetUpdateListener ):
 dpr.addSelectedDataSetUpdateListener( MyDataSetUpdateListener() )
 
 def lineSelected( ev ):
-    rec= bundle( dataset(ev.startX,name='X1'), # ,format='$Y-$dT$H:$M:$S.$(subsec;places=9)' TODO: Fix this), 
-                 dataset(ev.startY,name='Y1',format='%.6f'), 
-                 dataset(ev.finishX,name='X2'), 
-                 dataset(ev.finishY,name='Y2',format='%.6f') )
+    #yp1= 1/sqrt(y1)
+    #yp2= 1/sqrt(ev.finishY)
+    #D= (yp2-yp1)/(x2-x1)
     if ( ev.getXRange().width().value()==0 ): return
-                      
+    if ev.startX<ev.finishX:
+        x1= ev.startX
+        x2= ev.finishX
+        y1= ev.startY
+        y2= ev.finishY
+    else:
+        x2= ev.startX
+        x1= ev.finishX
+        y2= ev.startY
+        y1= ev.finishY
+    rec= bundle( dataset(x1,name='X1'), # ,format='$Y-$dT$H:$M:$S.$(subsec;places=9)' TODO: Fix this), 
+                 dataset(y1,name='Y1',format='%.6f'), 
+                 dataset(x2,name='X2'), 
+                 dataset(y2,name='Y2',format='%.6f') )                      
     dpr.addDataPoint( rec )
 
 mm= addMouseModule( dom.plots[0], 'whistler digitizer', lineSelected );
