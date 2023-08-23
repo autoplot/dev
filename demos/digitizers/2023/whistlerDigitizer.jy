@@ -1,3 +1,7 @@
+setScriptTitle('whistler digitizer')
+setScriptDescription('''Demo of how a digitizer which assumes a whistler 
+model can be used to digitize data.''')
+
 from org.das2.components import DataPointRecorder
 from org.das2.graph import Painter
 from org.das2.graph import Arrow
@@ -6,7 +10,7 @@ from org.das2.graph import SeriesRenderer
 from org.das2.qds import DataSetUtil
 from org.das2.util import ColorUtil
 from java.awt import BasicStroke
-from java.awt.geom import Point2D
+from java.awt.geom import Point2D,Line2D
 from org.das2.util import GrannyTextRenderer
 from java.lang import Thread
 
@@ -15,64 +19,43 @@ dpr.setSorted(False)
 dpr.setTimeFormat('$Y-$m-$dT$H:$M:$S.$(subsec;places=6)')
 addTab( 'digitizer', dpr )
 
-plot( 'vap+das2server:https://jupiter.physics.uiowa.edu/das/server?B&dataset=Juno/WAV/Survey&start_time=2020-07-25T07:02:00.000Z&end_time=2020-07-25T07:03:00.000Z') 
+ds= getDataSet('vap+das2server:https://jupiter.physics.uiowa.edu/das/server?B&dataset=Juno/WAV/Survey&start_time=2020-07-25T07:02:00.000Z&end_time=2020-07-25T07:03:00.000Z' )
+plot( ds )
 
 xa= dom.plots[0].xaxis.controller.dasAxis
 ya= dom.plots[0].yaxis.controller.dasAxis
    
 def paintWhistler( g, x1, y1, x2, y2, size ):
-    print x1, y1, x2, y2
-    y1= 1/sqrt(y1)
-    y2= 1/sqrt(y2)
-    D= (y2-y1)/(x2-x1)
+    'paint the whistler at the data coordinates'
+    yp1= 1/sqrt(y1)
+    yp2= 1/sqrt(y2)
+    D= (yp2-yp1)/(x2-x1)
     tt= linspace(x1,x2,100)
-    yy= linspace(y1,y2,100)
+    yy= linspace(yp1,yp2,100)
+
     rend= SeriesRenderer()
+    rend.setLineWidth(size)
+    rend.setColor(g.color)
     rend.setParent(dom.plots[0].controller.dasPlot)
     rend.setDataSet(dataset(tt,1/yy**2))
     rend.updatePlotImage( xa, ya, None ) 
-    rend.render( g, xa, ya )
-    print 'done'
+    rend.render( g.create(), xa, ya )
     
 class FeedbackPainter( Painter ):
      def paint( self, g ):
          ds= dpr.getDataPoints()
          if ( ds!=None ):
-             i=1
              for d in ds:
-                 x1= dom.plots[0].controller.dasPlot.getXAxis().transform( d[0] )
-                 y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
-                 x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
-                 y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
-                 p1= Point2D.Double( x1, y1 )
-                 p2= Point2D.Double( x2, y2 )
-                 g.color= Color.GRAY
-                 paintWhistler( g, x1, y1, x2, y2, 15 ) 
-         ds= dpr.getSelectedDataPoints()
-         if ( ds!=None ): 
-             for d in ds:
-                 x1= dom.plots[0].controller.dasPlot.getXAxis().transform( d[0] )
-                 y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
-                 x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
-                 y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
-                 p1= Point2D.Double( x1, y1 )
-                 p2= Point2D.Double( x2, y2 )
-                                                   
-                 p11= Point2D.Double( x1+2, y1+2 )
-                 p21= Point2D.Double( x2+2, y2+2 )
-                 p12= Point2D.Double( x1-2, y1+2 )
-                 p22= Point2D.Double( x2-2, y2+2 )
-                 try:
-                     g.color= ColorUtil.decodeColor('lightBlue')
-                     paintWhistler( g, x1, y1, x2, y2, 15 )
-                 except:
-                     import traceback
-                     traceback.print_exc()
-                     print 'oh no' # Bug observed with Java 17 and Java 20 on Masafumi's Mac
-                     g.color= ColorUtil.decodeColor('lightBlue')
-                     paintWhistler( g, x1, y1, x2, y2, 15 )
-                     g.color= Color.GRAY
-                     paintWhistler( g, x1, y1, x2, y2, 15 )
+                 g.color= Color.PINK
+                 paintWhistler( g, d[0], d[1], d[2], d[3], 7 ) 
+         dsSelect= dpr.getSelectedDataPoints()
+         print 'data points ', ds, 'selected data points ', dsSelect
+         if ( dsSelect!=None ): 
+             for d in dsSelect:
+                 g.color= ColorUtil.decodeColor('white')
+                 paintWhistler( g, d[0], d[1], d[2], d[3], 15 )
+                 g.color= ColorUtil.decodeColor('lightBlue')
+                 paintWhistler( g, d[0], d[1], d[2], d[3], 7 )
 dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )
 
 # we need to listen for updates from the DataPointRecorder, when the selection changes.
@@ -105,17 +88,7 @@ class MyDragRenderer( AbstractDragRenderer ):
         y1 = ya.invTransform(p1.y)
         x2 = xa.invTransform(p2.x)
         y2 = ya.invTransform(p2.y)
-        
-        y1= 1/sqrt(y1)
-        y2= 1/sqrt(y2)
-        D= (y2-y1)/(x2-x1)
-        D= putProperty(D,QDataSet.UNITS,None)
-        tt= linspace(x1,x2,100)
-        yy= linspace(y1,y2,100)
-        rend= SeriesRenderer()
-        rend.setParent(dom.plots[0].controller.dasPlot)
-        rend.setDataSet(dataset(tt,1/yy**2))
-        rend.updatePlotImage( xa, ya, None ) 
-        rend.render( g, xa, ya )
+        g.color= Color.GRAY
+        paintWhistler(g,x1,y1,x2,y2,5)
 
 mm.setDragRenderer( MyDragRenderer() )
