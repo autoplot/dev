@@ -5,6 +5,7 @@ t= linspace('2023-08-24T00:00','2023-08-24T01:39',100)
 
 ds= link( t, ds )
 
+# note timeFormat is ignored.  TODO: investigate this.
 formatDataSet( ds,'/tmp/ap/csv_rank2_spec.csv?format=%.2f&timeFormat=$Y-$jT$H:$MZ' )
 
 ds= randn(100)
