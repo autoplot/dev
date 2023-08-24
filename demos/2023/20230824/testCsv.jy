@@ -1,0 +1,12 @@
+setScriptDescription('Verify export to csv.  See https://sourceforge.net/p/autoplot/bugs/2539/')
+
+ds= randn(100,6)
+t= linspace('2023-08-24T00:00','2023-08-24T01:39',100)
+
+ds= link( t, ds )
+
+formatDataSet( ds,'/tmp/ap/csv_rank2_spec.csv?format=%.2f&timeFormat=$Y-$jT$H:$MZ' )
+
+ds= randn(100)
+ds= link( t, ds )
+formatDataSet( ds,'/tmp/ap/csv_rank1_series.csv?format=%.2f&timeFormat=$Y-$jT$H:$MZ' )
