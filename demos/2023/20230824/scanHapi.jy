@@ -1,0 +1,8 @@
+setScriptDescription('''Scan a HAPI server for all info responses''')
+
+zz= getCompletions( 'vap+hapi:http://localhost:8080/hapi?id=' )
+for z in zz:
+    print z
+    params= getCompletions( z+'&parameters=' )
+    print z, len(params)
+    
