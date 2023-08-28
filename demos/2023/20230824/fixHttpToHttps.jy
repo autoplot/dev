@@ -1,0 +1,18 @@
+from org.autoplot.datasource import URISplit
+setScriptDescription('''Change all http references to https within a .vap file.''')
+
+resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/autoplot.vap', 'example file to load' )
+dom= loadVap( resourceURI )
+for dsf in dom.dataSourceFilters:
+    newuri= dsf.uri.replace('http:','https:')
+    dsf.uri= newuri
+
+for p in dom.plots:
+    p.ticksURI= p.ticksURI.replace('http:','https:')
+    
+if ( resourceURI.startswith('http') ):
+    split= URISplit.parse(resourceURI)
+    n= split.file[len(split.path):]
+    saveVap( dom, '/tmp/ap/'+n+'.https.vap' )
+else:
+    saveVap( dom, resourceURI +'.https.vap' )
