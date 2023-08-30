@@ -2,21 +2,26 @@ setScriptDescription("experiment with thing that gets references from emails")
 
 from java.io import FileOutputStream,File,InputStream
 from java.awt import Toolkit
-cc= dom.canvases[0].controller.dasCanvas
-import jarray
+import java.awt.dnd.DropTarget
+import java.awt.dnd.DropTargetDropEvent
+import java.awt.dnd.DropTargetListener
 
-clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
+class DropTargetExample(DropTargetListener):
 
-ff= clipboard.getAvailableDataFlavors()
-for f in ff:
-    print f
-    insclass= f.getDefaultRepresentationClass() 
-    ins= clipboard.getData(f)
+    def __init__(self, component):
+        self.component = component
+        self.dropTarget = DropTarget(component, self)
 
-    m= f.getMimeType()
-    i= m.find(';')
-    if i>-1:
-        m=m[0:i]
-    m= safeName( m )
+    def dragEnter(self, event):
+        event.acceptDrag(java.awt.dnd.DnDConstants.ACTION_COPY)
 
-    print m, ins
+    def dragOver(self, event):
+        event.acceptDrag(java.awt.dnd.DnDConstants.ACTION_COPY)
+
+    def drop(self, event):
+        for droppedFile in event.getTransferable().getTransferDataFlavors():
+            print("Dropped file:", droppedFile.getMimeType())
+
+component = javax.swing.JLabel("Drop files here")
+
+DropTargetExample(component)
