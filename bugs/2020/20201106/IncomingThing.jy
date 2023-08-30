@@ -1,1 +1,22 @@
 setScriptDescription("experiment with thing that gets references from emails")
+
+from java.io import FileOutputStream,File,InputStream
+from java.awt import Toolkit
+cc= dom.canvases[0].controller.dasCanvas
+import jarray
+
+clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
+
+ff= clipboard.getAvailableDataFlavors()
+for f in ff:
+    print f
+    insclass= f.getDefaultRepresentationClass() 
+    ins= clipboard.getData(f)
+
+    m= f.getMimeType()
+    i= m.find(';')
+    if i>-1:
+        m=m[0:i]
+    m= safeName( m )
+
+    print m, ins
