@@ -1,10 +1,12 @@
+from javax.swing import JLabel,JTextArea
 setScriptDescription("experiment with thing that gets references from emails")
 
 from java.io import FileOutputStream,File,InputStream
 from java.awt import Toolkit
-import java.awt.dnd.DropTarget
-import java.awt.dnd.DropTargetDropEvent
-import java.awt.dnd.DropTargetListener
+from java.awt.dnd import DropTarget
+from java.awt.dnd import DropTargetDropEvent
+from java.awt.dnd import DropTargetListener
+from java.awt.dnd import DnDConstants
 
 class DropTargetExample(DropTargetListener):
 
@@ -12,16 +14,21 @@ class DropTargetExample(DropTargetListener):
         self.component = component
         self.dropTarget = DropTarget(component, self)
 
+    def dragExit(self, event):
+        print 'bye'
+        
     def dragEnter(self, event):
-        event.acceptDrag(java.awt.dnd.DnDConstants.ACTION_COPY)
+        event.acceptDrag(DnDConstants.ACTION_COPY)
 
     def dragOver(self, event):
-        event.acceptDrag(java.awt.dnd.DnDConstants.ACTION_COPY)
+        event.acceptDrag(DnDConstants.ACTION_COPY)
 
     def drop(self, event):
         for droppedFile in event.getTransferable().getTransferDataFlavors():
             print("Dropped file:", droppedFile.getMimeType())
 
-component = javax.swing.JLabel("Drop files here")
+component = JTextArea("Drop files here")
 
 DropTargetExample(component)
+
+getApplication().getTabs().addTab('droptest',component)
