@@ -1,3 +1,5 @@
+setScriptDescription('We explore a case where our test for outliers fails.')
+
 data= getDataSet(PWD + 'test_peaks.cdf?Variable_0')
 xx=xtags(data)
 
