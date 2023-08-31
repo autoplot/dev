@@ -1,0 +1,43 @@
+data= getDataSet(PWD + 'test_peaks.cdf?Variable_0')
+xx=xtags(data)
+
+stdevs = 5
+window = 17
+
+plot(0,data,ylog=False,yrange='0 to 1e-9')
+#clean data filters out outliers
+#c is cleaned data
+#c = cleanData(data, stdev, window)
+#make sure you are woking with slice
+
+load(PWD + 'layout.vap')
+
+plot( data )
+
+mean = smooth( data,window )
+plot( 1, mean, ytitle='smooth', title='' ) 
+
+mads = smooth( abs( subtract( data, mean ) ), window )
+plot( 2, mads, ytitle='mads', title='' )
+
+allowedDevs = multiply(mads, stdevs)
+
+plot( 3, allowedDevs, ytitle=('%d * mads' % stdevs) )
+actualDeviations = abs( subtract( data, mean ) )
+
+plot( 4, actualDeviations, ytitle='actual<br>deviation<br>(red=where)' )
+
+r = where( actualDeviations.gt(allowedDevs) )
+plot( 5, actualDeviations[r], xrange=dom.plots[1].xaxis.range )
+
+#setLayoutOverplot(2)
+
+#plot( 0, xx, data )
+#plot( 1, xx[r], data[r], color= 'red' )
+
+
+# 5 5 6 4 5   # original data
+#     5       # mean
+# 0 0 1 1 0   # deviation
+#    0.4
+    
