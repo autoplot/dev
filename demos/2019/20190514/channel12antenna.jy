@@ -1,0 +1,21 @@
+# what is the twin-lead dipole optimized for channel 12?
+# See http://users.wfu.edu/matthews/misc/dipole.html
+# from jfaden.net:/home/jbf/ct/fun/antenna
+
+channel= getParam( 'channel', 12, 'channel number (12=pbs in Iowa City)', [7,12] )
+
+if ( channel<5 ):
+    freq= ( 6 * channel ) + 45
+elif ( channel<7 ):
+    freq= ( 6*channel ) + 49
+elif( channel<14 ):
+    freq= (6*channel ) +135
+else:
+    freq= ( 6*channel ) +389 
+    
+wavelength= 0.95 * 300/freq
+
+print 'frequency: ', freq
+print 'wavelength: ', wavelength, 'meters'
+print 'the antenna dipole loop length should be ' + str(wavelength/2) + ' meters
+ or '+ str( wavelength/2 * 100 / 2.54 ) + ' inches'

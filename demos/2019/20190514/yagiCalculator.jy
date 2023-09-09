@@ -1,4 +1,4 @@
-# created from http://www.rfwireless-world.com/calculators/3-element-Yagi-Antenna-Calculator.html
+setScriptDescription('''Created from http://www.rfwireless-world.com/calculators/3-element-Yagi-Antenna-Calculator.html''')
 
 Fr= getParam( 'frequency', 200, 'Operating Frequency in MHz'  )
 me= getParam( 'me', 'metric', 'Metric or English Units', [ 'English','metric'] )
