@@ -1,0 +1,24 @@
+setScriptDescription('''Demonstrate that append can be used to create a set of events''')
+
+from org.das2.util import ColorUtil
+evts1= None
+ev1= createEvent('2020-01-01',ColorUtil.GOLDENROD.getRGB(),'sc1_mode1')
+evts1= append( evts1, ev1 )
+ev1= createEvent('2020-01-02',ColorUtil.GOLDENROD.getRGB(),'sc1_mode1')
+evts1= append( evts1, ev1 )
+ev1= createEvent('2020-01-03',ColorUtil.GOLD.getRGB(),'sc1_mode2')
+evts1= append( evts1, ev1 )
+print ev1
+
+evts2= None
+ev2= createEvent('2020-01-02',ColorUtil.CORNFLOWER_BLUE.getRGB(),'sc2_mode1')
+evts2= append( evts2, ev2 )
+ev2= createEvent('2020-01-03',ColorUtil.LIGHT_SKY_BLUE.getRGB(),'sc2_mode2')
+evts2= append( evts2, ev2 )
+ev2= createEvent('2020-01-04',ColorUtil.CORNFLOWER_BLUE.getRGB(),'sc2_mode1')
+evts2= append( evts2, ev2 )
+print ev2
+
+plot( 0, evts1 )
+plot( 1, evts2 )
+plot( 2, append( evts1, evts2 ) )
