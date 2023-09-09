@@ -1,0 +1,16 @@
+setScriptDescription('''Demonstrate applyIndex, which can subset or resort
+data along one dimension.  Image credit https://thatartteacher.com/2019/05/09/daily-doodle-easiest-hydrangea-painting-ever/''')
+
+image= getDataSet( '/home/jbf/ct/autoplot/screenshots/2023-09-09T07-52-28.png' )
+plot( image )
+ann= annotation( 0, text=str(image), background=None, fontSize='0.8em' )
+ann.controller.dasAnnotation.glow=True
+
+# demo applyIndex
+rr= append( indgen(100), indgen(150)+200 )
+image2= applyIndex( image,1,rr)
+
+p,pe= plot( 1, image2 )
+dom.plots[1].yaxis.reference='100'
+ann= annotation( 1, text=str(image2), background=None, fontSize='0.8em', plotId=p )
+ann.controller.dasAnnotation.glow=True
