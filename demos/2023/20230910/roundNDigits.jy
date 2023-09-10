@@ -1,3 +1,5 @@
+setScriptDescription('''Demo round N digits functions''')
+
 print '----'
 number= 1.2345678
 from org.das2.util import DasMath
