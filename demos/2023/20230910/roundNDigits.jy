@@ -1,0 +1,18 @@
+print '----'
+number= 1.2345678
+from org.das2.util import DasMath
+print 'number=', number
+print 'DasMath.roundNFractionalDigits(number,3)==', DasMath.roundNFractionalDigits(number,3)
+print 'DasMath.roundNSignificantDigits(number,3)=', DasMath.roundNSignificantDigits(number,3)
+
+print '----'
+number= 1.2345678e4
+print 'number=', number
+print 'DasMath.roundNFractionalDigits(number,3)=', DasMath.roundNFractionalDigits(number,3)
+print 'DasMath.roundNSignificantDigits(number,3)=', DasMath.roundNSignificantDigits(number,3)
+
+print '----'
+number= 1.2345678e-4
+print 'number=', number
+print 'DasMath.roundNFractionalDigits(number,3)=', DasMath.roundNFractionalDigits(number,3)
+print 'DasMath.roundNSignificantDigits(number,3)=', DasMath.roundNSignificantDigits(number,3)
