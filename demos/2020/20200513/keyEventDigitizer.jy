@@ -1,5 +1,5 @@
 setScriptTitle('Demo Keypress Mouse Module')
-setScriptDescription('''This shows how a mouse module can accept key presses.  This is way to hard, 
+setScriptDescription('''This shows how a mouse module can accept key presses.  This is way too hard, 
 but it can be done''')
 
 p= dom.plots[0].controller.dasPlot
