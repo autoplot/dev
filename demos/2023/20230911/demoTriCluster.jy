@@ -1,0 +1,40 @@
+from java.lang.Double import NaN
+
+setScriptDescription('''Demonstrate Triangulation Clustering to find groups of points''')
+
+xlimit= getParam( 'xlimit', 1.5 )
+ylimit= getParam( 'ylimit', 1.5 )
+
+randomSeed(0)
+
+xx= randn(50)
+yy= randn(50)
+xx= append( xx, randn(50)+5 )
+yy= append( yy, randn(50)+5 )
+
+plot( xx,yy, renderType='scatter' )
+
+tris= triangulate(xx,yy)
+plot( 1, tris )
+
+# find the triangles within the X and Y limits
+smallestx= abs( xx[tris[:,2]]-xx[tris[:,0]] )
+smallestx= greaterOf( smallestx, abs( xx[tris[:,0]]-xx[tris[:,1]] ) )
+smallestx= greaterOf( smallestx, abs( xx[tris[:,1]]-xx[tris[:,2]] ) )
+
+smallesty= abs( yy[tris[:,2]]-yy[tris[:,0]] )
+smallesty= greaterOf( smallesty, abs( yy[tris[:,0]]-yy[tris[:,1]] ) )
+smallesty= greaterOf( smallesty, abs( yy[tris[:,1]]-yy[tris[:,2]] ) )
+
+r = where( smallestx.lt(xlimit) .and( smallesty.lt(ylimit) ) )
+tris= tris[r]
+
+dsb= DataSetBuilder(2,100,2)
+for t in tris:
+    dsb.nextRecord([xx[t[0]],yy[t[0]]])
+    dsb.nextRecord([xx[t[1]],yy[t[1]]])
+    dsb.nextRecord([xx[t[2]],yy[t[2]]])
+    dsb.nextRecord([xx[t[0]],yy[t[0]]])
+    dsb.nextRecord([NaN,NaN])
+
+plot( 2, dsb.getDataSet(), renderType='series' )
