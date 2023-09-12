@@ -1,0 +1,14 @@
+tr= getParam( 'timerange', '2015', 'timerange to load' )
+from org.das2.qds.util import Reduction
+mms1_edi_e_gsm_srvy_l2__= getDataSet('https://lasp.colorado.edu/mms/sdc/public/about/browse/mms1/edi/srvy/l2/efield/$Y/$m/mms1_edi_srvy_l2_efield_$Y$m$d_v$(v,sep).cdf?mms1_edi_e_gsm_srvy_l2',tr)
+ds= Reduction.reducex(mms1_edi_e_gsm_srvy_l2__,dataset('60min'))
+
+plot( ds )
+
+tp = TimeParser.create('$Y-$m-$dT$H:00')
+
+for t in xtags(ds):
+    print tp.format(datum(t)), '1'
+    
+
+
