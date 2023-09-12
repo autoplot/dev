@@ -1,24 +1,29 @@
-from java.lang.Double import NaN
 
 setScriptDescription('''Demonstrate Triangulation Clustering to find groups of points.
 This version requires only one side be short.''')
 
 xlimit= getParam( 'xlimit', 1.5 )
 ylimit= getParam( 'ylimit', 1.5 )
+useCase= getParam( 'useCase', 1, 'use case', [ 1,2 ] )
+
 
 randomSeed(0)
 
-xx= randn(50)
-yy= randn(50)
-xx= append( xx, randn(50)+5 )
-yy= append( yy, randn(50)+5 )
-
-xrange= rescaleRange( extent(xx), -0.1, 1.1 )
-yrange= rescaleRange( extent(yy), -0.1, 1.1 )
+if useCase==1:
+    xx= randn(50)
+    yy= randn(50)
+    xx= append( xx, randn(50)+5 )
+    yy= append( yy, randn(50)+5 )
+elif useCase==2:
+    xx= dataset( [ 1,2,2,3,3,4 ] )
+    yy= dataset( [ 1,1,2,2,3,3 ] )
+    
+xr= rescaleRange( extent(xx), -0.1, 1.1 )
+yr= rescaleRange( extent(yy), -0.1, 1.1 )
 
 reset()
 
-plot( xx,yy, renderType='scatter', symbolSize=10, xrange=xrange, yrange=yrange,  isotropic=True )
+plot( xx,yy, renderType='scatter', symbolSize=10, xrange=xr, yrange=yr )
 
 tris= triangulate(xx,yy)
 
@@ -45,7 +50,12 @@ for t in tris:
                 whichGroup[i0]= nextGroupId
                 whichGroup[i1]= nextGroupId
 
-r= where( whichGroup.gt(0) )
-plot( 1, xx[r], yy[r], whichGroup[r], symbolSize=10, xrange=xrange, yrange=yrange, isotropic=True,
-    colorTable='apl_color_quantization' )
+u= uniqValues( whichGroup, None )
+for i in xrange(len(u)):
+    r= where( whichGroup.eq(u[i]) )
+    whichGroup[r]=i
+
+r= where( whichGroup.gt(-1) )
+
+plot( 1, xx[r], yy[r], whichGroup[r], symbolSize=10, xrange=xr, yrange=yr, colorTable='apl_color_quantization' )
     
