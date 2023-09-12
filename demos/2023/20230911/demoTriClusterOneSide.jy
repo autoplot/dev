@@ -13,9 +13,12 @@ yy= randn(50)
 xx= append( xx, randn(50)+5 )
 yy= append( yy, randn(50)+5 )
 
+xrange= rescaleRange( extent(xx), -0.1, 1.1 )
+yrange= rescaleRange( extent(yy), -0.1, 1.1 )
+
 reset()
 
-plot( xx,yy, renderType='scatter' )
+plot( xx,yy, renderType='scatter', symbolSize=10, xrange=xrange, yrange=yrange,  isotropic=True )
 
 tris= triangulate(xx,yy)
 
@@ -42,4 +45,7 @@ for t in tris:
                 whichGroup[i0]= nextGroupId
                 whichGroup[i1]= nextGroupId
 
-plot( 1, xx, yy, whichGroup )
+r= where( whichGroup.gt(0) )
+plot( 1, xx[r], yy[r], whichGroup[r], symbolSize=10, xrange=xrange, yrange=yrange, isotropic=True,
+    colorTable='apl_color_quantization' )
+    
