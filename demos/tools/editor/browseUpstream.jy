@@ -46,7 +46,7 @@ if ( matcher.matches() ) :
     localRoot= matcher.group(1)
     branch= matcher.group(2) 
 else:
-    raise Exception('expected match for "(.+)  .+ \[(.+)\]", got '+localRemote)
+    raise Exception('expected match for "(.+)  .+ \[(.+)\]", got '+localRoot)
 
 localRoot= File(localRoot).getCanonicalPath()
 cwd= File(cwd.path).getCanonicalPath()
