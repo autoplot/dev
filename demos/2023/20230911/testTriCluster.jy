@@ -1,0 +1,32 @@
+from org.das2.qds import DataSetUtil,DataSetOps
+f= getFile(PWD+'triCluster.jy')
+execfile(str(f))
+
+ds= getDataSet( PWD + '20230911.dat' )
+xx= xtags( ds )
+yy= ds
+xx= xx + dataset( randu(len(xx)), units=Units.milliseconds )
+yy= yy + randu(len(xx)) * 0.01
+xlimit= datum('16s')
+ylimit= datum(0.1)
+
+cc= triCluster( xx, yy, xlimit, ylimit )
+
+print cc, dir(cc)
+
+lens= zeros(cc.length())
+
+for i in xrange(cc.length()):
+    lens[i]= cc.slice(i).length()
+
+i=0
+r= where( lens.gt(2) )
+for ir in r:
+    idx= cc.slice(int(ir)) # quirk where cc isn't properly mapped to a Python Array
+    for j in idx:
+        print j,
+    print ''
+    plot( i, xx[idx], yy[idx] )
+    i=i+1
+
+        
