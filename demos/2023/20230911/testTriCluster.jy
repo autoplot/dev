@@ -1,4 +1,7 @@
 from org.das2.qds import DataSetUtil,DataSetOps
+
+setScriptDescription('''Demo use of triCluster command''')
+
 f= getFile(PWD+'triCluster.jy')
 execfile(str(f))
 
