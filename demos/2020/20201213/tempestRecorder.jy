@@ -132,8 +132,8 @@ while True:
         elif typ=='obs_st':
             recordObsSt( json )
             pass
-    except:
-        logger.info('exception')
+    except Exception, ex:
+        logger.info('exception '+ex)
         
 if socket!=None:
     socket.close()
