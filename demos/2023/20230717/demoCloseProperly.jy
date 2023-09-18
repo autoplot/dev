@@ -1,0 +1,4 @@
+from org.autoplot import AppManager
+AppManager.getInstance().allowExit= False
+
+showMessageDialog('Now close the application. File->Quit, or window close')
