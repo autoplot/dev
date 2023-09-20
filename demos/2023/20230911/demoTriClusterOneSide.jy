@@ -1,10 +1,12 @@
+from org.das2.util import ColorUtil
+from java.lang.Double import NaN
 
 setScriptDescription('''Demonstrate Triangulation Clustering to find groups of points.
 This version requires only one side be short.''')
 
 xlimit= getParam( 'xlimit', 1.5 )
 ylimit= getParam( 'ylimit', 1.5 )
-useCase= getParam( 'useCase', 1, 'use case', [ 1,2 ] )
+useCase= getParam( 'useCase', 3, 'use case', [ 1,2 ] )
 
 
 randomSeed(0)
@@ -17,15 +19,36 @@ if useCase==1:
 elif useCase==2:
     xx= dataset( [ 1,2,2,3,3,4 ] )
     yy= dataset( [ 1,1,2,2,3,3 ] )
-    
+elif useCase==3:
+    ds= getDataSet( PWD + '20230911.dat' )
+    xx= xtags( ds )
+    yy= ds
+    xx= xx + dataset( randu(len(xx)), units=Units.milliseconds )
+    yy= yy + randu(len(xx)) * 0.01
+    xlimit= datum('16s')
+    ylimit= 0.1
+   
 xr= rescaleRange( extent(xx), -0.1, 1.1 )
 yr= rescaleRange( extent(yy), -0.1, 1.1 )
 
 reset()
 
-plot( xx,yy, renderType='scatter', symbolSize=10, xrange=xr, yrange=yr )
+p,pe= plot( xx,yy, renderType='scatter', symbolSize=10, xrange=xr, yrange=yr )
 
+xxtri= (xx-xx[0])/'10s'
+yytri= yy
 tris= triangulate(xx,yy)
+
+dsb= DataSetBuilder(2,100,2)
+for t in tris:
+    dsb.nextRecord([xx[t[0]],yy[t[0]]])
+    dsb.nextRecord([xx[t[1]],yy[t[1]]])
+    dsb.nextRecord([xx[t[2]],yy[t[2]]])
+    dsb.nextRecord([xx[t[0]],yy[t[0]]])
+    dsb.nextRecord([NaN,NaN])
+
+plot( 1, dsb.getDataSet(), renderType='series', color=ColorUtil.GRAY, lineThick=0.5,
+      overplotOf=p )
 
 whichGroup= replicate( -1, len(xx) )
 nextGroupId= 0
@@ -57,5 +80,5 @@ for i in xrange(len(u)):
 
 r= where( whichGroup.gt(-1) )
 
-plot( 1, xx[r], yy[r], whichGroup[r], symbolSize=10, xrange=xr, yrange=yr, colorTable='apl_color_quantization' )
+plot( 2, xx[r], yy[r], whichGroup[r], symbolSize=10, xrange=xr, yrange=yr, colorTable='apl_color_quantization' )
     
