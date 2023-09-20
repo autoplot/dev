@@ -3,7 +3,10 @@ from org.das2.util import ColorUtil
 from java.lang.Double import NaN
 
 def triCluster( xx, yy, xlimit, ylimit ):
-
+    '''triCluster tags scatter data xx and yy and identifies groups of points which are within xlimit and ylimit 
+of one another.  Delaunay triangulation is used to create the tessalation, and then the routine loops over the
+triangles to build groups of adjacent points.
+'''
     xr= datumRange(rescaleRange( extent(xx), -0.1, 1.1 ))
     yr= datumRange(rescaleRange( extent(yy), -0.1, 1.1 ))
     
