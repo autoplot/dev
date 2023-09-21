@@ -1,3 +1,6 @@
+setScriptDescription('''Autoplot scripts can import routines with the getFile and execfile 
+commands.  This allows a script on one site to use a Jython script from another site.''')
+
 ff= getFile('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/resources/orbits/orbits.jy')
 execfile(str(ff))
 
