@@ -1,0 +1,4 @@
+ff= getFile('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/resources/orbits/orbits.jy')
+execfile(str(ff))
+
+print getAllOrbits()
