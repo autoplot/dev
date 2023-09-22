@@ -1,0 +1,23 @@
+from java.awt import BasicStroke
+from org.das2.util import GrannyTextRenderer,ColorUtil
+from org.das2.graph import Painter,GraphUtil
+
+class GraphPaperPainter(Painter):
+    def paint( self, g ):
+        g.color= ColorUtil.PLUM
+        from java.awt import Toolkit
+        size= Toolkit.getDefaultToolkit().getScreenSize();
+        gtr= GrannyTextRenderer()
+        gtr.setString(g,"%d&times;%d %d&times;%d" % ( size.width, size.height, dom.canvases[0].width, dom.canvases[0].height ) )
+        gtr.draw(g,0,12)
+        g.stroke= BasicStroke(0.2) 
+        for i in xrange(0,size.width,100):
+            g.drawLine(i,0,i,size.height)
+        for i in xrange(0,size.height,100):
+            g.drawLine(0,i,size.width,i)
+        now=str(TimeUtil.now())
+        gtr= GrannyTextRenderer()
+        gtr.setString(g,now)
+        gtr.draw(g,dom.canvases[0].width-gtr.width,12)
+        
+dom.canvases[0].controller.dasCanvas.addTopDecorator(GraphPaperPainter())
