@@ -1,0 +1,31 @@
+from java.lang.Double import NaN
+
+setScriptDescription('''Demonstrate Triangulation Clustering to find groups of points''')
+
+xlimit= getParam( 'xlimit', 1.5 )
+ylimit= getParam( 'ylimit', 1.5 )
+
+f= getFile(PWD+'triCluster.jy')
+execfile(str(f))
+
+randomSeed(0)
+
+xx= randn(10)
+yy= randn(10)
+xx= append( xx, randn(14)+5 )
+yy= append( yy, randn(14)+5 )
+
+s= shuffle(findgen(len(xx)))
+xx= xx[s]
+yy=yy[s]
+
+reset()
+p,pe= plot( xx,yy, renderType='scatter', symbolSize=10 )
+plot( 1, xx, yy, findgen(len(xx)), renderType='digital>align=NE&format=%d', overplotOf=p )
+
+tt= triCluster( xx, yy, xlimit, ylimit )
+
+p,_=plot( 2, tt, renderType='digital>format=%d' )
+
+annotation(0,text='Bug Here', pointAt='2.49,12.58', plotId=p, 
+                      anchorType='data', anchorPosition='SW' )

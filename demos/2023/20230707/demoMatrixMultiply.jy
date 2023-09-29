@@ -1,0 +1,36 @@
+from org.das2.qds.examples import Schemes
+print matrixParse('[[1,0,0],[0,1,0],[ 0 ,  0,1.0]]')  # does it parse okay
+a= matrixParse('[[1,0,0],[0,1,0],[0,1,1]]')
+b= dataset([3,4,5])
+r= matrixMultiply( a, b )
+print r, r[0], r[1], r[2]
+
+# https://www.math.utah.edu/~wortman/1050-text-3b3m.pdf
+a= matrixParse('[[2,7,3],[1,5,8],[0,4,1]]')
+b= dataset([1,0,4])
+r= matrixMultiply( a, b )
+print r, r[0], r[1], r[2], '***'
+
+print matrixMultiply( a, Schemes.vectorTimeSeries() )
+
+angle= linspace( 0, TAU, 202 )
+mm= zeros( 202, 3, 3 )
+mm[:,0,0]= cos(angle)
+mm[:,0,1]= sin(angle)
+mm[:,0,2]= 0
+mm[:,1,0]= 0
+mm[:,1,1]= 1
+mm[:,1,2]= 0
+mm[:,2,0]= 0
+mm[:,2,1]= 0
+mm[:,2,2]= 1
+
+vv= dataset( zeros( 202, 3 ), units=Units.cmps )
+vv[:,0]= 1
+vv[:,1]= 0
+vv[:,2]= 0
+plot( matrixMultiply( mm, vv ) )
+
+mm= matrixFromEuler("z",datum('90 deg') )
+vv= matrixMultiply( mm, dataset([1,0,0]) )
+print vv[0], vv[1], vv[2]

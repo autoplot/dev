@@ -11,7 +11,7 @@ resourceURI= getParam( 'resourceURI', PWD + 'example.txt', 'ASCII file containin
 
 import sys
 addToSearchPath( sys.path,
-     'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar',
+     'https://cottagesystems.com/hapi/uri_templates/dist/UriTemplatesJava.jar',
      monitor )
      
 from org.hapiserver import URITemplate

@@ -1,0 +1,11 @@
+setScriptDescription('''Autoplot scripts can import routines with the getFile and execfile 
+commands.  This allows a script on one site to use a Jython script from another site.''')
+
+# it might also be nice to have a one-line autoImport or execRemote which does these
+# two lines in one.
+ff= getFile('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/resources/orbits/orbits.jy')
+execfile(str(ff))
+
+# note it would be nice if completions would work here, and of course that it would read the documentation
+# for the completions.
+print getAllOrbits()
