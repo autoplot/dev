@@ -1,0 +1,4 @@
+tt= Units.cdfTT2000.parse('2023-01-01T00:00Z')
+tt= tt + dataset( linspace( 0, 5000, 6 ), units=Units.nanoseconds )
+
+plot( tt, dataset( [1,2,3,2,3,4] ) )
