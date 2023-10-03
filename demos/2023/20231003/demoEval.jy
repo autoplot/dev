@@ -1,0 +1,29 @@
+from org.apache.commons.math.analysis.solvers import BisectionSolver
+from org.apache.commons.math.analysis import UnivariateRealFunction
+         
+setScriptDescription('Demo using eval to allow a generic expression to be used')
+
+vsc= ones(20)
+
+exprs= { 'examples': [ '((vsc/4.0)+3.92)*50.0', 'vsc**2+3' ] }
+expr= getParam('expr','((vsc/4.0)+3.92)*50.0','enter expression',exprs)
+minv= getParam('minv',-100.0,'minimum value to try')
+maxv= getParam('maxv',100.0,'maximum value to try')
+
+class MyUnivariateRealFunction(UnivariateRealFunction):
+    def __init__(self):
+        print 'in init'
+    def value(self,vsc):
+        d= eval(expr)
+        print d
+        return d
+
+murv= MyUnivariateRealFunction()
+bs= BisectionSolver() 
+rs= bs.solve( murv, minv, maxv )
+
+vsc= rs
+d= eval(expr)
+msg= 'vsc='+ str(vsc) +'<br>' + expr + '<br>should be zero='+str(d)
+showMessageDialog('<html>' + msg)
+
