@@ -1,0 +1,25 @@
+from java.lang import System
+setScriptDescription('''Test setitem performance''')
+
+rank=getParam('rank',0,'rank of assignments',[0,1,2])
+
+nrec=5000
+nfield=50
+data= zeros(nrec,nfield)
+
+t0= System.currentTimeMillis()
+
+if rank==2:
+    data[:]= randn(nrec,nfield)
+elif rank==1:
+    for i in xrange(nrec):
+        data[i]= randn(nfield)
+elif rank==0:
+    for i in xrange(nrec):
+        for j in xrange(nfield):
+             data[i,j]= randn()
+
+print 'time to set: ', System.currentTimeMillis()-t0
+        
+plot( data )
+        
