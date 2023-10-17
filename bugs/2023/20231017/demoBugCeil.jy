@@ -1,0 +1,4 @@
+from org.das2.datum import TimeUtil
+drtr= datumRange( '2023-10-17T16:45/PT3M' )
+drtr= datumRange( [ TimeUtil.floor(TimeUtil.HOUR,drtr.min()), TimeUtil.ceil(TimeUtil.HOUR,drtr.max()) ] )
+print drtr
