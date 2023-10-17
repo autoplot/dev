@@ -1,0 +1,13 @@
+setScriptDescription('''example script to experiment with using 
+len with $x.  The problem is output doesn't sort properly, making this
+less useful.<ul>
+<li>load script into autoplot's run batch tool.
+<li>/tmp/ap/$(x;name=sc;pad=_;len=6)_$(x;name=innt;pad=_;len=6).png
+</ul>''')
+
+enu= getParam( 'sc', 'Apple', 'the spacecraft name', ['Apple','Boy'] )
+innt= getParam( 'innt', 10, 'an int value', [8,10,80,100,120] )
+
+annotation( 0, text=enu, fontSize='10em' )
+annotation( 1, text=str(innt), fontSize='8em', anchorOffset='0,10em' )
+
