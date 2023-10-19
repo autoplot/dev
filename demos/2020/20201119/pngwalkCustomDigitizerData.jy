@@ -14,7 +14,7 @@ from org.das2.dataset import DataSetUpdateListener
 from org.autoplot.pngwalk import SinglePngWalkView
 from org.das2.graph import Painter
 from java.beans import PropertyChangeListener
-from javax.swing import JPanel,BoxLayout,JLabel,JComboBox
+from javax.swing import JPanel,BoxLayout,JLabel,JComboBox,JOptionPane
 from org.autoplot.pngwalk import PngWalkTool
 pngw= PngWalkTool.start( 'https://jfaden.net/~jbf/autoplot/pngwalks/dmsp_nonTime/product.pngwalk', getApplication() )
 assert isinstance( pngw, PngWalkTool )
