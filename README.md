@@ -1,5 +1,5 @@
 # dev
-Development area containing scripts demoing bugs and features
+Development area containing Autoplot scripts, demoing bugs and features.
 
 The area "bugs" contains directories numbered by the SourceForge bug number, containing scripts 
 demonstrating bugs or useful for debugging.  For example the folder "2110" is for a bug described by 
