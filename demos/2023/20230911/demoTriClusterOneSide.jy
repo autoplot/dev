@@ -4,6 +4,8 @@ from java.lang.Double import NaN
 setScriptDescription('''Demonstrate Triangulation Clustering to find groups of points.
 This version requires only one side be short.''')
 
+xlimit= getParam('xlimit', datum('1.5 s')
+
 xlimit= getParam( 'xlimit', 1.5 )
 ylimit= getParam( 'ylimit', 1.5 )
 useCase= getParam( 'useCase', 3, 'use case', [ 1,2 ] )

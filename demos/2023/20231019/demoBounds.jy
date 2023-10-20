@@ -1,0 +1,11 @@
+setScriptDescription('''Demonstrate the getBounds call of dasPlot, and that this
+is not the same as the row,column bounds.  My goal is to make the "fix layout" function
+independent of the dom controllers.''' )
+
+dom.plots[0].title='A very<br>very <br>very tall<br>title'
+
+def paint(g):
+    r= dom.plots[0].getController().getDasPlot().getBounds()
+    g.drawRoundRect(r.x, r.y, r.width, r.height, 50, 50)
+    
+addTopDecoration(dom.canvases[0],paint)

@@ -1,0 +1,6 @@
+d = dataset( linspace( 0, 24*4, 40 ), units=Units.hours )
+d = d[:-1]
+d = mod( d, '24hr' )
+plot( d )
+
+dom.plotElements[0].controller.renderer.moduloY= Units.hours.createDatum(24)

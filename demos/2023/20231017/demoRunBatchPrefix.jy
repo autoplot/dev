@@ -1,0 +1,14 @@
+from java.util import HashMap
+import sys
+addToSearchPath( sys.path,
+     'https://cottagesystems.com/hapi/uri_templates/dist/UriTemplatesJava.jar',
+     monitor )
+     
+from org.hapiserver import URITemplate
+
+urit = URITemplate('/tmp/ap/$(x;name=sc;len=6;pad=_).dat')
+m= HashMap()
+m.put('sc','Apple')
+print urit.format(None,None,m)
+m.put('sc','Boy')
+print urit.format(None,None,m)
