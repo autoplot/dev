@@ -1,0 +1,3 @@
+from org.autoplot.dom import DomUtil,DomOps
+dom2= dom.copy()
+DomOps.fixLayout(dom2)
