@@ -6,13 +6,15 @@ autoplotData= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_
 
 f= open( autoplotData + "/bookmarks/history.txt" )
 for line in f.readlines():
-    print line[0:24], '...', line[-10:]
     if line.endswith('.vap\n'):
         ll= line.split('\t')
         try:
             ff= getFile(ll[-1].strip())
             vv= StatePersistence.restoreState(ff)
-            print vv.plots
+            for p in vv.plots:
+                if len(p.ticksURI)>0:
+                    print line
+                    print p.ticksURI
         except:
             print 'nope'
 
