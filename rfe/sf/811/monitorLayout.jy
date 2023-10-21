@@ -1,0 +1,20 @@
+from javax.swing import JList,SwingUtilities,Timer
+
+from java.awt.event import ActionListener
+
+ll = JList()
+
+class MyActionListener(ActionListener):
+  def actionPerformed(self,event):
+    print 'update'
+    data= [None]*len(dom.canvases[0].rows)
+    
+    for i in xrange(len(dom.canvases[0].rows)):
+        r= dom.canvases[0].rows[i]
+        data[i]=r.top+ ','+r.bottom
+    ll.setListData(data)
+    
+getApplication().tabs.addTab("layout",ll)
+
+timer= Timer(300,MyActionListener())
+timer.start()

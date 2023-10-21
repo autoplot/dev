@@ -1,0 +1,11 @@
+from org.autoplot.dom import DomUtil,DomOps
+
+setLayout(3)
+
+for pe in dom.plotElements:
+    p= DomUtil.getElementById(dom,pe.plotId)
+    p.title= 'The somewhat long title for ' + p.id
+    pe.legendLabel= pe.id
+    pe.displayLegend=True
+    p.displayLegend=True
+    
