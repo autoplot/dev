@@ -1,0 +1,40 @@
+from org.das2.util import ColorUtil
+setScriptDescription('''Color-coded bar based on DST.  This encodes<ul>
+<li>Green &gt;-20nT
+<li>Yellow -50nT to -20nT 
+<li>Orange -100nT to -50nT
+<li>Red &le; -100nT''')
+
+tr= getParam( 'timerange', '2023-Oct', 'timerange to load' )
+dst= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800',tr,monitor)
+
+def encodeDstColor(d):
+    if ( d>-20 ):
+        return 'green'
+    elif ( d>-50 ):
+        return 'yellow'
+    elif ( d>-100 ):
+        return 'orange'
+    else:
+        return 'red'
+        
+ttags= xtags(dst)
+t0= ttags[0]
+dst0= dst[0]
+color0= encodeDstColor(dst0)
+ds= None
+
+for i in xrange(len(dst)):
+    c1= encodeDstColor(dst[i])
+    t= ttags[i]
+    if ( c1!=color0 ):
+        dr= datumRange( [t0,t] )
+        ds= createEvent( ds, dr, ColorUtil.decodeColor(color0).getRGB(), 'dst' )
+        t0= t
+        color0= c1
+dr= datumRange( [t0,t] )
+ds= createEvent( ds, dr, ColorUtil.decodeColor(color0).getRGB(), 'dst' )
+
+ds.putProperty( QDataSet.LABEL, 'DST' )
+
+result= ds

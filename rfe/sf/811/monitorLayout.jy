@@ -7,11 +7,12 @@ ll = JList()
 class MyActionListener(ActionListener):
   def actionPerformed(self,event):
     print 'update'
-    data= [None]*len(dom.canvases[0].rows)
-    
+    data= [None]*(1+len(dom.canvases[0].rows))
+    r= dom.canvases[0].marginRow
+    data[0]= r.id+': '+r.top+ ','+r.bottom
     for i in xrange(len(dom.canvases[0].rows)):
         r= dom.canvases[0].rows[i]
-        data[i]=r.top+ ','+r.bottom
+        data[i+1]='  '+r.id+': '+r.top+ ','+r.bottom
     ll.setListData(data)
     
 getApplication().tabs.addTab("layout",ll)
