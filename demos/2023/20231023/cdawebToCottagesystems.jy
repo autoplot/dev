@@ -1,0 +1,11 @@
+setScriptDescription('CDAWeb to Cottagesystems')
+u = getApplication().getDataSetSelector().value
+
+if ( u.startswith('vap+hapi:https://cottagesystems.com/server/cdaweb-nand/hapi') ):
+    u= u[59:]
+    u= 'vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi' + u
+elif ( u.startswith('vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi') ):
+    u= u[42:]
+    u= 'vap+hapi:https://cottagesystems.com/server/cdaweb-nand/hapi' + u
+print u
+getApplication().getDataSetSelector().value = u
