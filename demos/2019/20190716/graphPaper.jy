@@ -2,9 +2,16 @@ setScriptDescription('draw graph paper for the canvas')
 
 major= getParam( 'drawMajor', False, 'Draw the major lines as well.', [True,False] )
 
+spacing= getParam( 'spacing', '10px', 'Spacing between major lines', [ '10px', '5px', '1em' ] )
+
 from org.das2.util import ColorUtil
 from org.das2.graph import Painter
-from java.awt import BasicStroke
+from java.awt import BasicStroke,Font
+from org.das2.graph import DasColumn
+
+ff= Font.decode( dom.options.canvasFont ).size
+
+sp= DasColumn.parseLayoutStr( spacing, ff, dom.canvases[0].height, 10 );
 
 class GridPainter( Painter ):
     def paint( self, g ):
@@ -12,15 +19,15 @@ class GridPainter( Painter ):
         h= dom.canvases[0].height
         g.color= ColorUtil.decodeColor('Thistle')
         g.stroke= BasicStroke(0.5)
-        for i in xrange( 0, w, 10 ):
+        for i in xrange( 0, w, sp ):
             g.drawLine( i, 0, i, h )
-        for i in xrange( 0, h, 10 ):
+        for i in xrange( 0, h, sp ):
             g.drawLine( 0, i, w, i )
         if major:
             g.color= ColorUtil.decodeColor('Thistle').darker()
-            for i in xrange( 0, w, 100 ):
+            for i in xrange( 0, w, sp*10 ):
                 g.drawLine( i, 0, i, h )
-            for i in xrange( 0, h, 100 ):
+            for i in xrange( 0, h, sp*10 ):
                 g.drawLine( 0, i, w, i )        
 
 dom.canvases[0].controller.dasCanvas.addBottomDecorator(GridPainter())
