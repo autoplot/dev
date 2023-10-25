@@ -35,7 +35,7 @@ from java.awt.geom import Point2D
 from ProGAL.geom2d import Point
 
 class TriRend( Renderer ):
-    def render( self, g, xaxis, yaxis, monitor ):
+    def render( self, g, xaxis, yaxis ):
         u= xaxis.units;
         for tr in tri.getTriangles():
             c= tr.getCenter()
