@@ -1,3 +1,4 @@
+from org.autoplot.dom import DomUtil
 from javax.swing import JList,SwingUtilities,Timer
 
 from java.awt.event import ActionListener
@@ -6,16 +7,25 @@ ll = JList()
 
 class MyActionListener(ActionListener):
   def actionPerformed(self,event):
-    print 'update'
     data= [None]*(1+len(dom.canvases[0].rows))
     r= dom.canvases[0].marginRow
+    pp= dom.controller.selectedPlots
+    selectedRow=None
+    if pp.find(',')==-1:
+        for i in xrange(len(dom.plots)):
+            if dom.plots[i].id==pp:
+                selectedRow= dom.plots[i].rowId
+    selectedIndex=-1
     data[0]= r.id+': '+r.top+ ','+r.bottom
     for i in xrange(len(dom.canvases[0].rows)):
         r= dom.canvases[0].rows[i]
         data[i+1]='  '+r.id+': '+r.top+ ','+r.bottom
+        if ( r.id==selectedRow ):
+            selectedIndex= i+1
     ll.setListData(data)
+    ll.selectedIndex= selectedIndex
     
-getApplication().tabs.addTab("layout",ll)
+getApplication().tabs.addTab("rowLayout",ll)
 
 timer= Timer(300,MyActionListener())
 timer.start()
