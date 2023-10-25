@@ -9,14 +9,12 @@ from org.das2.graph import Painter
 from java.awt import BasicStroke,Font
 from org.das2.graph import DasColumn
 
-ff= Font.decode( dom.options.canvasFont ).size
-
-sp= DasColumn.parseLayoutStr( spacing, ff, dom.canvases[0].height, 10 );
-
 class GridPainter( Painter ):
     def paint( self, g ):
+        ff= Font.decode( dom.options.canvasFont ).size
         w= dom.canvases[0].width
         h= dom.canvases[0].height
+        sp= int( DasColumn.parseLayoutStr( spacing, ff, h, 10 ) )
         g.color= ColorUtil.decodeColor('Thistle')
         g.stroke= BasicStroke(0.5)
         for i in xrange( 0, w, sp ):
