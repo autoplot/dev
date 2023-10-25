@@ -1,0 +1,28 @@
+# I meant for the plate interpolation to be flat.
+
+import ProGAL.geom2d.Point
+a= ProGAL.geom2d.Point( 0,0 )
+b= ProGAL.geom2d.Point( 1,0 )
+c= ProGAL.geom2d.Point( 0,1 )
+z1= ProGAL.geom2d.Point( 0.5,0 )
+z2= ProGAL.geom2d.Point( 0.75,0 )
+print area( a, b, c )
+print area( a, c, z1 )
+print area( a, c, z2 )
+print area( b, c, z1 ) + area( a, c, z1 ), area( a, b, c )
+print area( b, c, z2 ) + area( a, c, z2 ), area( a, b, c )
+
+plot( 0, map( ProGAL.geom2d.Point.x, [a,b,c] ), map( ProGAL.geom2d.Point.y, [a,b,c] ))
+plot( addPlotElement(0), map( ProGAL.geom2d.Point.x, [a,c,z1] ), map( ProGAL.geom2d.Point.y, [a,c,z1] ))
+
+x= dataset([a.x(),b.x(),c.x()])
+y= dataset([a.y(),b.y(),c.y()])
+z= dataset([0,0,1])
+
+ngrid=1000
+xx= outerProduct( linspace(0,1,ngrid),ones(ngrid) ) 
+yy= outerProduct( ones(ngrid),linspace(0,1,ngrid) ) 
+
+zz= buckshotInterpolate( bundle(x,y), z, xx, yy )
+
+plot( addPlotElement(0), xx, yy, zz )

@@ -1,0 +1,61 @@
+N=10
+
+randomSeed(5334)
+xx= randu( N )
+yy= randu( N )
+zz= round( randu(N)*5 )
+
+x= outerProduct( linspace(0,1,100), ones(100) )
+y= outerProduct( ones(100), linspace(0,1,100) )
+x= flatten(x)[:,-1]
+y= flatten(y)[:,-1]
+
+#x= dataset( [0.5,0.678,0.644] )
+#y= dataset( [0.5,0.855,0.140] )
+#x= dataset( [0.4339] )
+#y= dataset( [0.5160] )
+
+z= buckshotInterpolate(bundle(xx,yy),zz,x,y)
+tri= z.property( 'TRIANGULATION' )
+
+reset()
+
+plot( z )
+if ( tri==None ):
+    raise Exception('triangles not found')
+    
+plot( 0, xx,yy,zz, symbolSize=10 )
+plot( addPlotElement(0), x,y,z, symbolSize=6 )
+
+
+from org.das2.graph import Renderer
+from org.das2.graph.Arrow import paintArrow
+from org.das2.graph.Arrow import HeadStyle
+from java.awt.geom import Point2D
+from ProGAL.geom2d import Point
+
+class TriRend( Renderer ):
+    def render( self, g, xaxis, yaxis, monitor ):
+        u= xaxis.units;
+        g.setColor( Color.GRAY )
+        for tr in tri.getTriangles():
+            c= tr.getCenter()
+            g.fillRect( int(xaxis.transform(c.x(),u))-1, 
+                int(yaxis.transform(c.y(),u))-1,3,3 )
+            p= Point.midPoint( c, tr.getCorner(0) )
+            h= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            p= Point.midPoint( c, tr.getCorner(1) )
+            t= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            paintArrow( g, h, t, 9, HeadStyle.DRAFTING )
+            h= t
+            p= Point.midPoint( c, tr.getCorner(2) )
+            t= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            paintArrow( g, h, t, 9, HeadStyle.DRAFTING )
+            h= t
+            p= Point.midPoint( c, tr.getCorner(0) )
+            t= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            paintArrow( g, h, t, 9, HeadStyle.DRAFTING )
+            h= t
+
+dom.plots[0].controller.dasPlot.addRenderer(TriRend())
+        

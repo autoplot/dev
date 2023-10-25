@@ -1,0 +1,32 @@
+n= 4
+x= dataset( [0,1,1,2] )/4
+y= dataset( [0,1,0,1] )
+z= dataset( [0,1,2,3] )
+
+ngrid=1000
+xgrid= outerProduct( linspace(0,1,ngrid),ones(ngrid) ) 
+ygrid= outerProduct( ones(ngrid),linspace(0,1,ngrid) ) 
+
+#xgrid= flatten( xgrid )
+#ygrid= flatten( ygrid )
+
+zgrid= buckshotInterpolate( bundle(x,y), z, xgrid, ygrid )
+
+tri= zgrid.property('TRIANGULATION')
+
+dsb= DataSetBuilder(2,100,2)
+for t in tri.getTriangles():
+    p= t.getCorner(0)
+    dsb.nextRecord( [ p.x(), p.y() ] )
+    p= t.getCorner(1)
+    dsb.nextRecord( [ p.x(), p.y() ] )
+    p= t.getCorner(2)
+    dsb.nextRecord( [ p.x(), p.y() ] )
+    p= t.getCorner(0)
+    dsb.nextRecord( [ p.x(), p.y() ] )
+xy= dsb.getDataSet()
+
+setLayoutOverplot(3)
+plot( 0, xgrid[:,0], ygrid[0,:], zgrid )
+plot( 1, xy[:,0], xy[:,1], xrange=[0,1], yrange=[0,1] )
+plot( 2, x, y, z, symbolSize=10 )

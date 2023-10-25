@@ -1,0 +1,61 @@
+infile= 'file:///home/jbf/ct/autoplot/data/users/seth/20160315/ltr-dr-600-nCs7mHz-BzN_mhd_1995-03-21T04-29-00Z.hdf'
+
+setLayoutOverplot(2)
+
+x= getDataSet( infile + '?X_grid' ) / 637814000  # Units.cm -> earth radii
+y= getDataSet( infile + '?Y_grid' ) / 637814000
+z= getDataSet( infile + '?Z_grid' ) / 637814000
+rho= getDataSet( infile + '?rho_' )
+
+s= shuffle(rho)
+x= x[s]
+y= y[s]
+z= z[s]
+rho= rho[s]
+
+nn= 5
+scale= linspace( -20,20,nn )
+S= zeros( nn,nn,nn )
+N= zeros( nn,nn,nn )
+S.putProperty( QDataSet.DEPEND_0, scale )
+S.putProperty( QDataSet.DEPEND_1, scale )
+S.putProperty( QDataSet.DEPEND_2, scale )
+N.putProperty( QDataSet.DEPEND_0, scale )
+N.putProperty( QDataSet.DEPEND_1, scale )
+N.putProperty( QDataSet.DEPEND_2, scale )
+
+print 'x', extent( x )
+print 'y', extent( y )
+print 'z', extent( z )
+
+ssx= outerProduct( ones(nn), scale )
+ssy= outerProduct( scale, ones(nn) )
+ssz= zeros( nn, nn )
+
+from org.virbo.dataset import DataSetUtil
+
+x= flatten(x)
+y= flatten(y)
+z= flatten(z)
+rho= flatten(rho)
+
+rho3= rebinBundle( link( x,y,z,rho), scale, scale, scale )
+rho3= flatten( rho3 )
+
+x= rho3[:,0]
+y= rho3[:,1]
+z= rho3[:,2]
+rho= rho3[:,3]
+
+x= x[0:5]
+y= y[0:5]
+z= z[0:5]
+rho= rho[0:5]
+
+rhoInterp= buckshotInterpolate( link( x, y, z ), rho, ssx, ssy, ssz )
+
+from org.virbo.dataset import QubeDataSetIterator
+itr= QubeDataSetIterator(z)
+
+plot( 0, rhoInterp, title='%{CONTEXT}' )
+plot( 1, 'http://autoplot.org/data/annotations/circleIllumn.jyds' )

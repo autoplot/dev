@@ -1,0 +1,60 @@
+n= 100
+
+#print randomSeed()
+#randomSeed(4521225099312150406)  #  fails
+#randomSeed(-381587579976729014) # fails
+#randomSeed(6989262430066354096) # works
+#randomSeed(6761223767476869853) # works
+#randomSeed(-7958545448149789182)# works
+randomSeed(-4598773923257909584)# works
+
+x= randu(n)
+y= randu(n)
+z= randu(n)
+f= -1*exp(x**2+y**2+z**2)
+
+ngrid=100
+xgrid= outerProduct( linspace(0,1,ngrid),ones(ngrid) ) 
+ygrid= outerProduct( ones(ngrid),linspace(0,1,ngrid) ) 
+zgrid= replicate(0.5,ngrid,ngrid)
+
+#xgrid= flatten( xgrid )
+#ygrid= flatten( ygrid )
+
+zgrid= buckshotInterpolate( bundle(x,y,z), f, xgrid, ygrid, zgrid )
+tri= zgrid.property( 'TRIANGULATION' )
+
+setLayoutOverplot(1)
+
+plot( xgrid[:,0], ygrid[0,:], reform( zgrid, [ ngrid,ngrid ] ) )
+
+from org.das2.graph import Renderer
+from org.das2.graph.Arrow import paintArrow
+from org.das2.graph.Arrow import HeadStyle
+from java.awt.geom import Point2D
+from ProGAL.geom2d import Point
+
+class TriRend( Renderer ):
+    def render( self, g, xaxis, yaxis, monitor ):
+        u= xaxis.units;
+        for tr in tri.getTriangles():
+            c= tr.getCenter()
+            g.fillRect( int(xaxis.transform(c.x(),u))-1, 
+                int(yaxis.transform(c.y(),u))-1,3,3 )
+            p= Point.midPoint( c, tr.getCorner(0) )
+            h= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            p= Point.midPoint( c, tr.getCorner(1) )
+            t= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            paintArrow( g, h, t, 9, HeadStyle.DRAFTING )
+            h= t
+            p= Point.midPoint( c, tr.getCorner(2) )
+            t= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            paintArrow( g, h, t, 9, HeadStyle.DRAFTING )
+            h= t
+            p= Point.midPoint( c, tr.getCorner(0) )
+            t= Point2D.Float( xaxis.transform(p.x(),u), yaxis.transform(p.y(),u) )
+            paintArrow( g, h, t, 9, HeadStyle.DRAFTING )
+            h= t
+
+dom.plots[0].controller.dasPlot.addRenderer(TriRend())
+        
