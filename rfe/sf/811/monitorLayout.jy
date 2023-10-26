@@ -25,7 +25,7 @@ class MyActionListener(ActionListener):
     ll.setListData(data)
     ll.selectedIndex= selectedIndex
     
-getApplication().tabs.addTab("rowLayout",ll)
+addTab("rowLayout",ll)
 
 timer= Timer(300,MyActionListener())
 timer.start()
