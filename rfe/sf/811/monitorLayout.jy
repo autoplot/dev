@@ -20,6 +20,9 @@ class MyActionListener(ActionListener):
     for i in xrange(len(dom.canvases[0].rows)):
         r= dom.canvases[0].rows[i]
         data[i+1]='  '+r.id+': '+r.top+ ','+r.bottom
+        if r.controller!=None:
+            heightPixels= r.controller.dasRow.getHeight()
+            data[i+1] = data[i+1] + " (%d pix)" % heightPixels
         if ( r.id==selectedRow ):
             selectedIndex= i+1
     ll.setListData(data)
