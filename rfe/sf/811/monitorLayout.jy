@@ -7,7 +7,8 @@ ll = JList()
 
 class MyActionListener(ActionListener):
   def actionPerformed(self,event):
-    data= [None]*(1+len(dom.canvases[0].rows))
+    nrow= len(dom.canvases[0].rows)
+    data= [None]*(1+nrow+1)
     r= dom.canvases[0].marginRow
     pp= dom.controller.selectedPlots
     selectedRow=None
@@ -17,7 +18,7 @@ class MyActionListener(ActionListener):
                 selectedRow= dom.plots[i].rowId
     selectedIndex=-1
     data[0]= r.id+': '+r.top+ ','+r.bottom
-    for i in xrange(len(dom.canvases[0].rows)):
+    for i in xrange(nrow):
         r= dom.canvases[0].rows[i]
         data[i+1]='  '+r.id+': '+r.top+ ','+r.bottom
         if r.controller!=None:
@@ -25,8 +26,15 @@ class MyActionListener(ActionListener):
             data[i+1] = data[i+1] + " (%d pix)" % heightPixels
         if ( r.id==selectedRow ):
             selectedIndex= i+1
+    if nrow>1:
+        h1= dom.canvases[0].rows[-2].controller.dasRow.getHeight()
+        h2= dom.canvases[0].rows[-1].controller.dasRow.getHeight()
+        data[-1]= 'ratio of last two heights: %.2f' % (float(h1)/h2)
+    else:
+        data[-1]= ''
     ll.setListData(data)
     ll.selectedIndex= selectedIndex
+    
     
 addTab("rowLayout",ll)
 
