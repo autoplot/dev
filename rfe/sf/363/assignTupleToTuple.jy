@@ -1,0 +1,2 @@
+lowCut_toggle, highcut_toggle, filttype_toggle, order_toggle = 0.5, 20, 'Bandpass', 4 # filter toggles LOW FLYER
+print highcut_toggle
