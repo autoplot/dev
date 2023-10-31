@@ -1,0 +1,6 @@
+setLayout(2,3)
+
+sleep(1000)
+
+for p in dom.plots:
+    p.zaxis.visible=False
