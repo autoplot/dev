@@ -1,6 +1,6 @@
 setScriptDescription('draw graph paper for the canvas')
 
-major= getParam( 'drawMajor', False, 'Draw the major lines as well.', [True,False] )
+major= getParam( 'drawMajor', True, 'Draw the major lines as well.', [True,False] )
 
 spacing= getParam( 'spacing', '10px', 'Spacing between major lines', [ '10px', '5px', '1em' ] )
 
@@ -16,13 +16,14 @@ class GridPainter( Painter ):
         h= dom.canvases[0].height
         sp= int( DasColumn.parseLayoutStr( spacing, ff, h, 10 ) )
         g.color= ColorUtil.decodeColor('Thistle')
-        g.stroke= BasicStroke(0.5)
+        g.stroke= BasicStroke(0.4)
         for i in xrange( 0, w, sp ):
             g.drawLine( i, 0, i, h )
         for i in xrange( 0, h, sp ):
             g.drawLine( 0, i, w, i )
         if major:
-            g.color= ColorUtil.decodeColor('Thistle').darker()
+            print 'major'
+            g.stroke= BasicStroke(0.6)
             for i in xrange( 0, w, sp*10 ):
                 g.drawLine( i, 0, i, h )
             for i in xrange( 0, h, sp*10 ):
