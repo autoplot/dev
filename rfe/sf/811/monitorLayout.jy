@@ -5,8 +5,7 @@ from java.awt.event import ActionListener
 
 ll = JList()
 
-class MyActionListener(ActionListener):
-  def actionPerformed(self,event):
+def formatRows():
     nrow= len(dom.canvases[0].rows)
     data= [None]*(1+nrow+1)
     r= dom.canvases[0].marginRow
@@ -17,7 +16,11 @@ class MyActionListener(ActionListener):
             if dom.plots[i].id==pp:
                 selectedRow= dom.plots[i].rowId
     selectedIndex=-1
-    data[0]= r.id+': '+r.top+ ','+r.bottom
+    data[0]= r.id+': '+r.top+ ','+r.bottom 
+    if r.controller!=None:
+        heightPixels= r.controller.dasRow.getHeight()
+        data[0]= data[0] + " (%d pix)" % heightPixels
+        
     for i in xrange(nrow):
         r= dom.canvases[0].rows[i]
         data[i+1]='  '+r.id+': '+r.top+ ','+r.bottom
@@ -32,11 +35,53 @@ class MyActionListener(ActionListener):
         data[-1]= 'ratio of last two heights: %.2f' % (float(h1)/h2)
     else:
         data[-1]= ''
+    return data
+        
+
+def formatColumns():
+    nn= len(dom.canvases[0].columns)
+    data= [None]*(1+nn+1)
+    c= dom.canvases[0].marginColumn
+    pp= dom.controller.selectedPlots
+    selectedColumn=None
+    if pp.find(',')==-1:
+        for i in xrange(len(dom.plots)):
+            if dom.plots[i].id==pp:
+                selectedColumn= dom.plots[i].columnId
+    selectedIndex=-1
+    data[0]= c.id+': '+c.left+ ','+c.right
+    if c.controller!=None:
+        widthPixels= c.controller.dasColumn.getWidth()
+        data[0]= data[0] + " (%d pix)" % widthPixels
+        
+    for i in xrange(nn):
+        r= dom.canvases[0].columns[i]
+        data[i+1]='  '+r.id+': '+r.left+ ','+r.right
+        if r.controller!=None:
+            widthPixels= r.controller.dasColumn.getWidth()
+            data[i+1] = data[i+1] + " (%d pix)" % widthPixels
+        if ( c.id==selectedColumn ):
+            selectedIndex= i+1
+    if nn>1:
+        w1= dom.canvases[0].columns[-2].controller.dasColumn.getWidth()
+        w2= dom.canvases[0].columns[-1].controller.dasColumn.getWidth()
+        data[-1]= 'ratio of last two widths: %.2f' % (float(w1)/w2)
+    else:
+        data[-1]= ''
+    return data
+            
+class MyActionListener(ActionListener):
+  def actionPerformed(self,event):
+    rowData= formatRows()
+    columnData= formatColumns()
+    data= rowData
+    data.extend(['----'])
+    data.extend( columnData )
     ll.setListData(data)
+    selectedIndex=-1
     ll.selectedIndex= selectedIndex
     
-    
-addTab("rowLayout",ll)
+addTab("rowColumnLayout",ll)
 
 timer= Timer(300,MyActionListener())
 timer.start()
