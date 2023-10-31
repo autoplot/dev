@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<vap appVersionTag="v2023a_10" domVersion="1.08">
+<vap appVersionTag="(dev)" domVersion="1.08">
     <Application id="app_0">
         <property class="Annotation" length="0" name="annotations"/>
         <property class="BindingModel" length="4" name="bindings">
-            <property default="null" type="propertyBinding" value="plot_0.colortable to style_0.colortable  (plot_0)"/>
             <property default="null" type="propertyBinding" value="app_0.timeRange to plot_0.context  (app_0)"/>
             <property default="null" type="propertyBinding" value="plot_1.colortable to style_1.colortable  (plot_1)"/>
+            <property default="null" type="propertyBinding" value="plot_0.colortable to style_0.colortable  (plot_0)"/>
             <property default="null" type="propertyBinding" value="app_0.timeRange to plot_1.context  (app_0)"/>
         </property>
         <property class="Canvas" length="1" name="canvases">
@@ -17,7 +17,7 @@
                 <property name="marginColumn" type="DomNode">
                     <Column id="marginColumn_0">
                         <property default="2em" name="left"
-                            type="String" value="5em"/>
+                            type="String" value="+5.0em"/>
                         <property name="parent" type="String" value=""/>
                         <property default="100%-3em" name="right"
                             type="String" value="100.00%-5.0em"/>
@@ -117,8 +117,7 @@
             <PlotElement id="plotElement_0">
                 <property name="active" type="Boolean" value="true"/>
                 <property name="autoComponent" type="Boolean" value="false"/>
-                <property default="false" name="autoLabel"
-                    type="Boolean" value="true"/>
+                <property name="autoLabel" type="Boolean" value="false"/>
                 <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
@@ -143,6 +142,8 @@
                         <property name="displayLegend" type="Boolean" value="true"/>
                         <property name="displayTitle" type="Boolean" value="true"/>
                         <property name="ephemerisLabels" type="String" value=""/>
+                        <property name="ephemerisLineCount"
+                            type="Integer" value="-1"/>
                         <property name="fontSize" type="String" value="1em"/>
                         <property name="isotropic" type="Boolean" value="false"/>
                         <property name="legendFontSize" type="String" value="1em"/>
@@ -265,8 +266,7 @@
             <PlotElement id="plotElement_1">
                 <property name="active" type="Boolean" value="true"/>
                 <property name="autoComponent" type="Boolean" value="false"/>
-                <property default="false" name="autoLabel"
-                    type="Boolean" value="true"/>
+                <property name="autoLabel" type="Boolean" value="false"/>
                 <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
@@ -291,6 +291,8 @@
                         <property name="displayLegend" type="Boolean" value="true"/>
                         <property name="displayTitle" type="Boolean" value="true"/>
                         <property name="ephemerisLabels" type="String" value=""/>
+                        <property name="ephemerisLineCount"
+                            type="Integer" value="-1"/>
                         <property name="fontSize" type="String" value="1em"/>
                         <property name="isotropic" type="Boolean" value="false"/>
                         <property name="legendFontSize" type="String" value="1em"/>
@@ -426,6 +428,7 @@
                 <property name="displayLegend" type="Boolean" value="true"/>
                 <property name="displayTitle" type="Boolean" value="true"/>
                 <property name="ephemerisLabels" type="String" value=""/>
+                <property name="ephemerisLineCount" type="Integer" value="-1"/>
                 <property name="fontSize" type="String" value="1em"/>
                 <property name="isotropic" type="Boolean" value="false"/>
                 <property name="legendFontSize" type="String" value="1em"/>
@@ -453,7 +456,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.12870 (dimensionless)"/>
+                            name="scale" type="datum" value="0.1287 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
@@ -521,6 +524,7 @@
                 <property name="displayLegend" type="Boolean" value="true"/>
                 <property name="displayTitle" type="Boolean" value="true"/>
                 <property name="ephemerisLabels" type="String" value=""/>
+                <property name="ephemerisLineCount" type="Integer" value="-1"/>
                 <property name="fontSize" type="String" value="1em"/>
                 <property name="isotropic" type="Boolean" value="false"/>
                 <property name="legendFontSize" type="String" value="1em"/>
@@ -548,7 +552,7 @@
                         </property>
                         <property name="reference" type="String" value=""/>
                         <property default="0.1 (dimensionless)"
-                            name="scale" type="datum" value="0.12870 (dimensionless)"/>
+                            name="scale" type="datum" value="0.1287 (dimensionless)"/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
                     </Axis>
