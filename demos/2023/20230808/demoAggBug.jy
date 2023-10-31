@@ -1,0 +1,22 @@
+setScriptDescription('''Why does this load two files?''')
+
+from org.das2.qds import DataSetOps,DataSetUtil,DDataSet
+from org.das2.qds import QubeDataSetIterator
+
+tr = getParam( 'timerange', '2021-01-17T10:49 to 2021-01-17T10:50', 'Timerange to load' )
+
+yy1= getDataSet( 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/dfb_dbm_dvac/$Y/psp_fld_l2_dfb_dbm_dvac_$Y$m$d$(H;delta=6)_v02.cdf?doDep=no&interpMeta=no&psp_fld_l2_dfb_dbm_dvac12' , tr)
+yy2= getDataSet( 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/dfb_dbm_dvac/$Y/psp_fld_l2_dfb_dbm_dvac_$Y$m$d06_v02.cdf?doDep=no&interpMeta=no&psp_fld_l2_dfb_dbm_dvac12' , tr)
+
+ww = flatten(yy1)
+print ww
+
+tt= getDataSet( 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/dfb_dbm_dvac/$Y/psp_fld_l2_dfb_dbm_dvac_$Y$m$d$(H;delta=6)_v02.cdf?doDep=no&interpMeta=no&psp_fld_l2_dfb_dbm_dvac_time_series_TT2000',tr )
+
+print yy2
+print yy1
+print yy1.property(QDataSet.USER_PROPERTIES).get('files')
+
+tt= flatten(tt)
+
+plot( tt, ww )

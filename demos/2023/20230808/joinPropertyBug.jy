@@ -1,0 +1,10 @@
+vv1= dataset(randn(1000),units='V')
+vv2= dataset(randn(1000),units='V')
+vv3= dataset(randn(1000),units='V')
+
+vv= join( join( vv1, vv2 ), vv3 )
+plot( vv )
+
+vv.putProperty( QDataSet.UNITS, units=None )
+
+plot( vv )

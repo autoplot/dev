@@ -1,0 +1,8 @@
+setScriptDescription('''Demo completions on git filesystems''')
+
+cc= getCompletions('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/u/george/2023/20230823/')
+print len(cc)
+
+
+cc= getCompletions('https://research-git.uiowa.edu/jbf/publicprojecttest/-/main/scripts/')
+print len(cc)

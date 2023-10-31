@@ -1,0 +1,6 @@
+aa= getParam('aa',1,'aa param',[1,2,3])
+bb= getParam('bb',1,'bb param',[1,2,3])
+
+print 'aa=%4d bb=%4d' % ( aa, bb )
+
+sleep(1000)

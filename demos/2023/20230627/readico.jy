@@ -1,0 +1,14 @@
+from java.io import File
+from javax.swing import JLabel,ImageIcon,SwingConstants
+from javax.imageio import ImageIO
+setScriptDescription('''Google Bard says I can read an ICO file into a BufferedImage in Java.  Is it true?''')
+
+ico= getFile('https://cottagesystems.com/favicon.ico')
+bi= ImageIO.read(ico)
+print bi
+
+ico= ImageIcon(bi)
+label= JLabel('Cottage Systems HAPI Server',ico,SwingConstants.LEADING)
+
+ImageIO.write( bi,'png',File('/tmp/ap/foo.png'))
+getApplication().setBottomPanel(label)

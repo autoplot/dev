@@ -1,0 +1,14 @@
+from java.awt import BasicStroke
+from java.awt import Toolkit
+from org.das2.util import GrannyTextRenderer,ColorUtil
+from org.das2.graph import Painter,GraphUtil
+
+gtr2= GrannyTextRenderer()
+gtr2.setStri<C>
+
+class GraphPaperPainter(Painter):
+    def paint( self, g ):
+        g.color= ColorUtil.PLUM
+        size= Toolkit.getDefaultToolkit().getScreenSize()
+        gtr= GrannyTextRenderer()
+        #gtr.setStri<C>

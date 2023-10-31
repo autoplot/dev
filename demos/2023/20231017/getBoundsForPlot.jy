@@ -1,0 +1,15 @@
+from org.das2.util import ColorUtil
+from org.autoplot.dom import DomUtil
+
+setScriptDescription('''DomUtil.getBoundsForPlot calculates the bounds for any plot, independent of Das2
+and the controller nodes.''')
+
+reset()
+setLayout(2,2)
+
+def mypaint(g):
+    r= DomUtil.getBoundsForPlot(dom,dom.plots[2])
+    g.color= ColorUtil.CHOCOLATE
+    g.drawRoundRect( r.x, r.y, r.width, r.height, 50, 50 )
+    
+addTopDecoration( dom.canvases[0], mypaint )

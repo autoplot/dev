@@ -1,0 +1,18 @@
+from java.awt import BasicStroke
+from java.awt import Toolkit
+from org.das2.util import GrannyTextRenderer,ColorUtil
+from org.das2.graph import Painter,GraphUtil
+
+gtr2= GrannyTextRenderer()
+# gtr2.set<C> # now works since 20230924a
+
+class GraphPaperPainter(Painter):
+    def paint( self, g ):
+        expensiveOp()
+        gtr= GrannyTextRenderer()
+        #gtr.set<C> # still doesn't work
+        g.color= ColorUtil.PLUM
+        size= Toolkit.getDefaultToolkit().getScreenSize()
+        
+gpp= GraphPaperPainter()
+dom.canvases[0].controller.dasCanvas.addBottomDecorator(gpp)
