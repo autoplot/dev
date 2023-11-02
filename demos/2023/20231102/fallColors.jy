@@ -1,0 +1,5 @@
+from org.das2.util import ColorUtil
+rgb=dataset( [ ColorUtil.BROWN.getRGB(), ColorUtil.RED.getRGB(), Color.ORANGE.getRGB()], units=Units.rgbColor )
+colorBarType= makeColorTable('funType3',dataset([0,100,200]),rgb)
+ds= dom.plotElements[0].controller.dataSet
+plot( ds, colorTable=colorBarType )
