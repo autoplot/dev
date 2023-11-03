@@ -5,6 +5,9 @@ from java.lang import Runnable
 class HangRun( Runnable ):
     def run( self ):
         hang()
-        
+
+from java.lang import System
+print 'enableResponseMonitor: ', System.getenv('enableResponseMonitor')
+
 from javax.swing import SwingUtilities
 SwingUtilities.invokeLater( HangRun() )
