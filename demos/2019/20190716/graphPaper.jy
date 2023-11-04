@@ -22,7 +22,6 @@ class GridPainter( Painter ):
         for i in xrange( 0, h, sp ):
             g.drawLine( 0, i, w, i )
         if major:
-            print 'major'
             g.stroke= BasicStroke(0.6)
             for i in xrange( 0, w, sp*10 ):
                 g.drawLine( i, 0, i, h )
