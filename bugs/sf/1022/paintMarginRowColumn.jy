@@ -16,6 +16,7 @@ class MyPainter( Painter ):
         cmin= dom.canvases[0].marginColumn.controller.dasColumn.getDMinimum()
         cmax= dom.canvases[0].marginColumn.controller.dasColumn.getDMaximum()
         g.color= ColorUtil.decodeColor( 'thistle' )
+        g.color= Color( g.color.red, g.color.green, g.color.blue, 128 )
         g.fill( Rectangle2D.Double( cmin, rmin, cmax-cmin, rmax-rmin ) )
         h= g.font.size
         g.color= Color.WHITE
