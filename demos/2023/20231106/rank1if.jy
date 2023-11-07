@@ -1,0 +1,12 @@
+setScriptDescription('Demonstrates that a rank 0 dataset can be used in an if statement, but a rank 1 or more cannot.')
+
+ds= dataset(1)
+if ds: print 'yep'
+
+ds= dataset([1])
+try:
+    if ds: print 'nope rank'
+except:
+    import traceback
+    traceback.print_exc()
+
