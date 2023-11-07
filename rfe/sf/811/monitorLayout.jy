@@ -1,9 +1,15 @@
+from java.awt import BorderLayout
 from org.autoplot.dom import DomUtil
-from javax.swing import JList,SwingUtilities,Timer
+from javax.swing import JList,SwingUtilities,Timer,BoxLayout,JCheckBox,JPanel
 
 from java.awt.event import ActionListener
 
+pp= JPanel()
+pp.layout= BorderLayout()
 ll = JList()
+pp.add( ll, BorderLayout.CENTER )
+cc= JCheckBox('echo to stderr',selected=False)
+pp.add( cc, BorderLayout.SOUTH )
 
 def formatRows():
     nrow= len(dom.canvases[0].rows)
@@ -80,8 +86,14 @@ class MyActionListener(ActionListener):
     ll.setListData(data)
     selectedIndex=-1
     ll.selectedIndex= selectedIndex
+    if cc.selected:
+        print('--------------------')
+        for d in data:
+            print(d)
+        print('--------------------')
+
     
-addTab("rowColumnLayout",ll)
+addTab( "rowColumnLayout",pp )
 
 timer= Timer(300,MyActionListener())
 timer.start()
