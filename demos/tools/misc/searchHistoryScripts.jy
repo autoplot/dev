@@ -23,9 +23,11 @@ for line in f.readlines():
             if ( checkedAlready.containsKey(ff) ): continue
             checkedAlready.put(ff,ff)
             
+            lineNum=0
             for ll in open(ff):
+                lineNum=lineNum+1
                 if ll.find(search)>-1:
-                    print ll.strip() + ' \t('+ ff + ")"
+                    print ll.strip() + ' \t('+ ff + ":"+str(lineNum)+")"
         except:
             import traceback
             traceback.print_exc()
