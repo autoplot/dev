@@ -18,5 +18,4 @@ class MyPainter( Painter ):
         g.fill( Rectangle2D.Double( cmin, rmin, cmax-cmin, rmax-rmin ) )
         g.drawString( str(dom.canvases[0].marginColumn.controller.dasColumn), cmin, rmin )
         
-reset()
 dom.canvases[0].controller.dasCanvas.addBottomDecorator(MyPainter())

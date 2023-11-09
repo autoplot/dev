@@ -1,0 +1,60 @@
+setScriptTitle('Fix Layout Test')
+setScriptDescription('''Run through permutions to document the operation of Fix Layout''')
+
+setLayout(2,3)
+for p in dom.plots:
+    p.zaxis.visible=True
+fixLayout()
+writeToPng(PWD + '/fixed/layout_2_3_colorbars.png')
+
+setLayout(2,3)
+for p in dom.plots:
+    p.zaxis.visible=False
+dom.plots[5].title='A Very<br>Long<br>Title'
+fixLayout()
+writeToPng(PWD + '/fixed/layout_2_3_title.png')
+    
+setLayout(2,3)
+for p in dom.plots:
+    p.zaxis.visible=False
+dom.plots[1].title='A Very<br>Long<br>Title'
+dom.plots[1].yaxis.label='A Very<br>Long<br>Label'
+fixLayout()
+writeToPng(PWD + '/fixed/layout_2_3_title_label.png')
+
+setLayout(2,3)
+for p in dom.plots:
+    p.zaxis.visible=False
+dom.plots[1].title='A Very<br>Long<br>Title'
+dom.plots[1].yaxis.label='A Very<br>Long<br>Label'
+dom.plots[1].zaxis.visible=True
+dom.plots[1].zaxis.label='Typical Label'
+fixLayout()
+
+writeToPng(PWD + '/fixed/layout_2_3_title_label.png')
+
+    
+load(PWD +'/threePanelDstKpAe.1embar.10px.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/threePanelDstKpAe.1embar.10px.png')
+
+load(PWD +'/threePanelDstKpAe.1embar.2col.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/threePanelDstKpAe.1embar.2col.png')
+
+load(PWD +'/twoPanelsFirstWithTallTitle.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/twoPanelsFirstWithTallTitle.png')
+
+load(PWD +'/twoPanelsSecondWithTallTitle.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/twoPanelsSecondWithTallTitle.png')
+
+load(PWD +'/twoPanelsSecondWithTallTitleOutsideLegend.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/twoPanelsSecondWithTallTitleOutsideLegend.png')
+
+load(PWD +'/threePanelDstKpAe.tallTitle.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/threePanelDstKpAe.tallTitle.png')
+
