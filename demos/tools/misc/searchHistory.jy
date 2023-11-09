@@ -1,0 +1,20 @@
+from org.autoplot.state import StatePersistence
+setScriptDescription('Search history for vaps with ephemeris')
+
+from org.autoplot.datasource import AutoplotSettings
+autoplotData= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_AUTOPLOTDATA)
+
+f= open( autoplotData + "/bookmarks/history.txt" )
+for line in f.readlines():
+    if line.endswith('.vap\n'):
+        ll= line.split('\t')
+        try:
+            ff= getFile(ll[-1].strip())
+            vv= StatePersistence.restoreState(ff)
+            for p in vv.plots:
+                if len(p.ticksURI)>0:
+                    print line
+                    print p.ticksURI
+        except:
+            print 'nope'
+
