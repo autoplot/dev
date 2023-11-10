@@ -1,5 +1,8 @@
-setScriptDescription( '''Demo the AVERAGE_TYPE=mod360 property.  
-Oddly I can't get this to work...''') 
+setScriptDescription( '''Demo the AVERAGE_TYPE=mod360 property.  Presently
+interpolate should respect this property.  Ideally the series renderer (and
+other renderers) would respect it as well, but this is not the case.  This
+demo is not working, but I need to do something else. TODO: get this to 
+work.''') 
 
 t0=  '2023-11-10T11-53-00Z'
 x= linspace(0,6*TAU,200)*'1s' + t0
