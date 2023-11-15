@@ -1,0 +1,50 @@
+from java.util.regex import Pattern
+setScriptDescription('Code generator')
+
+lines= '''Style.OPERATOR = 0x000000, 0
+Style.DELIMITER = 0x000000, 1
+Style.KEYWORD = 0x3333ee, 0
+Style.KEYWORD2 = 0x3333ee, 3
+Style.TYPE = 0x000000, 2
+Style.TYPE2 = 0x000000, 1
+Style.TYPE3 = 0x000000, 3
+Style.STRING = 0xcc6600, 0
+Style.STRING2 = 0xcc6600, 1
+Style.NUMBER = 0x999933, 1
+Style.REGEX = 0xcc6600, 0
+Style.IDENTIFIER = 0x000000, 0
+Style.COMMENT = 0x339933, 2
+Style.COMMENT2 = 0x339933, 3
+Style.DEFAULT = 0x000000, 0
+Style.WARNING = 0xCC0000, 0
+Style.ERROR = 0xCC0000, 3
+'''
+
+p=Pattern.compile("([a-zA-Z\.0-9]+)\s*=\s*([0-9a-fA-Fx]+)(\s*\,\s*([0123])\s*)?")
+
+temp= '''
+    private Color %(bean)s = Color.decode( "%(color)s" );
+    
+    public static final String PROP_%(BEAN)s = "%(bean)s";
+    
+    public void set%(beanUp)s( Color c ) {
+        Color oldColor= %(bean)s;
+        %(bean)s=c;
+        propertyChangeSupport.firePropertyChange(PROP_%(BEAN)s, oldColor, c );
+    }
+        
+    public Color get%(beanUp)s( ) {
+        return %(bean)s;
+    }
+    
+'''
+for s in lines.split('\n'):
+    m= p.matcher(s)
+    if ( m.matches() ):
+        beanName= m.group(1)
+        color= m.group(2)
+        if beanName.startswith('Style.'):
+            beanUp= 'Style' + beanName[6] + beanName[7:].lower()
+            beanName= 'style'+beanName[6]+beanName[7:].lower()
+            print temp % { 'bean':beanName, 'BEAN':beanName.upper(), 'color':color, 'beanUp':beanUp }
+            print '    ' + 'set'+beanUp+"(c);"
