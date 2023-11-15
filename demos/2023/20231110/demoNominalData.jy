@@ -1,0 +1,15 @@
+setScriptDescription('''Demonstrate nominal data and that one can iterate over an array of nominal data''')
+
+uu= Units.nominal()
+dsb= DataSetBuilder(1,4)
+dsb.nextRecord(uu.createDatum('Chicago'))
+dsb.nextRecord(uu.createDatum('Detroit'))
+dsb.nextRecord(uu.createDatum('Minneapolis'))
+dsb.nextRecord(uu.createDatum('Kansas City'))
+dsb.nextRecord(uu.createDatum('Des Moines'))
+
+cities= dsb.getDataSet()
+
+for city in cities:
+    print city
+    
