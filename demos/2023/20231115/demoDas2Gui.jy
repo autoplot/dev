@@ -1,0 +1,131 @@
+from java.lang import StringBuilder
+from java.awt import FlowLayout,Dimension
+from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane
+from java.util import LinkedHashMap,ArrayList
+from javax.xml.xpath import XPathFactory,XPathConstants
+from org.xml.sax import InputSource
+from javax.xml.parsers import DocumentBuilderFactory
+from java.io import StringReader
+from org.das2.util import FileUtil
+
+setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.  See
+/var/www/das2srv/datasets_jupiter/Juno/WAV/Housekeeping.dsdf on jupiter''')
+
+urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
+        'file:/home/jbf/tmp/20231115/housekeeping.dsdf' ]
+url= getParam( 'dsdf', urls[0], 'URL of dsdf', urls )
+
+def readXML(xmlsrc):
+     
+    domFactory = DocumentBuilderFactory.newInstance()
+    domFactory.setNamespaceAware(True)
+    builder = domFactory.newDocumentBuilder(); 
+    inputsrc = InputSource(StringReader(xmlsrc));
+    doc = builder.parse(inputsrc);
+    xp= XPathFactory.newInstance().newXPath()
+    nn=xp.evaluate( '//properties',doc,XPathConstants.NODE)
+    
+    mm= LinkedHashMap()
+    ll= ArrayList(100)
+    for i in xrange(100):
+        ll.add(i,'')
+        
+    aa= nn.getAttributes()
+    for i in xrange(aa.length):
+        itm=aa.item(i)
+        if ( itm.nodeName.startswith('param_') ):
+            idx= int(itm.nodeName[6:])
+            ll.set( idx,itm.nodeValue )
+    return ll
+    
+def readDsdf(dsdfsrc):
+     
+    ll= ArrayList(100)
+    for i in xrange(100):
+        ll.add(i,'')
+        
+    for line in dsdfsrc.splitlines():
+        print line
+        if ( line.startswith('param_') ):
+            ieq= line.find('=')
+            
+            idx= int(line[0:ieq][6:])
+            ll.set( idx,line[ieq+1:].strip() )
+            
+    return ll
+        
+ff= downloadResourceAsTempFile( URL(url),monitor )
+ss= FileUtil.readFileToString(ff)
+
+if ( ss[0:4]=='[00]' ):
+    print 'reading xml within '+url
+    ll= readXML(ss[10:])
+else:
+    print 'reading dsdf '+url
+    ll= readDsdf(ss)
+
+print ll
+
+panel= JPanel()
+panel.layout= BoxLayout(panel, BoxLayout.Y_AXIS )
+
+cc= ArrayList(101)
+tt= ArrayList(101)  # types
+for i in xrange(101):
+   cc.add(i,None)
+   tt.add(i,None)
+   
+for i in xrange(100):
+    itm= ll.get(i)
+    extra=False
+    if len(itm)>0:
+        itm= itm.strip()
+        itm= itm[1:-1]
+        
+        print itm
+        
+        ss= itm.split('|')
+        narg= len(ss)
+        c= None
+        if narg==1:
+            print 'JCheckBox(text=\''+ss[0]+'\')'
+            c= JCheckBox(text=ss[0])
+            tt[i]= 'JCheckBox'
+        elif narg==2:
+            print 'JCheckBox(text=\''+ss[1]+'\')'
+            c= JCheckBox(text=ss[0]+': '+ss[1])
+            tt[i]= 'JCheckBox'
+        else:
+            extra=True
+                   
+        if ( c!=None ):
+            panel.add(c)
+            cc[i]= c
+            
+    if extra:
+        c= JTextArea(text='')
+        panel.add(c)
+        cc[100]= c
+        
+pp= JScrollPane(panel)
+pp.maximumSize= Dimension(600,800)
+pp.preferredSize= Dimension(600,800)
+JOptionPane.showMessageDialog(getApplication(),pp)
+
+delim=' '
+ss= StringBuilder()
+for i in xrange(100):
+    if cc[i]==None:
+        pass
+    elif tt[i]=='JCheckBox':
+        if cc[i].selected:
+            txt= cc[i].text
+            i= txt.find(': ')
+            if i>-1: 
+                txt= txt[0:i]
+            ss.append(txt)
+            ss.append(delim)
+
+print '-----'
+print ss.toString()
+print '-----'
