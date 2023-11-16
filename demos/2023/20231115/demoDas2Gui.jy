@@ -16,7 +16,7 @@ urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jov
         'file:/home/jbf/tmp/20231115/otherparams.dsdf' ]
 url= getParam( 'dsdf', urls[0], 'URL of dsdf', urls )
 
-paramz= getParam('params', 'JALT  JLAT', 'parameters string to parse' )
+paramz= getParam('params', 'JALT ', 'parameters string to parse' )
 
 def readXML(xmlsrc):
     '''Read the Das2Server container for DSDF'''
@@ -71,9 +71,6 @@ print ll
 
 paramsArr= paramz.split()
 
-for p in paramsArr:
-    print '>>>%s<<<' % p
-
 panel= JPanel()
 panel.layout= BoxLayout(panel, BoxLayout.Y_AXIS )
 
@@ -90,19 +87,14 @@ for i in xrange(100):
     if len(itm)>0:
         itm= itm.strip()
         
-        print itm
-        
         ss= itm.split('|')
         narg= len(ss)
         c= None
         if narg==1:
             ss[0]=ss[0].strip()
-            print 'JCheckBox(text=\''+ss[0]+'\')'
             c= JCheckBox(text=ss[0])
             try:
-                print paramsArr, ss[0], 'line102'
                 idx= paramsArr.index(ss[0])
-                print idx
                 c.selected=True
                 paramsArr.remove(ss[0])
             except:
@@ -111,12 +103,9 @@ for i in xrange(100):
         elif narg==2:
             ss[1]=ss[1].strip()
             ss[0]=ss[0].strip()
-            print 'JCheckBox(text=\''+ss[1]+'\')'
             c= JCheckBox(text=ss[0]+': '+ss[1])
             try:
-                print '%s_%s_%s_line113' % ( str( paramsArr), paramsArr[0], ss[0] )
                 idx= paramsArr.index(ss[0])
-                print idx, 'line116'
                 c.selected=True
                 paramsArr.remove(ss[0])
             except:
