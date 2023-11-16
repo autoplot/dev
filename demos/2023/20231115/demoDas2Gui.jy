@@ -1,6 +1,6 @@
 from java.lang import StringBuilder
 from java.awt import FlowLayout,Dimension
-from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane
+from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane,JTextArea,Box,JLabel
 from java.util import LinkedHashMap,ArrayList
 from javax.xml.xpath import XPathFactory,XPathConstants
 from org.xml.sax import InputSource
@@ -12,8 +12,9 @@ setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.
 /var/www/das2srv/datasets_jupiter/Juno/WAV/Housekeeping.dsdf on jupiter''')
 
 urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
-        'file:/home/jbf/tmp/20231115/housekeeping.dsdf' ]
-url= getParam( 'dsdf', urls[0], 'URL of dsdf', urls )
+        'file:/home/jbf/tmp/20231115/housekeeping.dsdf',
+        'file:/home/jbf/tmp/20231115/otherparams.dsdf' ]
+url= getParam( 'dsdf', urls[2], 'URL of dsdf', urls )
 
 def readXML(xmlsrc):
      
@@ -74,10 +75,11 @@ tt= ArrayList(101)  # types
 for i in xrange(101):
    cc.add(i,None)
    tt.add(i,None)
-   
+
+extra=False   
 for i in xrange(100):
     itm= ll.get(i)
-    extra=False
+
     if len(itm)>0:
         itm= itm.strip()
         itm= itm[1:-1]
@@ -102,10 +104,12 @@ for i in xrange(100):
             panel.add(c)
             cc[i]= c
             
-    if extra:
-        c= JTextArea(text='')
-        panel.add(c)
-        cc[100]= c
+if extra:
+    panel.add(JLabel('Text stuff'))
+    c= JTextArea(text='',rows=4)
+    panel.add(c)
+    cc[100]= c
+panel.add(Box.createGlue())
         
 pp= JScrollPane(panel)
 pp.maximumSize= Dimension(600,800)
@@ -125,7 +129,12 @@ for i in xrange(100):
                 txt= txt[0:i]
             ss.append(txt)
             ss.append(delim)
-
+if cc[100]!=None:
+    ss.append(delim)
+    txt= cc[100].text.replace('\n',delim)
+    txt= txt.strip()
+    ss.append(txt)
+    
 print '-----'
 print ss.toString()
 print '-----'
