@@ -14,10 +14,12 @@ setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.
 urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
         'file:/home/jbf/tmp/20231115/housekeeping.dsdf',
         'file:/home/jbf/tmp/20231115/otherparams.dsdf' ]
-url= getParam( 'dsdf', urls[2], 'URL of dsdf', urls )
+url= getParam( 'dsdf', urls[0], 'URL of dsdf', urls )
+
+paramz= getParam('params', 'JALT  JLAT', 'parameters string to parse' )
 
 def readXML(xmlsrc):
-     
+    '''Read the Das2Server container for DSDF'''
     domFactory = DocumentBuilderFactory.newInstance()
     domFactory.setNamespaceAware(True)
     builder = domFactory.newDocumentBuilder(); 
@@ -37,10 +39,11 @@ def readXML(xmlsrc):
         if ( itm.nodeName.startswith('param_') ):
             idx= int(itm.nodeName[6:])
             ll.set( idx,itm.nodeValue )
+            print 'found ', idx, itm.nodeValue
     return ll
     
 def readDsdf(dsdfsrc):
-     
+    '''Read the DSDF source file'''
     ll= ArrayList(100)
     for i in xrange(100):
         ll.add(i,'')
@@ -49,7 +52,6 @@ def readDsdf(dsdfsrc):
         print line
         if ( line.startswith('param_') ):
             ieq= line.find('=')
-            
             idx= int(line[0:ieq][6:])
             ll.set( idx,line[ieq+1:].strip() )
             
@@ -67,6 +69,11 @@ else:
 
 print ll
 
+paramsArr= paramz.split()
+
+for p in paramsArr:
+    print '>>>%s<<<' % p
+
 panel= JPanel()
 panel.layout= BoxLayout(panel, BoxLayout.Y_AXIS )
 
@@ -75,14 +82,13 @@ tt= ArrayList(101)  # types
 for i in xrange(101):
    cc.add(i,None)
    tt.add(i,None)
-
+    
 extra=False   
 for i in xrange(100):
     itm= ll.get(i)
 
     if len(itm)>0:
         itm= itm.strip()
-        itm= itm[1:-1]
         
         print itm
         
@@ -90,14 +96,36 @@ for i in xrange(100):
         narg= len(ss)
         c= None
         if narg==1:
+            ss[0]=ss[0].strip()
             print 'JCheckBox(text=\''+ss[0]+'\')'
             c= JCheckBox(text=ss[0])
+            try:
+                print paramsArr, ss[0], 'line102'
+                idx= paramsArr.index(ss[0])
+                print idx
+                c.selected=True
+                paramsArr.remove(ss[0])
+            except:
+                print 'param not found: '+ss[0]
             tt[i]= 'JCheckBox'
         elif narg==2:
+            ss[1]=ss[1].strip()
+            ss[0]=ss[0].strip()
             print 'JCheckBox(text=\''+ss[1]+'\')'
             c= JCheckBox(text=ss[0]+': '+ss[1])
+            try:
+                print '%s_%s_%s_line113' % ( str( paramsArr), paramsArr[0], ss[0] )
+                idx= paramsArr.index(ss[0])
+                print idx, 'line116'
+                c.selected=True
+                paramsArr.remove(ss[0])
+            except:
+                import traceback
+                traceback.print_exc()
+                print 'param not found: '+ss[0]
             tt[i]= 'JCheckBox'
         else:
+            
             extra=True
                    
         if ( c!=None ):
