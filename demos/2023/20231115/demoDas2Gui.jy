@@ -14,9 +14,9 @@ setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.
 urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
         'file:/home/jbf/tmp/20231115/housekeeping.dsdf',
         'file:/home/jbf/tmp/20231115/otherparams.dsdf' ]
-url= getParam( 'dsdf', urls[0], 'URL of dsdf', urls )
+url= getParam( 'dsdf', urls[1], 'URL of dsdf', urls )
 
-paramz= getParam('params', 'JALT ', 'parameters string to parse' )
+paramz= getParam('params', '3.6U -12.0 -13U   ', 'parameters string to parse' )
 
 def readXML(xmlsrc):
     '''Read the Das2Server container for DSDF'''
@@ -53,7 +53,10 @@ def readDsdf(dsdfsrc):
         if ( line.startswith('param_') ):
             ieq= line.find('=')
             idx= int(line[0:ieq][6:])
-            ll.set( idx,line[ieq+1:].strip() )
+            vv= line[ieq+1:].strip()
+            if vv[0]=='\'' and vv[-1]=='\'':
+                vv= vv[1:-1]  
+            ll.set( idx,vv )
             
     return ll
         
