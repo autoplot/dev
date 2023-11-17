@@ -19,7 +19,7 @@ urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jov
         'file:/home/jbf/tmp/20231115/textFieldNoSpace.dsdf',
         'file:/home/jbf/tmp/20231115/subsetOfEnum.dsdf',
         'file:/home/jbf/tmp/20231115/textFieldRange.dsdf' ]
-url= getParam( 'dsdf', urls[-1], 'URL of dsdf', urls )
+url= getParam( 'dsdf', urls[-1], 'URL of dsdf', { 'examples':urls } )
 
 #paramz= getParam('params', '- 13U -15.0 -20U CE_CMD CE_CRC     ', 'parameters string to parse' )
 paramz= getParam('params', '--dftlen 1024 ', 'parameters string to parse' )
