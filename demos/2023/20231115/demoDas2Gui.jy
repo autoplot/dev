@@ -11,14 +11,17 @@ from org.das2.util import FileUtil
 setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.  See
 /var/www/das2srv/datasets_jupiter/Juno/WAV/Housekeeping.dsdf on jupiter''')
 
+
 urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
         'file:/home/jbf/tmp/20231115/housekeeping.dsdf',
         'file:/home/jbf/tmp/20231115/otherparams.dsdf',
+        'file:/home/jbf/tmp/20231115/textField.dsdf',
+        'file:/home/jbf/tmp/20231115/textFieldNoSpace.dsdf',
         'file:/home/jbf/tmp/20231115/subsetOfEnum.dsdf' ]
 url= getParam( 'dsdf', urls[3], 'URL of dsdf', urls )
 
 #paramz= getParam('params', '- 13U -15.0 -20U CE_CMD CE_CRC     ', 'parameters string to parse' )
-paramz= getParam('params', 'Bz,Ex,Eu,Ev', 'parameters string to parse' )
+paramz= getParam('params', '--dftlen 1024 ', 'parameters string to parse' )
 
 def readXML(xmlsrc):
     '''Read the Das2Server container for DSDF'''
@@ -60,24 +63,59 @@ def readDsdf(dsdfsrc):
             
     return ll
     
-def findParamValue(paramsArr,ss0,regex):
-    '''return the value from paramsArr or '' (empty string)'''
+def checkMatch( template, sval ):
+    '''if template=xxx@bb and sval=xxxJbb then return J otherwise return empty string'''
+    template= template.strip()
+    sval= sval.strip()
+    if ( template.find('@')>-1 ):
+        idx= template.find('@')
+        i= len(sval) - (len(template)-idx-1)  # number of characters after @
+        if template[0:idx]==sval[0:idx] and template[idx+1:]==sval[i:]:
+            return sval[idx:(idx+len(sval)-len(template)+1)] 
+        else:
+            return ''
+    else:
+        if ( template==sval ): return sval
+        else: return ''
+        
+def findParamValue(paramsArr,ss0,template):
+    '''return the value from paramsArr or '' (empty string).  template can be a template or a regex'''
     try:
-        if regex==None:
+        if template==None:
             idx= paramsArr.index(ss0)
             paramsArr.remove(ss0)
             return ss0
         else:
-            import re
-            pattern= re.compile(regex)
-            for item in paramsArr:
-                match= pattern.match(item)
-                if match!=None:
-                    return item
-            return ''
+            if template[0]=='^': # it's a regex.  ss0 must not contain spaces
+                regex= template
+                import re
+                pattern= re.compile(regex)
+                for item in paramsArr:
+                    match= pattern.match(item)
+                    if match!=None:
+                        return item
+                return ''
+            else:
+                templates= template.split()
+                i=0
+                ipa=0
+                print templates, len(templates)
+                while i<len(templates):
+                    while ( ipa<len(paramsArr) and i<len(templates) ):
+                        item= paramsArr[ipa].strip()
+                        match= checkMatch(templates[i],item)
+                        if match=='':
+                            return ''
+                        else:
+                            if '@' in templates[i]:
+                                return match
+                            else:
+                                ipa= ipa+1
+                                i=i+1
+                return ''
     except:
-        #import traceback
-        #traceback.print_exc()
+        import traceback
+        traceback.print_exc()
         print 'param not found: '+ss0
         return ''
            
@@ -94,9 +132,7 @@ def setSelectedListItems( jList, allItems, items ):
         for b in jList.components:
             item= b.text
             try:
-                print 'line97 ', allItems, item
                 idx= items.index(item)
-                print 'selected ', item, idx
                 b.selected=True
             except:
                 continue
@@ -109,7 +145,11 @@ def getSelectedListItems( jList ):
             if b.selected:
                 resultList.append(b.text)
         return resultList
-        
+
+def getRegex( t ):
+    '''Return the regular expression for the template.  The first field will be the @ symbol value'''
+    return t.replace('@','(\\S+)')
+    
 ff= downloadResourceAsTempFile( URL(url),monitor )
 ss= FileUtil.readFileToString(ff)
 
@@ -126,22 +166,22 @@ panel= JPanel()
 panel.layout= BoxLayout(panel, BoxLayout.Y_AXIS )
 #panel.layout= GridLayout(99,1)
 #panel.layout= FlowLayout(FlowLayout.LEADING)
-
+    
 cc= ArrayList(101)
 tt= ArrayList(101)  # types
+ff= ArrayList(101)  # formats (--dftlen @)
 ss= ArrayList(101)  # special arguments for the GUI type, like sep
 for i in xrange(101):
    cc.add(i,None)
    tt.add(i,None)
    ss.add(i,None)
-   
-extra=False   
-for i in xrange(100):
-    itm= ll.get(i)
+   ff.add(i,None)
 
+extra=False   
+for i in xrange(10):
+    itm= ll.get(i)
     if len(itm)>0:
         itm= itm.strip()
-        print 'line110: ', itm
         ss= itm.split('|')
         narg= len(ss)
         c= None
@@ -151,6 +191,7 @@ for i in xrange(100):
             vv= findParamValue(paramsArr,ss[0],None)
             if len(vv)>0: c.selected=True
             tt[i]= 'JCheckBox'
+            panel.add(c)
         elif narg==2:
             ss[1]=ss[1].strip()
             ss[0]=ss[0].strip()
@@ -158,16 +199,21 @@ for i in xrange(100):
             vv= findParamValue(paramsArr,ss[0],None)
             if len(vv)>0: c.selected=True
             tt[i]= 'JCheckBox'
-            
+            panel.add(c)
         elif narg==3:
             ss[0]=ss[0].strip()
             ss[1]=ss[1].strip()
             ss[2]=ss[2].strip()
             panel.add(JLabel(text=ss[0]+': '+ss[1]))
-            c= JTextField(20)
+            c= JTextField('')
+            c.setMaximumSize( Dimension(8000, c.getPreferredSize().height) )  # Madness
             vv= findParamValue(paramsArr,ss[0],None)
-            if len(vv)>0: c.text= vv # wrong!
+            #c= JLabel('hello')
+            ff[i]= ss[2]
+            vv= findParamValue(paramsArr,ss[0],ss[2])
+            if len(vv)>0: c.text= vv 
             tt[i]= 'JTextField'
+            panel.add(c)
         elif narg==4:
             ss[0]=ss[0].strip()
             ss[1]=ss[1].strip()
@@ -198,6 +244,7 @@ for i in xrange(100):
                 items= vv.split(sep)
                 setSelectedListItems( c, allItems, items )
             tt[i]= 'JList'
+            panel.add(c)
         else:
             extra=True
                    
@@ -233,9 +280,10 @@ for i in xrange(100):
             parametersBuilder.append(txt)
             parametersBuilder.append(delim)
     elif tt[i]=='JTextField':
-        s=cc[i].text  # Wrong! 
+        s=cc[i].text
         if len(s)>0:
-            parametersBuilder.append(txt)
+            s= ff[i].replace('@',s)
+            parametersBuilder.append(s)
             parametersBuilder.append(delim)
     elif tt[i]=='JList':
         selectedItems= getSelectedListItems(cc[i])
