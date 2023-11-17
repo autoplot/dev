@@ -17,8 +17,9 @@ urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jov
         'file:/home/jbf/tmp/20231115/otherparams.dsdf',
         'file:/home/jbf/tmp/20231115/textField.dsdf',
         'file:/home/jbf/tmp/20231115/textFieldNoSpace.dsdf',
-        'file:/home/jbf/tmp/20231115/subsetOfEnum.dsdf' ]
-url= getParam( 'dsdf', urls[3], 'URL of dsdf', urls )
+        'file:/home/jbf/tmp/20231115/subsetOfEnum.dsdf',
+        'file:/home/jbf/tmp/20231115/textFieldRange.dsdf' ]
+url= getParam( 'dsdf', urls[-1], 'URL of dsdf', urls )
 
 #paramz= getParam('params', '- 13U -15.0 -20U CE_CMD CE_CRC     ', 'parameters string to parse' )
 paramz= getParam('params', '--dftlen 1024 ', 'parameters string to parse' )
@@ -219,31 +220,40 @@ for i in xrange(10):
             ss[1]=ss[1].strip()
             ss[2]=ss[2].strip()
             ss[3]=ss[3].strip()
-            panel.add(JLabel(text=ss[0]+': '+ss[1]))
             if ss[3].startswith('set:'):
+                panel.add(JLabel(text=ss[0]+': '+ss[1]))
                 sepAllItems= ss[3][4:].split()
                 allItems= sepAllItems[1:]
                 sep= sepAllItems[0]
                 ss[i]= sep
-            useJList=False
-            if useJList:
-                c= JList(allItems) 
-                c.layoutOrientation=JList.HORIZONTAL_WRAP # this doesn't work for me on Linux
+                useJList=False
+                if useJList:
+                    c= JList(allItems) 
+                    c.layoutOrientation=JList.HORIZONTAL_WRAP # this doesn't work for me on Linux
+                else:
+                    panel1= JPanel()
+                    panel1.setLayout( BoxLayout(panel1, BoxLayout.X_AXIS ) )
+                    panel1.background= Color.pink
+                    for item in allItems:
+                        b1= JCheckBox(item,selected=False)
+                        panel1.add(b1)
+                    c= panel1
+                itemMatch= '|'.join(allItems)
+                regex='^(%s)(?:%s(%s))*$' % ( itemMatch, sep, itemMatch )
+                vv= findParamValue(paramsArr,ss[0],regex)
+                if len(vv)>0:
+                    items= vv.split(sep)
+                    setSelectedListItems( c, allItems, items )
+                tt[i]= 'JList'
             else:
-                panel1= JPanel()
-                panel1.setLayout( BoxLayout(panel1, BoxLayout.X_AXIS ) )
-                panel1.background= Color.pink
-                for item in allItems:
-                    b1= JCheckBox(item,selected=False)
-                    panel1.add(b1)
-                c= panel1
-            itemMatch= '|'.join(allItems)
-            regex='^(%s)(?:%s(%s))*$' % ( itemMatch, sep, itemMatch )
-            vv= findParamValue(paramsArr,ss[0],regex)
-            if len(vv)>0:
-                items= vv.split(sep)
-                setSelectedListItems( c, allItems, items )
-            tt[i]= 'JList'
+                panel.add(JLabel(text=ss[0]+': '+ss[1] + " (" +ss[3]+")"))
+                c= JTextField('')
+                c.setMaximumSize( Dimension(8000, c.getPreferredSize().height) )  # Madness
+                vv= findParamValue(paramsArr,ss[0],None)
+                ff[i]= ss[2]
+                vv= findParamValue(paramsArr,ss[0],ss[2])
+                if len(vv)>0: c.text= vv 
+                tt[i]= 'JTextField'
             panel.add(c)
         else:
             extra=True
