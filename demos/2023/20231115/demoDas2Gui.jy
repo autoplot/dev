@@ -1,6 +1,6 @@
 from java.lang import StringBuilder
-from java.awt import FlowLayout,Dimension
-from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane,JTextArea,Box,JLabel
+from java.awt import FlowLayout,Dimension,GridLayout,Component
+from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane,JTextArea,Box,JLabel,JTextField,JComboBox,JList
 from java.util import LinkedHashMap,ArrayList
 from javax.xml.xpath import XPathFactory,XPathConstants
 from org.xml.sax import InputSource
@@ -13,10 +13,12 @@ setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.
 
 urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
         'file:/home/jbf/tmp/20231115/housekeeping.dsdf',
-        'file:/home/jbf/tmp/20231115/otherparams.dsdf' ]
-url= getParam( 'dsdf', urls[1], 'URL of dsdf', urls )
+        'file:/home/jbf/tmp/20231115/otherparams.dsdf',
+        'file:/home/jbf/tmp/20231115/subsetOfEnum.dsdf' ]
+url= getParam( 'dsdf', urls[3], 'URL of dsdf', urls )
 
-paramz= getParam('params', '3.6U -12.0 -13U   ', 'parameters string to parse' )
+#paramz= getParam('params', '- 13U -15.0 -20U CE_CMD CE_CRC     ', 'parameters string to parse' )
+paramz= getParam('params', 'Bz,Ex,Eu,Ev', 'parameters string to parse' )
 
 def readXML(xmlsrc):
     '''Read the Das2Server container for DSDF'''
@@ -39,7 +41,6 @@ def readXML(xmlsrc):
         if ( itm.nodeName.startswith('param_') ):
             idx= int(itm.nodeName[6:])
             ll.set( idx,itm.nodeValue )
-            print 'found ', idx, itm.nodeValue
     return ll
     
 def readDsdf(dsdfsrc):
@@ -49,7 +50,6 @@ def readDsdf(dsdfsrc):
         ll.add(i,'')
         
     for line in dsdfsrc.splitlines():
-        print line
         if ( line.startswith('param_') ):
             ieq= line.find('=')
             idx= int(line[0:ieq][6:])
@@ -59,7 +59,37 @@ def readDsdf(dsdfsrc):
             ll.set( idx,vv )
             
     return ll
-        
+    
+def findParamValue(paramsArr,ss0,regex):
+    '''return the value from paramsArr or '' (empty string)'''
+    try:
+        if regex==None:
+            idx= paramsArr.index(ss0)
+            paramsArr.remove(ss0)
+            return ss0
+        else:
+            import re
+            pattern= re.compile(regex)
+            for item in paramsArr:
+                match= pattern.match(item)
+                if match!=None:
+                    return item
+            return ''
+    except:
+        #import traceback
+        #traceback.print_exc()
+        print 'param not found: '+ss0
+        return ''
+           
+def setSelectedListItems( jList, allItems, items ):
+    jList.clearSelection()
+    for item in items:
+        try:
+            idx= allItems.index(item)
+            jList.addSelectionInterval(idx,idx)
+        except:
+            continue
+                
 ff= downloadResourceAsTempFile( URL(url),monitor )
 ss= FileUtil.readFileToString(ff)
 
@@ -70,66 +100,88 @@ else:
     print 'reading dsdf '+url
     ll= readDsdf(ss)
 
-print ll
-
 paramsArr= paramz.split()
 
 panel= JPanel()
 panel.layout= BoxLayout(panel, BoxLayout.Y_AXIS )
+#panel.layout= GridLayout(99,1)
+#panel.layout= FlowLayout(FlowLayout.LEADING)
 
 cc= ArrayList(101)
 tt= ArrayList(101)  # types
+ss= ArrayList(101)  # special arguments for the GUI type, like sep
 for i in xrange(101):
    cc.add(i,None)
    tt.add(i,None)
-    
+   ss.add(i,None)
+   
 extra=False   
 for i in xrange(100):
     itm= ll.get(i)
 
     if len(itm)>0:
         itm= itm.strip()
-        
+        print 'line110: ', itm
         ss= itm.split('|')
         narg= len(ss)
         c= None
         if narg==1:
             ss[0]=ss[0].strip()
             c= JCheckBox(text=ss[0])
-            try:
-                idx= paramsArr.index(ss[0])
-                c.selected=True
-                paramsArr.remove(ss[0])
-            except:
-                print 'param not found: '+ss[0]
+            vv= findParamValue(paramsArr,ss[0],None)
+            if len(vv)>0: c.selected=True
             tt[i]= 'JCheckBox'
         elif narg==2:
             ss[1]=ss[1].strip()
             ss[0]=ss[0].strip()
             c= JCheckBox(text=ss[0]+': '+ss[1])
-            try:
-                idx= paramsArr.index(ss[0])
-                c.selected=True
-                paramsArr.remove(ss[0])
-            except:
-                import traceback
-                traceback.print_exc()
-                print 'param not found: '+ss[0]
+            vv= findParamValue(paramsArr,ss[0],None)
+            if len(vv)>0: c.selected=True
             tt[i]= 'JCheckBox'
-        else:
             
+        elif narg==3:
+            ss[0]=ss[0].strip()
+            ss[1]=ss[1].strip()
+            ss[2]=ss[2].strip()
+            panel.add(JLabel(text=ss[0]+': '+ss[1]))
+            c= JTextField(20)
+            vv= findParamValue(paramsArr,ss[0],None)
+            if len(vv)>0: c.text= vv # wrong!
+            tt[i]= 'JTextField'
+        elif narg==4:
+            ss[0]=ss[0].strip()
+            ss[1]=ss[1].strip()
+            ss[2]=ss[2].strip()
+            ss[3]=ss[3].strip()
+            panel.add(JLabel(text=ss[0]+': '+ss[1]))
+            if ss[3].startswith('set:'):
+                sepAllItems= ss[3][4:].split()
+                allItems= sepAllItems[1:]
+                sep= sepAllItems[0]
+                ss[i]= sep
+            c= JList(allItems) 
+            itemMatch= '|'.join(allItems)
+            regex='^(%s)(?:%s(%s))*$' % ( itemMatch, sep, itemMatch )
+            vv= findParamValue(paramsArr,ss[0],regex)
+            if len(vv)>0:
+                items= vv.split(sep)
+                setSelectedListItems( c, allItems, items )
+            tt[i]= 'JList'
+        else:
             extra=True
                    
         if ( c!=None ):
             panel.add(c)
             cc[i]= c
             
+        c.setAlignmentX(Component.LEFT_ALIGNMENT);
 if extra:
     panel.add(JLabel('Text stuff'))
     c= JTextArea(text='',rows=4)
     panel.add(c)
     cc[100]= c
-panel.add(Box.createGlue())
+
+panel.add(Box.createVerticalGlue())
         
 pp= JScrollPane(panel)
 pp.maximumSize= Dimension(600,800)
@@ -137,7 +189,7 @@ pp.preferredSize= Dimension(600,800)
 JOptionPane.showMessageDialog(getApplication(),pp)
 
 delim=' '
-ss= StringBuilder()
+parametersBuilder= StringBuilder()
 for i in xrange(100):
     if cc[i]==None:
         pass
@@ -147,8 +199,19 @@ for i in xrange(100):
             i= txt.find(': ')
             if i>-1: 
                 txt= txt[0:i]
-            ss.append(txt)
-            ss.append(delim)
+            parametersBuilder.append(txt)
+            parametersBuilder.append(delim)
+    elif tt[i]=='JTextField':
+        s=cc[i].text  # Wrong! 
+        if len(s)>0:
+            parametersBuilder.append(txt)
+            parametersBuilder.append(delim)
+    elif tt[i]=='JList':
+        selectedItems=cc[i].selectedValuesList
+        sep=ss[i]
+        parametersBuilder.append(sep.join(selectedItems))
+        parametersBuilder.append(delim) 
+            
 if cc[100]!=None:
     ss.append(delim)
     txt= cc[100].text.replace('\n',delim)
@@ -156,5 +219,5 @@ if cc[100]!=None:
     ss.append(txt)
     
 print '-----'
-print ss.toString()
+print parametersBuilder.toString()
 print '-----'
