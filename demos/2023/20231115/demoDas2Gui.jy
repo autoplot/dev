@@ -1,6 +1,6 @@
 from java.lang import StringBuilder
 from java.awt import FlowLayout,Dimension,GridLayout,Component
-from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane,JTextArea,Box,JLabel,JTextField,JComboBox,JList
+from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane,JTextArea,Box,JLabel,JTextField,JComboBox,JList,ButtonGroup,JButton
 from java.util import LinkedHashMap,ArrayList
 from javax.xml.xpath import XPathFactory,XPathConstants
 from org.xml.sax import InputSource
@@ -82,14 +82,34 @@ def findParamValue(paramsArr,ss0,regex):
         return ''
            
 def setSelectedListItems( jList, allItems, items ):
-    jList.clearSelection()
-    for item in items:
-        try:
-            idx= allItems.index(item)
-            jList.addSelectionInterval(idx,idx)
-        except:
-            continue
-                
+    if ( isinstance( jList, JList ) ):
+        jList.clearSelection()
+        for item in items:
+            try:
+                idx= allItems.index(item)
+                jList.addSelectionInterval(idx,idx)
+            except:
+                continue
+    else:
+        for b in jList.components:
+            item= b.text
+            try:
+                print 'line97 ', allItems, item
+                idx= items.index(item)
+                print 'selected ', item, idx
+                b.selected=True
+            except:
+                continue
+def getSelectedListItems( jList ):
+    if ( isinstance( jList, JList ) ):      
+        return jList.selectedValuesList
+    else:
+        resultList= []
+        for b in jList.components:
+            if b.selected:
+                resultList.append(b.text)
+        return resultList
+        
 ff= downloadResourceAsTempFile( URL(url),monitor )
 ss= FileUtil.readFileToString(ff)
 
@@ -159,7 +179,18 @@ for i in xrange(100):
                 allItems= sepAllItems[1:]
                 sep= sepAllItems[0]
                 ss[i]= sep
-            c= JList(allItems) 
+            useJList=False
+            if useJList:
+                c= JList(allItems) 
+                c.layoutOrientation=JList.HORIZONTAL_WRAP # this doesn't work for me on Linux
+            else:
+                panel1= JPanel()
+                panel1.setLayout( BoxLayout(panel1, BoxLayout.X_AXIS ) )
+                panel1.background= Color.pink
+                for item in allItems:
+                    b1= JCheckBox(item,selected=False)
+                    panel1.add(b1)
+                c= panel1
             itemMatch= '|'.join(allItems)
             regex='^(%s)(?:%s(%s))*$' % ( itemMatch, sep, itemMatch )
             vv= findParamValue(paramsArr,ss[0],regex)
@@ -207,7 +238,7 @@ for i in xrange(100):
             parametersBuilder.append(txt)
             parametersBuilder.append(delim)
     elif tt[i]=='JList':
-        selectedItems=cc[i].selectedValuesList
+        selectedItems= getSelectedListItems(cc[i])
         sep=ss[i]
         parametersBuilder.append(sep.join(selectedItems))
         parametersBuilder.append(delim) 
