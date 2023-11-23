@@ -1,0 +1,21 @@
+setScriptDescription('''This demonstrates where the format to ASCII file doesn't
+consider the resolution needed to form each time tag.  Note that explicitly
+setting the format works around this problem.''')
+
+tt= Units.cdfTT2000.parse('2023-01-01T00:00Z')
+tt= tt + dataset( linspace( 0, 5000, 6 ), units=Units.nanoseconds )
+
+ds= link( tt, dataset( [1,2,3,2,3,4] ) )
+plot( ds )
+
+formatDataSet( ds,'/tmp/ap/fineCadenceTimeTags.dat')
+
+# qstream formatter uses GCD code to calculate the cadence
+formatDataSet( ds,'/tmp/ap/fineCadenceTimeTags.qds')
+
+# I'm not sure how formats are specified when data is time.
+tt.putProperty( QDataSet.FORMAT, '$Y-$m-$dT$H:$M:$S.$(subsec;places=9)' )
+ds= link( tt, dataset( [1,2,3,2,3,4] ) )
+formatDataSet( ds,'/tmp/ap/fineCadenceTimeTags.2.dat')
+
+
