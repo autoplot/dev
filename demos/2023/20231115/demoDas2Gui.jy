@@ -1,0 +1,313 @@
+from java.lang import StringBuilder
+from java.awt import FlowLayout,Dimension,GridLayout,Component
+from javax.swing import JPanel,BoxLayout,JOptionPane,JCheckBox,JScrollPane,JTextArea,Box,JLabel,JTextField,JComboBox,JList,ButtonGroup,JButton
+from java.util import LinkedHashMap,ArrayList
+from javax.xml.xpath import XPathFactory,XPathConstants
+from org.xml.sax import InputSource
+from javax.xml.parsers import DocumentBuilderFactory
+from java.io import StringReader
+from org.das2.util import FileUtil
+
+setScriptDescription('''Build a prototype parameters GUI for Das2Server sources.  See
+/var/www/das2srv/datasets_jupiter/Juno/WAV/Housekeeping.dsdf on jupiter''')
+
+
+urls= [ 'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&server=dsdf', 
+        'https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/GanymedeCoRotational&server=dsdf', 
+        'file:/home/jbf/tmp/20231115/housekeeping.dsdf',
+        'file:/home/jbf/tmp/20231115/otherparams.dsdf',
+        'file:/home/jbf/tmp/20231115/textField.dsdf',
+        'file:/home/jbf/tmp/20231115/textFieldNoSpace.dsdf',
+        'file:/home/jbf/tmp/20231115/subsetOfEnum.dsdf',
+        'file:/home/jbf/tmp/20231115/textFieldRange.dsdf' ]
+url= getParam( 'dsdf', urls[1], 'URL of dsdf', { 'examples':urls } )
+
+#paramz= getParam('params', '- 13U -15.0 -20U CE_CMD CE_CRC     ', 'parameters string to parse' )
+paramz= getParam('params', '--dftlen 1024 ', 'parameters string to parse' )
+
+def readXML(xmlsrc):
+    '''Read the Das2Server container for DSDF'''
+    domFactory = DocumentBuilderFactory.newInstance()
+    domFactory.setNamespaceAware(True)
+    builder = domFactory.newDocumentBuilder(); 
+    inputsrc = InputSource(StringReader(xmlsrc));
+    doc = builder.parse(inputsrc);
+    xp= XPathFactory.newInstance().newXPath()
+    nn=xp.evaluate( '//properties',doc,XPathConstants.NODE)
+    
+    mm= LinkedHashMap()
+    ll= ArrayList(100)
+    for i in xrange(100):
+        ll.add(i,'')
+        
+    aa= nn.getAttributes()
+    for i in xrange(aa.length):
+        itm=aa.item(i)
+        if ( itm.nodeName.startswith('param_') ):
+            idx= int(itm.nodeName[6:])
+            ll.set( idx,itm.nodeValue )
+    return ll
+    
+def readDsdf(dsdfsrc):
+    '''Read the DSDF source file'''
+    ll= ArrayList(100)
+    for i in xrange(100):
+        ll.add(i,'')
+        
+    for line in dsdfsrc.splitlines():
+        if ( line.startswith('param_') ):
+            ieq= line.find('=')
+            idx= int(line[0:ieq][6:])
+            vv= line[ieq+1:].strip()
+            if vv[0]=='\'' and vv[-1]=='\'':
+                vv= vv[1:-1]  
+            ll.set( idx,vv )
+            
+    return ll
+    
+def checkMatch( template, sval ):
+    '''if template=xxx@bb and sval=xxxJbb then return J otherwise return empty string'''
+    template= template.strip()
+    sval= sval.strip()
+    if ( template.find('@')>-1 ):
+        idx= template.find('@')
+        i= len(sval) - (len(template)-idx-1)  # number of characters after @
+        if template[0:idx]==sval[0:idx] and template[idx+1:]==sval[i:]:
+            return sval[idx:(idx+len(sval)-len(template)+1)] 
+        else:
+            return ''
+    else:
+        if ( template==sval ): return sval
+        else: return ''
+        
+def findParamValue(paramsArr,ss0,template):
+    '''return the value from paramsArr or '' (empty string).  template can be a template or a regex'''
+    try:
+        if template==None:
+            idx= paramsArr.index(ss0)
+            paramsArr.remove(ss0)
+            return ss0
+        else:
+            if template[0]=='^': # it's a regex.  ss0 must not contain spaces
+                regex= template
+                import re
+                pattern= re.compile(regex)
+                for item in paramsArr:
+                    match= pattern.match(item)
+                    if match!=None:
+                        return item
+                return ''
+            else:
+                templates= template.split()
+                i=0
+                ipa=0
+                print templates, len(templates)
+                while i<len(templates):
+                    while ( ipa<len(paramsArr) and i<len(templates) ):
+                        item= paramsArr[ipa].strip()
+                        match= checkMatch(templates[i],item)
+                        if match=='':
+                            return ''
+                        else:
+                            if '@' in templates[i]:
+                                return match
+                            else:
+                                ipa= ipa+1
+                                i=i+1
+                return ''
+    except:
+        import traceback
+        traceback.print_exc()
+        print 'param not found: '+ss0
+        return ''
+           
+def setSelectedListItems( jList, allItems, items ):
+    if ( isinstance( jList, JList ) ):
+        jList.clearSelection()
+        for item in items:
+            try:
+                idx= allItems.index(item)
+                jList.addSelectionInterval(idx,idx)
+            except:
+                continue
+    else:
+        for b in jList.components:
+            item= b.text
+            try:
+                idx= items.index(item)
+                b.selected=True
+            except:
+                continue
+def getSelectedListItems( jList ):
+    if ( isinstance( jList, JList ) ):      
+        return jList.selectedValuesList
+    else:
+        resultList= []
+        for b in jList.components:
+            if b.selected:
+                resultList.append(b.text)
+        return resultList
+
+def getRegex( t ):
+    '''Return the regular expression for the template.  The first field will be the @ symbol value'''
+    return t.replace('@','(\\S+)')
+    
+ff= downloadResourceAsTempFile( URL(url),monitor )
+ss= FileUtil.readFileToString(ff)
+
+if ( ss[0:4]=='[00]' ):
+    print 'reading xml within '+url
+    ll= readXML(ss[10:])
+else:
+    print 'reading dsdf '+url
+    ll= readDsdf(ss)
+
+paramsArr= paramz.split()
+
+panel= JPanel()
+panel.layout= BoxLayout(panel, BoxLayout.Y_AXIS )
+#panel.layout= GridLayout(99,1)
+#panel.layout= FlowLayout(FlowLayout.LEADING)
+    
+cc= ArrayList(101)
+tt= ArrayList(101)  # types
+ff= ArrayList(101)  # formats (--dftlen @)
+ss= ArrayList(101)  # special arguments for the GUI type, like sep
+for i in xrange(101):
+   cc.add(i,None)
+   tt.add(i,None)
+   ss.add(i,None)
+   ff.add(i,None)
+
+extra=False   
+for i in xrange(10):
+    itm= ll.get(i)
+    if len(itm)>0:
+        itm= itm.strip()
+        ss= itm.split('|')
+        narg= len(ss)
+        c= None
+        if narg==1:
+            ss[0]=ss[0].strip()
+            c= JCheckBox(text=ss[0])
+            vv= findParamValue(paramsArr,ss[0],None)
+            if len(vv)>0: c.selected=True
+            tt[i]= 'JCheckBox'
+            panel.add(c)
+        elif narg==2:
+            ss[1]=ss[1].strip()
+            ss[0]=ss[0].strip()
+            c= JCheckBox(text=ss[0]+': '+ss[1])
+            vv= findParamValue(paramsArr,ss[0],None)
+            if len(vv)>0: c.selected=True
+            tt[i]= 'JCheckBox'
+            panel.add(c)
+        elif narg==3:
+            ss[0]=ss[0].strip()
+            ss[1]=ss[1].strip()
+            ss[2]=ss[2].strip()
+            panel.add(JLabel(text=ss[0]+': '+ss[1]))
+            c= JTextField('')
+            c.setMaximumSize( Dimension(8000, c.getPreferredSize().height) )  # Madness
+            vv= findParamValue(paramsArr,ss[0],None)
+            #c= JLabel('hello')
+            ff[i]= ss[2]
+            vv= findParamValue(paramsArr,ss[0],ss[2])
+            if len(vv)>0: c.text= vv 
+            tt[i]= 'JTextField'
+            panel.add(c)
+        elif narg==4:
+            ss[0]=ss[0].strip()
+            ss[1]=ss[1].strip()
+            ss[2]=ss[2].strip()
+            ss[3]=ss[3].strip()
+            if ss[3].startswith('set:'):
+                panel.add(JLabel(text=ss[0]+': '+ss[1]))
+                sepAllItems= ss[3][4:].split()
+                allItems= sepAllItems[1:]
+                sep= sepAllItems[0]
+                ss[i]= sep
+                useJList=False
+                if useJList:
+                    c= JList(allItems) 
+                    c.layoutOrientation=JList.HORIZONTAL_WRAP # this doesn't work for me on Linux
+                else:
+                    panel1= JPanel()
+                    panel1.setLayout( BoxLayout(panel1, BoxLayout.X_AXIS ) )
+                    panel1.background= Color.pink
+                    for item in allItems:
+                        b1= JCheckBox(item,selected=False)
+                        panel1.add(b1)
+                    c= panel1
+                itemMatch= '|'.join(allItems)
+                regex='^(%s)(?:%s(%s))*$' % ( itemMatch, sep, itemMatch )
+                vv= findParamValue(paramsArr,ss[0],regex)
+                if len(vv)>0:
+                    items= vv.split(sep)
+                    setSelectedListItems( c, allItems, items )
+                tt[i]= 'JList'
+            else:
+                panel.add(JLabel(text=ss[0]+': '+ss[1] + " (" +ss[3]+")"))
+                c= JTextField('')
+                c.setMaximumSize( Dimension(8000, c.getPreferredSize().height) )  # Madness
+                vv= findParamValue(paramsArr,ss[0],None)
+                ff[i]= ss[2]
+                vv= findParamValue(paramsArr,ss[0],ss[2])
+                if len(vv)>0: c.text= vv 
+                tt[i]= 'JTextField'
+            panel.add(c)
+        else:
+            extra=True
+                   
+        if ( c!=None ):
+            panel.add(c)
+            cc[i]= c
+            
+        c.setAlignmentX(Component.LEFT_ALIGNMENT);
+if extra:
+    panel.add(JLabel('Text stuff'))
+    c= JTextArea(text='',rows=4)
+    panel.add(c)
+    cc[100]= c
+
+panel.add(Box.createVerticalGlue())
+        
+pp= JScrollPane(panel)
+pp.maximumSize= Dimension(600,800)
+pp.preferredSize= Dimension(600,800)
+JOptionPane.showMessageDialog(getApplication(),pp)
+
+delim=' '
+parametersBuilder= StringBuilder()
+for i in xrange(100):
+    if cc[i]==None:
+        pass
+    elif tt[i]=='JCheckBox':
+        if cc[i].selected:
+            txt= cc[i].text
+            i= txt.find(': ')
+            if i>-1: 
+                txt= txt[0:i]
+            parametersBuilder.append(txt)
+            parametersBuilder.append(delim)
+    elif tt[i]=='JTextField':
+        s=cc[i].text
+        if len(s)>0:
+            s= ff[i].replace('@',s)
+            parametersBuilder.append(s)
+            parametersBuilder.append(delim)
+    elif tt[i]=='JList':
+        selectedItems= getSelectedListItems(cc[i])
+        sep=ss[i]
+        parametersBuilder.append(sep.join(selectedItems))
+        parametersBuilder.append(delim) 
+            
+if cc[100]!=None:
+    ss.append(delim)
+    txt= cc[100].text.replace('\n',delim)
+    txt= txt.strip()
+    ss.append(txt)
+    
+print '-----'
+print parametersBuilder.toString()
+print '-----'

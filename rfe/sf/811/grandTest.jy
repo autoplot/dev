@@ -50,6 +50,10 @@ load(PWD +'/twoPanelsSecondWithTallTitle.vap')
 fixLayout()
 writeToPng(PWD + '/fixed/twoPanelsSecondWithTallTitle.png')
 
+load(PWD +'/twoPanelsSecondWithTallTitleOutsideLegend.vap')
+fixLayout()
+writeToPng(PWD + '/fixed/twoPanelsSecondWithTallTitleOutsideLegend.png')
+
 load(PWD +'/threePanelDstKpAe.tallTitle.vap')
 fixLayout()
 writeToPng(PWD + '/fixed/threePanelDstKpAe.tallTitle.png')

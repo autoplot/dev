@@ -1,0 +1,34 @@
+from java.util import HashMap
+from org.autoplot.state import StatePersistence
+setScriptDescription('Search history for scripts with search string')
+
+search= getParam('search','createEvent','text to search for')
+
+from org.autoplot.datasource import AutoplotSettings,URISplit
+autoplotData= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_AUTOPLOTDATA)
+
+checkedAlready= HashMap()
+
+f= open( autoplotData + "/bookmarks/history.txt" )
+for line in f.readlines():
+    if line.endswith('.jy\n'):
+        ll= line.split('\t')
+        try:
+            uri= ll[-1].strip()
+            split= URISplit.parse(uri)
+            ff= split.file
+            name= split.file[len(split.path):]
+            if not fileExists(ff): continue
+            ff= str(getFile(uri))
+            if ( checkedAlready.containsKey(ff) ): continue
+            checkedAlready.put(ff,ff)
+            
+            lineNum=0
+            for ll in open(ff):
+                lineNum=lineNum+1
+                if ll.find(search)>-1:
+                    print ll.strip() + ' \t('+ ff + ":"+str(lineNum)+")"
+        except:
+            import traceback
+            traceback.print_exc()
+
