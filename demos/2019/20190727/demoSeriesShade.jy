@@ -7,6 +7,6 @@ ds.putProperty( QDataSet.DELTA_MINUS, dds )
 
 plot( ds, renderType='series', fillColor=Color.LIGHT_GRAY, 
       symbol=None, lineStyle=None )
-
+dom.plotElements[0].style.drawError=True
 from org.das2.graph import ErrorBarType
 dom.plotElements[0].controller.renderer.errorBarType= ErrorBarType.SHADE
