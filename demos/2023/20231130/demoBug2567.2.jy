@@ -1,3 +1,6 @@
+setScriptDescription( '''Demos bug where the binding between the Autoplot DOM object 
+and the Das2 implementation was lost''' )
+
 m= getParam('multi',True,'multi column',[True,False])
 nh= getParam('nv',3,'number of rows',[1,2,3])
 nv= getParam('nh',1,'number of columns',[1,2,3])
