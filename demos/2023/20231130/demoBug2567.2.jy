@@ -1,15 +1,15 @@
 m= getParam('multi',False,'multi column',[True,False])
-
+nh= getParam('nv',3,'number of rows',[1,2,3])
+nv= getParam('nh',3,'number of columns',[1,2,3])
 pnum= getParam('pnum',0,'plot number')
 
 if m:
-    setLayout(2,2)
+    setLayout(nh,nv)
 else:
     reset()
 
 ann= annotation( text='now', plotId=dom.plots[pnum].id, anchorType='plot' )
 
-for i in xrange(100):
-    ann.text= 'time_'+str(i)
-    sleep(250)
-    
+waitUntilIdle()
+
+ann.text= 'time_0'
