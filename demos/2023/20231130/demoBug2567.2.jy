@@ -16,8 +16,8 @@ ann= annotation( text='now', plotId=dom.plots[pnum].id, anchorType='plot' )
 sleep(1000)
 waitUntilIdle()
 
-ann.text= 'time_0'
-ann.controller.dasAnnotation.text='time_0'
+ann.text= 'later'
+#ann.controller.dasAnnotation.text='time_0'
 sleep(1000)
 
 print ann.text
