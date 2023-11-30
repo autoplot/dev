@@ -5,6 +5,7 @@ dds= sin(linspace(PI/8,7*PI/8,N))
 ds.putProperty( QDataSet.DELTA_PLUS, dds )
 ds.putProperty( QDataSet.DELTA_MINUS, dds )
 
+reset()
 plot( ds, renderType='series', fillColor=Color.LIGHT_GRAY, 
       symbol=None, lineStyle=None )
 dom.plotElements[0].style.drawError=True
