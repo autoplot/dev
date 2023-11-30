@@ -1,15 +1,21 @@
-m= getParam('multi',False,'multi column',[True,False])
+m= getParam('multi',True,'multi column',[True,False])
 nh= getParam('nv',3,'number of rows',[1,2,3])
-nv= getParam('nh',3,'number of columns',[1,2,3])
-pnum= getParam('pnum',0,'plot number')
+nv= getParam('nh',1,'number of columns',[1,2,3])
+pnum= getParam('pnum',1,'plot number')
 
 if m:
     setLayout(nh,nv)
 else:
     reset()
 
+sleep(1000)
 ann= annotation( text='now', plotId=dom.plots[pnum].id, anchorType='plot' )
-
+sleep(1000)
 waitUntilIdle()
 
 ann.text= 'time_0'
+ann.controller.dasAnnotation.text='time_0'
+sleep(1000)
+
+print ann.text
+print ann.controller.dasAnnotation.text
