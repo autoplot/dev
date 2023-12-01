@@ -17,7 +17,7 @@ sleep(1000)
 waitUntilIdle()
 
 ann.text= 'later'
-#ann.controller.dasAnnotation.text='time_0'
+#ann.controller.dasAnnotation.text='later'
 sleep(1000)
 
 print ann.text
