@@ -1,0 +1,16 @@
+ds= getDataSet('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/trajPlot/readScmodes.jyds')
+ds= getDataSet('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/trajPlot/readScmodes.jyds')
+
+dirr= 'https://www-pw.physics.uiowa.edu/~jbf/juno/scmodes/'
+
+orbit='57'
+ll= listDirectory(dirr+'SAP_A0%s0_T*.txt' % orbit)
+print len(ll)
+ll= listDirectory(dirr+'SAP_A0%s1_T*.txt' % orbit)
+print len(ll)
+
+orbit='56'
+ll= listDirectory(dirr+'SAP_A0%s0_T*.txt' % orbit)
+print len(ll)
+ll= listDirectory(dirr+'SAP_A0%s1_T*.txt' % orbit)
+print len(ll)
