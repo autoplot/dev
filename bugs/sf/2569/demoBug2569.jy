@@ -1,0 +1,6 @@
+setScriptDescription('Both N and OutsideN both show this bug')
+
+annotation(text='LeVeL',xrange=[20,20], yrange=dom.plots[0].yaxis.range,
+    anchorType='data', anchorBorderType='rectangle', anchorPosition='N' )
+    
+    
