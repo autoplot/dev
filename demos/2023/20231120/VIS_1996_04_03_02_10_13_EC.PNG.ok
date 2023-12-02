@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qualityControlRecord xmlns="http://autoplot.org/data/schema/pngwalkQC">
+    <currentStatus>OK</currentStatus>
+    <modifiedDate>2023-12-02T11:15:00Z</modifiedDate>
+    <imageURI>http://vis.physics.uiowa.edu/survey/1996/04-apr/03/images/VIS_1996_04_03_02_10_13_EC.PNG</imageURI>
+    <reviewComment date="2023-12-02T11:15:00Z" reviewer="jbf" status="OK">Two objects</reviewComment>
+</qualityControlRecord>

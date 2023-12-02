@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qualityControlRecord xmlns="http://autoplot.org/data/schema/pngwalkQC">
+    <currentStatus>OK</currentStatus>
+    <modifiedDate>2023-12-02T11:14:51Z</modifiedDate>
+    <imageURI>http://vis.physics.uiowa.edu/survey/1996/04-apr/03/images/VIS_1996_04_03_02_07_48_EC.PNG</imageURI>
+    <reviewComment date="2023-12-02T11:14:51Z" reviewer="jbf" status="OK">Object, plume thingy</reviewComment>
+</qualityControlRecord>

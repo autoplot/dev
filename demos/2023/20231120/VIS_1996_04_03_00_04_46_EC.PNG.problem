@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<qualityControlRecord xmlns="http://autoplot.org/data/schema/pngwalkQC">
+    <currentStatus>Problem</currentStatus>
+    <modifiedDate>2023-12-02T11:12:46Z</modifiedDate>
+    <imageURI>http://vis.physics.uiowa.edu/survey/1996/04-apr/03/images/VIS_1996_04_03_00_04_46_EC.PNG</imageURI>
+    <reviewComment date="2023-12-02T11:12:46Z" reviewer="jbf" status="Problem">shadow in image</reviewComment>
+</qualityControlRecord>
