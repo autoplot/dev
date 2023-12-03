@@ -1,0 +1,26 @@
+setScriptDescription('''Demonstrates how a Jython script can decorate an existing png''')
+from javax.imageio import ImageIO
+from java.io import File
+
+im= ImageIO.read(File('/usr/share/icons/mate/32x32/apps/gnome-terminal.png'))
+
+s= getParam('label','ap','two-letter label for icon')
+
+g= im.getGraphics()
+
+from java.awt import RenderingHints
+g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+
+from java.awt import Font
+g.setFont(Font.decode('sans-18'))
+
+g.setColor( Color.BLACK )
+g.drawString( s,3,23 )
+
+g.setColor( Color.WHITE )
+g.drawString( s,4,24 )
+
+mkdir('/tmp/ap/')
+
+ImageIO.write(im,'png',File('/tmp/ap/gnome-terminal-%s.png'%s))
+setStatus('Modified png written to /tmp/ap/gnome-terminal-%s.png'%s )
