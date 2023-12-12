@@ -1,0 +1,9 @@
+from org.das2.util import ColorUtil
+x= randn(1000)
+y= randn(1000)
+z= replicate( ColorUtil.DARK_GRAY.getRGB(),1000 )
+r= where( x.gt(0).and(y.gt(0)) )
+z[r]= ColorUtil.BLUE_VIOLET.getRGB()
+z.putProperty( QDataSet.UNITS, Units.rgbColor )
+
+plot( x,y,z, symbolSize=10 )
