@@ -1,0 +1,29 @@
+from org.das2.util import ColorUtil
+
+setScriptDescription('''Draw a dot with each of the named colors''')
+
+colormap= ColorUtil.getNamedColors()
+
+zz= indgen(len(colormap))
+nn= indgen(len(colormap))
+nn.putProperty(QDataSet.UNITS,Units.nominal())
+
+i=0
+for c in colormap:
+    print type(c), colormap.get(c)
+    zz[i]= colormap.get(c).RGB
+    nn[i]= c
+    i=i+1
+zz= dataset(zz,units=Units.rgbColor)
+
+xx= mod( linspace( 0, len(colormap)-1, len(colormap) ), 6 )
+yy= div( linspace( 0, len(colormap)-1, len(colormap) ), 6 )
+
+reset()
+setCanvasSize(1153,829)
+p,pe= plot( xx, yy, zz, symbolSize=30 )
+waitUntilIdle()
+p.zaxis.visible=False # doesn't work!
+
+plot( xx, yy, nn, overplotOf=p, renderType='digital>fontSize=0.8em' )
+p.zaxis.visible=False
