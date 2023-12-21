@@ -1,0 +1,26 @@
+setScriptDescription('''Make pixellated screenshot for winter 2023 release.
+Image from https://images.pexels.com/photos/905248/pexels-photo-905248.jpeg''')
+
+img= getDataSet('file:///home/jbf/Downloads/pexels-harvey-reed-905248.jpg')
+
+randomSeed(0)  # make random numbers repeatable
+
+n= 20000
+xx= randu(n) * 3418
+yy= randu(n) * 2279
+
+rr= img[:,:,0]
+gg= img[:,:,1]
+bb= img[:,:,2]
+
+zzrr= interpolate( rr,xx,yy )
+zzgg= interpolate( gg,xx,yy )
+zzbb= interpolate( bb,xx,yy )
+
+#cc= (int)zzrr * 256 * 256 + zzgg * 256 + zzbb 
+cc= floor(zzrr)* 256 * 256  + floor(zzgg) * 256 + floor(zzbb)
+cc= dataset( cc, units=Units.rgbColor )
+
+plot( xx, yy, cc, symbolSize=10 )
+dom.plots[0].zaxis.visible=False
+
