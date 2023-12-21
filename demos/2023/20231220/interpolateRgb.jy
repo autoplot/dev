@@ -17,9 +17,7 @@ zzrr= interpolate( rr,xx,yy )
 zzgg= interpolate( gg,xx,yy )
 zzbb= interpolate( bb,xx,yy )
 
-#cc= (int)zzrr * 256 * 256 + zzgg * 256 + zzbb 
-cc= floor(zzrr)* 256 * 256  + floor(zzgg) * 256 + floor(zzbb)
-cc= dataset( cc, units=Units.rgbColor )
+cc= rgbColorDataset( zzrr, zzgg, zzbb )
 
 plot( xx, yy, cc, symbolSize=10 )
 dom.plots[0].zaxis.visible=False
