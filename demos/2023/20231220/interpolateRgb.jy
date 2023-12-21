@@ -1,5 +1,6 @@
 setScriptDescription('''Make pixellated screenshot for winter 2023 release.
-Image from https://images.pexels.com/photos/905248/pexels-photo-905248.jpeg''')
+Image from https://images.pexels.com/photos/905248/pexels-photo-905248.jpeg
+taken by Harvey Reed.''')
 
 img= getDataSet('file:///home/jbf/Downloads/pexels-harvey-reed-905248.jpg')
 
