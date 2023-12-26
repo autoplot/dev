@@ -1,0 +1,13 @@
+setScriptDescription('''Demonstrate that something squirrelly is happening
+with the cadenced used in the SeriesRenderer''')
+
+plot('vap+hapi:https://vires.services/hapi?id=GRACE_A_MAG&parameters=Timestamp,Longitude&timerange=2017-10-30+23:00+to+2017-11-01+03:00')
+
+annotation(text=dom.plotElements[0].controller.renderer.lastCadence )
+tr= dom.timeRange
+for i in xrange(300):
+    dom.timeRange= dom.timeRange.rescale(0.001,0.999)
+    sleep(10)
+    annotation(text=dom.plotElements[0].controller.renderer.lastCadence )
+
+    
