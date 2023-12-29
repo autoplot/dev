@@ -1,0 +1,13 @@
+y= dataset( [1,2,3,2,3,4,3,2,4,3,2,3] ) * 1000 + 100
+x= indgen(len(y))
+
+reset()
+
+plot( x, y, ylog=True )
+
+x1= linspace( 0, len(y), 10000 )
+y1= interpolate( y, findex( x, x1 ) )
+
+plot( 1, x1, y1, overplotOf=dom.plots[0], color='red' )
+
+
