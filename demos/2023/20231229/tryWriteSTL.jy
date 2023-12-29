@@ -1,0 +1,66 @@
+from java.io import File
+from org.das2.util import FileUtil
+setScriptDescription('''Demo write STL file, a 3-D modelling file
+format supported by Sketchup and other software.''')
+
+stl= '''solid cube
+    facet normal 0 0 1
+        outer loop
+            vertex +0.5e+001 +0.5e+001 +0.5e+001
+            vertex -0.5e+001 +0.5e+001 +0.5e+001
+            vertex -0.5e+001 -0.5e+001 +0.5e+001
+            vertex +0.5e+001 -0.5e+001 +0.5e+001
+            vertex +0.5e+001 +0.5e+001 +0.5e+001
+        endloop
+    endfacet
+    facet normal 0 0 -1
+        outer loop
+            vertex +0.5e+001 -0.5e+001 -0.5e+001
+            vertex -0.5e+001 -0.5e+001 -0.5e+001
+            vertex -0.5e+001 +0.5e+001 -0.5e+001
+            vertex +0.5e+001 +0.5e+001 -0.5e+001
+            vertex +0.5e+001 -0.5e+001 -0.5e+001
+        endloop
+    endfacet
+    facet normal 1 0 0
+        outer loop
+            vertex +0.5e+001 +0.5e+001 +0.5e+001
+            vertex +0.5e+001 +0.5e+001 -0.5e+001
+            vertex +0.5e+001 -0.5e+001 -0.5e+001
+            vertex +0.5e+001 -0.5e+001 +0.5e+001
+            vertex +0.5e+001 +0.5e+001 +0.5e+001
+        endloop
+    endfacet
+    facet normal -1 0 0
+        outer loop
+            vertex -0.5e+001 -0.5e+001 +0.5e+001
+            vertex -0.5e+001 -0.5e+001 -0.5e+001
+            vertex -0.5e+001 +0.5e+001 -0.5e+001
+            vertex -0.5e+001 +0.5e+001 +0.5e+001
+            vertex -0.5e+001 -0.5e+001 +0.5e+001
+        endloop
+    endfacet
+    facet normal 0 1 0
+        outer loop
+            vertex +0.5e+001 +0.5e+001 +0.5e+001
+            vertex -0.5e+001 +0.5e+001 +0.5e+001
+            vertex -0.5e+001 +0.5e+001 -0.5e+001
+            vertex +0.5e+001 +0.5e+001 -0.5e+001
+            vertex +0.5e+001 +0.5e+001 +0.5e+001            
+        endloop
+    endfacet
+    facet normal 0 -1 0
+        outer loop
+            vertex +0.5e+001 -0.5e+001 +0.5e+001
+            vertex -0.5e+001 -0.5e+001 +0.5e+001
+            vertex -0.5e+001 -0.5e+001 -0.5e+001
+            vertex +0.5e+001 -0.5e+001 -0.5e+001
+            vertex +0.5e+001 -0.5e+001 +0.5e+001
+        endloop
+    endfacet
+endsolid cube
+'''
+
+FileUtil.writeStringToFile(File('/tmp/ap/foo.stl'),stl)
+
+print stl
