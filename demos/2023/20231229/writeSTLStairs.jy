@@ -1,0 +1,50 @@
+from java.lang import StringBuilder
+from java.io import File
+from org.das2.util import FileUtil
+
+setScriptDescription('''Demo write STL file, a 3-D modelling file
+format supported by Sketchup and other software.  <a href='https://3dviewer.net/#'>3dviewer.net</a>
+can be used to visualize output.''')
+
+
+rise=getParam('rise',8.0,'rise in inches')
+run=getParam('run',12.0,'run in inches')
+
+depth= getParam('depth',10,'depth')
+width= getParam('width',36,'width')
+
+count= getParam('count',10,'number of steps')
+
+outf= getParam('outf','/tmp/ap/steps.stl','.stl output filename' )
+
+sb= StringBuilder()
+sb.append( "solid Stairs\n" );
+
+def addStep( sb, x, z ):
+    sb.append( "facet normal 0 0 1\n" )
+    sb.append( "  outer loop\n" )
+    sb.append( "  vertex %d %d %d\n" % ( x- 0,    0, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x-20,    0, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x- 0,  -width, z ) )
+    sb.append( "  endloop\n" )
+    sb.append( "endfacet\n" )
+    sb.append( "facet normal 0 0 1\n" )
+    sb.append( "  outer loop\n" )
+    sb.append( "  vertex %d %d %d\n" % ( x- 0,  -width, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x-20,    0, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x-20,  -width, z ) )
+    sb.append( "  endloop\n" )
+    sb.append( "endfacet\n" )    
+    
+x= 0
+z= 0
+for i in xrange(count):
+    addStep( sb, x, z )
+    x=x+run
+    z=z+rise
+
+sb.append( "endsolid Stairs\n" )
+
+stl= sb.toString()
+
+FileUtil.writeStringToFile(File(outf),stl)
