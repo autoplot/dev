@@ -15,6 +15,11 @@ width= getParam('width',36,'width')
 
 count= getParam('count',10,'number of steps')
 
+floor= 0
+landing= getParam('landing', 54, 'offset to landing in inches' )
+ceiling= getParam('ceiling', 96, 'offset to ceiling in inches' )
+
+
 outf= getParam('outf','/tmp/ap/steps.stl','.stl output filename' )
 
 sb= StringBuilder()
@@ -24,15 +29,15 @@ def addStep( sb, x, z ):
     sb.append( "facet normal 0 0 1\n" )
     sb.append( "  outer loop\n" )
     sb.append( "  vertex %d %d %d\n" % ( x- 0,    0, z ) )
-    sb.append( "  vertex %d %d %d\n" % ( x-20,    0, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x-depth,    0, z ) )
     sb.append( "  vertex %d %d %d\n" % ( x- 0,  -width, z ) )
     sb.append( "  endloop\n" )
     sb.append( "endfacet\n" )
     sb.append( "facet normal 0 0 1\n" )
     sb.append( "  outer loop\n" )
     sb.append( "  vertex %d %d %d\n" % ( x- 0,  -width, z ) )
-    sb.append( "  vertex %d %d %d\n" % ( x-20,    0, z ) )
-    sb.append( "  vertex %d %d %d\n" % ( x-20,  -width, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x-depth,    0, z ) )
+    sb.append( "  vertex %d %d %d\n" % ( x-depth,  -width, z ) )
     sb.append( "  endloop\n" )
     sb.append( "endfacet\n" )    
     
@@ -48,3 +53,4 @@ sb.append( "endsolid Stairs\n" )
 stl= sb.toString()
 
 FileUtil.writeStringToFile(File(outf),stl)
+setStatus('wrote to '+outf )

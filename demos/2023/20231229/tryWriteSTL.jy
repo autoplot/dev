@@ -3,62 +3,104 @@ from org.das2.util import FileUtil
 setScriptDescription('''Demo write STL file, a 3-D modelling file
 format supported by Sketchup and other software.''')
 
-stl= '''solid cube
-    facet normal 0 0 1
-        outer loop
-            vertex +0.5e+001 +0.5e+001 +0.5e+001
-            vertex -0.5e+001 +0.5e+001 +0.5e+001
-            vertex -0.5e+001 -0.5e+001 +0.5e+001
-            vertex +0.5e+001 -0.5e+001 +0.5e+001
-            vertex +0.5e+001 +0.5e+001 +0.5e+001
-        endloop
-    endfacet
-    facet normal 0 0 -1
-        outer loop
-            vertex +0.5e+001 -0.5e+001 -0.5e+001
-            vertex -0.5e+001 -0.5e+001 -0.5e+001
-            vertex -0.5e+001 +0.5e+001 -0.5e+001
-            vertex +0.5e+001 +0.5e+001 -0.5e+001
-            vertex +0.5e+001 -0.5e+001 -0.5e+001
-        endloop
-    endfacet
-    facet normal 1 0 0
-        outer loop
-            vertex +0.5e+001 +0.5e+001 +0.5e+001
-            vertex +0.5e+001 +0.5e+001 -0.5e+001
-            vertex +0.5e+001 -0.5e+001 -0.5e+001
-            vertex +0.5e+001 -0.5e+001 +0.5e+001
-            vertex +0.5e+001 +0.5e+001 +0.5e+001
-        endloop
-    endfacet
-    facet normal -1 0 0
-        outer loop
-            vertex -0.5e+001 -0.5e+001 +0.5e+001
-            vertex -0.5e+001 -0.5e+001 -0.5e+001
-            vertex -0.5e+001 +0.5e+001 -0.5e+001
-            vertex -0.5e+001 +0.5e+001 +0.5e+001
-            vertex -0.5e+001 -0.5e+001 +0.5e+001
-        endloop
-    endfacet
-    facet normal 0 1 0
-        outer loop
-            vertex +0.5e+001 +0.5e+001 +0.5e+001
-            vertex -0.5e+001 +0.5e+001 +0.5e+001
-            vertex -0.5e+001 +0.5e+001 -0.5e+001
-            vertex +0.5e+001 +0.5e+001 -0.5e+001
-            vertex +0.5e+001 +0.5e+001 +0.5e+001            
-        endloop
-    endfacet
-    facet normal 0 -1 0
-        outer loop
-            vertex +0.5e+001 -0.5e+001 +0.5e+001
-            vertex -0.5e+001 -0.5e+001 +0.5e+001
-            vertex -0.5e+001 -0.5e+001 -0.5e+001
-            vertex +0.5e+001 -0.5e+001 -0.5e+001
-            vertex +0.5e+001 -0.5e+001 +0.5e+001
-        endloop
-    endfacet
-endsolid cube
+stl= '''solid AssimpScene
+ facet normal 0 0 1
+  outer loop
+  vertex -35 60 20
+  vertex -55 60 20
+  vertex -35 40 20
+  endloop
+ endfacet
+
+ facet normal 0 0 1
+  outer loop
+  vertex -35 40 20
+  vertex -55 60 20
+  vertex -55 40 20
+  endloop
+ endfacet
+
+ facet normal 0 0 -1
+  outer loop
+  vertex -35 40 0
+  vertex -55 40 0
+  vertex -35 60 0
+  endloop
+ endfacet
+
+ facet normal 0 0 -1
+  outer loop
+  vertex -35 60 0
+  vertex -55 40 0
+  vertex -55 60 0
+  endloop
+ endfacet
+
+ facet normal 0 -1 0
+  outer loop
+  vertex -55 40 20
+  vertex -55 40 0
+  vertex -35 40 20
+  endloop
+ endfacet
+
+ facet normal 0 -1 0
+  outer loop
+  vertex -35 40 20
+  vertex -55 40 0
+  vertex -35 40 0
+  endloop
+ endfacet
+
+ facet normal -1 0 0
+  outer loop
+  vertex -55 60 20
+  vertex -55 60 0
+  vertex -55 40 20
+  endloop
+ endfacet
+
+ facet normal -1 0 0
+  outer loop
+  vertex -55 40 20
+  vertex -55 60 0
+  vertex -55 40 0
+  endloop
+ endfacet
+
+ facet normal 0 1 0
+  outer loop
+  vertex -35 60 20
+  vertex -35 60 0
+  vertex -55 60 20
+  endloop
+ endfacet
+
+ facet normal 0 1 0
+  outer loop
+  vertex -55 60 20
+  vertex -35 60 0
+  vertex -55 60 0
+  endloop
+ endfacet
+
+ facet normal 1 0 0
+  outer loop
+  vertex -35 40 20
+  vertex -35 40 0
+  vertex -35 60 20
+  endloop
+ endfacet
+
+ facet normal 1 0 0
+  outer loop
+  vertex -35 60 20
+  vertex -35 40 0
+  vertex -35 60 0
+  endloop
+ endfacet
+
+endsolid AssimpScene
 '''
 
 FileUtil.writeStringToFile(File('/tmp/ap/foo.stl'),stl)
