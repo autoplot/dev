@@ -1,0 +1,51 @@
+from org.das2.qds.examples import Schemes
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPath,XPathFactory
+from org.das2.util.filesystem import FileSystem
+from zipfs import ZipFileSystem, ZipFileSystemFactory
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPathFactory
+from javax.xml.xpath import XPathConstants
+from org.xml.sax import InputSource
+from java.io import FileInputStream
+from zipfs import ZipFileSystemFactory
+
+setScriptDescription('''Demonstrate read of 3mf file''')
+
+ff= getFile('https://github.com/3MFConsortium/3mf-samples/blob/master/examples/core/sphere.3mf')
+#ff='file:/home/jbf/eg/3d/3mf/box.3mf'
+resourceURI= getParam( 'resourceURI', 'file:'+str(ff), 'example file to load' )
+
+zipfs= ZipFileSystemFactory().createFileSystem(URI(resourceURI))
+
+fo= zipfs.getFileObject( "/3D/3dmodel.model" )
+myin= fo.getInputStream()
+
+
+builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+source = InputSource( myin )
+initialDocument = builder.parse(source)
+
+factory= XPathFactory.newInstance()
+xpath= factory.newXPath()
+
+vertices= xpath.evaluate( '/model/resources/object[@id=1]/mesh/vertices/vertex', initialDocument, XPathConstants.NODESET )
+triangles= xpath.evaluate( '/model/resources/object[@id=1]/mesh/triangles/triangle', initialDocument, XPathConstants.NODESET )
+
+dsb= DataSetBuilder(2,100,3)
+for i in xrange(vertices.length):
+    n= vertices.item(i)
+    dsb.nextRecord( [ n.getAttribute('x'), n.getAttribute('y'), n.getAttribute('z') ] )
+verticesDs= dsb.getDataSet()
+
+dsb= DataSetBuilder(2,100,3)
+for i in xrange(triangles.length):
+    n= triangles.item(i)
+    dsb.nextRecord( [ n.getAttribute('v1'), n.getAttribute('v2'), n.getAttribute('v3') ] )
+trianglesDs= dsb.getDataSet()
+
+model= join( verticesDs, trianglesDs )
+
+plot( model[0] )
+
+#dom.plotElements[0].component='|slice0(0)'
