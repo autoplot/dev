@@ -1,0 +1,20 @@
+from org.das2.util.filesystem import FileSystem
+from java.lang import System
+
+setScriptDescription('''demo where Bill was seeing hang because gitlabs support doesn't drop 
+into offline mode.''')
+ 
+case= getParam('case',1,'case number',[1,2,3])
+
+if case==1:
+    r= 'https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/trajPlot/readScmodes.jyds'
+elif case==2:
+    r= 'https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/wigglePlot/wigglePlotSapClipFast.jy'
+elif case==3:    
+    r= 'https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/digitizer/addPointDigitizer.jy'
+    
+print 'resource: ', r
+print 'filesystem: ', FileSystem.create('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/')
+t0= System.currentTimeMillis()
+ff= getFile(r)
+print 'resource download time (ms): ', System.currentTimeMillis()-t0
