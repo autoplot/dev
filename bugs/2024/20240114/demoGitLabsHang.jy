@@ -1,0 +1,10 @@
+from java.lang import System
+
+setScriptDescription('''demo where Bill was seeing hang because gitlabs support doesn't drop 
+into offline mode.''')
+
+r= 'https://abbith.physics.uiowa.edu/jbf/juno/-/blob/master/team/digitizer/addPointDigitizer.jy'
+print 'resource: '+r
+t0= System.currentTimeMillis()
+ff= getFile(r)
+print 'resource download time (ms): ', System.currentTimeMillis()-t0
