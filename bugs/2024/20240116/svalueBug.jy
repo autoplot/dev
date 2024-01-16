@@ -1,0 +1,7 @@
+setScriptDescription('''Demonstrate that svalue doesn't use FORMAT property when
+it should.  Use DataSetUtil.toString in the meantime.''')
+# I was surprised to see format wasn't used.
+vv= dataset(PI)
+vv.putProperty(QDataSet.FORMAT,"%.2f")
+print vv.svalue(), ' not 3.14'
+
