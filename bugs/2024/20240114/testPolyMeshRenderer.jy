@@ -1,0 +1,48 @@
+from org.das2.qds import DataSetUtil
+from org.das2.util import ColorUtil
+from org.das2.qds.examples import Schemes
+from org.das2.graph import PolyMeshRenderer,DasColorBar
+
+
+xx= dataset( [ 1,1,0,0 ] )
+yy= dataset( [ 0,1,1,0 ] )
+
+pm= None
+pm= createPolyMesh( pm, bundle(xx,yy) )
+print pm
+pm= createPolyMesh( pm, bundle(xx+3,yy+1) )
+print pm
+pm= createPolyMesh( pm, bundle(xx+5,yy-1) )
+print pm
+pm= createPolyMesh( pm, bundle(xx+7,yy-3) )
+print pm
+
+plot( pm, renderer= PolyMeshRenderer() )
+print pm
+print copy(pm), '  <-- this is broken'
+
+zz= dataset( [ ColorUtil.CHOCOLATE.getRGB(), 
+    ColorUtil.DARK_BLUE.getRGB(), 
+    ColorUtil.AQUAMARINE.getRGB(),
+    ColorUtil.FOREST_GREEN.getRGB() ], 
+    units=Units.rgbColor )
+
+DataSetUtil.validate( pm, None )
+
+print zz
+print pm
+
+dd= link(pm,zz)
+print dd.property(QDataSet.DEPEND_0)
+
+if not DataSetUtil.validate( dd, None ):
+    print 'here stop'
+
+print dd
+print pm
+print dd.property(QDataSet.DEPEND_0)
+
+reset()
+plot( dd, renderer= PolyMeshRenderer() )
+
+
