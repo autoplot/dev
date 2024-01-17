@@ -1,0 +1,44 @@
+from org.das2.qds.examples import Schemes
+from org.das2.graph import TriMeshRenderer,DasColorBar
+
+src= getParam('case',1,'case number',[1,2,3])
+
+if src==1:
+    tris= Schemes.polyMesh()
+elif src==2:
+    xx= randn(100) * 5 - 2.5
+    yy= randn(100) * 5 - 2.5
+    tt= triangulate(xx,yy)
+    tris= join( bundle(xx,yy), tt )
+elif src==3:
+    xx= dataset( [ 1,1,0,0 ] )
+    yy= dataset( [ 0,1,1,0 ] )
+    tt= dataset( [ [ 0, 1, 2, 3 ] ] )
+    xx= concatenate( xx, dataset( [ 3,3,2,2 ] ) )
+    yy= concatenate( yy, dataset( [ 1,2,2,1 ] ) )
+    tt= join( dataset( [ 0, 1, 2, 3 ] ), dataset( [ 4,5,6,7 ] ) )
+    tris= join( bundle(xx,yy), tt )
+
+cc= distance(100,100,50,50,30,30)
+
+tt= polyCenters( tris )
+cc1= interpolate(cc,tt[:,0]*10+50,tt[:,1]*10+50)
+cc1.putProperty( QDataSet.FORMAT, "%.2f" )
+
+cb= DasColorBar(datum(0),datum(2),False)
+
+colors= intarr( len(tt) )
+colors.putProperty( QDataSet.UNITS, Units.rgbColor )
+for i in xrange(len(cc1)):
+    colors[i]= cb.rgbTransform(cc1[i].value(),Units.dimensionless)
+    
+ds= link( tris, colors )
+ll= link( tris, cc1 )
+
+if len(tt)<=30:
+    setLayoutOverplot(2)
+    plot( ds, renderer= PolyMeshRenderer() )
+    plot( 1,ll, renderer= PolyMeshRenderer() )
+else:
+    reset()
+    plot( ds, renderer= PolyMeshRenderer() )
