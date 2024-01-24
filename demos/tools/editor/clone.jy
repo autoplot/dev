@@ -32,7 +32,7 @@ autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP
 
 dia= JPanel()
 dia.setLayout( BoxLayout( dia, BoxLayout.Y_AXIS ) )
-dia.add( JLabel( 'Clone Repository:') )
+dia.add( JLabel( 'Clone Repository :') )
 repoTF= JTextField(gitRemote,40)
 
 dia.add( repoTF )
