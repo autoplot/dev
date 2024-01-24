@@ -32,14 +32,14 @@ autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP
 
 dia= JPanel()
 dia.setLayout( BoxLayout( dia, BoxLayout.Y_AXIS ) )
-dia.add( JLabel( 'Clone Repository :') )
+dia.add( JLabel( 'Clone Repository:') )
 repoTF= JTextField(gitRemote,40)
 
 dia.add( repoTF )
 dia.add( JLabel( 'Local Folder:' ) )
 localFile= JTextField(40)
 dia.add( localFile )
-dia.add( JLabel( '<html><em>This will create the repo folder within the local folder' ) )
+dia.add( JLabel( '<html><em>This will create the repository folder within the local folder.' ) )
 
 icon= ImageIcon( URL( PWD + 'Git-Icon-1788C_48px.png' ) )
 target= JOptionPane.showConfirmDialog(getApplication(),dia,'Clone Repo',JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE,icon)
