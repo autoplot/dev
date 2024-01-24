@@ -15,3 +15,27 @@ ww2= sin(indgen(100,512)/90.)+randn(100,512)/10
 ww2= dataset( tt, dtt, ww2 )
 plot( 1, ww2 )
 
+# the two plots are bound together.  
+bbs= dom.controller.findBindings( dom.plots[0].xaxis, 'range' )
+for b in bbs:
+    dom.controller.removeBinding(b)
+    
+bbs= dom.controller.findBindings( dom.plots[1].xaxis, 'range' )
+for b in bbs:
+    dom.controller.removeBinding(b)
+
+print 'All bindings are deleted:'
+bbs= dom.controller.findBindings( dom, 'timeRange' )
+for b in bbs:
+    print b
+            
+dom.plotElements[0].component= "|fftPower(512,2,'Hanning')"
+dom.plotElements[1].component= "|fftPower(512,2,'Hanning')"
+
+waitUntilIdle()
+
+print 'Bindings are back:'
+bbs= dom.controller.findBindings( dom, 'timeRange' )
+for b in bbs:
+    print b
+    
