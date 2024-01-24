@@ -29,6 +29,9 @@ bbs= dom.controller.findBindings( dom, 'timeRange' )
 for b in bbs:
     print b
             
+print '''Here is what resets the binding.  The variable "shouldBindX" is true
+in PlotController, and this allows it to rebind.'''
+
 dom.plotElements[0].component= "|fftPower(512,2,'Hanning')"
 dom.plotElements[1].component= "|fftPower(512,2,'Hanning')"
 
@@ -38,4 +41,3 @@ print 'Bindings are back:'
 bbs= dom.controller.findBindings( dom, 'timeRange' )
 for b in bbs:
     print b
-    
