@@ -55,7 +55,7 @@ ntf.setEditable(False)
 panel.add( ntf )
 
 panel.add( JLabel('Download:') )
-ntf=JTextField('http://autoplot.org/jnlp/'+version+'/autoplot.jar')
+ntf=JTextField('https://das2.org/autoplot/jnlp/'+version+'/autoplot.jar')
 ntf.setEditable(False)
 panel.add( ntf )
 
@@ -93,7 +93,7 @@ if ( m.find() ):
 
     if ( response==JOptionPane.OK_OPTION ):
         
-        tempfile= downloadResourceAsTempFile(URL('http://autoplot.org/jnlp/%s/autoplot.jar' % version ),3600,monitor)
+        tempfile= downloadResourceAsTempFile(URL('https://das2.org/autoplot/jnlp/%s/autoplot.jar' % version ),3600,monitor)
         
         if ( not tempfile.renameTo( newjarfile ) ):
             error='Unable to move downloaded file to '+ str(newjarfile)
