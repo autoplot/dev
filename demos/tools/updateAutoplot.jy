@@ -69,11 +69,11 @@ ntf=JTextField(jarlink)
 ntf.setEditable(False)
 panel.add( ntf )
 
-#imgScreen = ImageIcon(URL('http://autoplot.org/jnlp/'+version+'/screen.png'))
+#imgScreen = ImageIcon(URL('https://das2.org/autoplot/jnlp/'+version+'/screen.png'))
 #label= JLabel('')
 #label.setIcon(imgScreen)
 
-website = JEditorPane('http://autoplot.org/jnlp/'+version)
+website = JEditorPane('https://das2.org/autoplot/jnlp/'+version)
 website= JScrollPane(website)
 website.preferredSize= website.maximumSize= Dimension(1040,320)
 
