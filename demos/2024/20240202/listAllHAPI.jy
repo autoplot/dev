@@ -1,0 +1,8 @@
+cc= getCompletions('vap+hapi:https://cottagesystems.com/server/esdc/hapi?id=')
+for c in cc:
+    uri2 = c + '&parameters='
+    try:
+        cc2= getCompletions(uri2)
+        print uri2 + ' ' + len(cc2)
+    except:
+        print '*** fails: '+ uri2 
