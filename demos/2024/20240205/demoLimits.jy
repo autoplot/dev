@@ -1,0 +1,5 @@
+ds= randn(1000)*5+100
+tt= linspace('2024-02-05T00:00Z','2024-02-05T01:00Z',1000)
+ds= link( tt, ds )
+
+plot( ds )
