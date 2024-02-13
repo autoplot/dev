@@ -1,7 +1,7 @@
 setScriptDescription('''Valentine's day plot showing
 32 random walks in varying shades of red.''')
 
-seed= getParam('seed',5347,'random seed',5334+indgen(20))
+seed= getParam('seed',5347,'random seed',range(5334,5354) )
 randomSeed(seed)
 
 setLayoutOverplot(32)
