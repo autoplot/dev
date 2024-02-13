@@ -1,0 +1,14 @@
+setScriptDescription('''Valentine's day plot showing
+32 random walks in varying shades of red.''')
+
+seed= getParam('seed',5347,'random seed',5334+indgen(20))
+randomSeed(seed)
+
+setLayoutOverplot(32)
+for i in xrange(32):
+    x= accum(randn(10000))
+    y= accum(randn(10000))
+    gb= int(randu()*200)
+    c= Color(255,gb,gb)
+    plot( i, x, y, color=c )
+    
