@@ -1,0 +1,13 @@
+from java.util import HashMap
+
+setScriptDescription('Demo limits')
+
+ds= randn(1000)*5+100
+tt= linspace('2024-02-05T00:00Z','2024-02-05T01:00Z',1000)
+ds= link( tt, ds )
+m= HashMap()
+m.put( 'LIMITS_WARN_MIN', 95 )
+m.put( 'LIMITS_WARN_MAX', 105 )
+ds= putProperty( ds, QDataSet.METADATA, m )
+
+plot( ds )

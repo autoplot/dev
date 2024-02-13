@@ -1,0 +1,43 @@
+setScriptDescription('''Demo where Connor observed the annoyance that after unbinding
+two xaxes, applying fftPowerSpectralDensity causes them to rebind.  This also happens with
+the old fftPower filter.''')
+
+tt= linspace( '2024-01-22T00:00',  '2024-01-22T01:40', 100 )
+dtt= linspace( '0s','1s',512)
+
+ww1= sin(indgen(100,512)/100.)+randn(100,512)/10
+ww1= dataset( tt, dtt, ww1 )
+plot( ww1 )
+
+tt= linspace( '2024-01-22T00:10',  '2024-01-22T01:50', 100 )
+
+ww2= sin(indgen(100,512)/90.)+randn(100,512)/10
+ww2= dataset( tt, dtt, ww2 )
+plot( 1, ww2 )
+
+# the two plots are bound together.  
+bbs= dom.controller.findBindings( dom.plots[0].xaxis, 'range' )
+for b in bbs:
+    dom.controller.removeBinding(b)
+    
+bbs= dom.controller.findBindings( dom.plots[1].xaxis, 'range' )
+for b in bbs:
+    dom.controller.removeBinding(b)
+
+print 'All bindings are deleted:'
+bbs= dom.controller.findBindings( dom, 'timeRange' )
+for b in bbs:
+    print b
+            
+print '''Here is what resets the binding.  The variable "shouldBindX" is true
+in PlotController, and this allows it to rebind.'''
+
+dom.plotElements[0].component= "|fftPower(512,2,'Hanning')"
+dom.plotElements[1].component= "|fftPower(512,2,'Hanning')"
+
+waitUntilIdle()
+
+print 'Bindings are back:'
+bbs= dom.controller.findBindings( dom, 'timeRange' )
+for b in bbs:
+    print b

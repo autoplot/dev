@@ -3,6 +3,8 @@ from org.das2.util import ColorUtil
 from org.das2.qds.examples import Schemes
 from org.das2.graph import PolyMeshRenderer,DasColorBar
 
+setScriptDescription('''Experiments with PolyMeshRenderer, trying 
+to find bug which was at line 23.  The bug was found.''')
 
 xx= dataset( [ 1,1,0,0 ] )
 yy= dataset( [ 0,1,1,0 ] )
