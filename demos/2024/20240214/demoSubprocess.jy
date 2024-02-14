@@ -1,0 +1,16 @@
+from java.io import BufferedReader,InputStreamReader
+from java.lang import ProcessBuilder
+# demo call subprocess.
+
+slp= getParam('sleep',100)
+
+pb= ProcessBuilder(['date'])
+process= pb.start()
+process.waitFor()
+inputStream = process.getInputStream()
+reader= BufferedReader(InputStreamReader(inputStream))
+line= reader.readLine()
+while ( line!=None ):
+    print line
+    line= reader.readLine()
+sleep(slp)
