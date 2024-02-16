@@ -1,0 +1,28 @@
+from org.das2.datum import DatumRange
+from org.das2.util.filesystem import FileSystem
+from org.das2.fsm import FileStorageModel
+root='https://data.remss.com/ccmp/v03.1/Y2019/M10/' 
+fs= FileSystem.create(root)
+fsm= FileStorageModel.create(fs,'CCMP_Wind_Analysis_$Y$m$d_V03.1_L4.0.nc')
+
+ff= fsm.getNamesFor(datumRange('2019-oct'))
+
+dsb= DataSetBuilder(2,40,1440)
+tdsb= DataSetBuilder(1,40)
+
+monitor.taskSize= len(ff)
+monitor.started()
+
+for f in ff:
+    print f
+    monitor.taskProgress= monitor.taskProgress+1
+    if f.find('monthly')>-1: continue
+    ds= getDataSet( root + f + '?uwnd[358,:,0]' )
+    dsb.nextRecord(ds)
+    tdsb.nextRecord(fsm.getRangeFor(f).middle())
+    plot( tdsb.getDataSet(), dsb.getDataSet() )
+monitor.finished()
+
+ds= dataset( tdsb.getDataSet(), dsb.getDataSet() )
+
+plot( ds )
