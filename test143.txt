@@ -6,7 +6,7 @@ http://autoplot.org/data/sst.mnmean.nc?sst
 #vap+dat:ftp://ftp.seismo.nrcan.gc.ca/intermagnet/minute/definitive/IAGA2002/2004/08/aae20040816dmin.min?skipLines=26&time=field0&timeFormat=$Y-$m-$d+$H:$M:$S&fill=99999.0&column=field3&label=AAEX 
 
 # jyds internal plug-ins.  These are jyds scripts which have been associated with file extensions.
-vap+wdc:ftp://ftp.ngdc.noaa.gov/STP/GEOMAGNETIC_DATA/INDICES/KP_AP/$Y?apkp=kp&timerange=1940+through+1942
+#vap+wdc:ftp://ftp.ngdc.noaa.gov/STP/GEOMAGNETIC_DATA/INDICES/KP_AP/$Y?apkp=kp&timerange=1940+through+1942
 
 # error bars
 https://github.com/autoplot/vap/errorBarsRPI.vap
