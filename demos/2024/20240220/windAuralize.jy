@@ -1,0 +1,12 @@
+ds= getDataSet( 'vap+cdaweb:ds=WI_H2_MFI&filter=wind&id=BGSE&timerange=2023-09-22+through+2023-09-30')
+right= ds[:,0]
+left= ds[:,1]
+middle= ds[:,2]
+
+right= right + middle/2
+left= left + middle/2
+
+stereo= bundle( right, left )
+stereo= link( xtags(right), stereo )
+formatDataSet( stereo,'file:///tmp/ap/wind_h2_mfi.wav?timeScale=4000.0')
+
