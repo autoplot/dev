@@ -1,3 +1,7 @@
+setScriptDescription('''Demo running average and stddev''')
+
+size= getParam( 'size', 151, 'Boxcar size', [ 51,151,501 ] )
+
 randomSeed(0) # predictable random sequence
 data= getDataSet( 'vap+inline:randn(200000)*4.5+1.4' )
 
@@ -9,10 +13,10 @@ print mean(data)  # 1.4092
 # standard deviation is then the square root of the running variance.  
 
 data= getDataSet( 'vap+inline:randn(200000)*(2+cos(linspace(0,8*PI,200000)))+1.4+2*sin(linspace(0,4*PI,200000))' )
-plot( data )
+plot( data, ytitle='Signal' )
 
-avgs= smooth( data, 151 )
-stddevs= sqrt( smooth( (data-avgs)**2, 151 ) )
+avgs= smooth( data, size )
+stddevs= sqrt( smooth( (data-avgs)**2, size ) )
 
-plot(1,avgs)
-plot(2,stddevs)
+plot(1,avgs,ytitle='Boxcar Averages')
+plot(2,stddevs,ytitle='Standard Deviations<br>from boxcar average')
