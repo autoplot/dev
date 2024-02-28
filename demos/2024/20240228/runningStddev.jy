@@ -8,7 +8,7 @@ data= getDataSet( 'vap+inline:randn(200000)*4.5+1.4' )
 print stddev(data)  # 4.4944
 print mean(data)  # 1.4092
 
-# for running averages, one can use smooth to run a boxcar avarege of a given length, here 151, over
+# for running averages, one can use smooth to run a boxcar average of a given length, over
 # the data.  The running variance is then the smooth of deviations squared, and the running
 # standard deviation is then the square root of the running variance.  
 
