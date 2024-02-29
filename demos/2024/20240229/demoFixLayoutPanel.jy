@@ -1,0 +1,14 @@
+from java.util import HashMap
+from org.autoplot.dom import DomOps
+from javax.swing import JOptionPane
+from org.autoplot import FixLayoutPanel
+flp= FixLayoutPanel()
+flp.setPreview(dom);
+if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),flp) ):
+    print flp.getOptions()
+    
+answ= HashMap()
+answ.put('horizontalSpacing','1.0em')
+answ.put('verticalSpacing','1.0em')
+
+DomOps.fixLayout(dom,answ)
