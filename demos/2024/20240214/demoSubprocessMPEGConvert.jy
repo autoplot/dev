@@ -1,0 +1,31 @@
+from java.io import BufferedReader,InputStreamReader,File
+from java.lang import ProcessBuilder
+
+setScriptDescription('''Demostrate a call to a spawned OS command.  
+This just calls ffmpeg to extract a single frame from a video.  This
+can be used with the Run Batch Tool to manage many jobs.
+''')
+
+fln= getParam('file','file:/home/tomcat/albumServer/imageDatabase/20061001_boys/P1010016.MOV','AVI,MOV,etc file')
+
+# demo call subprocess.
+
+outf= URI(fln).path+'.jpg'
+if fileExists( outf ):
+    if not File( outf ).delete():
+        raise Exception('unable to delete file which exists already: '+outf)
+    
+slp= getParam('sleep',100)
+# ffmpeg -i  20061001_boys/P1010013.MOV -ss 00:00:01.000 -vframes 1 20061001_boys/P1010013.MOV.JPG
+pb= ProcessBuilder(['ffmpeg','-i',URI(fln).path,'-ss','00:00:01.000', '-vframes', '1',URI(fln).path+'.jpg' ])
+process= pb.start()
+process.waitFor()
+inputStream = process.getInputStream()
+reader= BufferedReader(InputStreamReader(inputStream))
+line= reader.readLine()
+while ( line!=None ):
+    print line
+    line= reader.readLine()
+sleep(slp)
+
+print 'wrote '+URI(fln).path+'.jpg'
