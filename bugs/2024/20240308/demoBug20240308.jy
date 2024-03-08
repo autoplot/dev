@@ -5,4 +5,4 @@ ds= dataset( pyds )
 
 plot( 0, ds, ytitle='All y values are zero' )
 
-plot( 1, zeros(25,25), ytitle='Correct' )
+plot( 1, zeros(5,5), ytitle='Correct' )
