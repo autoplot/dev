@@ -1,5 +1,7 @@
-# title: Plot the Mandelbrot Set.
-# label: Plot the Mandelbrot Set.
+setScriptDescription('''Copied from https://github.com/fadend/misc/blob/main/autoplot/mset.jy, this
+calculates the Mandelbrot Set.''')
+setScriptTitle('Plot the Mandelbrot Set.')
+setScriptLabel('Plot the Mandelbrot Set.')
 
 from org.das2.graph import DasColorBar
 
