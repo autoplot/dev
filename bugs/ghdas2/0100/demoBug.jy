@@ -1,7 +1,18 @@
 setScriptDescription('''Demonstrate where trim fails because
-the data from CDAWeb is not monotonic in time.''')
+the data from CDAWeb is not monotonic in time.  This also demonstrates
+where the TYPICAL_MIN and TYPICAL_MAX properties are not removed
+or updated by the trim operation, but should be.''')
+
+dosort= getParam('sort',False,'Sort the data before trim', [True,False])
 
 tr='2022-12-24 through 2022-12-31'
 b=getDataSet('vap+cdaweb:ds=STA_L2_MAGPLASMA_1M&id=BFIELDRTN',tr)
 
+if dosort:
+    s= sort( xtags(b) )
+    b= b[s]
+    
 b= trim(b,tr)
+
+reset()
+plot(b)
