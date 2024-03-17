@@ -1,0 +1,20 @@
+setScriptDescription('''getDataSets was added so that multiple 
+datasets could be loaded in parallel.  The plan is to allow this
+to happen automatically, but until then this should happen
+explicitly.  Note there's a new getDataSet command coming, and
+logically getDataSets should be updated as well.  This would include
+trim, for example.''')
+
+tr='2022-12-24 through 2022-12-31'
+
+uri= 'vap+cdaweb:ds=STA_L2_MAGPLASMA_1M&%s&timerange='+tr
+dss= ['BFIELDRTN','Vp','Np','Tp']
+dss= map( lambda s : uri % s, dss )
+
+b,V,ni,T= getDataSets(dss,monitor)
+
+reset()
+plot( 0, b )
+plot( 1, V )
+plot( 2, ni )
+plot( 3, T )
