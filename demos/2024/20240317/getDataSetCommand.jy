@@ -1,0 +1,50 @@
+setScriptDescription('''verify that all the forms
+of getDataSet are supported in the next devel 
+release.''')
+
+case= getParam('case',2,'case number',[0,1,2,3] )
+
+tr='2022-12-24 through 2022-12-31'
+
+uri= 'vap+cdaweb:ds=STA_L2_MAGPLASMA_1M&id=Tp'
+
+ds1= getDataSet(uri+'&timerange='+tr)
+ds2= getDataSet(uri,tr)
+ds3= getDataSet(uri,tr,monitor.getSubtaskMonitor('ds3'))
+ds4= getDataSet(uri+'&timerange='+tr,monitor.getSubtaskMonitor('ds4'))
+ds5= getDataSet(uri,datumRange(tr))
+ds6= getDataSet(uri,datumRange(tr),monitor.getSubtaskMonitor('ds7'))
+
+print ds1
+print ds2
+print ds3
+print ds4
+print ds5
+print ds6
+
+reset()
+plot( 0, ds1 )
+plot( 1, ds2 )
+plot( 2, ds3 )
+plot( 3, ds4 )
+plot( 4, ds5 )
+plot( 5, ds6 )
+
+annotation(0,text='Num of Points: '+str(len(ds1)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em',
+           plotId=dom.plots[0])
+annotation(1,text='Num of Points: '+str(len(ds1)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em',
+           plotId=dom.plots[1])
+annotation(2,text='Num of Points: '+str(len(ds1)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em',
+           plotId=dom.plots[2])
+annotation(3,text='Num of Points: '+str(len(ds1)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em',
+           plotId=dom.plots[3])
+annotation(4,text='Num of Points: '+str(len(ds1)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em',
+           plotId=dom.plots[4])
+annotation(5,text='Num of Points: '+str(len(ds1)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em',
+           plotId=dom.plots[5])
