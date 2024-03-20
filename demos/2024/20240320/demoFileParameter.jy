@@ -1,0 +1,5 @@
+from java.io import File
+
+f= getParam('f',File('/home/jbf/'),'directory for input files')
+
+print f, type(f)
