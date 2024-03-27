@@ -1,6 +1,6 @@
 setScriptDescription('''Demo bug where slice1 of zero-length
 dataset results in IndexOutOfBounds, instead of producing a zero-length
-rank 1 dataset.''')
+rank 1 dataset. https://github.com/das-developers/das2java/issues/103''')
 
 xy= randn(0,2)
 
