@@ -1,0 +1,12 @@
+lib= 'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import TimeUtil
+#dd= TimeUtil.countOffDays('1922-02-02','1922-03-03' )
+dd= TimeUtil.countOffDays('1922-02-02T00:00Z','1922-03-03T00:00Z' )
+for d in dd:
+    print d
+    
