@@ -1,0 +1,6 @@
+tt= 1e13 + linspace(0,10,101)
+ds= sin(linspace(0,4*PI,101))
+
+plot( tt, ds )
+
+dom.plots[0].controller.dasPlot.XAxis.format="%18.1f"
