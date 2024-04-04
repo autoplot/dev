@@ -1,24 +1,24 @@
 from java.io import BufferedReader,InputStreamReader,File
 from java.lang import ProcessBuilder
 
-setScriptDescription('''Demostrate a call to a spawned OS command.  This just calls ffmpeg to extract a single frame from a video.  Thiscan be used with the Run Batch Tool to manage many jobs.''')
+setScriptDescription('''Demostrate a call to a spawned OS command.  
+This just calls ffmpeg to convert video to mp4 format.  This
+can be used with the Run Batch Tool to manage many jobs.''')
 
-fln= getParam('resourceURI','file:/net/spot10/hd1_8t/home/jbf/fun/videos/dv/ephemeral12/dvgrab-009.dv','DV video file')
+fln= getParam('resourceURI','file:/home/jbf/tmp/dvgrab-003.dv','DV video file')
 
 # demo call subprocess.
-
-outf= URI(fln).path+'.jpg'
-if fileExists( outf ):
-    if not File( outf ).delete():
-        raise Exception('unable to delete file which exists already: '+outf)
     
 slp= getParam('sleep',100)
-# ffmpeg -i  20061001_boys/P1010013.MOV -ss 00:00:01.000 -vframes 1 20061001_boys/P1010013.MOV.JPG
 
 infile= URI(fln).path
 outfile= URI(fln).path[0:-3]+'.mp4'
-    
-pb= ProcessBuilder(['ffmpeg','-i',infile,'-y',outfile ])
+
+# ffmpeg -i dvgrab-009.dv -vf yadif -y dvgrab-009.mp4  
+#   -vf yadif  removes interlacing
+#   -y  will overwrite existing file
+
+pb= ProcessBuilder(['ffmpeg','-i',infile,'-vf','yadif','-y',outfile ])
 process= pb.start()
 process.waitFor()
 inputStream = process.getInputStream()
