@@ -10,9 +10,12 @@ from org.xml.sax import InputSource
 from java.io import FileInputStream
 from zipfs import ZipFileSystemFactory
 
-setScriptDescription('''Demonstrate read of 3mf file''')
+setScriptDescription('''Demonstrate read of 3mf file.  See 
+https://dpt3.dptcorporate.com/Content/Help/language/glossary/T_3MF.htm . This also
+demonstrates the need for a new QDataSet schema for tesselations.''')
 
-ff= getFile('https://github.com/3MFConsortium/3mf-samples/blob/master/examples/core/sphere.3mf')
+#ff= getFile('https://github.com/3MFConsortium/3mf-samples/blob/master/examples/core/sphere.3mf')
+ff= getFile('https://github.com/3MFConsortium/3mf-samples/blob/master/examples/material/rhombicuboctahedron_color.3mf')
 #ff='file:/home/jbf/eg/3d/3mf/box.3mf'
 resourceURI= getParam( 'resourceURI', 'file:'+str(ff), 'example file to load' )
 
