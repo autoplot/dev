@@ -5,16 +5,33 @@ explicitly.  Note there's a new getDataSet command coming, and
 logically getDataSets should be updated as well.  This would include
 trim, for example.''')
 
+case= getParam('case',2,'case number',[0,1,2,3] )
+
 tr='2022-12-24 through 2022-12-31'
 
-uri= 'vap+cdaweb:ds=STA_L2_MAGPLASMA_1M&%s&timerange='+tr
+uri= 'vap+cdaweb:ds=STA_L2_MAGPLASMA_1M&%s'
 dss= ['BFIELDRTN','Vp','Np','Tp']
 dss= map( lambda s : uri % s, dss )
 
-b,V,ni,T= getDataSets(dss,monitor)
+if case==0:
+    b,V,ni,T= getDataSets(dss,monitor,trim=tr)
+elif case==1:
+    b,V,ni,T= getDataSets(dss,monitor,trim=datumRange(tr))
+elif case==2:
+    b,V,ni,T= getDataSets(dss,tr,monitor)
+elif case==3:
+    b,V,ni,T= getDataSets(dss,datumRange(tr),monitor)
 
+if case==2 or case==3:
+    b= trim(b,tr)
+    V= trim(V,tr)
+    ni= trim(ni,tr)
+    T= trim(T,tr)
+    
 reset()
 plot( 0, b )
 plot( 1, V )
 plot( 2, ni )
 plot( 3, T )
+annotation(0,text='Num of Points: '+str(len(b)),
+           anchorOffset='', anchorPosition='NW', fontSize='.5em')
