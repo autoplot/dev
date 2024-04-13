@@ -12,11 +12,15 @@ src= FileUtil.readFileToString(ff)
 json= JSONObject(src)
 
 tt= DataSetBuilder(1,100)
+
 pp= DataSetBuilder(1,100)
 pp.putProperty(QDataSet.LABEL,'Pressure')
+pp.putProperty(QDataSet.UNITS,Units.lookupUnits('mb'))
+
 tm= DataSetBuilder(1,100) 
 tm.putProperty(QDataSet.LABEL,'Temperature')
 tm.putProperty(QDataSet.UNITS,Units.celciusDegrees)
+
 sr= DataSetBuilder(1,100) 
 sr.putProperty(QDataSet.LABEL,'Solar Radiation')
 sr.putProperty(QDataSet.UNITS,Units.lookupUnits('W/m^2'))
