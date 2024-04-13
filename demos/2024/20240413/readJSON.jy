@@ -1,0 +1,20 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject
+setScriptDescription('''Demo how data is read from JSON file''')
+
+ff= getFile( 'https://jfaden.net/~jbf/data/json/rest.stats.station.34803.json' )
+src= FileUtil.readFileToString(ff)
+
+json= JSONObject(src)
+
+tt= DataSetBuilder(1,100)
+pp= DataSetBuilder(1,100)
+
+ja= json.getJSONArray('stats_day')
+
+for i in xrange(ja.length()):
+    rec= ja.getJSONArray[i]
+    tt.nextRecord(Units.us2000.parse(rec.getString(0)))
+    pp.nextRecord(rec.getDouble(1))
+
+plot( tt.getDataSet(), pp.getDataSet() )
