@@ -13,7 +13,7 @@ pp= DataSetBuilder(1,100)
 ja= json.getJSONArray('stats_day')
 
 for i in xrange(ja.length()):
-    rec= ja.getJSONArray[i]
+    rec= ja.getJSONArray(i)
     tt.nextRecord(Units.us2000.parse(rec.getString(0)))
     pp.nextRecord(rec.getDouble(1))
 
