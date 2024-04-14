@@ -1,0 +1,61 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject
+
+setScriptDescription('''Demo how data is read from JSON file.  This is
+a JSON file produced for the Tempest weather station.  See
+https://apidocs.tempestwx.com/reference/get_stats-station-station-id.
+The parameter "token" is found at https://tempestwx.com/settings/tokens
+for your station.
+
+'https://swd.weatherflow.com/swd/rest/observations/stn/34803?time_start=1712448000&time_end=1712534400&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key=1c78261b-804a-4969-af68-b0119a6b83d1'
+''')
+     
+tr= getParam('timerange','2024-04-08' )
+station= getParam('station','34803')
+token= getParam('token','')
+
+drtr= datumRange(tr)
+if ( drtr.width()>datum('24hr') ):
+    raise Exception('only 24hr can be retrieved: '+str(drtr.width()))
+    
+h= { 'station':station,
+     'start': drtr.min().doubleValue(Units.t1970),
+     'stop': drtr.max().doubleValue(Units.t1970),
+     'token': token }
+     
+uri= 'https://swd.weatherflow.com/swd/rest/observations/stn/%(station)s?time_start=%(start)d&time_end=%(stop)d&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key=%(token)s' % h
+print uri
+
+ff= downloadResourceAsTempFile(URL(uri),3600,monitor)
+
+src= FileUtil.readFileToString(ff)
+
+json= JSONObject(src)
+
+tt= DataSetBuilder(1,100)
+
+pp= DataSetBuilder(1,100)
+pp.putProperty(QDataSet.LABEL,'Pressure')
+pp.putProperty(QDataSet.UNITS,Units.lookupUnits('mb'))
+
+tm= DataSetBuilder(1,100) 
+tm.putProperty(QDataSet.LABEL,'Temperature')
+tm.putProperty(QDataSet.UNITS,Units.celciusDegrees)
+
+sr= DataSetBuilder(1,100) 
+sr.putProperty(QDataSet.LABEL,'Solar Radiation')
+sr.putProperty(QDataSet.UNITS,Units.lookupUnits('W/m^2'))
+
+ja= json.getJSONArray('obs')
+
+for i in xrange(ja.length()):
+    rec= ja.getJSONArray(i)
+    tt.nextRecord(Units.t1970.createDatum(rec.getDouble(0)))
+    pp.nextRecord(rec.getDouble(6))
+    tm.nextRecord(rec.getDouble(8))
+    sr.nextRecord(rec.getDouble(12))
+
+tt= tt.getDataSet()
+pressure= dataset( tt, pp.getDataSet() )
+temperature= dataset( tt, tm.getDataSet() )
+solarRadation= dataset( tt, sr.getDataSet() )
