@@ -12,7 +12,7 @@ for your station.
      
 tr= getParam('timerange','2024-04-08' )
 station= getParam('station','34803')
-token= getParam('token','')
+token= getParam('token','1c78261b-804a-4969-af68-b0119a6b83d1')
 
 drtr= datumRange(tr)
 if ( drtr.width()>datum('24hr') ):
