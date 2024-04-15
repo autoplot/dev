@@ -1,0 +1,14 @@
+setScriptDescription('''Show how to combine columns in CSV file''')
+resourceURI= getParam( 'resourceURI', PWD+'data.csv', 'example file to load' )
+
+
+f= getFile(resourceURI)
+newName= str(f)[0:-4]+'.reformat.csv'
+outs= open(newName,'w')
+
+for line in open(str(f)):
+    ss= line.split(',')
+    outs.write( ss[0]+'T'+ss[1]+'Z,'+','.join(ss[2:])+'\n' )
+    
+outs.close()
+setStatus('wrote '+newName)
