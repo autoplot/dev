@@ -7,12 +7,12 @@ https://apidocs.tempestwx.com/reference/get_stats-station-station-id.
 The parameter "token" is found at https://tempestwx.com/settings/tokens
 for your station.
 
-'https://swd.weatherflow.com/swd/rest/observations/stn/34803?time_start=1712448000&time_end=1712534400&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key=1c78261b-804a-4969-af68-b0119a6b83d1'
+'https://swd.weatherflow.com/swd/rest/observations/stn/34803?time_start=1712448000&time_end=1712534400&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key='
 ''')
      
 tr= getParam('timerange','2024-04-08' )
 station= getParam('station','34803')
-token= getParam('token','1c78261b-804a-4969-af68-b0119a6b83d1')
+token= getParam('token','1c78261b-804a-4969-af68-b0119a6b83d1','token, also known as API key')
 
 drtr= datumRange(tr)
 if ( drtr.width()>datum('24hr') ):
