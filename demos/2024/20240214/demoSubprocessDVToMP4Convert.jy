@@ -7,10 +7,6 @@ can be used with the Run Batch Tool to manage many jobs.''')
 
 fln= getParam('resourceURI','file:/home/jbf/tmp/dvgrab-003.dv','DV video file')
 
-# demo call subprocess.
-    
-slp= getParam('sleep',100)
-
 infile= URI(fln).path
 outfile= URI(fln).path[0:-3]+'.mp4'
 
@@ -27,6 +23,5 @@ line= reader.readLine()
 while ( line!=None ):
     print line
     line= reader.readLine()
-sleep(slp)
 
 print 'wrote '+outfile
