@@ -1,5 +1,6 @@
 from org.das2.util import FileUtil
 from org.json import JSONObject
+from java.lang.Double import NaN
 
 setScriptDescription('''Demo how data is read from JSON file.  This is
 a JSON file produced for the Tempest weather station.  See
@@ -27,6 +28,7 @@ uri= 'https://swd.weatherflow.com/swd/rest/observations/stn/%(station)s?time_sta
 print uri
 
 ff= downloadResourceAsTempFile(URL(uri),3600,monitor)
+print ff
 
 src= FileUtil.readFileToString(ff)
 
@@ -52,8 +54,8 @@ for i in xrange(ja.length()):
     rec= ja.getJSONArray(i)
     tt.nextRecord(Units.t1970.createDatum(rec.getDouble(0)))
     pp.nextRecord(rec.getDouble(6))
-    tm.nextRecord(rec.getDouble(8))
-    sr.nextRecord(rec.getDouble(12))
+    tm.nextRecord(rec.optDouble(8,NaN))
+    sr.nextRecord(rec.optDouble(12,NaN))
 
 tt= tt.getDataSet()
 pressure= dataset( tt, pp.getDataSet() )
