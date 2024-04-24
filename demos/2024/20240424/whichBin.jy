@@ -1,0 +1,17 @@
+setScriptDescription('''Often data needs to be 
+put into bins.  Here's the code which calculates
+which bin the data should be put in to.''')
+
+binsize= getParam( 'binsize', 2, 'bin size' )
+firstBin= getParam( 'firstBinMin', 0, 'first bin minimum boundary' )
+
+value= getParam( 'value', 3.4, 'value to put into bin' )
+
+ibin= floor( ( value-firstBin ) / binsize )
+
+binMin= ( ibin * binsize ) + firstBin
+binMax= ( (ibin+1) * binsize ) + firstBin
+
+msg= str(value) + ' goes into bin '+str(binMin) + '-' + str(binMax)
+
+showMessageDialog(msg)
