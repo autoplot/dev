@@ -1,0 +1,82 @@
+from org.json import JSONObject
+from java.lang import StringBuilder
+from java.io import BufferedReader,InputStreamReader
+from org.das2.util import FileUtil
+from java.util.stream import Collectors
+
+setScriptDescription('''Read temperature from YoSmart device.  YoSmart are devices with
+a hub which receives messages from various sensing and controlling devices, for example
+a temperature sensor.  Data can be immediately read with a smart phone app, and User
+Access Credentials allow access to the data from other programs.  See 
+http://doc.yosmart.com/docs/overall/intro.''')
+
+clientId= getParam( 'clientId', 'ua_94B198BC9CF44A76ACA9B38DDC566AA7', 
+                    'UAID on User Access Credentials screen, starts with "ua".' )
+clientSecret= getParam( 'clientSecret','sec_v1_xxxxxxxxxxxxxxxxxxxxxxx==',
+                    'Secret Key on User Access Credentials screen, starts with "sec".')
+
+def getAccessToken( clientId, clientSecret ):
+    '''note downloadResourceAsTempFile will use the same file during the timeout period, 
+    which is roughly the same as the token timeout.'''
+    data= 'grant_type=client_credentials&client_id=%(clientId)s&client_secret=%(clientSecret)s' % { "clientId":clientId, "clientSecret":clientSecret }
+
+    url= 'https://api.yosmart.com/open/yolink/token'
+    
+    data_string= data  # URL Encode is not necessary
+    
+    url_obj = URL(url)
+
+    # Create a connection
+    conn = url_obj.openConnection()
+    conn.setRequestMethod("POST")
+    conn.setRequestProperty("grant_type", "client_credentials" )
+    conn.setRequestProperty("client_id", clientId )
+    conn.setRequestProperty("clientSecret", clientSecret )
+    conn.setDoOutput(True)
+    output_stream = conn.getOutputStream()
+    output_stream.write(data_string.encode("UTF-8"))
+    output_stream.close()
+    response = conn.getInputStream()
+    lines= BufferedReader(InputStreamReader(response)).lines()
+    response= lines.collect(Collectors.joining())
+    jo= JSONObject(response)
+    accessToken= jo.get('access_token')
+    return accessToken
+
+def getTemperature( accessToken, targetDevice, deviceToken ):
+    data= JSONObject()
+    data.put( 'method', 'THSensor.getState' )
+    data.put( 'targetDevice', targetDevice )
+    data.put( 'token', deviceToken )
+    data_string= data.toString()
+
+    url= 'https://api.yosmart.com/open/yolink/v2/api'
+    url_obj = URL(url)
+    conn = url_obj.openConnection()
+    conn.setRequestMethod("POST")
+    conn.setRequestProperty("Authorization", "Bearer "+accessToken )
+    conn.setRequestProperty("Content-Type", "application/json" )
+    conn.setDoOutput(True)
+    
+    #data_string= '{ "method":"THSensor.getState", "targetDevice":"d88b4c0100041ca8", "token":"CCA3E18F91E40CC2605E531F6216BF7E" }'
+    print data_string
+    print data_string.encode("UTF-8")
+
+    output_stream = conn.getOutputStream()
+    output_stream.write(data_string.encode("UTF-8"))
+    output_stream.close()
+    
+    response = conn.getInputStream()
+    lines= BufferedReader(InputStreamReader(response)).lines()
+    rr= lines.collect(Collectors.joining())
+    
+    jo= JSONObject(rr)
+    temperature= jo.get("data").get("state").getDouble("temperature")
+    
+    temperature= temperature * 9 / 5. + 32
+    return temperature
+    
+accessToken= getAccessToken( clientId, clientSecret )
+print 'Got token: '+accessToken
+
+print getTemperature( accessToken, "d88b4c0100041ca8", "CCA3E18F91E40CC2605E531F6216BF7E" )
