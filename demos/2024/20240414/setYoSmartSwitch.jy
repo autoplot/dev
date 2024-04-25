@@ -1,3 +1,4 @@
+from java.util.regex import Pattern
 from org.json import JSONObject
 from java.lang import StringBuilder,System
 from java.io import BufferedReader,InputStreamReader,File
@@ -18,11 +19,14 @@ clientSecret= getParam( 'clientSecret','',
 deviceName= getParam( 'name', 'attic fan', 'device name', { 'examples':['attic fan'] } )
 switchState= getParam( 'state', 'off', 'set to this state', ['on','off'] )
 
-
 def getSecret( app, id, deft=None ):
     'get the secret, returning deft if not found, or raise exception if deft is None.'
+    if not Pattern.compile('[a-zA-Z0-9_][a-zA-Z0-9_\-\.]*').matcher(app).matches():
+        raise Exception('app does not meet regex constraint: '+app)
     s= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_AUTOPLOTDATA)
-    secrets= File( File( s, 'config' ), app+".secrets.json" )
+    secrets= File( File( s, 'secrets' ), app+".json" )
+    print secrets
+    if not secrets.parentFile.exists(): secrets.parentFile.mkdirs()
     if secrets.exists():
         jo= JSONObject( FileUtil.readFileToString(secrets) )
         if jo.has(id):
@@ -39,8 +43,11 @@ def getSecret( app, id, deft=None ):
     
 def setSecret( app, id, value ):
     'set the secret, which can be a string, int, float, or org.json.JSONObject.'
+    if not Pattern.compile('[a-zA-Z0-9_][a-zA-Z0-9_\-\.]*').matcher(app).matches():
+        raise Exception('app does not meet regex constraint: '+app)    
     s= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_AUTOPLOTDATA)
-    secrets= File( File( s, 'config' ), app+".secrets.json" )
+    secrets= File( File( s, 'secrets' ), app+".json" )
+    if not secrets.parentFile.exists(): secrets.parentFile.mkdirs()
     if secrets.exists():
         jo= JSONObject( FileUtil.readFileToString(secrets) )
     else:
@@ -90,7 +97,7 @@ def getAccessToken( clientId, clientSecret ):
     response = conn.getInputStream()
     lines= BufferedReader(InputStreamReader(response)).lines()
     response= lines.collect(Collectors.joining())
-    print response
+
     jo= JSONObject(response)
     accessToken= jo.get('access_token')
     expiresIn= jo.get('expires_in')
@@ -109,7 +116,7 @@ def getDeviceByName( accessToken, name='', deviceId='', type='' ):
     deviceList= getSecret('yoSmart-'+clientId,'deviceList','')
     if deviceList!='':
         print 'using fresh deviceList'
-        rr= deviceList
+        jo= deviceList
     else:        
         data= JSONObject()
         data.put( 'method', 'Home.getDeviceList' )
@@ -127,11 +134,9 @@ def getDeviceByName( accessToken, name='', deviceId='', type='' ):
         response = conn.getInputStream()
         lines= BufferedReader(InputStreamReader(response)).lines()
         rr= lines.collect(Collectors.joining())
-        setSecret( 'yoSmart-'+clientId,'deviceList',rr)
-        
-    print rr
+        jo= JSONObject(rr)
+        setSecret( 'yoSmart-'+clientId,'deviceList',jo)
     
-    jo= JSONObject(rr)
     devices= jo.get('data').get('devices')
     
     for i in xrange(devices.length()):
@@ -159,10 +164,6 @@ def getTemperature( accessToken, targetDevice, deviceToken ):
     conn.setRequestProperty("Content-Type", "application/json" )
     conn.setDoOutput(True)
     
-    #data_string= '{ "method":"THSensor.getState", "targetDevice":"d88b4c0100041ca8", "token":"CCA3E18F91E40CC2605E531F6216BF7E" }'
-    print data_string
-    print data_string.encode("UTF-8")
-
     output_stream = conn.getOutputStream()
     output_stream.write(data_string.encode("UTF-8"))
     output_stream.close()
@@ -194,10 +195,6 @@ def setSwitch( accessToken, targetDevice, deviceToken, state='closed' ):
     conn.setRequestProperty("Content-Type", "application/json" )
     conn.setDoOutput(True)
     
-    #data_string= '{ "method":"THSensor.getState", "targetDevice":"d88b4c0100041ca8", "token":"CCA3E18F91E40CC2605E531F6216BF7E" }'
-    print data_string
-    print data_string.encode("UTF-8")
-
     output_stream = conn.getOutputStream()
     output_stream.write(data_string.encode("UTF-8"))
     output_stream.close()
@@ -213,10 +210,8 @@ def setSwitch( accessToken, targetDevice, deviceToken, state='closed' ):
     return state
         
 accessToken= getAccessToken( clientId, clientSecret )
-print 'Got token: '+accessToken
 
 device= getDeviceByName(accessToken,name=deviceName)
-print device.toString(4)
 
 #print getTemperature( accessToken, device.get('deviceId'), device.get('token') )
 
@@ -227,4 +222,8 @@ if switchState=='on':
 elif switchState=='off':
     switchState='closed'
     
-print setSwitch(accessToken, device.get('deviceId'), device.get('token'), switchState)
+switchState= setSwitch(accessToken, device.get('deviceId'), device.get('token'), switchState)
+if switchState=='open':
+    print 'switch is now on'
+elif switchState=='closed':
+    print 'switch is now off'
