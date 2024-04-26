@@ -134,6 +134,7 @@ def getTemperature( accessToken, targetDevice, deviceToken ):
     rr= lines.collect(Collectors.joining())
     
     jo= JSONObject(rr)
+    
     temperature= jo.get("data").get("state").getDouble("temperature")
     
     temperature= temperature * 9 / 5. + 32
@@ -169,3 +170,23 @@ def setSwitch( accessToken, targetDevice, deviceToken, state='closed' ):
     state= jo.get("data").get("state")
     
     return state
+    
+if False:    
+    clientId= getParam( 'clientId', 'ua_94B198BC9CF44A76ACA9B38DDC566AA7', 
+                        'UAID on User Access Credentials screen, starts with "ua_"' )
+    clientSecret= getParam( 'clientSecret','',
+                        'Secret Key on User Access Credentials screen, starts with "sec_", empty will use from secrets file.')
+    deviceName= getParam( 'name', 'pool temperature', 'device name', { 'examples':['attic fan'] } )
+    switchState= getParam( 'state', 'off', 'set to this state', ['on','off'] )
+    
+    secrets= getFile( PWD + 'persistentSecrets.jy' )
+    execfile(str(secrets))
+        
+    accessToken= getAccessToken( clientId, clientSecret )
+    
+    device= getDeviceByName(accessToken,name=deviceName)
+        
+    t= getTemperature( accessToken, device.get('deviceId'), device.get('token') )
+    t= Units.centigrade.createDatum(t)
+    s= 'Temperature at %s: %s (%s)' % ( deviceName, t, t.convertTo( Units.fahrenheitScale ) ) 
+    print s
