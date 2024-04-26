@@ -8,16 +8,14 @@ clientSecret= getParam( 'clientSecret','',
                     'Secret Key on User Access Credentials screen, starts with "sec_", empty will use from secrets file.')
 deviceName= getParam( 'name', 'pool temperature', 'device name', { 'examples':['pool temperature','ground temperature'] } )
 
-secrets= getFile(PWD+'persistentSecrets.jy')
-execfile(str(secrets))
+execfile( str( getFile(PWD+'persistentSecrets.jy') ) )
+execfile( str( getFile(PWD+'yoSmart.jy') ) )
             
 if clientSecret=='':
     clientSecret=getSecret('yoSmart-'+clientId,'clientSecret')
 else:
     setSecret( 'yoSmart-'+clientId,'clientSecret',clientSecret )
        
-yosmart= getFile(PWD+'yoSmart.jy')
-execfile(str(yosmart))
         
 accessToken= getAccessToken( clientId, clientSecret )
 
