@@ -1,0 +1,171 @@
+from org.json import JSONObject
+from java.lang import StringBuilder,System
+from java.io import BufferedReader,InputStreamReader,File
+from org.das2.util import FileUtil
+from java.util.stream import Collectors
+
+setScriptDescription('''Functions for interacting and retrieving
+data from YoSmart devices.  YoSmart are devices with a hub which 
+receives messages from various sensing and controlling devices, 
+Examples include temperature sensors and switched outlets.  Data 
+can be immediately read with a smart phone app, and User
+Access Credentials allow access to the data from other programs like
+Autoplot.  
+
+The User Access Credentials are kept in a "secrets" file, see 
+secrets.jy, and these are used to retrieve an access token from 
+Yo-Smart which has a two-hour life.  When this has expired, a new
+token will be retrieved automatically.
+
+The scientist's clientId and clientSecret, which are found within the
+YoSmart phone application, will be accepted by Jython codes using this
+code.
+
+Note getDeviceByName uses org.json.JSONObject, so the following will be
+imported.
+
+See http://doc.yosmart.com/docs/overall/intro.''')
+
+def getAccessToken( clientId, clientSecret ):
+    '''Retrieve an access token, which will be kept in Autoplot's secrets file.'''
+    
+    token= getSecret('yoSmart-'+clientId,'access_token','')
+    tokenExp= getSecret('yoSmart-'+clientId,'token-exp',0)
+    
+    if token!='':
+        if System.currentTimeMillis()<tokenExp:
+            print 'using fresh token'
+            return token
+            
+    data= 'grant_type=client_credentials&client_id=%(clientId)s&client_secret=%(clientSecret)s' % { "clientId":clientId, "clientSecret":clientSecret }
+
+    url= 'https://api.yosmart.com/open/yolink/token'
+    
+    data_string= data  # URL Encode is not necessary
+    
+    url_obj = URL(url)
+
+    # Create a connection
+    conn = url_obj.openConnection()
+    conn.setRequestMethod("POST")
+    conn.setRequestProperty("grant_type", "client_credentials" )
+    conn.setRequestProperty("client_id", clientId )
+    conn.setRequestProperty("clientSecret", clientSecret )
+    conn.setDoOutput(True)
+    output_stream = conn.getOutputStream()
+    output_stream.write(data_string.encode("UTF-8"))
+    output_stream.close()
+    response = conn.getInputStream()
+    lines= BufferedReader(InputStreamReader(response)).lines()
+    response= lines.collect(Collectors.joining())
+
+    jo= JSONObject(response)
+    accessToken= jo.get('access_token')
+    expiresIn= jo.get('expires_in')
+    tokenExp = System.currentTimeMillis() + int(expiresIn)*1000
+    
+    setSecret('yoSmart-'+clientId,'access_token',accessToken)
+    setSecret('yoSmart-'+clientId,'token-exp',tokenExp)
+    setSecret('yoSmart-'+clientId,'refresh_token', jo.get('refresh_token'))
+    setSecret('yoSmart-'+clientId,'deviceList','')
+    
+    return accessToken
+
+def getDeviceByName( accessToken, name='', deviceId='', type='' ):
+    'return a JSONObject describing the device, containing tags deviceId, name, type, token.'
+    
+    deviceList= getSecret('yoSmart-'+clientId,'deviceList','')
+    if deviceList!='':
+        print 'using fresh deviceList'
+        jo= deviceList
+    else:        
+        data= JSONObject()
+        data.put( 'method', 'Home.getDeviceList' )
+        data_string= data.toString()
+        url= 'https://api.yosmart.com/open/yolink/v2/api'
+        url_obj = URL(url)
+        conn = url_obj.openConnection()
+        conn.setRequestMethod("POST")
+        conn.setRequestProperty("Authorization", "Bearer "+accessToken )
+        conn.setRequestProperty("Content-Type", "application/json" )
+        conn.setDoOutput(True)
+        output_stream = conn.getOutputStream()
+        output_stream.write(data_string.encode("UTF-8"))
+        output_stream.close()
+        response = conn.getInputStream()
+        lines= BufferedReader(InputStreamReader(response)).lines()
+        rr= lines.collect(Collectors.joining())
+        jo= JSONObject(rr)
+        setSecret( 'yoSmart-'+clientId,'deviceList',jo)
+    
+    devices= jo.get('data').get('devices')
+    
+    for i in xrange(devices.length()):
+        device= devices.get(i)
+        if device.get('name')==name:
+            return device
+        if device.get('deviceId')==deviceId:
+            return device
+        if device.get('type')==type:
+            return device
+    raise Exception('device not found by name or deviceId or type')
+    
+    
+def getTemperature( accessToken, targetDevice, deviceToken ):
+    data= JSONObject()
+    data.put( 'method', 'THSensor.getState' )
+    data.put( 'targetDevice', targetDevice )
+    data.put( 'token', deviceToken )
+    data_string= data.toString()
+    url= 'https://api.yosmart.com/open/yolink/v2/api'
+    url_obj = URL(url)
+    conn = url_obj.openConnection()
+    conn.setRequestMethod("POST")
+    conn.setRequestProperty("Authorization", "Bearer "+accessToken )
+    conn.setRequestProperty("Content-Type", "application/json" )
+    conn.setDoOutput(True)
+    
+    output_stream = conn.getOutputStream()
+    output_stream.write(data_string.encode("UTF-8"))
+    output_stream.close()
+    
+    response = conn.getInputStream()
+    lines= BufferedReader(InputStreamReader(response)).lines()
+    rr= lines.collect(Collectors.joining())
+    
+    jo= JSONObject(rr)
+    temperature= jo.get("data").get("state").getDouble("temperature")
+    
+    temperature= temperature * 9 / 5. + 32
+    return temperature
+    
+def setSwitch( accessToken, targetDevice, deviceToken, state='closed' ):
+    data= JSONObject()
+    data.put( 'method', 'Outlet.setState' )
+    data.put( 'targetDevice', targetDevice )
+    data.put( 'token', deviceToken )
+    params= JSONObject()
+    params.put( 'state', state )
+    data.put( 'params', params )
+    data_string= data.toString()
+    url= 'https://api.yosmart.com/open/yolink/v2/api'
+    url_obj = URL(url)
+    conn = url_obj.openConnection()
+    conn.setRequestMethod("POST")
+    conn.setRequestProperty("Authorization", "Bearer "+accessToken )
+    conn.setRequestProperty("Content-Type", "application/json" )
+    conn.setDoOutput(True)
+    
+    output_stream = conn.getOutputStream()
+    output_stream.write(data_string.encode("UTF-8"))
+    output_stream.close()
+    
+    response = conn.getInputStream()
+    lines= BufferedReader(InputStreamReader(response)).lines()
+    rr= lines.collect(Collectors.joining())
+    
+    jo= JSONObject(rr)
+    
+    state= jo.get("data").get("state")
+    
+    return state
