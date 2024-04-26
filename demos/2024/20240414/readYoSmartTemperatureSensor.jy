@@ -7,7 +7,6 @@ clientId= getParam( 'clientId', 'ua_94B198BC9CF44A76ACA9B38DDC566AA7',
 clientSecret= getParam( 'clientSecret','',
                     'Secret Key on User Access Credentials screen, starts with "sec_", empty will use from secrets file.')
 deviceName= getParam( 'name', 'pool temperature', 'device name', { 'examples':['pool temperature','ground temperature'] } )
-switchState= getParam( 'state', 'off', 'set to this state', ['on','off'] )
 
 secrets= getFile(PWD+'persistentSecrets.jy')
 execfile(str(secrets))
