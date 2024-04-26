@@ -1,5 +1,6 @@
 setScriptDescription('''Read temperature from YoSmart device.  
-See %syoSmart.jy''' % PWD )
+See %syoSmart.jy.  This also demonstrates how separate Jython codes
+can share common code without multiple copies.''' % PWD  )
 
 clientId= getParam( 'clientId', 'ua_94B198BC9CF44A76ACA9B38DDC566AA7', 
                     'UAID on User Access Credentials screen, starts with "ua_"' )
