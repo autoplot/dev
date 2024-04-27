@@ -1,7 +1,7 @@
 from org.das2.qds.examples import Schemes
-from org.das2.graph import TriMeshRenderer,DasColorBar
+from org.das2.graph import PolyMeshRenderer,DasColorBar
 
-src= getParam('case',1,'case number',[1,2,3])
+src= getParam('case',4,'case number',[1,2,3,4])
 
 if src==1:
     tris= Schemes.polyMesh()
@@ -18,6 +18,11 @@ elif src==3:
     yy= concatenate( yy, dataset( [ 1,2,2,1 ] ) )
     tt= join( dataset( [ 0, 1, 2, 3 ] ), dataset( [ 4,5,6,7 ] ) )
     tris= join( bundle(xx,yy), tt )
+elif src==4:
+    xx= randn(1000) * 5 - 2.5
+    yy= randn(1000) * 5 - 2.5
+    tt= triangulate(xx,yy)
+    tris= join( bundle(xx,yy), tt )
 
 cc= distance(100,100,50,50,30,30)
 
@@ -25,7 +30,7 @@ tt= polyCenters( tris )
 cc1= interpolate(cc,tt[:,0]*10+50,tt[:,1]*10+50)
 cc1.putProperty( QDataSet.FORMAT, "%.2f" )
 
-cb= DasColorBar(datum(0),datum(2),False)
+cb= DasColorBar(datum(0),datum(1),False)
 
 colors= intarr( len(tt) )
 colors.putProperty( QDataSet.UNITS, Units.rgbColor )
