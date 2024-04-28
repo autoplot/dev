@@ -25,16 +25,19 @@ else:
     
 drtr= datumRange(tr)
 if ( drtr.width()>datum('24hr') ):
-    raise Exception('only 24hr can be retrieved: '+str(drtr.width()))
+    raise Exception('Only 24hrs can be loaded each time')
+    
     
 h= { 'station':station,
      'start': drtr.min().doubleValue(Units.t1970),
      'stop': drtr.max().doubleValue(Units.t1970),
      'token': token }
      
-uri= 'https://swd.weatherflow.com/swd/rest/observations/stn/%(station)s?time_start=%(start)d&time_end=%(stop)d&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key=%(token)s' % h
+url= 'https://swd.weatherflow.com/swd/rest/observations/stn/%(station)s?time_start=%(start)d&time_end=%(stop)d&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key=%(token)s' % h
 
-ff= downloadResourceAsTempFile(URL(uri),3600,monitor)
+print url
+ff= downloadResourceAsTempFile(URL(url),3600,monitor)
+print ff
 
 src= FileUtil.readFileToString(ff)
 
@@ -43,7 +46,7 @@ json= JSONObject(src)
 ob_fields= json.get('ob_fields')
 print ob_fields
 
-dsb= DataSetBuilder(2,1440,ob_fields.length())
+dsb= DataSetBuilder(2,1440,ob_fields.length()-1)
 
 tt= DataSetBuilder(1,100)
 
@@ -67,11 +70,33 @@ def toDoubleArray( ja ):
         result[i-1]= ja.optDouble(i,NaN)
     return result
 
+# assign units for names containing temp, wind, precip, pressure, distance.
+units= json.getJSONObject('units')
+if units.getString('units_temp')=='c':
+   units.put('units_temp',Units.centigrade.toString())
+
+for j in xrange(1,ob_fields.length()):
+    name= ob_fields.getString(j)
+    if name=='precip_type':
+        continue
+    if name=='wind_dir':
+        dsb.setUnits(j-1,Units.lookupUnits('degrees east of North'))
+        continue
+    print name, '----'
+    unitsKeys= units.keys()
+    for k in unitsKeys:
+        if ( name.find(k[6:])>-1 ):
+            print name, k, units
+            dsb.setUnits(j-1,Units.lookupUnits(units.getString(k)))
+
 dsb.setUnits(5,Units.lookupUnits('mb'))
 dsb.setUnits(7,Units.centigrade)
 dsb.setUnits(11,Units.lookupUnits('W/m^2'))
+
 for j in xrange(1,ob_fields.length()):
+    print j, ob_fields.getString(j)
     dsb.setLabel(j-1,ob_fields.getString(j))
+    dsb.setName(j-1,safeName(ob_fields.getString(j)))
     
 for i in xrange(ja.length()):
     rec= ja.getJSONArray(i)
