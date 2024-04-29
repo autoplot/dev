@@ -1,6 +1,10 @@
 setScriptDescription('''Autoplot never exposes bundled data
 xtags, so you need to explicitly add them in.  I believe
-it's because if I ''')
+it's because if I automatically look for DEPEND_0 on any of
+the bundled datasets, then sometimes a variable intended for
+the X values is ignored.  There really needs to be something
+that disambiguates this.''')
+
 wspeed= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=WindSpeed&timerange=2024-04-27')
 alt= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=Altimeter&timerange=2024-04-27')
 
