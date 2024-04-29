@@ -1,0 +1,13 @@
+setScriptDescription('''Autoplot never exposes bundled data
+xtags, so you need to explicitly add them in.  I believe
+it's because if I ''')
+wspeed= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=WindSpeed&timerange=2024-04-27')
+alt= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=Altimeter&timerange=2024-04-27')
+
+ds= bundle( wspeed, alt )
+
+print ds
+print xtags(ds)
+print xtags(unbundle(ds,0))
+
+plot( ds )
