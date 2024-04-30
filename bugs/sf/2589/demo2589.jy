@@ -1,0 +1,15 @@
+setScriptDescription('''This script demos the new logic that the units can be changed,
+even if they are not convertible with the current units.  If the label can be changed,
+then shouldn't the units also be allowed to change?  The problem is that if they can 
+be converted, they will be converted.  Therefor resetUnits must be used to assert the 
+new units.''')
+
+clearMeta= getParam('clearMeta',True,'Clear out the old values first',[True,False])
+
+ac_k0_mfi= getDataSet('vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi?id=AC_K0_MFI&parameters=Magnitude&timerange=2024-04-20')
+if clearMeta:
+    ac_k0_mfi= dataset( ac_k0_mfi,units=None,label=None )
+    
+ac_k0_mfi= dataset( ac_k0_mfi,label='Ion Flux',units='1/cc' )
+
+plot( ac_k0_mfi )
