@@ -29,6 +29,6 @@ from java.awt.image import BufferedImage
 from java.awt import Point
 
 f=getFile(PWD + 'featherPlotRenderer.jy')
-execfile(f)
+execfile(str(f))
 
 plot( featherDs, renderer= FeatherRenderer(0.03) )
