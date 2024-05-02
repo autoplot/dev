@@ -28,25 +28,7 @@ from org.das2.graph import Renderer
 from java.awt.image import BufferedImage
 from java.awt import Point
 
-class FeatherRenderer( Renderer ):
-    def __init__(self,scale=1):
-        self.scale= scale
-        
-    def doAutorange( self, ds ):
-        dx= ds[:,2]*self.scale 
-        xr= extent( ds[:,0]+dx )
-        dy= ds[:,3]*self.scale
-        yr= extent( ds[:,1]+dy )
-        bds= join(rescaleRange(xr,-0.1,1.1),rescaleRange(yr,-0.1,1.1))
-        return bds
-   
-    def render( self, g, xaxis, yaxis ):
-        ds= self.getDataSet()
-        for i in xrange(ds.length()):
-            x0= int(xaxis.transform( ds[i,0],xaxis.getUnits() ))
-            y0= int(yaxis.transform( ds[i,1],yaxis.getUnits() ))
-            x1= int(xaxis.transform( ds[i,0]+ds[i,2]*self.scale,xaxis.getUnits() ))
-            y1= int(yaxis.transform( ds[i,1]+ds[i,3]*self.scale,yaxis.getUnits() ))
-            Arrow.paintArrow(g,Point(x1,y1),Point(x0,y0),4,Arrow.HeadStyle.DRAFTING)
+f=getFile(PWD + 'featherPlotRenderer.jy')
+execfile(f)
 
 plot( featherDs, renderer= FeatherRenderer(0.03) )
