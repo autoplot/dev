@@ -20,7 +20,7 @@ print mag
 dx= putProperty( mag[:,0], QDataSet.UNITS, Units.dimensionless )
 dy= putProperty( mag[:,1], QDataSet.UNITS, Units.dimensionless )
 featherDs= bundle( x, y, dx, dy )
-featherDs= link( t2, featherDs 
+featherDs= link( t2, featherDs )
 
 f=getFile(PWD + 'featherPlotRenderer.jy')
 execfile(str(f))
