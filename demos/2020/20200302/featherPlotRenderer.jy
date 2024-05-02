@@ -1,3 +1,7 @@
+from org.das2.graph import Renderer
+from java.awt.image import BufferedImage
+from java.awt import Point
+
 setScriptDescription('''Draws arrows along a trajectory.  Import this
 using getFile and eval, and then create the data as a rank 2 dataset
 with x,y,dx,dy for each record.  For example, see featherPlot.jy:<br>
