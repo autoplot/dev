@@ -3,8 +3,6 @@ setScriptDescription('Shows a custom renderer which plots arrows of lengths dx,d
 
 reset()
 
-from org.das2.graph import Arrow
-
 t= timegen( '2017-10-01T4:50', '60s', 1600 )
 x= cos( (t-'2017-10-01T4:50')/'5hr' ) 
 y= sin( (t-'2017-10-01T4:50')/'5hr' ) * linspace( 1,1.2,1600 )
@@ -22,11 +20,7 @@ print mag
 dx= putProperty( mag[:,0], QDataSet.UNITS, Units.dimensionless )
 dy= putProperty( mag[:,1], QDataSet.UNITS, Units.dimensionless )
 featherDs= bundle( x, y, dx, dy )
-featherDs= link( t2, featherDs )
-
-from org.das2.graph import Renderer
-from java.awt.image import BufferedImage
-from java.awt import Point
+featherDs= link( t2, featherDs 
 
 f=getFile(PWD + 'featherPlotRenderer.jy')
 execfile(str(f))
