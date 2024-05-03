@@ -12,7 +12,7 @@ plot( featherDs, renderer= FeatherRenderer(0.03) )''')
 class FeatherRenderer( Renderer ):
     def __init__(self,scale=1,color=None):
         self.scale= scale
-        self.color= color
+        self.mycolor= color
         
     def doAutorange( self, ds ):
         dx= ds[:,2]*self.scale 
@@ -24,8 +24,8 @@ class FeatherRenderer( Renderer ):
    
     def render( self, g, xaxis, yaxis ):
         ds= self.getDataSet()
-        if self.color!=None:
-            g.color= color
+        if self.mycolor!=None:
+            g.color= self.mycolor
         for i in xrange(ds.length()):
             x0= int(xaxis.transform( ds[i,0],xaxis.getUnits() ))
             y0= int(yaxis.transform( ds[i,1],yaxis.getUnits() ))
