@@ -1,6 +1,6 @@
 from java.lang import Double
 
-setScriptDescription('''Demo where with multiple
+setScriptDescription('''Demo "where" with multiple
 conditions that need to be met.''')
 
 # make the data be repeatable by specifying a random seed.
