@@ -1,0 +1,19 @@
+from java.lang import Double
+
+setScriptDescription('''Demo where with multiple
+conditions that need to be met.''')
+
+randomSeed(5334)
+
+x= randn(1000)
+y= randn(1000)
+z= sqrt( 4 - ( x**2 + y**2 ) )
+
+r= where( z.lt(0) )
+z[r]= Double.NaN
+
+p,_= plot( x, y, z, symbolSize=5 )
+
+r= where( x.lt(-1).and( y.lt(0) ) )
+
+plot( x[r], y[r], z[r], symbolSize=15, overplotOf=p )
