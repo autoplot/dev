@@ -28,7 +28,7 @@ while ( not File( dirp, 'ro_cache.txt' ).exists() ):
         break
         
 if ( dirp==None or not File( dirp, 'ro_cache.txt' ).exists() ):
-    raise Exception('unable to find ro_cache.txt file')
+    raise Exception('unable to find ro_cache.txt file, no local copy found')
     
 ss= FileUtil.readFileToString( File( dirp, 'ro_cache.txt' ) )
 ss= ss.strip()

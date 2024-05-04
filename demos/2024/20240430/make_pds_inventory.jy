@@ -1,0 +1,77 @@
+from java.nio.file import Paths
+from java.lang import System
+from java.util import ArrayList
+from java.io import FileInputStream,PrintWriter,FileWriter
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPath
+from javax.xml.xpath import XPathExpressionException
+from javax.xml.xpath import XPathFactory
+from javax.xml.xpath import XPathConstants
+from org.xml.sax import InputSource
+from java.io import File
+from org.das2.util import FileUtil
+
+setScriptDescription('''Experiment to see how long it takes to form a table of start, stops for 
+each granule.  There are about 65,000 xml files and it takes ~281s to make the file (over NFS).''')
+
+root= getParam('root',File('/project/cassini/pds4/cassini-rpws-wideband'))
+rootPath= Paths.get(root.toURI())
+
+def findAllXmlLabl(root,list,depth,mon):
+    ff= root.listFiles()
+    if depth==0:
+        mon.setTaskSize(len(ff))
+        mon.started()
+    #print root,depth,list.size(),len(ff)
+    for f in ff:
+        if depth==0: mon.taskProgress=mon.taskProgress+1
+        if ( f.isDirectory() ):
+            findAllXmlLabl(f,list,depth+1,mon)
+        elif f.name.endswith('.xml'):
+            list.add(f)
+        elif f.name.endswith('.lblx'):
+            list.add(f)
+    if depth==0: mon.finished()
+
+llist= ArrayList()
+
+monitor.taskSize=100
+
+mon= monitor.getSubtaskMonitor(0,10,'find files')
+t0= System.currentTimeMillis()
+findAllXmlLabl(root,llist,0,mon)
+
+print len(llist), ""+str(System.currentTimeMillis()-t0)+"ms"#
+#print llist.get(0)
+#llist= ['/project/cassini/pds4/cassini-rpws-wideband/T20040XX/T2004001/cas_rpws_wbrfr_325khz_e_cruise_20040101_18_v02.lblx']
+#llist= ['/project/cassini/pds4/cassini-rpws-wideband/T20041XX/T2004100/cas_rpws_wbrfr_27khz_e_20040409_11_v02.lblx']
+
+fout= open( URI(PWD+'index.csv').path, 'w' )
+
+mon= monitor.getSubtaskMonitor(10,90,'get start and stop')
+mon.taskSize= len(llist)
+mon.started()
+
+inventory=None
+for f in llist:
+    mon.taskProgress= mon.taskProgress+1
+    builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+    myin= FileInputStream( f )
+    source = InputSource( myin )
+    initialDocument = builder.parse(source)
+    factory= XPathFactory.newInstance()
+    xpath= factory.newXPath()
+
+    inventory= xpath.evaluate( '/Product_Observational/File_Area_Observational/File/file_name/text()', initialDocument, XPathConstants.STRING )
+    start= xpath.evaluate('/Product_Observational/Observation_Area/Time_Coordinates/start_date_time/text()', initialDocument, XPathConstants.STRING )
+    stop= xpath.evaluate('/Product_Observational/Observation_Area/Time_Coordinates/stop_date_time/text()', initialDocument, XPathConstants.STRING )
+    if ( inventory!='' ):
+        fr= rootPath.relativize(Paths.get(f.toURI()))
+        print '%s,%s,%s' % ( fr, start, stop )
+        fout.write('%s,%s,%s\n' % ( fr, start, stop ))
+
+mon.finished()
+
+fout.close()
+print len(llist), ""+str(System.currentTimeMillis()-t0)+"ms"#
+print 'wrote '+str(fout.name)
