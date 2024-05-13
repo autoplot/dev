@@ -20,7 +20,7 @@ fsm= FileStorageModel.create(fs,'$Y/vg1pws_lr_$Y$m$d_v$v.cdf')
 
 nn= fsm.getNamesFor(recent)   
 
-if len(nn)==0:
-    raise Exception('no recent VG1 files found: '+str(fs) )
+#if len(nn)==0:
+#    raise Exception('no recent VG1 files found: '+str(fs) )
 
 print 'Recent VG1 files found: '+str(len(nn))
