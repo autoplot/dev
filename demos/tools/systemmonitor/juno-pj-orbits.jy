@@ -4,25 +4,32 @@ from org.das2.util.filesystem import FileSystem
 setScriptDescription('''Check that the most recent Juno orbit
 is centered about R.''')
 
-from org.das2.datum import Orbits
-oo= Orbits.getOrbitsFor('junoPJ')
+def doCheck(name):
+    from org.das2.datum import Orbits
+    oo= Orbits.getOrbitsFor(name)
 
-lasto= oo.getOrbitOnOrBefore(datumRange('P1D/now').max())
-print 'last orbit: '+lasto
-
-lasto= oo.getDatumRange(lasto)
-print lasto
-
-R= getDataSet( 'vap+das2server:https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&interval=60&item=0',lasto)
-
-r= imin( R )
-
-tmin= xtags(R)[r]
-
-ratio= (tmin-lasto.min()) / (lasto.max()-lasto.min() )
-
-if ratio<0.48 or ratio>0.52:
-    raise Exception('Radius minimum is not centered in orbit '+str(lasto))
-
-print ratio
+    orbit= oo.getOrbitOnOrBefore(datumRange('P1D/now').max())
+    print 'inspecting orbit:'+name+':'+orbit
     
+    lasto= oo.getDatumRange(orbit)
+    print TimeUtil.now() - lasto.max()
+    
+    if ( (TimeUtil.now()-lasto.max()) > '60days' ):
+        raise Exception('last orbit found is more than 60 days ago: '+orbit)
+    print 'time since orbit interval end: '+str(TimeUtil.now()-lasto.max())
+        
+    R= getDataSet( 'vap+das2server:https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/Ephemeris/Jovicentric&interval=60&item=0',lasto)
+    
+    r= imin( R )
+    
+    tmin= xtags(R)[r]
+    
+    ratio= (tmin-lasto.min()) / (lasto.max()-lasto.min() )
+    
+    if ratio<0.48 or ratio>0.52:
+        raise Exception('Radius minimum is not centered in orbit '+str(lasto))
+    
+    print ratio
+
+doCheck('junoPJ')
+doCheck('junoPJ_2hr')
