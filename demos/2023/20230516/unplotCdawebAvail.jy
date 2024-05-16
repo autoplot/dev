@@ -1,5 +1,5 @@
 setScriptDescription('''Parse the avail.png file at CDAWeb which shows when each product is available,
-and print an ASCII table for each parameter.''')
+and print an ASCII table for each parameter.  It is not known that this was finished.''')
 
 ds= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/avail.png?xaxis=[1960-001T00:00Z,371,2029-001T00:00Z,1065]')
 cc= getCompletions( 'vap+cdaweb:id=')
