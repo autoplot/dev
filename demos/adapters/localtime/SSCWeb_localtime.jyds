@@ -1,0 +1,29 @@
+setScriptTitle('Read Local Time HAPI SSCWeb')
+setScriptDescription('''Reads the local time from HAPI SSCWeb server, 
+which is served as a HH:MM:SS string, and returns 
+the data as floating-point hours.
+''')
+
+
+sats='''rbspa,rbspb'''.split(',')
+
+sc= getParam('sat','rbspa','satellite', { 'examples:':['rbspa','rbspb'] } )
+
+hapiParam= getParam( 'param', 'LT_GM', 'parameter to read' )
+
+tr= getParam( 'timerange', '2019-12-04', 'timerange to load' )
+
+uri= 'vap+hapi:https://hapi-server.org/servers/SSCWeb/hapi?id=%s&parameters=%s&timerange=%s'
+ss= getDataSet( uri % ( sc, hapiParam, tr ) )
+
+print ss[0]
+
+rsb= DataSetBuilder(1,100)
+rsb.putProperty(QDataSet.DEPEND_0,xtags(ss))
+
+for i in xrange(len(ss)):
+    ss1= ss[i].svalue()
+    d= float(ss1[0:2]) + float(ss1[3:5])/60. + float(ss1[6:8])/3600.
+    rsb.nextRecord(d)
+    
+result= rsb.getDataSet()
