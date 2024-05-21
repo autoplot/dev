@@ -1,8 +1,6 @@
 setScriptTitle('Read Local Time HAPI SSCWeb')
-setScriptDescription('''Reads the local time from HAPI SSCWeb server, 
-which is served as a HH:MM:SS string, and returns 
-the data as floating-point hours.
-''')
+setScriptDescription('''Reads the local time from HAPI SSCWeb server, which 
+is served as a HH:MM:SS string, and returns the data as floating-point hours.''')
 
 
 sats='''rbspa,rbspb'''.split(',')
