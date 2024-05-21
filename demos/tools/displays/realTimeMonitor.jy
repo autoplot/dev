@@ -26,10 +26,10 @@ def runUntil():
         if scrollTimeAxis:
             axisWidth= dom.plots[0].xaxis.range.width()
             if axisWidth.units.isConvertibleTo(Units.seconds):
-                print axisWidth, TimeUtil.now()
                 newRange= DatumRangeUtil.union( TimeUtil.now(), TimeUtil.now()-axisWidth )
                 dom.plots[0].xaxis.range= newRange
-            
+            else:
+                print 'unable to use axis as time axis.'
         AutoplotUtil.reloadAll(dom)
         sleep(50)  # kludge to wait until data load
         waitUntilIdle()
