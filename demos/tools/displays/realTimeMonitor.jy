@@ -1,0 +1,45 @@
+from org.das2.datum import DatumRangeUtil,TimeUtil
+from java.lang import System
+from javax.swing import JCheckBox
+from org.autoplot import AutoplotUtil
+from javax.swing import Timer
+
+setScriptTitle('Real Time Monitor')
+setScriptLabel('Real Time Monitor')
+setScriptDescription('''This script takes the current configuration and forces a reload every 
+N seconds, and also optionally updates the time axis to show the 
+last M minutes.''')
+
+updateEvery= getParam( 'updateEvery', 5.0, 'refresh the display after idle for so many seconds' )
+updateEveryMs= updateEvery*1000
+
+scrollTimeAxis= getParam( 'scrollTimeAxis', True, 'also update the xaxis setting', [True,False] )
+
+checkBox= JCheckBox('Running...')
+checkBox.selected= True
+
+getApplication().setBottomPanel(checkBox)
+
+def runUntil():
+    while checkBox.selected:
+        t0= System.currentTimeMillis()
+        if scrollTimeAxis:
+            axisWidth= dom.plots[0].xaxis.range.width()
+            if axisWidth.units.isConvertibleTo(Units.seconds):
+                print axisWidth, TimeUtil.now()
+                newRange= DatumRangeUtil.union( TimeUtil.now(), TimeUtil.now()-axisWidth )
+                dom.plots[0].xaxis.range= newRange
+            
+        AutoplotUtil.reloadAll(dom)
+        sleep(50)  # kludge to wait until data load
+        waitUntilIdle()
+        dt= System.currentTimeMillis()-t0
+        while dt < updateEveryMs:
+            checkBox.text= 'Running...%.1f seconds to update' % ( updateEvery - dt/1000. )
+            sleep(50)
+            dt= System.currentTimeMillis()-t0
+        checkBox.text= 'Reloading...'
+    checkBox.text= 'Finished.  Rerun script to restart.'
+
+
+invokeSometime(runUntil)
