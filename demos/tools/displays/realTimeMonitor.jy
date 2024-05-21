@@ -30,7 +30,9 @@ def runUntil():
                 dom.plots[0].xaxis.range= newRange
             else:
                 print 'unable to use axis as time axis.'
-        AutoplotUtil.reloadAll(dom)
+
+        AutoplotUtil.reloadAll(dom)  # this is the same as ctrl-L key press
+        
         sleep(50)  # kludge to wait until data load
         waitUntilIdle()
         dt= System.currentTimeMillis()-t0
