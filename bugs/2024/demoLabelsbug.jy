@@ -1,2 +1,7 @@
+setScriptTitle('Demo Labels Bug')
+setScriptDescription('''This demonstrates where additional labels, added to the values in a droplist
+and which should not appear in the value selected, do appear in the value selected.
+''')
+
 type= getParam( 'type', 'e', 'electric or magnetic', { 'values':['e','m'], 'labels': ['Ey wrt B', 'Bz wrt B'] } )
 setStatus('type '+type)
