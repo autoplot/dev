@@ -1,0 +1,2 @@
+type= getParam( 'type', 'e', 'electric or magnetic', { 'values':['e','m'], 'labels': ['Ey wrt B', 'Bz wrt B'] } )
+setStatus('type '+type)
