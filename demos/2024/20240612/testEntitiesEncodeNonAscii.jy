@@ -1,0 +1,9 @@
+from org.das2.util import Entities
+
+s= 'aaa &rarr; bbb'
+
+result= Entities.encode( Entities.decodeEntities(s) )
+
+print result
+setStatus(result)
+
