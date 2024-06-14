@@ -1,0 +1,20 @@
+setScriptDescription('''This shows a bug, where sometimes it gets the proper
+number of items in the listing, and other times it gets none.  There 
+may be caching somewhere which is responsible.''')
+
+ll= [
+   'https://github.com/autoplot/dev/blob/master/demos/2020/20200302/',
+   'https://github.com/autoplot/dev/blob/master/demos/2020/20200302',
+   'https://github.com/autoplot/dev/demos/2020/20200302/',
+   'https://github.com/autoplot/dev/blob/master/demos/2020/'
+]
+
+for l in ll:
+    from org.das2.util.filesystem import FileSystem
+    s= l
+    fs= FileSystem.create(s)
+    ff= fs.listDirectory('')
+    if len(ff)==0:
+        peekAt(l)
+        ff= fs.listDirectory('')
+    print s, len(ff)
