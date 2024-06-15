@@ -1,0 +1,21 @@
+from org.das2.util import FileUtil
+from org.das2.util.filesystem import HtmlUtil,FileSystem
+
+ff= FileSystem.create(PWD)
+
+f= ff.getFileObject('347148079.000870322.html')
+ss= FileUtil.readFileToString(f.file)
+links1= HtmlUtil.getLinks(URL('https://github.com/autoplot/dev/'),ss)
+print '=== ' + str(len(links1))
+for l in links1:
+    if str(l).startswith('https://github.com/autoplot/dev/blob/master/demos/2020/20200302/'):
+        print l
+
+f= ff.getFileObject('347148079.000681615.html')
+ss= FileUtil.readFileToString(f.file)
+links2= HtmlUtil.getLinks(URL('https://github.com/autoplot/dev/'),ss)
+print '=== ' + str(len(links2))
+for l in links2:
+    if str(l).startswith('https://github.com/autoplot/dev/blob/master/demos/2020/20200302/'):
+        print l
+
