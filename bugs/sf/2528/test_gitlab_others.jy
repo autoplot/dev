@@ -1,0 +1,20 @@
+setScriptDescription('''This shows the gitlabs works reliably.''')
+
+ll= [
+   'https://jfaden.net/git/jbfaden/public/',
+   'https://jfaden.net/git/jbfaden/public/2021/',
+   'https://research-git.uiowa.edu/abbith/juno/-/tree/main/u/jeremy/',
+   'https://research-git.uiowa.edu/abbith/juno/-/tree/main/u/jeremy/2019/',
+   'https://research-git.uiowa.edu/abbith/juno/-/tree/main/',
+   'https://research-git.uiowa.edu/abbith/juno/-/tree/main/team/'
+]
+
+for l in ll:
+    from org.das2.util.filesystem import FileSystem
+    s= l
+    fs= FileSystem.create(s)
+    ff= fs.listDirectory('')
+    if len(ff)==0:
+        peekAt(l)
+        ff= fs.listDirectory('')
+    print s, len(ff)
