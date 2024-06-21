@@ -1,3 +1,8 @@
+setScriptDescription('''Intentionally hang the application by running a code
+on the Java event thread which pauses for 15 seconds.  This is used
+for testing, and if the Response Monitor is enabled a file will be
+created in HOME/autoplot_data/log/.''')
+
 def hang():
     sleep(15000)
     
@@ -5,6 +10,7 @@ from java.lang import Runnable
 class HangRun( Runnable ):
     def run( self ):
         hang()
+        print 'system should be normal again.  See HOME/autoplot_data/log if a hang file was produced.'
 
 from java.lang import System
 print 'enableResponseMonitor: ', System.getenv('enableResponseMonitor')
