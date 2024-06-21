@@ -13,6 +13,8 @@ class HangRun( Runnable ):
         print 'system should be normal again.  See HOME/autoplot_data/log if a hang file was produced.'
 
 from java.lang import System
+
+print 'The environment variable enableResponseMonitor, if set to true, should write to HOME/autoplot_data/log.'
 print 'enableResponseMonitor: ', System.getenv('enableResponseMonitor')
 
 print 'hanging the event thread now, see you in 15 seconds...'
