@@ -16,7 +16,7 @@ from java.lang import System
 
 print 'The environment variable enableResponseMonitor, if set to true, should write to HOME/autoplot_data/log.'
 print 'enableResponseMonitor: ', System.getenv('enableResponseMonitor')
-
+print 'getApplication().getResponseMonitor(): ', getApplication().getResponseMonitor()
 print 'hanging the event thread now, see you in 15 seconds...'
 
 from javax.swing import SwingUtilities
