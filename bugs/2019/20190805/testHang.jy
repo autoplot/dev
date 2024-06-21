@@ -15,5 +15,7 @@ class HangRun( Runnable ):
 from java.lang import System
 print 'enableResponseMonitor: ', System.getenv('enableResponseMonitor')
 
+print 'hanging the event thread now, see you in 15 seconds...'
+
 from javax.swing import SwingUtilities
 SwingUtilities.invokeLater( HangRun() )
