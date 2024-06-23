@@ -1,11 +1,20 @@
-from org.das2.components import DasProgressPanel
 from java.beans import PropertyChangeListener
 from java.awt import BorderLayout
 from javax.swing import JSlider,JLabel,JPanel,BoxLayout
+
+from org.das2.components import DasProgressPanel
+from org.das2.datum import UnitsConverter
+
+setScriptTitle('Interactive Pool Temp Air Correlation')
+setScriptDescription('''A slider is used to find the time offset between 
+the air temperature and the water temperature in a small pool.  Run
+the script and use the new slider GUI at the bottom to set the
+time shift.''')
+
 tr= getParam( 'timerange', '2021-Apr' )
+
 dom.timeRange= datumRange(tr)
 
-from org.das2.datum import UnitsConverter
 Units.fahrenheitDegrees.registerConverter(Units.fahrenheitScale,UnitsConverter.IDENTITY )
 
 airTemp=None
