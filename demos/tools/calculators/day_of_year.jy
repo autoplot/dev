@@ -1,3 +1,9 @@
+setScriptTitle('Day of Year Calculator')
+setScriptLabel('Day of Year Calculator')
+setScriptDescription('''Enter a date in any format and the date will be printed
+as $Y-$m-$d and $Y-$j.  Optionally, a custom format
+can be used.''')
+
 date= getParam('date','2005-10-11T19:00:00.000Z')
 format= getParam('format', '', 'Format for result')
 
