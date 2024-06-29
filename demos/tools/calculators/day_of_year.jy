@@ -1,0 +1,11 @@
+date= getParam('date','2005-10-11T19:00:00.000Z')
+format= getParam('format', '', 'Format for result')
+
+d= datum(date)
+
+if format=='':
+    print TimeParser.create('$Y-$m-$d').format(d)
+    print TimeParser.create('$Y-$j').format(d)
+else:
+    print TimeParser.create(format).format(d)
+    
