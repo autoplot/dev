@@ -1,0 +1,7 @@
+setScriptDescription('''Demo where we can't write a file on Windows because of the colon.''')
+  
+tr= TimeUtil.now()
+fln= '/tmp/ap/'+str(tr)+'.txt'
+formatDataSet(randn(240),fln)
+print 'wrote to '+fln
+  
