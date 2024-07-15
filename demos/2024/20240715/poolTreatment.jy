@@ -1,0 +1,4 @@
+dose= 3.
+per= 500.
+pool=getParam('pool surface area (sq ft)',12*8)
+print '%.1f oz' % ( pool/per*dose )
