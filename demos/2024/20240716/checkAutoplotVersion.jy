@@ -7,6 +7,6 @@ from org.das2.util import AboutUtil
 tag = AboutUtil.getReleaseTag()
 print tag
 
-if True or ( tag[0]=='v' and tag>'v2025a' ) or ( tag[0]=='2' and tag>'20240716a' ):
+if ( tag[0]=='v' and tag>'v2025a' ) or ( tag[0]=='2' and tag>'20240716a' ):
     d= datum('1992-05-03T02:14Z')
     print TimeUtil.rangeContaining(10,TimeUtil.MINUTE,d), 'Should be 1992-05-03 2:10 to 2:20'
