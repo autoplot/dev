@@ -12,12 +12,12 @@ PWD=System.getProperty('user.dir') + '/'
 import re
 from java.io import File
 
-print """This collection of images has been collected from release screenshots over the years.
+print """<html>
+<body><p>This collection of images has been collected from release screenshots over the years.</p>
 
-'''Click an image to expand/contract'''
 
-<addhtml>
-<html>
+<b>Click an image to expand/contract</b>
+
 <style type="text/css">
 img.thumb {
 	width:150px;
@@ -32,18 +32,7 @@ div.thumb {
 div.caption {
    background-color:yellow;
 }
-#thumbframe {
-    float: left;
-	text-align:left;
-	z-index:0;
-}
 </style>
-
-<script>
-$(function() {
-  $('.thumb').click(function() { $(this).toggleClass("thumb").next().toggleClass("thumb").css('width',$(this).width());});
-});
-</script>
 
 <div id="thumbframe">
 """
@@ -76,5 +65,4 @@ for f in ff:
         
 print """</div>
 </html>
-</addhtml>
 """
