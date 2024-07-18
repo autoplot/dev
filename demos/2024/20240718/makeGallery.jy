@@ -1,3 +1,80 @@
 setScriptDescription('''Make the gallery page for the website.  This was found at 
 jfaden.net:/home/jbf/ct/autoplot/script/demos/screenshots/makeGallery.jy and put
 here so that it can be found more easily in the future.''')
+# this should be run at ubuntu@ip-10-136-6-74:/var/www/autoplot/jnlp
+# with the line:
+# ~/local/jdk1.8/bin/java -Djava.awt.headless=true -jar latest/autoplot.jar  --script=makeGallery.jy
+#
+
+#PWD='/home/jbf/temp/autoplot/VirboAutoplot/'
+PWD='/var/www/autoplot/jnlp/'
+
+import re
+from java.io import File
+
+print """This collection of images has been collected from release screenshots over the years.
+
+'''Click an image to expand/contract'''
+
+<addhtml>
+<html>
+<style type="text/css">
+img.thumb {
+	width:150px;
+	border:solid white 3px;
+	vertical-align:top;
+	margin:auto;
+	z-index:1;
+}
+div.thumb {
+   display:none;
+}
+div.caption {
+   background-color:yellow;
+}
+#thumbframe {
+    float: left;
+	text-align:left;
+	z-index:0;
+}
+</style>
+
+<script>
+$(function() {
+  $('.thumb').click(function() { $(this).toggleClass("thumb").next().toggleClass("thumb").css('width',$(this).width());});
+});
+</script>
+
+<div id="thumbframe">
+"""
+
+def getCaption(fi):
+    for line in open(fi):
+        i= line.index('<p><small>')
+        if ( i>-1 ):
+            return line[i+10:]
+    return '(no caption)'
+    
+lastId= 0
+include=['v2.*_.*','2009.*','201.*']
+ff= listDirectory(PWD+'*')
+for f in ff:
+    if ( not File(PWD+f).isDirectory() ):
+       continue
+    check= listDirectory( PWD+f +'/screen.png' )
+    check= len(check)>0
+    doInclude= False
+    for x in include:
+        xx= re.match(x,f)
+        if ( xx!=None ): doInclude=True
+    if ( File(PWD+f+'screen.png').length()==lastId ): doInclude=False
+ 
+    if ( check and doInclude ):
+        cap=getCaption(PWD+f+'index.html')
+        lastId= File(PWD+f+'screen.png').length()
+        print '<img class="thumb" src="http://autoplot.org/jnlp/%sscreen.png" />' % f
+        
+print """</div>
+</html>
+</addhtml>
+"""
