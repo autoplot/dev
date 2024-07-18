@@ -7,7 +7,8 @@ here so that it can be found more easily in the future.''')
 #
 
 #PWD='/home/jbf/temp/autoplot/VirboAutoplot/'
-PWD='/var/www/autoplot/jnlp/'
+from java.lang import System
+PWD=System.getProperty('user.dir') + '/'
 
 import re
 from java.io import File
