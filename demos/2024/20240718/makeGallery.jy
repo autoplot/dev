@@ -6,7 +6,6 @@ here so that it can be found more easily in the future.''')
 # ~/local/jdk1.8/bin/java -Djava.awt.headless=true -jar latest/autoplot.jar  --script=makeGallery.jy
 #
 
-#PWD='/home/jbf/temp/autoplot/VirboAutoplot/'
 from java.lang import System
 PWD=System.getProperty('user.dir') + '/'
 
