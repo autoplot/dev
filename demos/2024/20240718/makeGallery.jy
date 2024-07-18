@@ -50,7 +50,7 @@ $(function() {
 
 def getCaption(fi):
     for line in open(fi):
-        i= line.index('<p><small>')
+        i= line.find('<p><small>')
         if ( i>-1 ):
             return line[i+10:]
     return '(no caption)'
@@ -72,7 +72,7 @@ for f in ff:
     if ( check and doInclude ):
         cap=getCaption(PWD+f+'index.html')
         lastId= File(PWD+f+'screen.png').length()
-        print '<img class="thumb" src="http://autoplot.org/jnlp/%sscreen.png" />' % f
+        print '<img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" />' % f
         
 print """</div>
 </html>
