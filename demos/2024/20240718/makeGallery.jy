@@ -14,7 +14,8 @@ import re
 from java.io import File
 
 print """<html>
-<body><p>This collection of images has been collected from release screenshots over the years.</p>
+<body><p>This collection of images has been collected from release screenshots over the years. Mouse
+over images to see captions, and click on any to see a particular release screenshot.</p>
 
 <b>Click an image to expand/contract</b>
 
