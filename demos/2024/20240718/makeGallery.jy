@@ -45,7 +45,7 @@ def getCaption(fi):
     return '(no caption)'
     
 lastId= 0
-include=['v2.*_.*','2009.*','201.*']
+include=['v2.*_.*']
 ff= listDirectory(PWD+'*')
 for f in ff:
     if ( not File(PWD+f).isDirectory() ):
