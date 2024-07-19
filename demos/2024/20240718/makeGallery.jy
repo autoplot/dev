@@ -20,11 +20,11 @@ print """<html>
 
 <style type="text/css">
 img.thumb {
-	width:150px;
-	border:solid white 3px;
-	vertical-align:top;
-	margin:auto;
-	z-index:1;
+    width:150px;
+    border:solid white 3px;
+    vertical-align:top;
+    margin:auto;
+    z-index:1;
 }
 div.thumb {
    display:none;
@@ -40,7 +40,10 @@ div.caption {
 
 .tooltip .tooltiptext {
   visibility: hidden;
-  width: 120px;
+  width: 300px;
+  top:100%;
+  left:50%;
+  margin-left: -150px;
   background-color: white;
   color: black;
   text-align: center;
@@ -70,7 +73,7 @@ def getCaption(fi):
     return '(no caption)'
     
 lastId= 0
-include=['v2.*_.*']
+include=['v20.*_.*']
 ff= listDirectory(PWD+'*')
 for f in ff:
     if ( not File(PWD+f).isDirectory() ):
@@ -86,7 +89,7 @@ for f in ff:
     if ( check and doInclude ):
         cap=getCaption(PWD+f+'index.html')
         lastId= File(PWD+f+'screen.png').length()
-        print '<div class="tooltip"><a href="https://das2.org/autoplot/jnlp/%sscreen.png"><img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" ><span class="tooltiptext">my tooltip text</span></div></a>' % (f,f)
+        print '<div class="tooltip"><a href="https://das2.org/autoplot/jnlp/%sscreen.png"><img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" ><span class="tooltiptext">%s</span></div></a>' % (f,f,cap)
         
 print """</div>
 </html>
