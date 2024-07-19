@@ -89,8 +89,12 @@ for f in ff:
     if ( check and doInclude ):
         cap=getCaption(PWD+f+'index.html')
         lastId= File(PWD+f+'screen.png').length()
-        print '<div class="tooltip"><a href="https://das2.org/autoplot/jnlp/%sscreen.png"><img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" ><span class="tooltiptext">%s</span></div></a>' % (f,f,cap)
-        
+        print '<div class="tooltip">'
+        print '   <a href="https://das2.org/autoplot/jnlp/%sscreen.png">' %f
+        print '       <img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" >' % f
+        print '       <span class="tooltiptext">%s</span>' % (cap)
+        print '   </a>'
+        print '</div>'
 print """</div>
 </html>
 """
