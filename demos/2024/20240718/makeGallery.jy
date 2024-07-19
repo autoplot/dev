@@ -91,7 +91,7 @@ for f in ff:
         cap=getCaption(PWD+f+'index.html').strip()
         link= cap.find('<a')
         if link>-1: cap= cap[0:link] + '...'
-        cap= f[:-1] + '<br>'
+        cap= f[:-1] + '<br>' + cap
         lastId= File(PWD+f+'screen.png').length()
         print '<div class="tooltip">'
         print '   <a href="https://das2.org/autoplot/jnlp/%s">' %f
