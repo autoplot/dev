@@ -1,9 +1,10 @@
 setScriptDescription('''Make the gallery page for the website.  This was found at 
 jfaden.net:/home/jbf/ct/autoplot/script/demos/screenshots/makeGallery.jy and put
 here so that it can be found more easily in the future.''')
-# this should be run at ubuntu@ip-10-136-6-74:/var/www/autoplot/jnlp
+# this should be run in the directory containing the release directories (v2024a_4, etc)
 # with the line:
-# ~/local/jdk1.8/bin/java -Djava.awt.headless=true -jar latest/autoplot.jar  --script=makeGallery.jy
+# wget -N https://raw.githubusercontent.com/autoplot/dev/master/demos/2024/20240718/makeGallery.jy
+# java -Djava.awt.headless=true -jar latest/autoplot.jar  --script=makeGallery.jy
 #
 
 from java.lang import System
@@ -14,7 +15,6 @@ from java.io import File
 
 print """<html>
 <body><p>This collection of images has been collected from release screenshots over the years.</p>
-
 
 <b>Click an image to expand/contract</b>
 
@@ -43,10 +43,10 @@ div.caption {
   width: 300px;
   top:100%;
   left:50%;
-  margin-left: -150px;
+  margin-left: -50px;
   background-color: white;
   color: black;
-  text-align: center;
+  text-align: left;
   border-radius: 6px;
   padding: 5px 0;
 
@@ -87,10 +87,13 @@ for f in ff:
     if ( File(PWD+f+'screen.png').length()==lastId ): doInclude=False
  
     if ( check and doInclude ):
-        cap=getCaption(PWD+f+'index.html')
+        cap=getCaption(PWD+f+'index.html').strip()
+        link= cap.find('<a')
+        if link>-1: cap= cap[0:link] + '...'
+        cap= f[:-1] + '<br>'
         lastId= File(PWD+f+'screen.png').length()
         print '<div class="tooltip">'
-        print '   <a href="https://das2.org/autoplot/jnlp/%sscreen.png">' %f
+        print '   <a href="https://das2.org/autoplot/jnlp/%s">' %f
         print '       <img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" >' % f
         print '       <span class="tooltiptext">%s</span>' % (cap)
         print '   </a>'
