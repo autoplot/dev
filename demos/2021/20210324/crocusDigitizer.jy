@@ -1,8 +1,6 @@
 from java.awt import BasicStroke
 from java.util import ArrayList
-# Click events are registered on the tab "digitizer." 
-# This also provides feedback showing the digitized data and the data points 
-# selected in the digitizer tab.
+
 setScriptDescription('''Silly demo showing how table of x,y points digitized on a 
 picture of crocus flowers can be triangulated interactively.  Click
 events are registered on the tab "digitizer."  These points are then displayed
