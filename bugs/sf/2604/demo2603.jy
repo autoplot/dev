@@ -1,3 +1,4 @@
+setScriptDescription('''https://sourceforge.net/p/autoplot/bugs/2603/''')
 N = 1441
 x = randn(N) + 1000
 y= randn(N)
