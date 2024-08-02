@@ -9,7 +9,7 @@ flux= getDataSet( ff + '?eflux' )
 pitch_angle= getDataSet( ff + '?pitch_angle')
 energy_full= getDataSet( ff + '?energy_full')
 
-idx= 80
+idx= 81
 
 def update(i):
     ep= epoch[i]
@@ -18,7 +18,7 @@ def update(i):
     en= flatten(energy_full[i])[:,-1]
     
     title= 'Frame time: '+ ep.svalue()
-    plot( pitch, en, fl, title=title, symbolSize=10,
+    plot( pitch, en, fl, title=title, symbolSize=10, symbol='boxes',
         xtickValues='+90/3', xrange=[-5,365],
         ylog=True, yrange='3.5825 to 35825.0 eV',
         zrange='4.0e6 to 5.03e7' )
@@ -32,4 +32,4 @@ sl= JSlider(0,len(epoch)-1,stateChanged=updateSlider)
 
 getApplication().setBottomPanel(sl)
 
-
+update(idx)
