@@ -1,30 +1,31 @@
 setScriptDescription('''Make the gallery page for the website.  This was found at 
 jfaden.net:/home/jbf/ct/autoplot/script/demos/screenshots/makeGallery.jy and put
 here so that it can be found more easily in the future.''')
-# this should be run at ubuntu@ip-10-136-6-74:/var/www/autoplot/jnlp
+# this should be run in the directory containing the release directories (v2024a_4, etc)
 # with the line:
-# ~/local/jdk1.8/bin/java -Djava.awt.headless=true -jar latest/autoplot.jar  --script=makeGallery.jy
+# wget -N https://raw.githubusercontent.com/autoplot/dev/master/demos/2024/20240718/makeGallery.jy
+# java -Djava.awt.headless=true -jar latest/autoplot.jar  --script=makeGallery.jy
 #
 
-#PWD='/home/jbf/temp/autoplot/VirboAutoplot/'
-PWD='/var/www/autoplot/jnlp/'
+from java.lang import System
+PWD=System.getProperty('user.dir') + '/'
 
 import re
 from java.io import File
 
-print """This collection of images has been collected from release screenshots over the years.
+print """<html>
+<body><p>This collection of images has been collected from release screenshots over the years. Mouse
+over images to see captions, and click on any to see a particular release screenshot.</p>
 
-'''Click an image to expand/contract'''
+<b>Click an image to expand/contract</b>
 
-<addhtml>
-<html>
 <style type="text/css">
 img.thumb {
-	width:150px;
-	border:solid white 3px;
-	vertical-align:top;
-	margin:auto;
-	z-index:1;
+    width:150px;
+    border:solid white 3px;
+    vertical-align:top;
+    margin:auto;
+    z-index:1;
 }
 div.thumb {
    display:none;
@@ -32,31 +33,48 @@ div.thumb {
 div.caption {
    background-color:yellow;
 }
-#thumbframe {
-    float: left;
-	text-align:left;
-	z-index:0;
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: none;
 }
-</style>
 
-<script>
-$(function() {
-  $('.thumb').click(function() { $(this).toggleClass("thumb").next().toggleClass("thumb").css('width',$(this).width());});
-});
-</script>
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 300px;
+  top:100%;
+  left:50%;
+  margin-left: -50px;
+  background-color: white;
+  color: black;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.size_of_img{
+width:100px}
+</style>
 
 <div id="thumbframe">
 """
 
 def getCaption(fi):
     for line in open(fi):
-        i= line.index('<p><small>')
+        i= line.find('<p><small>')
         if ( i>-1 ):
             return line[i+10:]
     return '(no caption)'
     
 lastId= 0
-include=['v2.*_.*','2009.*','201.*']
+include=['v20.*_.*']
 ff= listDirectory(PWD+'*')
 for f in ff:
     if ( not File(PWD+f).isDirectory() ):
@@ -70,11 +88,17 @@ for f in ff:
     if ( File(PWD+f+'screen.png').length()==lastId ): doInclude=False
  
     if ( check and doInclude ):
-        cap=getCaption(PWD+f+'index.html')
+        cap=getCaption(PWD+f+'index.html').strip()
+        link= cap.find('<a')
+        if link>-1: cap= cap[0:link] + '...'
+        cap= f[:-1] + '<br>' + cap
         lastId= File(PWD+f+'screen.png').length()
-        print '<img class="thumb" src="http://autoplot.org/jnlp/%sscreen.png" />' % f
-        
+        print '<div class="tooltip">'
+        print '   <a href="https://das2.org/autoplot/jnlp/%s">' %f
+        print '       <img class="thumb" src="https://das2.org/autoplot/jnlp/%sscreen.png" >' % f
+        print '       <span class="tooltiptext">%s</span>' % (cap)
+        print '   </a>'
+        print '</div>'
 print """</div>
 </html>
-</addhtml>
 """
