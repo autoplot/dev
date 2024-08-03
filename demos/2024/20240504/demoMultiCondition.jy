@@ -1,0 +1,25 @@
+from java.lang import Double
+
+setScriptDescription('''Demo "where" with multiple
+conditions that need to be met.''')
+# make the data be repeatable by specifying a random seed.
+randomSeed(0)
+
+x= randn(1000)
+y= randn(1000)
+z= sqrt( 4 - ( x**2 + y**2 ) )
+
+# functions like "lt" return zero where the condition is false.  
+# "where" returns the indices of where its argument is non-zero.
+r= where( z.lt(0) )
+z[r]= Double.NaN
+
+# plot all the data, keeping a reference "p" to the plot.
+p,_= plot( x, y, z, symbolSize=5 )
+
+# multiple conditions are combined with "or" and "and" functions.
+r= where( ( x.lt(-1).and( y.lt(0) ) )
+       .or( x.gt(1).and( y.gt(0) ) ) )
+
+# plot the subset of the points with larger symbols.
+plot( x[r], y[r], z[r], symbolSize=15, overplotOf=p )

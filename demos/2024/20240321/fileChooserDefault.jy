@@ -1,0 +1,23 @@
+setScriptDescription('''George asked if there was a way we
+could make the FileChooser come up in the details view.  I found the
+website https://stackoverflow.com/questions/16292502/how-can-i-start-the-jfilechooser-in-the-details-view
+but wasn't able to find anything that worked. https://sourceforge.net/p/autoplot/feature-requests/825/''')
+
+from javax.swing import JFrame
+from javax.swing import JFileChooser
+
+frame = JFrame()
+fileChooser = JFileChooser(".")
+
+mm = fileChooser.getActionMap()
+print mm
+kk= mm.keys()
+print kk, '<<<'
+if kk!=None:
+   print kk.length
+   for k in kk:
+       print k
+       
+#details = fileChooser.getActionMap().get("viewTypeDetails")
+#details.actionPerformed(None)
+#fileChooser.showOpenDialog(frame)

@@ -3,6 +3,9 @@ from java.awt import Toolkit
 cc= dom.canvases[0].controller.dasCanvas
 import jarray
 
+setScriptDescription('''Show the flavors of the item in the system clipboard.  See 
+also https://github.com/autoplot/dev/blob/master/bugs/2020/20201106/IncomingThing.jy''')
+
 clipboard= Toolkit.getDefaultToolkit().getSystemClipboard()
 
 ff= clipboard.getAvailableDataFlavors()

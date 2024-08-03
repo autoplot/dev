@@ -1,0 +1,35 @@
+from javax.swing import JSlider
+setScriptDescription('''Recreate the plot from CDAWeb, where they switch over to showing
+the distribution frame-by-frame.''')
+
+ff= 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/fast/esa/l2/eeb/1997/01/fa_esa_l2_eeb_19970101071903_01437_v02.cdf'
+
+epoch= getDataSet( ff + '?epoch' )
+flux= getDataSet( ff + '?eflux' )
+pitch_angle= getDataSet( ff + '?pitch_angle')
+energy_full= getDataSet( ff + '?energy_full')
+
+idx= 81
+
+def update(i):
+    ep= epoch[i]
+    fl= flatten(flux[i])[:,-1]
+    pitch= flatten(pitch_angle[i])[:,-1]
+    en= flatten(energy_full[i])[:,-1]
+    
+    title= 'Frame time: '+ ep.svalue()
+    plot( pitch, en, fl, title=title, symbolSize=10, symbol='boxes',
+        xtickValues='+90/3', xrange=[-5,365],
+        ylog=True, yrange='3.5825 to 35825.0 eV',
+        zrange='4.0e6 to 5.03e7' )
+
+
+def updateSlider(evt):
+    global sl
+    update( sl.value )
+        
+sl= JSlider(0,len(epoch)-1,stateChanged=updateSlider)
+
+getApplication().setBottomPanel(sl)
+
+update(idx)

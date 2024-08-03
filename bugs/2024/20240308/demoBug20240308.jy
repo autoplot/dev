@@ -1,0 +1,8 @@
+setScriptDescription('See https://github.com/das-developers/das2java/issues/98')
+
+pyds= [ [ 0,0,0,0,0 ],[ 0,0,0,0,0 ],[ 0,0,0,0,0 ],[ 0,0,0,0,0 ], [ 0,0,0,0,0 ] ]
+ds= dataset( pyds )
+
+plot( 0, ds, ytitle='All y values are zero' )
+
+plot( 1, zeros(5,5), ytitle='Correct' )

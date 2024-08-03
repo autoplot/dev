@@ -1,0 +1,26 @@
+from java.awt import Font
+setScriptDescription('''Couldn't a display for the 
+digits 0-9 be created by assembling no more than 64 pieces?
+Many can't read seven-segment displays without glasses,
+and perhaps 64 segments could do a nice job.''')
+
+fontname= getParam('font','mono','font name',['mono','Seven Segment'])
+
+font= Font.decode(fontname)
+
+from java.awt import Font
+from org.das2.util import ColorUtil
+def paint(g):
+    size=380
+    g.translate(300,size)
+    g.setFont(font)
+    for i in xrange(10):
+        g.color= Color.LIGHT_GRAY
+        f= g.getFont().deriveFont(Font.BOLD,size)
+        v= f.createGlyphVector(g.getFontMetrics(f).getFontRenderContext(), "%d" % i )
+        s = v.getOutline()
+        g.draw(s)
+        print i
+
+addTopDecoration( dom.plots[0],paint )
+ 

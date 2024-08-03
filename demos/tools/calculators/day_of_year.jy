@@ -1,0 +1,18 @@
+setScriptTitle('Day of Year Calculator')
+setScriptLabel('Day of Year Calculator')
+setScriptDescription('''Enter a date in any format and the date will be printed
+as $Y-$m-$d and $Y-$j.  Optionally, a custom format
+can be used.''')
+
+date= getParam('date','2005-10-11T19:00:00.000Z')
+format= getParam('format', '', 'Format for result',
+   { 'examples':['$y$j','/project/cassini/pds4/cassini-rpws-wideband/T$Y$jXX/T$Y$j/cas_rpws_wbrfr_$x_e_$Y$m$d_$H_v$v.cdf'] } )
+
+d= datum(date)
+
+if format=='':
+    print TimeParser.create('$Y-$m-$d').format(d)
+    print TimeParser.create('$Y-$j').format(d)
+else:
+    print TimeParser.create(format).format(d)
+    

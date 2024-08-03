@@ -1,0 +1,116 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject
+from java.lang.Double import NaN
+
+setScriptDescription('''Demo how data is read from JSON file.  This is
+a JSON file produced for the Tempest weather station.  See
+https://apidocs.tempestwx.com/reference/get_stats-station-station-id.
+The parameter "token" is found at https://tempestwx.com/settings/tokens
+for your station.
+
+'https://swd.weatherflow.com/swd/rest/observations/stn/34803?time_start=1712448000&time_end=1712534400&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key='
+''')
+     
+tr= getParam('timerange','2024-04-08' )
+station= getParam('station','34803')
+token= getParam('token','1c78261b-804a-4969-af68-b0119a6b83d1','token, also known as API key')
+
+secrets= getFile('https://github.com/autoplot/dev/blob/master/demos/2024/20240414/persistentSecrets.jy')
+execfile(str(secrets))
+
+if token=='':
+    token=getSecret('tempest-'+station,'token')
+else:
+    setSecret( 'tempest-'+station,'token',token )
+    
+drtr= datumRange(tr)
+if ( drtr.width()>datum('24hr') ):
+    raise Exception('Only 24hrs can be loaded each time')
+    
+    
+h= { 'station':station,
+     'start': drtr.min().doubleValue(Units.t1970),
+     'stop': drtr.max().doubleValue(Units.t1970),
+     'token': token }
+     
+url= 'https://swd.weatherflow.com/swd/rest/observations/stn/%(station)s?time_start=%(start)d&time_end=%(stop)d&bucket=1&units_temp=c&units_wind=mps&units_pressure=mb&units_precip=mm&units_distance=km&api_key=%(token)s' % h
+
+print url
+ff= downloadResourceAsTempFile(URL(url),3600,monitor)
+print ff
+
+src= FileUtil.readFileToString(ff)
+
+json= JSONObject(src)
+
+ob_fields= json.get('ob_fields')
+print ob_fields
+
+dsb= DataSetBuilder(2,1440,ob_fields.length()-1)
+
+tt= DataSetBuilder(1,100)
+
+pp= DataSetBuilder(1,100)
+pp.putProperty(QDataSet.LABEL,'Pressure')
+pp.putProperty(QDataSet.UNITS,Units.lookupUnits('mb'))
+
+tm= DataSetBuilder(1,100) 
+tm.putProperty(QDataSet.LABEL,'Temperature')
+tm.putProperty(QDataSet.UNITS,Units.centigrade)
+
+sr= DataSetBuilder(1,100) 
+sr.putProperty(QDataSet.LABEL,'Solar Radiation')
+sr.putProperty(QDataSet.UNITS,Units.lookupUnits('W/m^2'))
+
+ja= json.getJSONArray('obs')
+
+def toDoubleArray( ja ):
+    result=[ 0.] * (ja.length()-1)
+    for i in xrange(1,ja.length()):
+        result[i-1]= ja.optDouble(i,NaN)
+    return result
+
+# assign units for names containing temp, wind, precip, pressure, distance.
+units= json.getJSONObject('units')
+if units.getString('units_temp')=='c':
+   units.put('units_temp',Units.centigrade.toString())
+
+for j in xrange(1,ob_fields.length()):
+    name= ob_fields.getString(j)
+    if name=='precip_type':
+        continue
+    if name=='wind_dir':
+        dsb.setUnits(j-1,Units.lookupUnits('degrees east of North'))
+        continue
+    print name, '----'
+    unitsKeys= units.keys()
+    for k in unitsKeys:
+        if ( name.find(k[6:])>-1 ):
+            print name, k, units
+            dsb.setUnits(j-1,Units.lookupUnits(units.getString(k)))
+
+dsb.setUnits(5,Units.lookupUnits('mb'))
+dsb.setUnits(7,Units.centigrade)
+dsb.setUnits(11,Units.lookupUnits('W/m^2'))
+
+for j in xrange(1,ob_fields.length()):
+    print j, ob_fields.getString(j)
+    dsb.setLabel(j-1,ob_fields.getString(j))
+    dsb.setName(j-1,safeName(ob_fields.getString(j)))
+    
+for i in xrange(ja.length()):
+    rec= ja.getJSONArray(i)
+    tt.nextRecord(Units.t1970.createDatum(rec.getDouble(0)))
+    pp.nextRecord(rec.getDouble(6))
+    tm.nextRecord(rec.optDouble(8,NaN))
+    sr.nextRecord(rec.optDouble(12,NaN))
+    dsb.nextRecord( toDoubleArray(rec) )
+    
+tt= tt.getDataSet()
+pressure= dataset( tt, pp.getDataSet() )
+temperature= dataset( tt, tm.getDataSet() )
+solarRadation= dataset( tt, sr.getDataSet() )
+
+dsb.putProperty( QDataSet.DEPEND_0, tt )
+
+result= dsb.getDataSet()

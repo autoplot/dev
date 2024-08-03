@@ -1,0 +1,17 @@
+root='https://data.remss.com/ccmp/v03.1/Y2019/M10/'
+ff= listDirectory(root)
+
+dsb= DataSetBuilder(2,100,1440)
+
+monitor.taskSize= len(ff)
+monitor.started()
+
+for f in ff:
+    print f
+    monitor.taskProgress= monitor.taskProgress+1
+    if f.find('monthly')>-1: continue
+    ds= getDataSet( root + f + '?uwnd[358,:,0]' )
+    dsb.nextRecord(ds)
+monitor.finished()
+
+plot( dsb.getDataSet() )

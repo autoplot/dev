@@ -1,0 +1,19 @@
+from java.util import HashMap
+from javax.swing import JOptionPane
+from org.autoplot.dom import DomOps
+from org.autoplot import FixLayoutPanel
+
+setScriptDescription('''Autoplot v2023a_12 introduced more control
+to the fixLayout operation.  This shows how they can be
+accessed in a script.''')
+
+flp= FixLayoutPanel()
+flp.setPreview(dom);
+if ( JOptionPane.OK_OPTION==JOptionPane.showConfirmDialog(getApplication(),flp) ):
+    print flp.getOptions()
+    
+answ= HashMap()
+answ.put('horizontalSpacing','1.0em')
+answ.put('verticalSpacing','1.0em')
+
+DomOps.fixLayout(dom,answ)

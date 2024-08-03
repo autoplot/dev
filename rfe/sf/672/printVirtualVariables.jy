@@ -1,5 +1,6 @@
 setScriptTitle('VVar Function Search')
-setScriptDescription('Show all the virtual variable functions used')
+setScriptDescription('''Show all the virtual variable functions used.  Also tally
+a list of which ids use virtual variables, for the CDAWeb HAPI server.''')
 
 d= {}  # location of example
 count= {}  # number of times used
@@ -14,6 +15,8 @@ monitor.started()
 
 from org.das2.components import DasProgressPanel
 
+out= open('virtualVariables.20240515.txt','w')
+
 for id in ids:
     monitor.setTaskProgress(monitor.getTaskProgress()+1)
     if monitor.cancelled: break
@@ -25,6 +28,7 @@ for id in ids:
         f= cdaweb.getMasterFile( id, mon1 )
     except:
         print '!unable to get sample file: '+id
+        mon1.finished()
         continue
 
     print '--- ' + id + ' ---'
@@ -35,6 +39,7 @@ for id in ids:
     except:
         print 'except line 9 '+id
         continue
+    virts=''
     for c in cc:
         v= c
         if ( not v.endswith('=') ):
@@ -50,9 +55,19 @@ for id in ids:
                         count[s]= 1
                     else:
                         count[s]= count[s]+1
+                    if virts.find(s)==-1:
+                        virts= virts + ',' + s
             except:
                 print 'except, '+v
+    if len(virts)>0:
+        out.write( '%s\t%d\t%s\n' % ( id, 1, virts[1:] ) )
+        print '%s\t%d\t%s\n' % ( id, 1, virts[1:] )
+    else:
+        out.write( '%s\t%d\t%s\n' % ( id, 0, virts ) )
+        print '%s\t%d\t%s\n' % ( id, 0, virts )
     print d
+
+out.close()
 
 print '---'
 for s in d.keys():

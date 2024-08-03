@@ -5,3 +5,4 @@ and this is where I'm looking at pandoc and readthedocs.org.
 
 See also https://github.com/jbfaden/mygithubbook
 
+See also https://github.com/autoplot/documentation/blob/master/src/writeDownloadAllMediawiki.jy

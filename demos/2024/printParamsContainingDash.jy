@@ -1,0 +1,22 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject
+setScriptDescription('See how quickly we can answer science question.  It is 8:37, done at 8:45')
+
+ff= getFile('https://github.com/hapi-server/servers/blob/master/index/https_cdaweb.gsfc.nasa.gov_hapi.json') # could not load raw
+
+jo= JSONObject( FileUtil.readFileToString(ff) )
+ 
+cc= jo.getJSONArray('catalog')   # could not complete
+
+for i in xrange(cc.length()):   # can't iterate over JSON array
+    cc1= cc.get(i)
+    params= cc1.getJSONArray('parameters')
+    printedIt=False
+    for j in xrange(params.length()):
+        param= params.get(j)
+        n= param.get('name')
+        if n.find('-')>-1:
+            if not printedIt:
+                print cc1.get('id')+':'
+                printedIt=True
+            print '   ' +n + ' from ' +cc1.get('id')

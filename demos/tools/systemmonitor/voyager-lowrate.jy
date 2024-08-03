@@ -1,0 +1,26 @@
+from org.das2.fsm import FileStorageModel
+from org.das2.util.filesystem import FileSystem
+setScriptDescription('''Check that the Voyager products are running and raise
+an exception when it does not appear that that are.''')
+
+recent= datumRange('P14D/now')
+
+fs= FileSystem.create('https://space.physics.uiowa.edu/plasma-wave/voyager/data/voyager-2-pws-sa/data/')
+fsm= FileStorageModel.create(fs,'$Y/vg2pws_lr_$Y$m$d_v$v.cdf')
+
+nn= fsm.getNamesFor(recent)   #TODO: Jython editor could point out that I didn't have "data" and it failed
+
+if len(nn)==0:
+    raise Exception('no recent VG2 files found: '+str(fs) )
+
+print 'Recent VG2 files found: '+str(len(nn))
+
+fs= FileSystem.create('https://space.physics.uiowa.edu/plasma-wave/voyager/data/voyager-1-pws-sa/data/')
+fsm= FileStorageModel.create(fs,'$Y/vg1pws_lr_$Y$m$d_v$v.cdf')
+
+nn= fsm.getNamesFor(recent)   
+
+#if len(nn)==0:
+#    raise Exception('no recent VG1 files found: '+str(fs) )
+
+print 'Recent VG1 files found: '+str(len(nn))

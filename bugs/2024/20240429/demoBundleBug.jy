@@ -1,0 +1,32 @@
+setScriptDescription('''Autoplot never exposes bundled data
+xtags, so you need to explicitly add them in.  I believe
+it's because if I automatically look for DEPEND_0 on any of
+the bundled datasets, then sometimes a variable intended for
+the X values is ignored.  There really needs to be something
+that disambiguates this.''')
+
+# here is where it is not intended to assert a depenency.
+wspeed= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=WindSpeed&timerange=2024-04-27')
+alt= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&parameters=Altimeter&timerange=2024-04-27')
+
+ds= bundle( wspeed, alt )
+
+print ds
+print xtags(ds)
+print xtags(unbundle(ds,0))
+
+plot( 0, ds )
+
+# here is where it is intended to assert a dependency.
+t= linspace('2024-01-01T00:00Z','2024-01-02T00:00Z',200)
+x= link(t,randn(200))
+y= link(t,randn(200))
+
+z= sqrt( x**2 + y**2 )
+ds= bundle( x, y, z )
+
+print ds
+print xtags(ds)
+print xtags(unbundle(ds,0))
+
+plot( 1, ds )

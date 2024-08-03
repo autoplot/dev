@@ -1,0 +1,33 @@
+setScriptDescription('''Experiment with a dark theme.  I found code describing
+how the nimbus look and feel can be made dark, so this code can be run to set
+its defaults, and then the look and feel set to nimbus using the look and feel
+script https://github.com/autoplot/scripts/blob/master/switchLookAndFeelRuntime.jy.
+Run this script and then the look and feel script.''')
+
+from javax.swing import UIManager
+UIManager.getInstalledLookAndFeels()
+UIManager.put( "control", Color( 128, 128, 128) )
+UIManager.put( "info", Color(128,128,128) )
+UIManager.put( "nimbusBase", Color( 18, 30, 49) )
+UIManager.put( "nimbusAlertYellow", Color( 248, 187, 0) )
+UIManager.put( "nimbusDisabledText", Color( 128, 128, 128) )
+UIManager.put( "nimbusFocus", Color(115,164,209) )
+UIManager.put( "nimbusGreen", Color(176,179,50) )
+UIManager.put( "nimbusInfoBlue", Color( 66, 139, 221) )
+UIManager.put( "nimbusLightBackground", Color( 18, 30, 49) )
+UIManager.put( "nimbusOrange", Color(191,98,4) )
+UIManager.put( "nimbusRed", Color(169,46,34) )
+UIManager.put( "nimbusSelectedText", Color( 255, 255, 255) )
+UIManager.put( "nimbusSelectionBackground", Color( 104, 93, 156) )
+UIManager.put( "text", Color( 230, 230, 230) )
+
+try :
+   for info in UIManager.getInstalledLookAndFeels():
+      if ("Nimbus".equals(info.getName())) :
+          UIManager.setLookAndFeel(info.getClassName())
+          break
+except:
+  import traceback
+  traceback.print_exc()
+
+

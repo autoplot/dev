@@ -1,0 +1,22 @@
+from java.io import BufferedReader,InputStreamReader
+from java.lang import ProcessBuilder
+
+setScriptDescription('''Demostrate a call to a spawned OS command.  
+This just calls the Unix date command and prints the result.  This
+can be used with the Run Batch Tool to manage many jobs.
+''')
+
+# demo call subprocess.
+
+slp= getParam('sleep',100)
+
+pb= ProcessBuilder(['date'])
+process= pb.start()
+process.waitFor()
+inputStream = process.getInputStream()
+reader= BufferedReader(InputStreamReader(inputStream))
+line= reader.readLine()
+while ( line!=None ):
+    print line
+    line= reader.readLine()
+sleep(slp)

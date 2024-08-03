@@ -1,0 +1,8 @@
+setScriptDescription('''Calculates the amount of Aqua Blanket Water Conserving Liquid,
+which reduces pool water evaporation and heat loss.''')
+
+dose= 3. # oz
+per= 500. # sq ft
+
+pool=getParam('pool surface area (sq ft)',12*8)
+print '%.1f oz' % ( pool/per*dose )

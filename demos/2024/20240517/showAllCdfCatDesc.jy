@@ -1,0 +1,12 @@
+from org.das2.util.monitor import NullProgressMonitor
+vv= getCompletions('https://rbsp-ect.newmexicoconsortium.org/data_pub/rbspa/rept/level3/pitchangle/2019/rbspa_rel03_ect-rept-sci-L3_20190101_v5.4.0.cdf?')
+
+for v in vv:
+    if v.find('=')>-1: continue
+    mm= getMetadata( v, NullProgressMonitor() )
+    if True: # v.endswith('FEDU_Energy'):
+        print '%s "%s"' % ( mm.get('FIELDNAM'), mm.get('CATDESC') )
+
+    
+    
+

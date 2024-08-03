@@ -1,0 +1,15 @@
+setScriptDescription('''This shows how https works, identifying folders and files reliably.''')
+
+ll= [
+   'https://jfaden.net/~jbf/autoplot/'
+]
+
+for l in ll:
+    from org.das2.util.filesystem import FileSystem
+    s= l
+    fs= FileSystem.create(s)
+    ff= fs.listDirectory('')
+    if len(ff)==0:
+        peekAt(l)
+        ff= fs.listDirectory('')
+    print s, len(ff)

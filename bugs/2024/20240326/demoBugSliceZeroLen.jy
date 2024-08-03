@@ -1,0 +1,31 @@
+setScriptDescription('''Demo bug where slice1 of zero-length
+dataset results in IndexOutOfBounds, instead of producing a zero-length
+rank 1 dataset. https://github.com/das-developers/das2java/issues/103''')
+
+xy= randn(0,2)
+
+# note a qube will not throw index-out-of-bounds for length(0).
+print xy.length(0)
+
+x= xy[:,0]
+y= xy[:,1]
+
+plot(x,y)
+
+# slice2 
+xy= randn(0,10,2)
+x= slice2( xy, 0 )
+print x
+y= slice2( xy, 1 )
+print y
+plot(x)
+plot(y)
+
+# slice3 
+xy= randn(0,10,5,2)
+x= slice3( xy, 0 )
+print x
+y= slice3( xy, 1 )
+print y
+#plot(x)
+#plot(y)

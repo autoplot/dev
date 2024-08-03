@@ -1,0 +1,6 @@
+setScriptTitle('No Title')
+setScriptDescription('''Make a plot without the default title by using 
+an empty string.''')
+
+dst1800= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=Oct+2016')
+plot( dst1800, title='', ytitle='' )

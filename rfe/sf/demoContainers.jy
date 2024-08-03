@@ -1,0 +1,21 @@
+from org.autoplot.pds import Pds3DataSourceFactory
+
+setScriptDescription('''I realized I wasn't supporting containers, which hold
+rank 2 and high rank data.''')
+
+rank= getParam('rank',3,'Rank to load',[1,2,3] )
+
+
+if ( rank==1 ):
+    name='MCP_VOLTAGE'
+elif ( rank==2 ):
+    name='ISSUES'
+elif ( rank==3 ):
+    name='DATA'
+    
+do3= Pds3DataSourceFactory.getDataObjectPds3( 
+   URL('https://pds-ppi.igpp.ucla.edu/data/JNO-J_SW-JAD-3-CALIBRATED-V1.0/DATA/2023/2023004/ELECTRONS/JAD_L30_LRS_ELC_ANY_CNT_2023004_V04.LBL'), 
+   name )
+   
+print do3.resolveUri(URL('https://pds-ppi.igpp.ucla.edu/data/JNO-J_SW-JAD-3-CALIBRATED-V1.0/DATA/2023/2023004/ELECTRONS/JAD_L30_LRS_ELC_ANY_CNT_2023004_V04.DAT'))
+   

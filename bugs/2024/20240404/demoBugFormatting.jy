@@ -1,0 +1,13 @@
+from org.das2.datum import DatumRange
+setScriptDescription('''Demo where the Property Editor for 
+DatumRange-type properties doesn't use sufficient resolution. 
+This issue pointed out by James at APL.''')
+
+xx= 1e9 + linspace(0.,1000.,1001)
+yy= sin(linspace(0.,TAU*8,1001))
+plot(xx,yy)
+
+print dom.plots[0].xaxis.range
+
+dr= DatumRange.newDatumRange( 1e9, 1e9+1, Units.dimensionless )
+print dr

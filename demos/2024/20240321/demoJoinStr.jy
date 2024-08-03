@@ -1,0 +1,13 @@
+setScriptDescription('''This shows two ways to form a string of 
+the values of a rank 1 dataset.''')
+
+vv=dataset([1.4,2.5,3.6,1.4,3.6])
+uu= uniq(vv,sort(vv))
+x= map(str,vv[uu])
+print ','.join(x)
+
+
+result=vv[uu[0]].svalue()
+for i in xrange(1,len(uu)):
+    result= result + ','+ vv[uu[i]].svalue()
+print result

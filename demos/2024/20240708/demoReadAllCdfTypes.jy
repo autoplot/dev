@@ -1,0 +1,9 @@
+setScriptDescription('''Demo that Autoplot can read all types of CDF variables.''')
+
+cc= getCompletions('https://cdaweb.gsfc.nasa.gov/pub/software/cdf/cdf_test_files/test_alltypes.cdf?')
+for c in cc:
+    if c.find('=')>-1: continue
+    ds= getDataSet(c)
+    print ds
+    
+    

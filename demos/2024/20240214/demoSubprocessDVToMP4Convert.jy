@@ -1,0 +1,27 @@
+from java.io import BufferedReader,InputStreamReader,File
+from java.lang import ProcessBuilder
+
+setScriptDescription('''Demostrate a call to a spawned OS command.  
+This just calls ffmpeg to convert video to mp4 format.  This
+can be used with the Run Batch Tool to manage many jobs.''')
+
+fln= getParam('resourceURI','file:/home/jbf/tmp/dvgrab-003.dv','DV video file')
+
+infile= URI(fln).path
+outfile= URI(fln).path[0:-3]+'.mp4'
+
+# ffmpeg -i dvgrab-009.dv -vf yadif -y dvgrab-009.mp4  
+#   -vf yadif  removes interlacing
+#   -y  will overwrite existing file
+
+pb= ProcessBuilder(['ffmpeg','-i',infile,'-vf','yadif','-y',outfile ])
+process= pb.start()
+process.waitFor()
+inputStream = process.getInputStream()
+reader= BufferedReader(InputStreamReader(inputStream))
+line= reader.readLine()
+while ( line!=None ):
+    print line
+    line= reader.readLine()
+
+print 'wrote '+outfile

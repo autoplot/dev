@@ -1,0 +1,35 @@
+from java.awt.image import BufferedImage
+from java.awt import Point
+from org.das2.util import ColorUtil
+from org.das2.graph import Arrow
+from org.das2.graph import Renderer
+
+setScriptDescription('''Draws arrows along a trajectory.  Import this
+using getFile and eval, and then create the data as a rank 2 dataset
+with x,y,dx,dy for each record.  For example, see featherPlot.jy:<br>
+plot( featherDs, renderer= FeatherRenderer(0.03) )''')
+
+class FeatherRenderer( Renderer ):
+    def __init__(self,scale=1,color=None):
+        self.scale= scale
+        self.mycolor= color
+        
+    def doAutorange( self, ds ):
+        dx= ds[:,2]*self.scale 
+        xr= extent( ds[:,0]+dx )
+        dy= ds[:,3]*self.scale
+        yr= extent( ds[:,1]+dy )
+        bds= join(rescaleRange(xr,-0.1,1.1),rescaleRange(yr,-0.1,1.1))
+        return bds
+   
+    def render( self, g, xaxis, yaxis ):
+        ds= self.getDataSet()
+        if self.mycolor!=None:
+            g.color= self.mycolor
+        for i in xrange(ds.length()):
+            x0= int(xaxis.transform( ds[i,0],xaxis.getUnits() ))
+            y0= int(yaxis.transform( ds[i,1],yaxis.getUnits() ))
+            x1= int(xaxis.transform( ds[i,0]+ds[i,2]*self.scale,xaxis.getUnits() ))
+            y1= int(yaxis.transform( ds[i,1]+ds[i,3]*self.scale,yaxis.getUnits() ))
+            Arrow.paintArrow(g,Point(x1,y1),Point(x0,y0),4,Arrow.HeadStyle.DRAFTING)
+            

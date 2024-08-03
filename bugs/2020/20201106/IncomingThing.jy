@@ -1,5 +1,6 @@
 from javax.swing import JLabel,JTextArea
-setScriptDescription("experiment with thing that gets references from emails")
+setScriptDescription('''experiment with thing that gets references from emails. See 
+also https://github.com/autoplot/dev/blob/master/bugs/2020/20201106/dropTarget.jyy''')
 
 from java.io import FileOutputStream,File,InputStream
 from java.awt import Toolkit

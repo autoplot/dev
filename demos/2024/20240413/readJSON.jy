@@ -1,0 +1,39 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject
+
+setScriptDescription('''Demo how data is read from JSON file.  This is
+a JSON file produced for the Tempest weather station.  See
+https://apidocs.tempestwx.com/reference/get_stats-station-station-id
+''')
+
+ff= getFile( 'https://jfaden.net/~jbf/data/json/rest.stats.station.34803.json' )
+src= FileUtil.readFileToString(ff)
+
+json= JSONObject(src)
+
+tt= DataSetBuilder(1,100)
+
+pp= DataSetBuilder(1,100)
+pp.putProperty(QDataSet.LABEL,'Pressure')
+pp.putProperty(QDataSet.UNITS,Units.lookupUnits('mb'))
+
+tm= DataSetBuilder(1,100) 
+tm.putProperty(QDataSet.LABEL,'Temperature')
+tm.putProperty(QDataSet.UNITS,Units.celciusDegrees)
+
+sr= DataSetBuilder(1,100) 
+sr.putProperty(QDataSet.LABEL,'Solar Radiation')
+sr.putProperty(QDataSet.UNITS,Units.lookupUnits('W/m^2'))
+
+ja= json.getJSONArray('stats_day')
+
+for i in xrange(ja.length()):
+    rec= ja.getJSONArray(i)
+    tt.nextRecord(Units.us2000.parse(rec.getString(0)))
+    pp.nextRecord(rec.getDouble(1))
+    tm.nextRecord(rec.getDouble(4))
+    sr.nextRecord(rec.getDouble(16))
+
+plot( 0, tt.getDataSet(), pp.getDataSet() )
+plot( 1, tt.getDataSet(), tm.getDataSet() )
+plot( 2, tt.getDataSet(), sr.getDataSet() )

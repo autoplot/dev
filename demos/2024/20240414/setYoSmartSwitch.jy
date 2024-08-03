@@ -1,0 +1,42 @@
+setScriptDescription('''Read temperature from YoSmart device.  YoSmart are devices with
+a hub which receives messages from various sensing and controlling devices, for example
+a temperature sensor.  Data can be immediately read with a smart phone app, and User
+Access Credentials allow access to the data from other programs.  See 
+http://doc.yosmart.com/docs/overall/intro.''')
+
+clientId= getParam( 'clientId', 'ua_94B198BC9CF44A76ACA9B38DDC566AA7', 
+                    'UAID on User Access Credentials screen, starts with "ua_"' )
+clientSecret= getParam( 'clientSecret','',
+                    'Secret Key on User Access Credentials screen, starts with "sec_", empty will use from secrets file.')
+deviceName= getParam( 'name', 'attic fan', 'device name', { 'examples':['attic fan'] } )
+switchState= getParam( 'state', 'off', 'set to this state', ['on','off'] )
+
+secrets= getFile(PWD+'persistentSecrets.jy')
+execfile(str(secrets))
+            
+if clientSecret=='':
+    clientSecret=getSecret('yoSmart-'+clientId,'clientSecret')
+else:
+    setSecret( 'yoSmart-'+clientId,'clientSecret',clientSecret )
+       
+yosmart= getFile(PWD+'yoSmart.jy')
+execfile(str(yosmart))
+        
+accessToken= getAccessToken( clientId, clientSecret )
+
+device= getDeviceByName(accessToken,name=deviceName)
+
+#print getTemperature( accessToken, device.get('deviceId'), device.get('token') )
+
+# YoLink uses "open" to mean on, and "closed" to mean off, like a Grocery Store not
+# in an Electronics Switch.
+if switchState=='on':
+    switchState='open'
+elif switchState=='off':
+    switchState='closed'
+    
+switchState= setSwitch(accessToken, device.get('deviceId'), device.get('token'), switchState)
+if switchState=='open':
+    print 'switch is now on'
+elif switchState=='closed':
+    print 'switch is now off'

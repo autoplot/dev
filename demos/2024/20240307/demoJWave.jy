@@ -1,0 +1,28 @@
+setScriptDescription('''Demonstrates use of the JWave library which does
+wavelet transforms.''')
+
+import sys
+
+addToSearchPath(sys.path,'https://github.com/graetz23/JWave/raw/master/dist/JWave.jar',monitor.getSubtaskMonitor('load JWave'))
+
+from jwave import Transform
+from jwave.transforms import BasicTransform,AncientEgyptianDecomposition,FastWaveletTransform
+from jwave.transforms.wavelets.haar import Haar1
+from jwave.transforms.wavelets import WaveletBuilder
+
+
+t= Transform( AncientEgyptianDecomposition(
+                FastWaveletTransform(
+                 Haar1( ) ) ) )
+
+arrTime = [ 1., -1., 1., -1., 1., -1., 1. ] # length = 7
+
+arrHilb = t.forward( arrTime ) # 1-D AED FWT Haar forward
+
+print arrHilb
+
+#           |    2 steps    |   1 step   | 0  |
+# arrHilb = : 2., 0., 0., 0., 1.41421, 0., 1.
+arrReco = t.reverse( arrHilb ) # 1-D AED FWT Haar reverse
+
+print arrReco

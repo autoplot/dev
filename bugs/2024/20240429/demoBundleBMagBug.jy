@@ -1,0 +1,20 @@
+setScriptDescription('''Autoplot never exposes bundled data
+xtags, so you need to explicitly add them in.  I believe
+it's because if I automatically look for DEPEND_0 on any of
+the bundled datasets, then sometimes a variable intended for
+the X values is ignored.  There really needs to be something
+that disambiguates this.  See https://github.com/das-developers/das2java/issues/107''')
+
+BXYZ= getDataSet('vap+hapi:https://cdaweb.gsfc.nasa.gov/hapi?id=AC_K0_MFI&timerange=2024-04-20&parameters=Time,BGSEc')
+BX= unbundle(BXYZ,0)
+BY= unbundle(BXYZ,1)
+BZ= unbundle(BXYZ,2)
+
+ds= bundle( BX, BY, BZ )
+
+plot( 0, ds, ytitle='color scatter' )
+
+ds= bundle( BX, BY, BZ )
+ds= dataset( xtags(BX),ds )
+
+plot( 1, ds, ytitle='time series bundle' )

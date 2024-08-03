@@ -1,0 +1,13 @@
+setScriptDescription('''Demo bug 91 where dimensionCount doesn't count BUNDLE_1 properly.
+See https://github.com/das-developers/das2java/issues/91''')
+
+ds= getDataSet('vap+hapi:http://jfaden.net/HapiServerDemo/hapi?id=Iowa+City+Conditions&timerange=2024-04-28')
+print dimensionCount(ds), 'should be 10'
+
+x= randn(100)
+y= randn(100)
+z= randn(100)
+xyz= bundle(x,y,z)
+print dimensionCount(xyz), 'should be 3'
+
+
