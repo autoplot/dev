@@ -1,0 +1,6 @@
+a= getParam('a',2,'p a',[2,3,4])
+b= getParam('b',20,'p a',[20,30,40])
+c= getParam('c',300,'p a',[200,300,400])
+d= getParam('d',4000,'p a',[2000,3000,4000])
+
+print a, b, c, d
