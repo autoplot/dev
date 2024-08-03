@@ -11,7 +11,8 @@ website and interpret the times for each file.  For formatting, the names are ge
 
 setScriptTitle('URI_Templates')
 
-# see also 
+# see also AutoplotServlet/web/URI_Templates.jy on SourceForge, where this script is embedded.
+
 resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/C1_CP_EDI_EGD__$Y$m$d_V03.cef', 'example file to load', 
     [ 'data_$Y_$(m)_$(d;delta=7;phasestart=2019-05-05).qds', 
       'http://autoplot.org/data/C1_CP_EDI_EGD__$Y$m$d_V03.cef', 
