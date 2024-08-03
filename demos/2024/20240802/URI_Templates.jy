@@ -1,0 +1,121 @@
+import time
+
+from java.util import Collections
+from java.lang import System
+
+from org.das2.fsm import FileStorageModel
+from org.das2.util.filesystem import FileSystem
+
+setScriptDescription('''Demonstrate parsing and formatting of URI_Templates.  For parsing, we list a remote
+website and interpret the times for each file.  For formatting, the names are generated.''')
+
+setScriptTitle('URI_Templates')
+
+# see also 
+resourceURI= getParam( 'resourceURI', 'http://autoplot.org/data/C1_CP_EDI_EGD__$Y$m$d_V03.cef', 'example file to load', 
+    [ 'data_$Y_$(m)_$(d;delta=7;phasestart=2019-05-05).qds', 
+      'http://autoplot.org/data/C1_CP_EDI_EGD__$Y$m$d_V03.cef', 
+      'C1_CP_EDI_EGD__$Y$m$d_$(enum,values=A|B).cef' ] )
+
+timerange= getParam( 'timerange', '2005-02-12/2005-02-19', 'timerange to load' )
+
+generate= getParam( 'generate', False, 'Generation doesn''t list remote folders', [True,False] )
+
+if ( len(timerange.split(' '))==10 ):  # make it easier to use Jon V.'s document "uri_template_test_cases.txt"
+   trs= timerange.split(' ')   
+   timerange= '-'.join( trs[0:3] ) + 'T' + ':'.join( trs[3:5] ) + '/' + '-'.join( trs[5:8] ) + 'T' + ':'.join( trs[8:10] )
+
+drtr= DatumRangeUtil.parseTimeRange(timerange)
+
+count=0
+
+if ( False ):
+  print params
+  print '# resourceURI='+resourceURI
+  print '# timerange='+timerange
+  print '# generate='+generate
+
+print '<html><body>'
+
+t0= System.currentTimeMillis()
+
+if ( generate ):
+   if ( resourceURI.find('$v')>-1 ):
+       print 'Template cannot contain $v.'
+       count=-1
+   else:
+       tp= TimeParser.create(resourceURI)
+       
+       i1= resourceURI.find('$(enum')
+       if ( i1>-1 ):
+           
+           ix= resourceURI.find('$(enum',i1+6)
+           if (ix>-1 ): 
+               print 'Template can only contain one $(enum).'
+               count=-1
+           else:
+               fh= tp.getFieldHandlerByCode('enum')
+               enums= fh.getValues()
+               id= fh.getId()
+       else:
+           enums= ['']
+           id= ''
+              
+       st= tp.format( drtr.min(), None, Collections.singletonMap( id, enums[0] ) ) 
+       dr= tp.parse( st,None ).getTimeRange()
+
+       print( "<h1>Generate Result</h1>")
+       print '<h3>'+resourceURI+'</h3>'
+       print '<p>search limited to '+timerange+'</p>'
+
+       print '<table border=1>'
+       print '<tr><td>Time Range</td><td>Generated filename</td></tr>'
+
+       while ( count<=10000 and dr.min().lt( drtr.max() ) ):
+          for enum in enums:
+             st= tp.format(dr.min(), dr.max(), Collections.singletonMap( id, enum ) ) 
+             print '<tr><td>'+ dr.toString() + '</td><td>'+st + '</td></tr>'
+             count= count+1
+             if ( count>10000 ):
+                 print '<tr><td></td><td>Search limited to 10000 results.</td></tr>'
+                 break
+          dr= dr.next()
+else:
+    i= FileStorageModel.splitIndex( resourceURI )
+
+    root= resourceURI[0:i]      # the static part of the name
+    template= resourceURI[i:]   # the templated part of the name
+
+    fs= FileSystem.create( root )
+    fsm= FileStorageModel.create( fs, template )
+
+    names= fsm.getNamesFor( DatumRangeUtil.parseTimeRange(timerange) )
+
+    print( "<h1>Parse Result</h1>")
+
+    print '<h3>'+resourceURI+'</h3>'
+    print '<p>search limited to '+timerange+'</p>'
+
+    print '<table border=1>'
+    print '<tr><td>Filename</td><td>Time Range</td><td>Version</td></tr>'
+    for n in names:
+       print '<tr>'
+       tr= fsm.getRangeFor( n )
+       try:       
+           v= fsm.getField('v',n)
+       except:
+           v= 'N/A'
+       ll= '<a href="'+root + n + '">' + root + n + '</a>'
+       print '<td>'+ll + '</td><td>'+tr.toString() + '</td><td>' + v +'</td>'
+       count= count+1
+       print '</tr>'
+    print '</table>'
+
+if ( count==0 ):
+   print '(none found)'
+
+dt= System.currentTimeMillis() - t0
+print '%d results calculated in %d milliseconds.\n' % ( count,dt )
+
+print '</body></html>'
+
