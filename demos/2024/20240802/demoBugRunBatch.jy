@@ -4,3 +4,4 @@ c= getParam('c',300,'p a',[200,300,400])
 d= getParam('d',4000,'p a',[2000,3000,4000])
 
 print a, b, c, d
+plot( dataset( '%s %s %s %s' % ( a, b, c, d ) ) )
