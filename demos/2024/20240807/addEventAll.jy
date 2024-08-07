@@ -1,5 +1,4 @@
 arrayOfPlots = dom.getPlots()
-x= xrange(5)
 numberOfPlots = len(arrayOfPlots)
 listOfPanels = list(xrange(numberOfPlots))
 #print listOfPanels
@@ -16,11 +15,27 @@ if whichPlots == 'single':
 titleOfHighlight = getParam('annotation', 'temp message', 'What annotation do you want displayed on hover?')
 colorOfHighlight = getParam('color', 'red', 'what color do you want to highlight to be?', ['red', 'dark green', 'blue', 'white', 'black', 'magenta'])
 
+import inspect
+
+def pprint( v ):
+    frame = inspect.currentframe().f_back
+    name=None
+    for n, value in frame.f_locals.items():
+        if value is v:
+            name=n
+    print name, v
+    
+pprint( timerangeOfHighlight )
+pprint( whichPlots )
+if whichPlots == 'single':
+    pprint( whichPanel )
+pprint( titleOfHighlight )
+pprint( colorOfHighlight )
+
 try:
     eventHighlight = createEvent(timerangeOfHighlight, colorOfHighlight, titleOfHighlight)
 except:
-    eventHighlight = createEvent(datumRange(timerangeOfHighlight), colorFromString(colorOfHighlight).getRGB()+0x40000000, titleOfHighlight)
-   
+    eventHighlight = createEvent(datumRange(timerangeOfHighlight), colorFromString(colorOfHighlight).getRGB()+0x40000000, titleOfHighlight)   
 
 index = 0
 if whichPlots == 'all':
@@ -28,7 +43,10 @@ if whichPlots == 'all':
 elif whichPlots == 'top':
     panelList = [0]    
 elif whichPlots == 'single':
-    panelList = list().append(whichPanel)    
+    panelList = list()
+    panelList.append(whichPanel)    
+else:
+    print 'huh'
 
 for plotNumber in panelList:
     print plotNumber
