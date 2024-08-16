@@ -1,0 +1,27 @@
+from java.util.regex import Pattern
+from java.io import BufferedReader,InputStreamReader
+from java.lang import ProcessBuilder,StringBuilder
+
+pid= getParam('pid', 745499, 'Process ID' )
+cmd= "grep RssAnon /proc/"+str(pid)+"/status"
+
+pb= ProcessBuilder(cmd.split(' '))
+p= pb.start()
+
+reader = BufferedReader(InputStreamReader(p.getInputStream()))
+builder = StringBuilder()
+line = reader.readLine()
+while ( line != None) :
+   builder.append(line)
+   builder.append('\n')
+   line = reader.readLine()
+
+result = builder.toString()
+
+i= result.find('kB')
+result= result[9:i-1]
+
+result= dataset(Units.kiloBytes.parse(result))
+
+setOutputParam('result',result,'Size of the process in kilobytes')
+
