@@ -1,0 +1,30 @@
+from javax.swing import JPanel,BoxLayout
+setScriptTitle('Demo Calendar DatePicker')
+setScriptDescription('''Use the calendar GUI component at 
+https://github.com/LGoodDatePicker/LGoodDatePicker/releases/download/v11.2.1-Standard/LGoodDatePicker-11.2.1.jar
+for something productive.''')
+
+print 'This is not working and I am off-task, so I am aborting this.  But it still shows how to load a jar file and add a component, and this would be useful in the future.'
+
+ff= downloadResourceAsTempFile(URL('https://github.com/LGoodDatePicker/LGoodDatePicker/releases/download/v11.2.1-Standard/LGoodDatePicker-11.2.1.jar'),3600,monitor.getSubtaskMonitor('code'))
+ffdoc= downloadResourceAsTempFile(URL('https://github.com/LGoodDatePicker/LGoodDatePicker/releases/download/v11.2.1-Standard/LGoodDatePicker-11.2.1-javadoc.jar'),3600,monitor.getSubtaskMonitor('docs'))
+
+from sys import path
+
+addToSearchPath(path,
+      str(ff), str( ffdoc),
+      monitor.getSubtaskMonitor('add to path')       )
+
+from com.github.lgooddatepicker.components import DatePicker
+from com.github.lgooddatepicker.components import TimePicker
+
+datePicker1 = DatePicker()
+timePicker1 = TimePicker()
+
+p= JPanel()
+p.layout= BoxLayout(p,BoxLayout.Y_AXIS)
+
+p.add(datePicker1)
+p.add(timePicker1)
+
+getApplication().getTabs().addTab('calendar',p)

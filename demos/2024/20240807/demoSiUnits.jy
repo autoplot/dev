@@ -1,0 +1,12 @@
+from org.das2.datum import SIUnits, Datum
+
+mps= SIUnits.fromClusterCDFSIConversion('m*s^-1','mps','meters per second')
+s= SIUnits.fromClusterCDFSIConversion('s','seconds','seconds')
+
+d= Datum.create( 5, mps )
+s= Datum.create( 5, s )
+print 'd', d
+print 's', s
+print 'd*s', d*s
+
+

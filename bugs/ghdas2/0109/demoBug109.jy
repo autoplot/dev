@@ -1,0 +1,6 @@
+setScriptDescription('''Demos bug where numbers are confused for dates.  See
+https://github.com/das-developers/das2java/issues/109''')
+
+print dataset('2 20 2000 300')
+print dataset('2 20 300 2000')
+print dataset('2000 300 2 20')
