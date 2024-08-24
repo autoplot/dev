@@ -3,7 +3,7 @@ from java.util.regex import Pattern
 setScriptDescription('Parse Apache web server logs')
 
 resourceURI= getParam( 'resourceURI', '/home/jbf/ct/hapi/p/cdaweb/20240815/august_localhost_access.log', 'Apache log file' )
-form=getParam( 'form', 2, 'log format number, where 1 has more fields', [1,2] )
+form=getParam( 'form', 2, 'log format number, where 1 has user-agent field, 2 was for CDAWeb', [1,2] )
 skipUrl=getParam( 'skipUrl', '', 'skip urls containing this string, if non-empty', ['','/hapi/catalog'] )
 inclUrl=getParam( 'includeUrl', '', 'only include URLs containing this', ['','/hapi/data'] )
 
@@ -13,7 +13,7 @@ if form==1:
     urlColumn=7
     agentColumn=12
 else:
-    regex= '(\S+) (\S+) (\S+) \[(\S+) (\S+)\] "(\S+) (\S+) (\S+)\" (\d+) (\d+|\-)'
+    regex= '(\S+) (\S+) (\S+) \[(\S+) (\S+)\] \"(\S+) (\S+) (\S+)\" (\d+) (\d+|\-)'
     urlColumn=7
     agentColumn=-1    
 
