@@ -18,7 +18,7 @@ script= getApplication().getScriptPanel().getFilename()
 localCacheDir= str(FileSystem.settings().localCacheDir)
 
 gitRemote=''
-if ( script.startswith(localCacheDir) ):
+if ( script!=None and script.startswith(localCacheDir) ):
     ldir= script[(len(localCacheDir)+1):]
     i2= ldir.find('main')
     if ( i2==-1 ):

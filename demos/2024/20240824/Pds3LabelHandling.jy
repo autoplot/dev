@@ -1,0 +1,16 @@
+from java.io import File
+from org.autoplot.pds import Pds3DataSourceFactory, DocumentUtil
+
+setScriptTitle('Demo PDS3 Label Include')
+setScriptDescription('''This demonstrates PDS3 label handling, where included nodes are retrieved and
+inserted into one document object.
+''')
+
+url= URL('https://pds-ppi.igpp.ucla.edu/data/CO-V_E_J_S_SS-RPWS-2-REFDR-WFRFULL-V1.0/DATA/RPWS_WAVEFORM_FULL/T20000XX/T2000037/T2000037_25HZ4_WFRFR.LBL')
+
+doc= Pds3DataSourceFactory.getDocumentWithImports(url)
+
+DocumentUtil.dumpToXML(doc,File('/tmp/T2000037_25HZ4_WFRFR.LBL.xml'))
+
+setStatus('See /tmp/T2000037_25HZ4_WFRFR.LBL.xml')
+alert('See /tmp/T2000037_25HZ4_WFRFR.LBL.xml')
