@@ -1,0 +1,65 @@
+from java.util.regex import Pattern
+
+setScriptDescription('Parse Apache web server logs')
+
+resourceURI= getParam( 'resourceURI', '/home/jbf/ct/hapi/p/cdaweb/20240815/august_localhost_access.log', 'Apache log file' )
+form=getParam( 'form', 2, 'log format number, where 1 has more fields', [1,2] )
+skipUrl=getParam( 'skipUrl', '', 'skip urls containing this string, if non-empty', ['','/hapi/catalog'] )
+inclUrl=getParam( 'includeUrl', '', 'only include URLs containing this', ['','/hapi/data'] )
+
+# Regular expressions will vary depending on server configuration.  Group 12 is assumed to be user agent.  See https://regex101.com/
+if form==1:
+    regex= '(\S+) (\S+) (\S+) \[(\S+) (\S+)\] \"(\S+) (\S+) (\S+)\" (\d+) (\d+|\-) \"(.+)\" \"(.+)\"'    
+    urlColumn=7
+    agentColumn=12
+else:
+    regex= '(\S+) (\S+) (\S+) \[(\S+) (\S+)\] "(\S+) (\S+) (\S+)\" (\d+) (\d+|\-)'
+    urlColumn=7
+    agentColumn=-1    
+
+pat= Pattern.compile(regex)
+client= Units.nominal('client')
+agent= Units.nominal('agent')
+url= Units.nominal('url')
+
+# example line form 2
+s= 'x.x.x.x - - [08/Aug/2024:10:23:16 -0400] "GET /hapi/data?id=MMS2_EDP_BRST_L2_HMFE&parameters=Time&time.min=2015-09-01T12:11:17Z&time.max=2015-09-01T12:11:18Z&format=binary HTTP/1.1" 500 -'
+
+# example lines form 1
+#s= '192.168.0.208 - - [19/Dec/2021:00:23:05 -0600] "GET /~jbf/autoplot/data/qds/ HTTP/1.1" 301 629 "-" "Java/1.8.0_181"'
+#s= '51.158.156.78 - - [19/Dec/2021:00:04:15 -0600] "GET /hmc/hybris HTTP/1.1" 404 438 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0"'
+
+m= pat.matcher(s)
+if not m.matches():
+    raise Exception('does not match')
+
+tt= DataSetBuilder(2,100,4)
+ff= open( str(getFile(resourceURI)) )
+for line in ff:
+    line=line.strip()
+    m= pat.matcher(line)
+    if not m.matches(): 
+        continue
+    wh= m.group(1) # who
+    ts= m.group(4)
+    tz= m.group(5)
+    t= TimeUtil.create(ts)
+    t = t + datum( tz[:-2]+'hrs' )
+    urls= m.group(urlColumn)
+    if len(skipUrl)>0 and urls.find(skipUrl)>-1:
+        continue
+    if len(inclUrl)>0 and not urls.find(inclUrl)>-1:
+        continue
+        
+    if agentColumn>-1:
+        tt.nextRecord([t, client.createDatum(wh), url.createDatum(urls), agent.createDatum(m.group(agentColumn))])
+    else:
+        tt.nextRecord([t, client.createDatum(wh), url.createDatum(urls), agent.createDatum('???')])
+        
+ds= tt.getDataSet()
+who= link( ds[:,0], ds[:,1] )
+agent= link( ds[:,0], ds[:,3] )
+url= link( ds[:,0], ds[:,2] )
+
+result= url
+
