@@ -1,0 +1,28 @@
+from java.io import File
+import sys
+ds= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/fast/esa/l2/eeb/2009/04/fa_esa_l2_eeb_20090429102158_51304_v02.cdf?data')
+
+addToSearchPath(sys.path,'https://cottagesystems.com/~jbf/autoplot/lib/jcodec-javase-0.2.5.jar',monitor.getSubtaskMonitor('jar1'))
+addToSearchPath(sys.path,'https://cottagesystems.com/~jbf/autoplot/lib/jcodec-0.2.5.jar',monitor.getSubtaskMonitor('jar2'))
+
+from org.jcodec.api.awt import AWTSequenceEncoder
+
+mkdir('/tmp/ap/')
+enc = AWTSequenceEncoder.createSequenceEncoder(File( "/tmp/ap/fast.mp4"), 30 )
+
+reset()
+setCanvasSize(800,600)
+
+plot( ds[0], zrange='0.153 to 67.0 Counts' )
+
+monitor.taskSize=len(ds)
+monitor.started()
+
+for i in xrange(len(ds)):
+    monitor.taskProgress=i
+    plot( ds[i], reset=False )
+    im= writeToBufferedImage()
+    enc.encodeImage( im )
+
+enc.finish()
+monitor.finished()
