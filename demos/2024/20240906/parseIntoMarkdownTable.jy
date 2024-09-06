@@ -1,0 +1,102 @@
+sss='''2024-09-03T00:52 AM	55 °F	0 °F	0 %	ESE	5 mph	0 mph	29.35 in	0.0 in	Fair
+1:52 AM	55 °F	0 °F	0 %	SSE	3 mph	0 mph	29.34 in	0.0 in	Fair
+2:52 AM	54 °F	0 °F	0 %	SSE	5 mph	0 mph	29.35 in	0.0 in	Fair
+3:52 AM	52 °F	0 °F	0 %	SSE	3 mph	0 mph	29.35 in	0.0 in	Fair
+4:52 AM	53 °F	0 °F	0 %	SSE	5 mph	0 mph	29.34 in	0.0 in	Fair
+5:52 AM	53 °F	52 °F	96 %	SSE	5 mph	0 mph	29.35 in	0.0 in	Fair
+6:52 AM	51 °F	51 °F	100 %	SSE	5 mph	0 mph	29.36 in	0.0 in	Fair
+7:52 AM	57 °F	54 °F	89 %	SE	5 mph	0 mph	29.38 in	0.0 in	Fair
+8:52 AM	62 °F	55 °F	78 %	SSE	8 mph	0 mph	29.38 in	0.0 in	Fair
+9:52 AM	67 °F	56 °F	68 %	SSE	9 mph	0 mph	29.38 in	0.0 in	Fair
+10:52 AM	70 °F	55 °F	59 %	SSE	13 mph	0 mph	29.38 in	0.0 in	Fair
+11:52 AM	72 °F	55 °F	55 %	SSE	13 mph	17 mph	29.38 in	0.0 in	Fair
+12:52 PM	74 °F	54 °F	50 %	SE	13 mph	20 mph	29.36 in	0.0 in	Fair
+1:52 PM	74 °F	54 °F	50 %	S	8 mph	0 mph	29.35 in	0.0 in	Fair
+2:52 PM	76 °F	53 °F	45 %	VAR	7 mph	0 mph	29.32 in	0.0 in	Fair
+3:52 PM	76 °F	52 °F	43 %	S	8 mph	0 mph	29.31 in	0.0 in	Fair
+4:52 PM	76 °F	53 °F	45 %	SE	8 mph	0 mph	29.29 in	0.0 in	Fair
+5:52 PM	74 °F	51 °F	45 %	SE	10 mph	0 mph	29.28 in	0.0 in	Fair
+6:52 PM	70 °F	55 °F	59 %	SE	5 mph	0 mph	29.28 in	0.0 in	Fair
+7:52 PM	64 °F	55 °F	72 %	SE	3 mph	0 mph	29.28 in	0.0 in	Fair
+8:52 PM	60 °F	53 °F	78 %	SE	5 mph	0 mph	29.29 in	0.0 in	Fair
+9:52 PM	58 °F	53 °F	84 %	SE	5 mph	0 mph	29.30 in	0.0 in	Fair
+10:52 PM	57 °F	52 °F	83 %	SE	5 mph	0 mph	29.30 in	0.0 in	Fair
+11:52 PM	55 °F	52 °F	89 %	SE	5 mph	0 mph	29.30 in	0.0 in	Fair
+2024-09-04T00:52 AM	55 °F	51 °F	86 %	ESE	5 mph	0 mph	29.30 in	0.0 in	Fair
+1:52 AM	55 °F	51 °F	86 %	SSE	6 mph	0 mph	29.31 in	0.0 in	Fair
+2:52 AM	56 °F	51 °F	84 %	SSE	6 mph	0 mph	29.30 in	0.0 in	Fair
+3:52 AM	55 °F	50 °F	83 %	SSE	6 mph	0 mph	29.30 in	0.0 in	Fair
+4:52 AM	51 °F	48 °F	89 %	CALM	0 mph	0 mph	29.31 in	0.0 in	Fair
+5:52 AM	50 °F	48 °F	93 %	E	3 mph	0 mph	29.32 in	0.0 in	Fair
+6:52 AM	49 °F	48 °F	97 %	E	3 mph	0 mph	29.32 in	0.0 in	Fair
+7:52 AM	54 °F	52 °F	93 %	ESE	5 mph	0 mph	29.33 in	0.0 in	Fair
+8:52 AM	61 °F	56 °F	83 %	SSE	6 mph	0 mph	29.33 in	0.0 in	Fair
+9:52 AM	65 °F	56 °F	73 %	S	6 mph	0 mph	29.33 in	0.0 in	Fair
+10:52 AM	70 °F	57 °F	63 %	SSE	8 mph	0 mph	29.33 in	0.0 in	Fair
+11:52 AM	72 °F	56 °F	57 %	SSE	6 mph	0 mph	29.32 in	0.0 in	Fair
+12:52 PM	74 °F	55 °F	52 %	SSE	9 mph	0 mph	29.30 in	0.0 in	Fair
+1:52 PM	76 °F	56 °F	50 %	SSE	8 mph	0 mph	29.29 in	0.0 in	Fair
+3:52 PM	78 °F	57 °F	48 %	SE	7 mph	0 mph	29.25 in	0.0 in	Fair
+4:52 PM	77 °F	55 °F	46 %	SSE	7 mph	0 mph	29.24 in	0.0 in	Fair
+5:52 PM	76 °F	56 °F	50 %	S	7 mph	0 mph	29.23 in	0.0 in	Fair
+6:52 PM	71 °F	59 °F	66 %	S	5 mph	0 mph	29.24 in	0.0 in	Fair
+7:52 PM	65 °F	57 °F	75 %	SSE	5 mph	0 mph	29.24 in	0.0 in	Fair
+8:52 PM	63 °F	56 °F	78 %	SSE	3 mph	0 mph	29.25 in	0.0 in	Fair
+9:52 PM	60 °F	55 °F	83 %	SSE	5 mph	0 mph	29.24 in	0.0 in	Fair
+10:52 PM	59 °F	55 °F	87 %	SSE	5 mph	0 mph	29.24 in	0.0 in	Fair
+11:52 PM	60 °F	56 °F	86 %	SSE	5 mph	0 mph	29.23 in	0.0 in	Fair
+2024-09-05T00:52 AM	58 °F	55 °F	90 %	SSE	5 mph	0 mph	29.22 in	0.0 in	Fair
+1:52 AM	59 °F	56 °F	90 %	S	3 mph	0 mph	29.23 in	0.0 in	Fair
+2:52 AM	57 °F	55 °F	93 %	SSE	6 mph	0 mph	29.22 in	0.0 in	Fair
+3:52 AM	56 °F	54 °F	93 %	S	3 mph	0 mph	29.21 in	0.0 in	Fair
+4:52 AM	56 °F	55 °F	97 %	S	5 mph	0 mph	29.21 in	0.0 in	Fair
+5:52 AM	56 °F	54 °F	93 %	S	5 mph	0 mph	29.20 in	0.0 in	Fair
+6:52 AM	55 °F	54 °F	96 %	S	6 mph	0 mph	29.20 in	0.0 in	Fair
+7:52 AM	59 °F	58 °F	96 %		0 mph	0 mph	29.20 in	0.0 in	Fair
+8:52 AM	66 °F	60 °F	81 %	SSW	5 mph	0 mph	29.20 in	0.0 in	Fair
+9:52 AM	71 °F	59 °F	66 %	SW	7 mph	0 mph	29.19 in	0.0 in	Fair
+10:52 AM	74 °F	62 °F	66 %	SSW	3 mph	0 mph	29.18 in	0.0 in	Fair
+11:52 AM	75 °F	63 °F	66 %	W	6 mph	0 mph	29.18 in	0.0 in	Fair
+12:52 PM	76 °F	64 °F	67 %	NW	12 mph	0 mph	29.20 in	0.0 in	Mostly Cloudy
+1:52 PM	74 °F	65 °F	73 %	NNW	10 mph	0 mph	29.19 in	0.0 in	Light Rain
+2:52 PM	74 °F	64 °F	71 %	NNW	10 mph	0 mph	29.20 in	0.0 in	Fair
+3:52 PM	75 °F	66 °F	73 %	NNW	8 mph	0 mph	29.19 in	0.0 in	Fair
+4:52 PM	75 °F	66 °F	73 %	NNW	9 mph	0 mph	29.20 in	0.0 in	Mostly Cloudy
+5:52 PM	76 °F	67 °F	74 %	NNW	8 mph	0 mph	29.20 in	0.0 in	Fair
+6:52 PM	74 °F	66 °F	76 %	NW	5 mph	0 mph	29.20 in	0.0 in	Fair
+7:52 PM	69 °F	64 °F	84 %	NW	6 mph	0 mph	29.21 in	0.0 in	Fair
+8:52 PM	67 °F	62 °F	84 %	NW	7 mph	0 mph	29.22 in	0.0 in	Fair
+9:52 PM	65 °F	61 °F	87 %	NW	6 mph	0 mph	29.21 in	0.0 in	Fair
+10:52 PM	63 °F	60 °F	90 %	NW	7 mph	0 mph	29.22 in	0.0 in	Fair
+11:52 PM	62 °F	59 °F	90 %	NW	7 mph	0 mph	29.23 in	0.0 in	Fair
+2024-09-06T00:52	62 °F	59 °F	90 %	NW	8 mph	0 mph	29.23 in	0.0 in	Fair
+1:52 AM	60 °F	58 °F	93 %	NNW	8 mph	0 mph	29.22 in	0.0 in	Fair
+2:52 AM	58 °F	56 °F	93 %	NW	8 mph	0 mph	29.23 in	0.0 in	Fair
+3:52 AM	55 °F	54 °F	96 %	NW	6 mph	0 mph	29.23 in	0.0 in	Fair
+4:52 AM	55 °F	54 °F	96 %	NNW	8 mph	0 mph	29.23 in	0.0 in	Fair
+5:52 AM	54 °F	53 °F	97 %	NW	7 mph	0 mph	29.24 in	0.0 in	Fair
+6:52 AM	54 °F	53 °F	97 %	NNW	8 mph	0 mph	29.26 in	0.0 in	Partly Cloudy
+7:52 AM	57 °F	54 °F	89 %	NNW	10 mph	0 mph	29.27 in	0.0 in	Fair
+8:52 AM	60 °F	55 °F	83 %	NNW	10 mph	0 mph	29.27 in	0.0 in	Partly Cloudy
+'''
+
+print '| Time (CDT)| Temperature (&deg;F) |'
+print '| ------ | ------ |'
+
+currentDate=''
+for line in sss.splitlines():
+    ss= line.split('\t')
+    if ( ss[0].startswith('2024') ):
+        currentDate= ss[0][0:11]
+        if ss[0].endswith(' AM'):
+            ss[0]= ss[0][0:-3]
+    else:
+        if ( ss[0].endswith('PM') ):
+            sss= ss[0].split(':')
+            ss[0]= '%02d' % ( int(sss[0])+12 ) + ':'+sss[1][0:-3]
+        else:
+            sss= ss[0].split(':')
+            ss[0]= '%02d' % int(sss[0]) + ':'+sss[1][0:-3]
+        ss[0]= currentDate + ss[0]
+    print '|', ss[0], '|', ss[1][:-3], '|'
+    
