@@ -1,0 +1,9 @@
+setScriptDescription('''Kodalith of W. E. Rollins sketch, taken from screenshot of Antiques Roadshow 
+in Portland, Oregon in 2017.''')
+
+value= getDataSet('https://cottagesystems.com/~jbf/autoplot/data/png/roadshow.sketch.jpg?channel=value')
+r= where( value.gt(80) )
+
+result= copy(value)
+result[:]= 0
+result[r]= 255
