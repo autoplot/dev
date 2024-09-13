@@ -1,0 +1,14 @@
+setScriptDescription('''Print the unique units found in SPASE records created by Lee and others''')
+
+ff= getFile( 'https://github.com/spase-group/adapt/blob/main/CDAWEB/numerical_data_parameter_all.tab', monitor )
+
+uu= {} 
+for line in open(str(ff),'r'):
+    ll= line.split('\t')
+    unit=ll[2]
+    uu[unit]= unit
+
+for k in uu.keys():
+    print k
+    
+print 'Number of unique values: %d'  % len(uu)
