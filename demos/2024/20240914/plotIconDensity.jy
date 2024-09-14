@@ -15,3 +15,5 @@ print density
 data= link( epoch, alt[0,:,0], indgen(6), density )
 
 plot( data )
+
+setOutputParam('description','The new version of the files must have different dimensionality.  This needs to be handled')
