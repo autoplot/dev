@@ -1,0 +1,17 @@
+setScriptTitle('ICON_fuv_density')
+setScriptDescription('''Regression tests have 
+vap+cdaweb:ds=ICON_L2-5_FUV_NIGHT&id=ICON_L25_O_Plus_Density&timerange=2021-11-02+21:01+to+21:30
+failing now.  Why?''')
+
+epoch= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/icon/l2-5_fuv_night/2021/icon_l2-5_fuv_night_20211102_v06r001.nc?Epoch')
+density= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/icon/l2-5_fuv_night/2021/icon_l2-5_fuv_night_20211102_v06r001.nc?ICON_L25_O_Plus_Density')
+alt= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/icon/l2-5_fuv_night/2021/icon_l2-5_fuv_night_20211102_v06r001.nc?ICON_L25_O_Plus_Profile_Altitude')
+
+print epoch
+print alt
+print density
+
+#data= link( epoch, alt[, indgen(6), density )
+data= link( epoch, alt[0,:,0], indgen(6), density )
+
+plot( data )
