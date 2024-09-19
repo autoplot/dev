@@ -1,0 +1,22 @@
+setScriptTitle('Remove Singlejar Launch Script')
+setScriptLabel('Remove Singlejar Launch Script')
+setScriptDescription('''The header script which makes the single-jar launchable 
+causes problems in some use cases, so this script can
+be used to remove it.  This removes the first 2650 bytes
+and verifies that this is followed by "PK"''')
+
+vers= getParam( 'vers', 'devel', 'devel or latest', ['devel','latest'] )
+
+inf= getParam( 'inf', URI('https://autoplot.org/'+vers+'/autoplot.jar'), 'Autoplot file location' )
+outf= getParam( 'outf', URI('file:/home/jbf/bin/'+vers+'/autoplot.devel.jar'), 'output file location' )
+
+ds= getDataSet('vap+bin:'+str(inf)+'?type=ubyte')
+
+if not ( ds[2650]==ord('P') and ds[2651]==ord('K') ):
+    raise Exception('PK is not at the right place, taking no action.')
+else:
+    ds= ds[2650:]
+    formatDataSet(ds,'vap+bin:'+str(outf)+'?type=ubyte')
+    
+    
+
