@@ -17,4 +17,6 @@ if not ( ds[2650]==ord('P') and ds[2651]==ord('K') ):
 else:
     ds= ds[2650:]
     formatDataSet(ds,'vap+bin:'+str(outf)+'?type=ubyte')
+    setStatus( 'wrote ' + str(outf) )
+    
     
