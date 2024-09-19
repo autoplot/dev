@@ -1,5 +1,5 @@
 setScriptTitle('Remove Singlejar Launch Script')
-setScriptLabel('Remove Singlejar Launch Script')
+
 setScriptDescription('''The header script which makes the single-jar launchable 
 causes problems in some use cases, so this script can
 be used to remove it.  This removes the first 2650 bytes
@@ -18,5 +18,3 @@ else:
     ds= ds[2650:]
     formatDataSet(ds,'vap+bin:'+str(outf)+'?type=ubyte')
     
-    
-
