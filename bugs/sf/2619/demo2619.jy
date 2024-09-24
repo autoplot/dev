@@ -4,6 +4,7 @@ from org.autoplot.datasource import DataSetURI
 from org.autoplot import ApplicationModel
 
 setScriptDescription('Demo where the simpleServlet is not setting PWD.')
+showBug= getParam('showBug',True,'Show the bug',[True,False])
 
 vapurl = 'https://github.com/autoplot/dev/blob/master/demos/2024/20240907/kodalith.vap'
 #github.com/autoplot/dev/blob/master/demos/2024/20240907/kodalith.vap";
@@ -11,7 +12,12 @@ openable = DataSetURI.getFile(vapurl, monitor)
 appmodel = ApplicationModel()
 appmodel.addDasPeersToAppAndWait()
 deltas = LinkedHashMap()
-#deltas.put("PWD", "https://github.com/autoplot/dev/blob/master/demos/2024/20240907/");
+
+if showBug:
+    print 'skipping step where PWD is set'
+else:
+    deltas.put("PWD", "https://github.com/autoplot/dev/blob/master/demos/2024/20240907/");
+
 appmodel.doOpenVap(openable, deltas)
 dom = appmodel.getDom()
 width = appmodel.getDom().getCanvases(0).getWidth()
