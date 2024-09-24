@@ -1,0 +1,26 @@
+from java.util import LinkedHashMap
+from java.io import File,FileOutputStream
+from org.autoplot.datasource import DataSetURI
+from org.autoplot import ApplicationModel
+
+setScriptDescription('Demo where the simpleServlet is not setting PWD.')
+
+vapurl = 'https://github.com/autoplot/dev/blob/master/demos/2024/20240907/kodalith.vap'
+#github.com/autoplot/dev/blob/master/demos/2024/20240907/kodalith.vap";
+openable = DataSetURI.getFile(vapurl, monitor)
+appmodel = ApplicationModel()
+appmodel.addDasPeersToAppAndWait()
+deltas = LinkedHashMap()
+#deltas.put("PWD", "https://github.com/autoplot/dev/blob/master/demos/2024/20240907/");
+appmodel.doOpenVap(openable, deltas)
+dom = appmodel.getDom()
+width = appmodel.getDom().getCanvases(0).getWidth()
+height = appmodel.getDom().getCanvases(0).getHeight()
+c = dom.getController().getCanvas().getController().getDasCanvas()
+c.prepareForOutput(width, height)
+dom.getController().waitUntilIdle()
+fout = File('/tmp/ap/kodalith.vap.png')
+fout.getParentFile().mkdirs()
+fos = FileOutputStream(fout)
+appmodel.getCanvas().writeToPng(fos, width, height)
+fos.close()
