@@ -30,3 +30,5 @@ fout.getParentFile().mkdirs()
 fos = FileOutputStream(fout)
 appmodel.getCanvas().writeToPng(fos, width, height)
 fos.close()
+
+setStatus('Wrote to '+str(fout))
