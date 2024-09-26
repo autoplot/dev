@@ -1,0 +1,18 @@
+cdaweb='https://cdaweb.gsfc.nasa.gov/sp_phys/'
+
+ll= cdaweb+'data/mms/mms1/edp/brst/l2/scpot/2015/07/mms1_edp_brst_l2_scpot_20150716013804_v0.2.0.cdf?'
+cc= getCompletions(ll)
+iq= ll.find('?')
+print cc[0][iq+1:]
+
+ll= cdaweb+'data/mms/mms1/edp/brst/l2/scpot/2024/08/mms1_edp_brst_l2_scpot_20240815040523_v2.9.0.cdf?'
+cc= getCompletions(ll)
+iq= ll.find('?')
+print cc[0][iq+1:]
+
+ll= 'https://cdaweb.gsfc.nasa.gov/pub/software/cdawlib/0MASTERS/mms1_edp_brst_l2_scpot_00000000_v01.cdf?'
+cc= getCompletions(ll)
+iq= ll.find('?')
+#for c in cc:
+print cc[0][iq+1:]
+    #if ( c.find('scpot',iq)>-1 ): print c[iq+1:]

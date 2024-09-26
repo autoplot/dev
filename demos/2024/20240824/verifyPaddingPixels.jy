@@ -1,0 +1,16 @@
+a= annotation(text='[Annotation]',borderType='rounded_rectangle')
+
+ff= dataset( [ 8,10,12,14,16,18,20,22,24,26,28,30 ] )
+
+#a.controller.dasAnnotation.padding='0.5em'
+triangle= append( ff, reverse(ff) )
+lt= dataset([1,2,3,4,3,2,1])
+
+while True:
+    for i in xrange( len( triangle ) ):
+        a.fontSize='%.1fem' % (triangle[i]/10.)
+        sleep(100)
+    for i in xrange( len( lt ) ):
+        print '%dpx' % (lt[i])
+        a.controller.dasAnnotation.lineThickness='%dpx' % (lt[i])
+        sleep(200)

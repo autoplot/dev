@@ -1,7 +1,10 @@
-setScriptDescription('parse web logs')
-
 from java.util.regex import Pattern
+
+setScriptDescription('Parse Apache web server logs')
+
 regex= '(\S+) (\S+) (\S+) \[(\S+) (\S+)\] \"(\S+) (\S+) (\S+)\" (\d+) (\d+) \"(.+)\" \"(.+)\"'
+
+resourceURI= getParam( 'resourceURI', '/home/jbf/ct/hapi/p/cdaweb/20240815/august_localhost_access.log', 'Apache log file' )
 
 pat= Pattern.compile(regex)
 client= Units.nominal('client')
@@ -15,7 +18,7 @@ if not m.matches():
     raise Exception('does not match')
 
 tt= DataSetBuilder(2,3,100)
-ff= open( '/home/jbf/tmp/access.log' )
+ff= open( str(getFile(resourceURI)) )
 for line in ff:
     line=line.strip()
     m= pat.matcher(line)

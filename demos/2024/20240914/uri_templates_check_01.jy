@@ -1,0 +1,15 @@
+setScriptTitle('URI_Templates check 1')
+setScriptDescription('''Verify that examples in URI_Templates document work in the 
+library.  This checks  pad=none.''')
+
+from java.util import HashMap
+import sys
+addToSearchPath( sys.path,
+     'https://cottagesystems.com/hapi/uri_templates/dist/UriTemplatesJava.jar',
+     monitor )
+     
+from org.hapiserver import URITemplate
+
+ff= URITemplate.formatRange('$Y-$(m;pad=none)-$d.dat','2015-09-28','2015-10-05')
+for f in ff:
+    print f
