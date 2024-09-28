@@ -1,0 +1,18 @@
+setScriptDescription('''Demonstrate a bug in uniq function, where units are not propogated.''')
+
+keyu= Units.nominal('key')
+a= keyu.createDatum('A').doubleValue(keyu)
+b= keyu.createDatum('B').doubleValue(keyu)
+c= keyu.createDatum('C').doubleValue(keyu)
+keyu.createDatum('D')
+keyu.createDatum('E')
+keyu.createDatum('F')
+
+ds= dataset( [ a,a,b,b,c,c,b,b], units=keyu )
+print ds, ds[0]
+
+s= sort(ds)
+u= uniq(ds,s)
+
+for u1 in u:
+    print u1

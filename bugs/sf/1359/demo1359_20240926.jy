@@ -1,0 +1,7 @@
+ds= getDataSet('file:///project/voyager/pds/voyager-2-pws-sa/data/$Y/vg2pws_lr_$Y$m$d_v$(v;sep).xml?electric_field&timerange=2016-08-26/P3D')
+plot(ds,xrange='2016-08-27')
+
+annotation(text='Note this is scan',pointAt='2016-08-28T00:00,5.0',anchorPosition='SE')
+
+# now hit scan to go to the right.  The left pop-up button will be step, which doesn't
+# make sense since we just scanned.

@@ -1,0 +1,43 @@
+from java.io import File
+import sys
+from javax.imageio import ImageIO
+from java.io import File
+
+setScriptTitle('Demo Plotx Replot Bug')
+setScriptDescription('''The plot command, which was once called plotx, has keywords like xrange and yrange to 
+match IDL's controls. The plot will first autorange, paints, and then reset its range to the 
+xrange and yrange requested.  This doubles the amount of time needed to process, and
+it would be really nice to avoid this.''')
+
+outf= getParam( 'outf', File('/tmp/apmovie.mp4'), 'Output File' )
+
+addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/jcodec/jcodec-javase/0.2.5/jcodec-javase-0.2.5.jar',monitor.getSubtaskMonitor('jar1'))
+addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/jcodec/jcodec/0.2.5/jcodec-0.2.5.jar',monitor.getSubtaskMonitor('jar2'))
+from org.jcodec.api.awt import AWTSequenceEncoder
+
+enc = AWTSequenceEncoder.createSequenceEncoder(outf,24)
+
+step=10
+limit=10000
+N = 100
+
+monitor.setTaskSize( limit )
+monitor.started()
+
+while N<limit:
+    monitor.taskProgress= N
+    randomSeed(0)
+    xx= accum( randn(N) )
+    randomSeed(2)
+    yy= accum( randn(N) )
+    giga= link( xx, yy )
+    ee= 50.*N/limit
+    plot( giga, xrange=[-50-ee,50+ee], yrange=[-50-ee,50+ee], reset=False )
+    img= writeToBufferedImage()
+
+    enc.encodeImage(img)
+    
+    N=N+step
+    
+enc.finish()
+monitor.finished()

@@ -1,0 +1,17 @@
+from java.lang import System
+from org.das2.qds import SortDataSet
+
+ds= getDataSet('vap+cdaweb:ds=STA_L2_MAGPLASMA_1M&id=BFIELDRTN&timerange=2022-12-24+through+2022-12-31')
+
+t0= System.currentTimeMillis()
+s= sort(xtags(ds))
+t1= System.currentTimeMillis()
+print "sort in millis: ", t1-t0 
+dsn= applyIndex(ds,s)
+t2= System.currentTimeMillis()
+print "applyIndex in millis: ", t2-t1 
+
+dsn= SortDataSet(ds,s)
+dsn= copy(dsn)
+t3= System.currentTimeMillis()
+print "manual application in millis: ", t3-t2
