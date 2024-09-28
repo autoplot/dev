@@ -1,5 +1,7 @@
-# title: Start screenshots recorder
-# label: Start Screenshots
+setScriptDescription('''Start writing screenshots, with privacy mask, to a directory.  
+These can be combined with the pngwalk tool to make an animated gif.  This provides
+the community with a way of easily making tutorial videos or demonstrating a bug.''')
+setScriptTitle('Start Screenshots')
 
 from org.virbo.autoplot import ScreenshotsTool
 
