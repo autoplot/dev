@@ -1,0 +1,2 @@
+tp= TimeParser.create('$Y-$m-$dT$H:$M:$S.$(subsec;places=9)Z')
+print tp.format(Units.cdfTT2000.createDatum(504273668184000000L))
