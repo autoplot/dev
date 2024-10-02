@@ -1,0 +1,20 @@
+from org.das2.util.filesystem import FileSystem
+fs= FileSystem.create('https://space.physics.uiowa.edu/~jbf/juno/u/bill/20200110/')
+ff= fs.listDirectory('')
+
+afile=None
+for f in ff:
+    if f.find(':')>-1:
+        afile= f
+        break
+        
+print afile
+fo= fs.getFileObject(afile)
+fi= fo.getFile()
+
+print fi
+print fi.length()
+
+
+
+    
