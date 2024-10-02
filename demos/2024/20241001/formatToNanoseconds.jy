@@ -1,0 +1,6 @@
+mms1_edi_flux1_180_srvy_l2= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/mms/mms1/edi/srvy/l2/amb/2015/12/mms1_edi_srvy_l2_amb_20151226_v4.1.0.cdf?mms1_edi_flux1_180_srvy_l2')
+tt= xtags(mms1_edi_flux1_180_srvy_l2)
+tt.putProperty(QDataSet.FORMAT,'$Y-$m-$dT$H:$M:$S.$(subsec;places=9)')
+#tp= TimeParser.create('$Y-$m-$dT$H:$M:$S.$(subsec;places=9)')
+for i in xrange(100):
+    print tt[i]

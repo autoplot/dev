@@ -1,0 +1,19 @@
+from org.das2.util import ColorUtil
+
+setScriptTitle('Time Range with Enum')
+setScriptDescription('''Used to generate pngwalk which contains time fields and enumerated values 
+($Y_$m_$d_$x.png).  The time ranges should be in the 2010-Jan month.''')
+
+timerangeOfHighlight = getParam('timerange', '2010-01-02', 'Timerange of the intended highlight')
+colorOfHighlight = getParam('color', 'red', 'what color do you want to highlight to be?', ['red', 'blue', 'white', 'black', 'magenta'])
+
+ev= createEvent( timerangeOfHighlight,ColorUtil.decodeColor(colorOfHighlight).RGB,colorOfHighlight)
+
+tr= datumRange(timerangeOfHighlight).rescale(-0.1,1.1)
+
+reset()
+plot( 0, ev, xrange=tr)
+plot( 1, ev, xrange='2010-01' )
+dom.controller.unbind(dom.plots[1].xaxis)
+dom.plots[0].xaxis.range= tr
+dom.controller.addConnector(dom.plots[0],dom.plots[1])

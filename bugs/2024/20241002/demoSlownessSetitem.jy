@@ -1,0 +1,55 @@
+from org.das2.qds import FDataSet
+from org.das2.util import LoggerManager
+from java.lang import System
+setScriptTitle('Demo Jython setitem slow')
+setScriptDescription('''Code which was overly cautious was introduced, making combineHfrWfr.jyds 
+awfully slow.  This script demos the problem.
+''')
+
+logger= LoggerManager.getLogger('analysis')
+
+# Here is the bug when I started.  setItem #2 is unnecessarily slow
+# begin 0 ms
+# loaded data in 577 ms
+# some unfamiliar process in 665 ms
+# about to do setItem #1 in 665 ms
+# about to do setItem #2 in 718 ms
+# done with setItem in 12730 ms
+
+t0= System.currentTimeMillis()
+logger.info('begin %d ms' % ( System.currentTimeMillis()-t0 ) )
+
+sc= 'a'
+SC= sc.upper()
+
+tr=  '2013-05-05'
+
+wfr_spectra= getDataSet( 'https://space.physics.uiowa.edu/rbsp/Flight/RBSP-%s/L2/$Y/$m/$d/rbsp-%s_WFR-spectral-matrix-diagonal_emfisis-L2_$Y$m$d_v$(v,sep).cdf?EuEu' % (SC,sc), tr, monitor.getSubtaskMonitor(0,22,'Reading WFR') )
+hfr_spectra= getDataSet( 'https://space.physics.uiowa.edu/rbsp/Flight/RBSP-%s/L2/$Y/$m/$d/rbsp-%s_HFR-spectra_emfisis-L2_$Y$m$d_v$(v,sep).cdf?HFR_Spectra' % (SC,sc),tr, monitor.getSubtaskMonitor(22,30,'Reading HFR') )
+
+logger.info('loaded data in %d ms' % ( System.currentTimeMillis()-t0 ) )
+
+t1= hfr_spectra.property( QDataSet.DEPEND_0 )
+t2= wfr_spectra.property( QDataSet.DEPEND_0 )
+idx12= round( findex( t2, t1 ) )
+r= where( idx12.ge(0) .and( idx12.lt(wfr_spectra.length()) ) )
+idx12= idx12[r]
+wfr_spectra= wfr_spectra[idx12,:]
+hfr_spectra= hfr_spectra[r,:]
+t1= hfr_spectra.property( QDataSet.DEPEND_0 )
+
+logger.info('some unfamiliar process in %d ms' % ( System.currentTimeMillis()-t0 ) )
+  
+n1= hfr_spectra.length(0)
+n2= wfr_spectra.length(0)-2  # two channel overlap, don't use WFR here.
+f1= hfr_spectra.property( QDataSet.DEPEND_1 )
+f2= wfr_spectra.property( QDataSet.DEPEND_1 )
+result= FDataSet.createRank2( idx12.length(), n1+n2 )
+
+logger.info('about to do setItem #1 in %d ms' % ( System.currentTimeMillis()-t0 ) )
+result[ :, 0:n2 ] = wfr_spectra[:,0:n2]
+logger.info('about to do setItem #2 in %d ms' % ( System.currentTimeMillis()-t0 ) )
+result[ :, n2:n1+n2 ] = hfr_spectra
+
+logger.info('done with setItem in %d ms' % ( System.currentTimeMillis()-t0 ) )
+
