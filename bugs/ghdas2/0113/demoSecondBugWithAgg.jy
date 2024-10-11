@@ -1,0 +1,3 @@
+ds= getDataSet('https://space.physics.uiowa.edu/~jbf/juno/u/bill/20200110/dust*:00.000rateZ.txt')
+
+print ds

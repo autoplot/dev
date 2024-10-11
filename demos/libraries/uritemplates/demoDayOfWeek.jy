@@ -1,0 +1,18 @@
+setScriptDescription('''Print the current day of the week (in UT)''')
+
+lib= 'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import TimeUtil
+
+day= TimeUtil.now()
+
+dow= TimeUtil.dayOfWeek(day[0],day[1],day[2])
+
+days= ['Mon','Tues','Wed','Thurs','Fri','Sat','Sun']
+print dow, days[dow]
+
+
