@@ -1,0 +1,11 @@
+setScriptTitle('How Much Data in HAPI')
+setScriptDescription('''Counts the number of datasets on a HAPI server''')
+
+resourceURI= getParam( 'resourceURI', 'https://wdcapi.bgs.ac.uk/hapi', 'example file to load' )
+
+ff= getCompletions( 'vap+hapi:'+ resourceURI + '?id=' )
+
+print len(ff)
+if len(ff)<100:
+    for f in ff:
+        print f
