@@ -1,0 +1,8 @@
+from org.das2.qds import DataSetUtil
+setScriptTitle('Guess Cadence Corner Cases')
+setScriptDescription('''Test guessCadence against the corner cases.''')
+
+ds= linspace('2024-04-04T00:00Z','2024-04-04T00:00Z',0)
+
+print DataSetUtil.guessCadence(ds,None)
+print DataSetUtil.guessCadenceNew(ds,None)
