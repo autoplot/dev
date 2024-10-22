@@ -1,0 +1,11 @@
+setScriptDescription('''There was a bug introduced into getDataSet, I believe, where the timerange
+is ignored.  This demos.  See v2024a_8 which shows the bug.''')
+
+ee= '2013-01-12 07:10 to 2013-01-29 05:03'
+print ee
+#want to load AE index for each event
+#file has start and stop times 
+ae = getDataSet('vap+cdaweb:ds=OMNI_HRO_1MIN&filter=omni&id=AE_INDEX', ee)
+print ae, ae[0], ae[-1]
+tt= xtags(ae)
+print tt[0], tt[-1]
