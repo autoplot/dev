@@ -1,0 +1,21 @@
+setScriptDescription('''The gtlt operator will only appear when cb=True.''')
+
+cb= getParam( 'cb', False, 'filter data', [True,False] )
+if cb:
+    gtlt= getParam( 'gtlt', 'gt', 'greater than or less than', [ 'gt','lt' ] )
+    threshold= getParam( 'threshold', 10 )
+
+ds= getDataSet( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2016' )
+
+print extent(xtags(ds))
+if cb:
+    if gtlt=='gt':
+        r= where( ds.gt(threshold) )
+        ds= ds[r]
+    elif gtlt=='lt':
+        r= where( ds.lt(threshold) )
+        ds= ds[r]
+
+print extent(xtags(ds))
+
+plot( ds )
