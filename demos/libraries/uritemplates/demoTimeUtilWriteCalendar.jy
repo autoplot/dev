@@ -28,8 +28,8 @@ prevSat= TimeUtil.subtract( thisSat, [0,0,7,0,0,0,0] )
 print '[prev](%d%02d%02d_wk.md) [next](%d%02d%02d_wk.md)' \
     % ( prevSat[0], prevSat[1], prevSat[2], nextSat[0], nextSat[1], nextSat[2] )
 print ' '
-print '| sunday | monday | tuesday | wednes | thurs  | friday | saturday |'
-print '| ------ | ------ | ------  | ------ | ------ | ------ | ------   |'
+print '| sunday | monday | tuesday| wednes | thurs  | friday |saturday|'
+print '| ------ | ------ | ------ | ------ | ------ | ------ | ------ |'
 
 day= prevSat
 for i in xrange(7):
