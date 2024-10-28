@@ -1,0 +1,17 @@
+setScriptTitle('Demo Image4J')
+setScriptDescription('''Demonstrates use of Image4J for reading ico files.''')
+
+from java.io import FileInputStream
+from org.autoplot.imagedatasource import ImageDataSet
+import sys
+addToSearchPath( sys.path, \
+    'https://repo1.maven.org/maven2/org/jclarion/image4j/0.7/image4j-0.7.jar',monitor)
+ff= getFile( 'https://autoplot.org/favicon.ico' )
+
+from net.sf.image4j.codec.ico import ICODecoder
+result= ICODecoder.read( FileInputStream(ff) )
+
+print result
+
+imageDs= ImageDataSet(result.get(0))
+plot( imageDs )
