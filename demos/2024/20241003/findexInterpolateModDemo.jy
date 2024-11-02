@@ -1,0 +1,14 @@
+setTitle('findex/interpolateMod demo')
+setScriptDescription('''findex/interpolateMod demo shows how findex and
+interpolateMod are used to interpolate angles to a common grid.''')
+
+se_lon= getDataSet('vap+cdaweb:ds=PSP_HELIO1DAY_POSITION&filter=psp&id=SE_LON&timerange=2021-06 to 2021-08')
+
+tt= getDataSet('vap+cdaweb:ds=PSP_ISOIS_L2-EPHEM&filter=psp&id=HGC_Lon&timerange=2021-06 to 2021-08')
+tt = xtags(tt)
+
+#se_lon = synchronize(tt,se_lon)
+se_lon2 = interpolateMod(se_lon,dataset('360deg'),findex(xtags(se_lon),tt))
+reset()
+p,_= plot(0, se_lon)
+plot(1, se_lon2, yrange=p.yaxis.range)

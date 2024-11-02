@@ -1,0 +1,38 @@
+setScriptTitle('Make Markdown Week Calendar')
+setScriptDescription('''Write the header of my weekly log, which contains a one-week calendar ''')
+
+day= getParam('date','now','now or a date containing the week', { 'examples':['now+P7D','now','now-P7D'] } )
+
+lib= 'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+from org.hapiserver import TimeUtil
+
+if day=='now':
+    day= TimeUtil.now()
+else:
+    day= TimeUtil.parseISO8601Time(day)
+    
+day= TimeUtil.parseISO8601Time( TimeUtil.floor( TimeUtil.formatIso8601Time(day) ) )
+
+today= TimeUtil.dayOfWeek(day[0],day[1],day[2])
+
+thisSat= TimeUtil.add( [0,0,5-today,0,0,0,0], day )
+nextSat= TimeUtil.add( [0,0,7,0,0,0,0], thisSat )
+prevSat= TimeUtil.subtract( thisSat, [0,0,7,0,0,0,0] )
+
+
+print '[prev](%d%02d%02d_wk.md) [next](%d%02d%02d_wk.md)' \
+    % ( prevSat[0], prevSat[1], prevSat[2], nextSat[0], nextSat[1], nextSat[2] )
+print ' '
+print '| sunday | monday | tuesday| wednes | thurs  | friday |saturday|'
+print '| ------ | ------ | ------ | ------ | ------ | ------ | ------ |'
+
+day= prevSat
+for i in xrange(7):
+    day= TimeUtil.add( day, [0,0,1,0,0,0,0] )
+    print '| %6d' % ( day[2] ),
+print '|'

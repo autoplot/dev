@@ -28,4 +28,8 @@ tt.putProperty( QDataSet.FORMAT, '$Y-$m-$dT$H:$M:$S.$(subsec;places=9)' )
 ds= link( tt, dataset( [1,2,3,2,3,4] ) )
 formatDataSet( ds,'/tmp/ap/fineCadenceTimeTags.2.dat')
 
-
+# I'm not sure how formats are specified when data is time.  There's a different
+# code which formats to CSV.
+tt.putProperty( QDataSet.FORMAT, '$Y-$m-$dT$H:$M:$S.$(subsec;places=9)' )
+ds= link( tt, dataset( [1,2,3,2,3,4] ) )
+formatDataSet( ds,'/tmp/ap/fineCadenceTimeTags.2.csv')
