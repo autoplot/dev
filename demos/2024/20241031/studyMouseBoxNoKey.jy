@@ -1,6 +1,6 @@
 from org.das2.event import BoxSelectionEvent
 
-setScriptDescription('''Demo box mouse event which is triggered by a key stroke.  This
+setScriptDescription('''Demo box mouse event which drawn with a mouse drag.  This
 script shows how to get both the box range and where the box was finished.''')
 
 def box(evt):
