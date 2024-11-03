@@ -1,4 +1,5 @@
-setScriptDescription('Demo box mouse event which is triggered by a key stroke')
+setScriptDescription('''Demo box mouse event which is triggered by a key stroke.  See
+https://github.com/das-developers/das2java/issues/116.''')
 
 def boxKey(evt):
     key= evt.getPlane('keyChar')
