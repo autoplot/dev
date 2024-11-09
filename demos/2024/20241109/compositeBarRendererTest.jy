@@ -22,9 +22,9 @@ rend= CompositeBarRenderer()
 rend.colors= [ ColorUtil.DARK_OLIVE_GREEN, ColorUtil.CHOCOLATE, ColorUtil.CADET_BLUE, ColorUtil.GOLDENROD ]
 plot( 0, ds, renderer=rend, renderType='internal>fillColor=gray&color=black', xrange=[0,2000], yrange=[-1,40] )
 
-annotext= '''!(painter;psym;boxes;size=0.8em;color=goldenRod) mode 1
-!(painter;psym;boxes;size=0.8em;color=cadetBlue) mode 2
-!(painter;psym;boxes;size=0.8em;color=chocolate) mode 3
-!(painter;psym;boxes;size=0.8em;color=darkOliveGreen) mode 4
+annotext= '''!(painter;psym;boxes;size=0.8em;color=goldenRod) mode 4
+!(painter;psym;boxes;size=0.8em;color=cadetBlue) mode 3
+!(painter;psym;boxes;size=0.8em;color=chocolate) mode 2
+!(painter;psym;boxes;size=0.8em;color=darkOliveGreen) mode 1
 '''
 annotation( 0, text=annotext.replace('\n','<br>' ) )
