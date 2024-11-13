@@ -1,5 +1,5 @@
 import sys
-addToSearchPath( sys.path,'https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.5.6.zip/groovy-2.5.6/lib/groovy-2.5.6.jar',monitor )
+addToSearchPath( sys.path,'https://repo1.maven.org/maven2/org/codehaus/groovy/groovy/3.0.23/groovy-3.0.23.jar',monitor )
 
 from java.lang import Thread
 
