@@ -1,3 +1,7 @@
+setScriptDescription('''Demo script which accepts key events during a mouse drag.  This shows a histogram of 
+selected data in the lower left plot when "1" is pressed and the lower right when "2" is pressed.  Note
+this requires Autoplot v2024a_10 or 20241108a which contains a bug fix in the addMouseModule code.''')
+
 #ds= randn(2000,2000) + sin(linspace(0,PI,2000)) 
 
 ds= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspb/l4/emfisis/wna-survey/2015/rbsp-b_wna-survey_emfisis-l4_20150106_v2.0.1.cdf?bsum')
