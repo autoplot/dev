@@ -1,3 +1,5 @@
+from org.das2.graph import Painter
+from java.awt.geom import Rectangle2D
 setScriptDescription('''Demo script which accepts key events during a mouse drag.  This shows a histogram of 
 selected data in the lower left plot when "1" is pressed and the lower right when "2" is pressed.  Note
 this requires Autoplot v2024a_10 or 20241108a which contains a bug fix in the addMouseModule code.  This
@@ -10,25 +12,76 @@ ds= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspb/l4/emfisis/wna-
 reset()
 addPlots(1,2,'below')
 
-p,pe= plot( 0, ds )
+p,_= plot( 0, ds )
+annotation( 0, plotId=dom.plots[2].id, text='Box 1 Histogram', anchorPosition='NW', anchorOffset='', background=None )
+annotation( 1, plotId=dom.plots[1].id, text='Box 2 Histogram', anchorPosition='NW', anchorOffset='', background=None )
 
-def action(evt):
-    print evt
+boxes=[None,None,None] # only boxes[1] and boxes[2] are used
+
+class BoxesPainter( Painter ):
+    def paint( self,g ):
+        global boxes,p
+        
+        dasplot= p.controller.dasPlot
+        b= boxes[1]
+        if b==None: return
+        ix0= dasplot.getXAxis().transform(b.slice(0).slice(0))
+        ix1= dasplot.getXAxis().transform(b.slice(0).slice(1))
+        iy0= dasplot.getYAxis().transform(b.slice(1).slice(0))
+        iy1= dasplot.getYAxis().transform(b.slice(1).slice(1))
+        rect= Rectangle2D.Double(ix0,iy1,ix1-ix0,iy0-iy1)
+        g.draw(rect)
+        g.drawString("Box 1",ix0,iy0)
+        g.color= Color.gray
+        g.draw(rect)
+        g.drawString("Box 1",ix0+1,iy0+1)
+        g.color= Color.black
+        
+        b= boxes[2]
+        if b==None: return
+        ix0= dasplot.getXAxis().transform(b.slice(0).slice(0))
+        ix1= dasplot.getXAxis().transform(b.slice(0).slice(1))
+        iy0= dasplot.getYAxis().transform(b.slice(1).slice(0))
+        iy1= dasplot.getYAxis().transform(b.slice(1).slice(1))
+        rect= Rectangle2D.Double(ix0,iy1,ix1-ix0,iy0-iy1)
+        g.draw(rect)
+        g.drawString("Box 2",ix0,iy0)
+        g.color= Color.gray
+        g.draw(rect)
+        g.drawString("Box 2",ix0+1,iy0+1)
+        g.color= Color.black
+    
+        print boxes
+    
+def updateHistograms( whichBox, xrange, yrange ):
     xtag= xtags(ds)
     ytag= ytags(ds)
-    rx= where( within( xtag, evt.getXRange() ) ) 
-    ry= where( within( ytag, evt.getYRange() ) )
+    rx= where( within( xtag, xrange ) ) 
+    ry= where( within( ytag, yrange ) )
     zz= ds[rx[0]:rx[-1],ry[0]:ry[-1]]
     
     h= histogram(zz,100)
-    k1= evt.getPlane('keyChar')
-    if ( k1=='2' ):
-        plot( 2, h, xrange=[1e-9,1e-2] )
+    
+    if ( whichBox=='2' ):
+        plot( 2, h, xrange=[1e-9,1e-2], ylog=False )
+        boxes[2]= join( dataset(xrange), dataset(yrange) )
     else:
-        plot( 1, h, xrange=[1e-9,1e-2] )
+        plot( 1, h, xrange=[1e-9,1e-2], ylog=False )
+        boxes[1]= join( dataset(xrange), dataset(yrange) )
+    global p
+    print p
+    dom.canvases[0].controller.dasCanvas.removeTopDecorators()
+    dom.canvases[0].controller.dasCanvas.addTopDecorator(BoxesPainter())
+    
+def action(evt):
+    global boxes
+    print evt
+    k1= evt.getPlane('keyChar')
+    invokeLater( updateHistograms, k1, evt.getXRange(), evt.getYRange() ) 
     
 mm= addMouseModule(p,'distribution within box',action)
 
 mm.keyEvents= True
 mm.dragEvents= False
 mm.releaseEvents= False
+
