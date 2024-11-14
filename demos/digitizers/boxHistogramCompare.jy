@@ -1,0 +1,33 @@
+setScriptDescription('''Demo script which accepts key events during a mouse drag.  This shows a histogram of 
+selected data in the lower left plot when "1" is pressed and the lower right when "2" is pressed.  Note
+this requires Autoplot v2024a_10 or 20241108a which contains a bug fix in the addMouseModule code.''')
+
+#ds= randn(2000,2000) + sin(linspace(0,PI,2000)) 
+
+ds= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspb/l4/emfisis/wna-survey/2015/rbsp-b_wna-survey_emfisis-l4_20150106_v2.0.1.cdf?bsum')
+
+reset()
+addPlots(1,2,'below')
+
+p,pe= plot( 0, ds )
+
+def action(evt):
+    print evt
+    xtag= xtags(ds)
+    ytag= ytags(ds)
+    rx= where( within( xtag, evt.getXRange() ) ) 
+    ry= where( within( ytag, evt.getYRange() ) )
+    zz= ds[rx[0]:rx[-1],ry[0]:ry[-1]]
+    
+    h= histogram(zz,100)
+    k1= evt.getPlane('keyChar')
+    if ( k1=='2' ):
+        plot( 2, h, xrange=[1e-9,1e-2] )
+    else:
+        plot( 1, h, xrange=[1e-9,1e-2] )
+    
+mm= addMouseModule(p,'distribution within box',action)
+
+mm.keyEvents= True
+mm.dragEvents= False
+mm.releaseEvents= False
