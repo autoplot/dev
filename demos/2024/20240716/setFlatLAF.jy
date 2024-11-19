@@ -1,0 +1,38 @@
+setScriptDescription('''Demo how you can switch the Java Swing Look and Feel (laf) at 
+runtime.  See also darkLookAndFeelExperiment.jy which
+experiments with a dark mode.''')
+
+lightOrDark= getParam( 'lightOrDark', 'light', 'Normal or Dark Mode', ['light','dark'] )
+
+all=  getParam( 'all', True, 'Also change canvas', [True,False] )
+
+from javax.swing import UIManager
+from com.formdev.flatlaf import FlatLightLaf,FlatDarkLaf
+
+def doSetLAF():
+    if lightOrDark=='light':
+        UIManager.setLookAndFeel( FlatLightLaf() );
+        UIManager.put( "TabbedPane.selectedBackground", Color.white )
+        UIManager.put( "ScrollBar.showButtons", True )
+        if all:
+            dom.options.foreground= Color.BLACK
+            dom.options.background= Color.WHITE
+    else:
+        UIManager.setLookAndFeel( FlatDarkLaf() );
+        UIManager.put( "ScrollBar.showButtons", True )
+        UIManager.put( "TabbedPane.selectedBackground", Color.black )
+        if all:
+            dom.options.foreground= Color.WHITE
+            dom.options.background= Color.BLACK
+    
+from javax.swing import SwingUtilities
+from java.lang import Runnable
+
+class MyRun(Runnable):
+    def run( self ):
+        doSetLAF()
+        x= getViewWindow()
+        SwingUtilities.updateComponentTreeUI( x )
+        
+SwingUtilities.invokeLater(MyRun())
+
