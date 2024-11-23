@@ -1,9 +1,10 @@
-from org.das2.qds import FDataSet
+from org.das2.qds import FDataSet,SemanticOps
 from org.das2.util import LoggerManager
 from java.lang import System
 setScriptTitle('Demo Jython setitem slow')
 setScriptDescription('''Code which was overly cautious was introduced, making combineHfrWfr.jyds 
-awfully slow.  This script demos the problem.
+awfully slow.  This script demos the problem.  See bug 2391 which is related and commit 26050
+talks about this: https://sourceforge.net/p/autoplot/bugs/2391/   
 ''')
 
 logger= LoggerManager.getLogger('analysis')
@@ -45,6 +46,8 @@ n2= wfr_spectra.length(0)-2  # two channel overlap, don't use WFR here.
 f1= hfr_spectra.property( QDataSet.DEPEND_1 )
 f2= wfr_spectra.property( QDataSet.DEPEND_1 )
 result= FDataSet.createRank2( idx12.length(), n1+n2 )
+
+SemanticOps.oneUnit(hfr_spectra)
 
 logger.info('about to do setItem #1 in %d ms' % ( System.currentTimeMillis()-t0 ) )
 result[ :, 0:n2 ] = wfr_spectra[:,0:n2]
