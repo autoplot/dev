@@ -25,8 +25,8 @@ nextSat= TimeUtil.add( [0,0,7,0,0,0,0], thisSat )
 prevSat= TimeUtil.subtract( thisSat, [0,0,7,0,0,0,0] )
 
 
-print '[prev](%d%02d%02d_wk.md) [next](%d%02d%02d_wk.md)' \
-    % ( prevSat[0], prevSat[1], prevSat[2], nextSat[0], nextSat[1], nextSat[2] )
+print '[prev](%d%02d%02d_wk.md) %d%02d%02d [next](%d%02d%02d_wk.md)' \
+    % ( prevSat[0], prevSat[1], prevSat[2], thisSat[0], thisSat[1], thisSat[2], nextSat[0], nextSat[1], nextSat[2] )
 print ' '
 print '| sunday | monday | tuesday| wednes | thurs  | friday |saturday|'
 print '| ------ | ------ | ------ | ------ | ------ | ------ | ------ |'
@@ -36,3 +36,9 @@ for i in xrange(7):
     day= TimeUtil.add( day, [0,0,1,0,0,0,0] )
     print '| %6d' % ( day[2] ),
 print '|'
+print ''
+print ''
+print 'At Home:'
+print ''
+print 'On Campus:'
+print '*'
