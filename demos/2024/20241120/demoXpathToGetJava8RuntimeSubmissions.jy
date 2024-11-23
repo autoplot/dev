@@ -38,7 +38,7 @@ def shouldInclude( fxml ):
         except:
             return # there are some without valid timetags
         if ( when>sinceTime ):
-            print who, java, when[0:10]
+            print who, java, when[0:10], fxml
     
 ff= listDirectory( '/home/jbf/uploads/*.xml' )
 for f in ff:
