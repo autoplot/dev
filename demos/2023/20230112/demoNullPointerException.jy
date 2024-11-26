@@ -1,0 +1,6 @@
+plot( 'https://pds-ppi.igpp.ucla.edu/data/GO-J-PWS-5-DDR-PLASMA-DENSITY-FULL-V1.0/DATA/00_JUPITER/FPE_1996_05_26_V01.LBL?FREQ_PE' )
+ds= dom.dataSourceFilters[0].controller.dataSet
+evt= identifyContinuousBlocks( datum('2.0 min'), None, None, xtags(ds) )
+plot( 1, evt )
+
+dom.timeRange= datumRange('1996-05-26 2:19 to 11:07')
