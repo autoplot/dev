@@ -1,0 +1,17 @@
+setScriptDescription('''Demo box mouse event which is triggered by a key stroke.  See
+https://github.com/das-developers/das2java/issues/116.''')
+
+def boxKey(evt):
+    key= evt.getPlane('keyChar')
+    xr= evt.getXRange()
+    yr= evt.getYRange()
+    text='xrange: %s<br>yrange: %s<br>key: %s' % ( xr, yr, key )
+    print text
+    annotation( 0, text=text, anchorType='data', \
+        xrange=xr, yrange=yr, plotId=dom.plots[0].id, \
+        borderType='rounded_rectangle' )
+    
+mm= addMouseModule(dom.plots[0],'draw_box_key',boxKey)
+mm.keyEvents= True
+mm.dragEvents= False
+mm.releaseEvents= False

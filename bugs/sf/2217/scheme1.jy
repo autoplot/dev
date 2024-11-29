@@ -1,0 +1,12 @@
+setScriptDescription('''Demo data for studying bug 2217''')
+
+data= randn(5,100,3)/2
+data[:,:,0]=data[:,:,0]+10+outerProduct(ones(5),3*sin(linspace(0,5*TAU,100)))
+data[:,:,1]=data[:,:,1]+15+outerProduct(ones(5),3*sin(linspace(0,7*TAU,100)))
+data[:,:,2]=data[:,:,2]+20+outerProduct(ones(5),3*sin(linspace(0,9*TAU,100)))
+data.putProperty( QDataSet.COORDINATE_FRAME, 'TEST' )
+data.putProperty( QDataSet.DEPEND_2, labelsDataset(['X','Y','Z']) )
+data.putProperty( QDataSet.DEPEND_0, \
+   labelsDataset(['Sensor1','Sensor2','Sensor3','Sensor4','Sensor5']) )
+
+plot( data )

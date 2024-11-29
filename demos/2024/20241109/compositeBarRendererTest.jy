@@ -1,0 +1,30 @@
+from org.das2.util import ColorUtil
+setScriptTitle('Test Box and Whisker')
+
+ds= zeros(15,4)
+xx= dataset( linspace(100,1500,15), label='x-position' )
+yy= labelsDataset( [ 'mode1', 'mode2', 'mode3', 'mode4' ] )
+ds= dataset( xx, yy, ds )
+# make up some populations 
+randomSeed(0)
+ds[:,0]= 6 + accum(randn(15))
+ds[:,1]= 8 + accum(randn(15))
+ds[:,2]= 4 + accum(randn(15))
+ds[:,3]= 5 + accum(randn(15))
+
+
+ff= getFile( PWD + 'compositeBarRenderer.jy', monitor.getSubtaskMonitor('get compositeBarRenderer') )
+execfile( str(ff) )
+
+reset()
+
+rend= CompositeBarRenderer()
+rend.colors= [ ColorUtil.DARK_OLIVE_GREEN, ColorUtil.CHOCOLATE, ColorUtil.CADET_BLUE, ColorUtil.GOLDENROD ]
+plot( 0, ds, renderer=rend, renderType='internal>fillColor=gray&color=black', xrange=[0,2000], yrange=[-1,40] )
+
+annotext= '''!(painter;psym;boxes;size=0.8em;color=goldenRod) mode 4
+!(painter;psym;boxes;size=0.8em;color=cadetBlue) mode 3
+!(painter;psym;boxes;size=0.8em;color=chocolate) mode 2
+!(painter;psym;boxes;size=0.8em;color=darkOliveGreen) mode 1
+'''
+annotation( 0, text=annotext.replace('\n','<br>' ) )

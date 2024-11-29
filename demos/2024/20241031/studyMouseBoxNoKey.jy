@@ -1,0 +1,26 @@
+from org.das2.event import BoxSelectionEvent
+
+setScriptDescription('''Demo box mouse event which drawn with a mouse drag.  This
+script shows how to get both the box range and where the box was finished.''')
+
+def box(evt):
+    assert isinstance( evt, BoxSelectionEvent )
+    xr= evt.getXRange()
+    yr= evt.getYRange()
+    
+    if evt.getFinishX()==xr.max():
+        eastWest='E'
+    else:
+        eastWest='W'
+    if evt.getFinishY()==yr.max():
+        northSouth='N'
+    else:
+        northSouth='S'
+        
+    text='xrange: %s<br>yrange: %s' % ( xr, yr )
+    print text
+    annotation( 0, text=text, anchorType='data', \
+        xrange=xr, yrange=yr, plotId=dom.plots[0].id, \
+        borderType='rounded_rectangle', anchorPosition=northSouth+eastWest )
+    
+mm= addMouseModule(dom.plots[0],'draw_box',box)

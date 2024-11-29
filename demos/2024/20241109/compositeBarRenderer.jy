@@ -1,0 +1,60 @@
+from org.das2.qds import SemanticOps
+import  org.das2.graph.Renderer
+
+class CompositeBarRenderer( org.das2.graph.Renderer ):
+    def __init__(self):
+        self.colors= None
+        
+    def setColors( self, colors ):
+        self.colors= colors
+        
+    def doAutorange( self, ds ):
+        print 'autorange ', ds
+        yrng= extent(total(ds,1))
+        yrng[0]= 0
+        yrng= rescaleRange( yrng, -0.1, 1.1 )
+        xrng= extent( SemanticOps.xtagsDataSet(ds) )
+        xrng= rescaleRange( xrng, -0.1, 1.1 )
+        print xrng, yrng
+        return join( xrng, yrng )
+        
+    '''Composite bar plot where data is ds[n,m].  Bars are drawn for the height of each element j of ds[i,j]'''
+    def render( self, g, xAxis, yAxis, mon=None ):
+        ds= self.getDataSet()
+        if ( ds==None ):
+               print 'ds is None'
+               return
+        xx= ds.property( QDataSet.DEPEND_0 )
+        yy= ds
+        w= ( xx[1]-xx[0] ) * 0.50
+        xunits= SemanticOps.getUnits(xx)
+        yunits= SemanticOps.getUnits(yy)
+        sfillColor= self.getControl('fillColor','blue')
+        from org.das2.util import ColorUtil
+        fillColor= ColorUtil.decodeColor(sfillColor)
+        scolor= self.getControl('color','black')
+        colr= ColorUtil.decodeColor(scolor)
+        for i in xrange( 0,xx.length() ):
+            x= xx[i]
+            ds1= ds[i]
+            h=0
+            for j in xrange( 0, len(ds1) ):
+                m0= h
+                m1= h + ds1[j]  
+                xmid= int( xAxis.transform( x, xunits ) )
+                xmin= int( xAxis.transform( x-w/2, xunits ) )
+                xmax= int( xAxis.transform( x+w/2, xunits ) )
+                ymin= int(yAxis.transform(m0,yunits))
+                ymax= int(yAxis.transform(m1,yunits))
+                
+                if ( self.colors==None or len(self.colors)<j ):
+                    g.setColor( fillColor )
+                else:
+                    g.setColor( self.colors[j] )
+                    
+                g.fillRect( xmin, ymax,
+                        xmax-xmin, ymin-ymax )
+                g.setColor( colr )
+                g.drawRect( xmin, ymax,
+                        xmax-xmin, ymin-ymax )
+                h= h+ds1[j]

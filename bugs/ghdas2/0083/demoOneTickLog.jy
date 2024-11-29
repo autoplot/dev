@@ -1,0 +1,15 @@
+from javax.swing import JPanel
+from org.das2.graph import DasCanvas,DasAxis,DasColumn,DasRow
+cc= DasCanvas(400,400)
+ax= DasAxis(DatumRange.newRange(7.8e-18,9.7e-17),DasAxis.LEFT)
+ax.setLog(True)
+row= DasRow.create(cc)
+col= DasColumn.create(cc,None,'50%','80%')
+
+cc.add(ax,row,col)
+
+panel= JPanel()
+panel.add(cc)
+
+getApplication().getTabs().addTab('test',panel)
+getApplication().revalidate()

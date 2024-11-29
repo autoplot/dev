@@ -1,0 +1,24 @@
+from java.io import File
+from java.util.regex import Pattern
+setScriptDescription('''Fix markdown links in markdown ported from Mediawiki''')
+
+root= '/home/jbf/ct/autoplot/git/documentation/md/'
+ff= listDirectory( root + '*.md')
+
+pattern= Pattern.compile('<http://autoplot.org//?([A-Za-z0-9_]+)>')
+
+def fixLinks( f ):
+    out= open( f+".t", 'w' )
+    for line in open( f,'r' ):
+        m= pattern.matcher(line)
+        if m.find():
+            print 'found one'
+            line= m.replaceAll('[$1]($1.md)')
+        out.write(line)
+    out.close()
+    File(f+".t").renameTo(File(f))
+    
+for f in ff:
+    print f
+    fixLinks(root+f)
+    

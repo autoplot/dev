@@ -1,0 +1,45 @@
+from javax.xml.xpath import XPathFactory,XPathConstants
+from javax.xml.parsers import DocumentBuilderFactory
+from org.xml.sax import InputSource
+from java.io import FileInputStream,InputStreamReader
+
+setScriptDescription('''How many people are still using Java 8?  Could the runtime submissions 
+in the last year which do not use Install4J and use Java 8.''')
+
+sinceTime= '2024-01-01'
+tp= TimeParser.create('$Y$m$d')
+print tp.parse('20230706').getTimeDatum().toString()
+
+def readDocument( f ):
+    input= FileInputStream(f)
+    source = InputSource()
+    source.setCharacterStream(InputStreamReader(input))
+    domFactory= DocumentBuilderFactory.newInstance()
+    builder = domFactory.newDocumentBuilder()
+    builder.setErrorHandler(None)
+    document= builder.parse(source)
+    return document
+    
+def shouldInclude( fxml ):
+    try:
+        doc= readDocument( fxml )
+    except:
+        return
+    xp= XPathFactory.newInstance().newXPath()
+    releaseType=xp.evaluate( "//exceptionReport/platform/property[@name='autoplot.release.type']/@value",doc,XPathConstants.STRING)
+    if ( releaseType!='install4j' ):
+        who=xp.evaluate( '//exceptionReport/userName/text()',doc,XPathConstants.STRING)
+        java=xp.evaluate( "//exceptionReport/platform/property[@name='java.version']/@value",doc,XPathConstants.STRING)
+        #rte_0874959786_20230706_090011_jbf.xml
+        i= fxml.rfind('/')
+        time= fxml[i+16:i+26]
+        try:
+            when= tp.parse(time).getTimeDatum().toString()
+        except:
+            return # there are some without valid timetags
+        if ( when>sinceTime ):
+            print who, java, when[0:10], fxml
+    
+ff= listDirectory( '/home/jbf/uploads/*.xml' )
+for f in ff:
+    shouldInclude( '/home/jbf/uploads/' + f )

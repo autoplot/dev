@@ -1,0 +1,27 @@
+from java.util import ArrayList,Arrays
+setScriptDescription('Show the files found in one directory but not another')
+
+dir1= getParam( 'dir1', '/home/jbf/ct/autoplot/git/documentation/to_md/' )
+dir2= getParam( 'dir2', '/home/jbf/ct/autoplot/git/documentation/md/' )
+glob= getParam( 'glob', '*.md', 'glob to match', { 'examples':['','*.md'] } )
+
+ff1= listDirectory(dir1+glob)
+ff2= listDirectory(dir2+glob)
+
+ff= ArrayList( Arrays.asList(ff1) )
+for f in ff2: 
+    ff.remove(f)
+print 'Files in dir1 not in dir2:'
+for f in ff:
+    print f
+
+print '--'
+
+ff=ArrayList( Arrays.asList(ff2) )
+for f in ff1: 
+    ff.remove(f)
+print 'Files in dir2 not in dir1:'
+for f in ff:
+    print f
+        
+print '--'
