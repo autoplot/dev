@@ -18,6 +18,4 @@ bb= lldd.boundaries( datum(2.5), datum(218) )
 for i in xrange(bb.getLength()):
     print bb.get(i),
 print ''
-
-# The bug is: 4.0  6.0  8.0  10.0  30.0  50.0  70.0  90.0  100.0   
-# Should be : 4.0  6.0  8.0  10.0  20.0  40.0  80.0  100.0   
+print '4.0  6.0  8.0  10.0  20.0  40.0  80.0  100.0  <-- it should be'
