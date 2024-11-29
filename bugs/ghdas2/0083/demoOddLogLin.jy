@@ -1,7 +1,15 @@
 from org.das2.datum import LogLinDomainDivider
 
 setScriptDescription('''Demo where LogLinDomainDivider is failing
-when the mantissa step size is 2.''')
+when the mantissa step size is 2.  The bug is <pre>
+4.0  6.0  8.0  10.0  30.0  50.0  70.0  90.0  100.0  
+</pre> 
+when it should be <pre> 
+4.0  6.0  8.0  10.0  20.0  40.0  80.0  100.0   
+</pre>
+.
+
+''')
 
 lldd= LogLinDomainDivider.create()
 lldd= lldd.coarserDivider(True)
