@@ -1,0 +1,22 @@
+from java.io import File
+
+t= TimeUtil.now()
+groundTemp= getDataSet(PWD + "readYoSmartTemperatureSensor.jyds?name='ground temperature'" )
+poolTemp= getDataSet(PWD + "readYoSmartTemperatureSensor.jyds?name='pool temperature'" )
+t2= TimeUtil.now()
+
+t= t+(t2-t)/2
+ff= TimeParser.create('$Y/$Y$m$d.csv').format(t)
+ff= '/home/jbf/data/yosmart/db/' + ff
+
+mkdir( File(ff).getParentFile().toString()+'/' )
+
+if not File(ff).exists():
+    f= open(ff,'w')
+    f.write( 'time,groundTemp(F),poolTemp(F)\n' )
+else:
+    f= open(ff,'a')
+    
+f.write( '%s,%.2f,%.2f\n' % (t,groundTemp,poolTemp) )
+f.close()
+
