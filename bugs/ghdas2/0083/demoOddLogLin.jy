@@ -5,17 +5,30 @@ when the mantissa step size is 2.  The bug is <pre>
 4.0  6.0  8.0  10.0  30.0  50.0  70.0  90.0  100.0  
 </pre> 
 when it should be <pre> 
-4.0  6.0  8.0  10.0  20.0  40.0  80.0  100.0   
+4.0  6.0  8.0  10.0  20.0  40.0  60.0  80.0  100.0   
 </pre>
 .
 
 ''')
 
+significand= getParam('significand',5,'step within each decade',[1,2,5])
+
+print 'significand is ', significand
+
 lldd= LogLinDomainDivider.create()
-lldd= lldd.coarserDivider(True)
+if significand==2:
+    lldd= lldd.coarserDivider(True)
+elif significand==5:
+    lldd= lldd.coarserDivider(True).coarserDivider(False)
 
 bb= lldd.boundaries( datum(2.5), datum(218) )
 for i in xrange(bb.getLength()):
     print bb.get(i),
 print ''
-print '4.0  6.0  8.0  10.0  20.0  40.0  80.0  100.0  <-- it should be'
+
+if significand==2 :
+    print '4.0  6.0  8.0  10.0  20.0  40.0  60.0  80.0  100.0  200.0<-- it should be'
+elif significand==5:
+    print '5.0  10.0  50.0  100.0   <-- it should be'
+elif significand==1:
+    print '3.0  4.0  5.0  6.0  7.0  8.0  9.0  10.0  20.0  30.0  40.0  50.0  60.0  70.0  80.0  90.0  100.0  200.0 <-- it should be'
