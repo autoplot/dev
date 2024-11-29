@@ -68,8 +68,7 @@ def updateHistograms( whichBox, xrange, yrange ):
     else:
         plot( 1, h, xrange=[1e-9,1e-2], ylog=False )
         boxes[1]= join( dataset(xrange), dataset(yrange) )
-    global p
-    print p
+
     dom.canvases[0].controller.dasCanvas.removeTopDecorators()
     dom.canvases[0].controller.dasCanvas.addTopDecorator(BoxesPainter())
     
