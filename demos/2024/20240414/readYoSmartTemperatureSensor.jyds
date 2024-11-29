@@ -1,0 +1,28 @@
+setScriptDescription('''Read temperature from YoSmart device.  
+See %syoSmart.jy.  This also demonstrates how separate Jython codes
+can share common code without multiple copies.''' % PWD  )
+
+clientId= getParam( 'clientId', 'ua_94B198BC9CF44A76ACA9B38DDC566AA7', 
+                    'UAID on User Access Credentials screen, starts with "ua_"' )
+clientSecret= getParam( 'clientSecret','',
+                    'Secret Key on User Access Credentials screen, starts with "sec_", empty will use from secrets file.')
+deviceName= getParam( 'name', 'attic temperature', 'device name', { 'examples':['pool temperature','ground temperature'] } )
+
+execfile( str( getFile(PWD+'persistentSecrets.jy') ) )
+execfile( str( getFile(PWD+'yoSmart.jy') ) )
+            
+if clientSecret=='':
+    clientSecret=getSecret('yoSmart-'+clientId,'clientSecret')
+else:
+    setSecret( 'yoSmart-'+clientId,'clientSecret',clientSecret )
+       
+        
+accessToken= getAccessToken( clientId, clientSecret )
+
+device= getDeviceByName(accessToken,name=deviceName)
+
+t= getTemperature( accessToken, device.get('deviceId'), device.get('token') )
+t= Units.fahrenheitScale.createDatum(t)
+
+result= dataset(t)
+
