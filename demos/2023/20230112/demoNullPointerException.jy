@@ -1,3 +1,4 @@
+setScriptDescription('''Demo NullPointerException which would happen with identifyContinuousBlocks.''')
 plot( 'https://pds-ppi.igpp.ucla.edu/data/GO-J-PWS-5-DDR-PLASMA-DENSITY-FULL-V1.0/DATA/00_JUPITER/FPE_1996_05_26_V01.LBL?FREQ_PE' )
 ds= dom.dataSourceFilters[0].controller.dataSet
 evt= identifyContinuousBlocks( datum('2.0 min'), None, None, xtags(ds) )
