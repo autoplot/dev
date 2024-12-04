@@ -1,13 +1,17 @@
+from javax.swing import JCheckBox
 setScriptDescription('demo new log tickV descriptor')
 
 dom.plots[0].yaxis.log= True
 dom.plots[0].yaxis.range= datumRange( '0.00129 to 0.087' )
 
+cb= JCheckBox('Run',True)
+getApplication().setBottomPanel(cb)
+
 while ( True ):
     for i in xrange(100):
-        dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(0.01,0.99)
+        if cb.selected: dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(0.01,0.99)
         sleep(30)
     for i in xrange(100):
-        dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(-0.01,1.01)
+        if cb.selected: dom.plots[0].yaxis.range= dom.plots[0].yaxis.range.rescale(-0.01,1.01)
         sleep(30)
         
