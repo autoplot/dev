@@ -1,0 +1,15 @@
+setScriptDescription('''New features for IDLSav export including text strings and
+named variables.''')
+
+author= dataset('Jeremy')
+
+ds= sawtooth(linspace(0,TAU*10,1001))
+
+sds= labelsDataset(['aaaa','bbbb','cccc'])
+
+ds.putProperty(QDataSet.UNITS,Units.dimensionless)
+
+formatDataSet( author,'/tmp/ap/newfeaturesidl.sav?Author')
+#formatDataSet( ds,'/tmp/ap/newfeaturesidl.sav?Data1')
+#formatDataSet( sds,'/tmp/ap/newfeaturesidl.sav?SDATA')
+
