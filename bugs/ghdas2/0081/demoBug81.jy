@@ -1,6 +1,7 @@
 from org.das2.datum import DatumUtil
-print DatumRangeUtil.parseTimeRange('2023-09-06T2350/2023-09-07T0040')
+print DatumRangeUtil.parseISO8601Range('2023-09-06T2350/2023-09-07T0040')
+print DatumRangeUtil.parseISO8601Range('2023-04-07T16:30/17:00')
 try:
-    print DatumRangeUtil.parseTimeRange('2023-04-07T1630/1700')
+    print DatumRangeUtil.parseISO8601Range('2023-04-07T1630/1700')
 except:
     print 'does not parse!'

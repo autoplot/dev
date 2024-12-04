@@ -15,22 +15,27 @@ addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/jcodec/jcodec-javas
 addToSearchPath(sys.path,'https://repo1.maven.org/maven2/org/jcodec/jcodec/0.2.5/jcodec-0.2.5.jar',monitor.getSubtaskMonitor('jar2'))
 from org.jcodec.api.awt import AWTSequenceEncoder
 
-enc = AWTSequenceEncoder.createSequenceEncoder(outf,24)
+enc = AWTSequenceEncoder.createSequenceEncoder(outf,48)
 
-step=10
+step=5
 limit=10000
 N = 100
+
+setCanvasSize(640,640)
 
 monitor.setTaskSize( limit )
 monitor.started()
 
+randomSeed(0)
+xx= accum( randn(limit) )
+randomSeed(2)
+yy= accum( randn(limit) )
+
 while N<limit:
     monitor.taskProgress= N
-    randomSeed(0)
-    xx= accum( randn(N) )
-    randomSeed(2)
-    yy= accum( randn(N) )
-    giga= link( xx, yy )
+    xx1= xx[0:N]
+    yy1= yy[0:N]
+    giga= link( xx1, yy1 )
     ee= 50.*N/limit
     plot( giga, xrange=[-50-ee,50+ee], yrange=[-50-ee,50+ee], reset=False )
     img= writeToBufferedImage()
