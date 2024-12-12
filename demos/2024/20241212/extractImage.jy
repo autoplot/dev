@@ -1,0 +1,34 @@
+from javax.imageio import ImageIO
+from java.io import FileInputStream,InputStreamReader,ByteArrayInputStream,File
+from org.xml.sax import InputSource
+from javax.xml.parsers import DocumentBuilderFactory
+from javax.xml.xpath import XPathConstants,XPathFactory
+from org.das2.util import Base64
+
+setScriptDescription('Extract the screenshot encoded in some runtime error reports')
+
+resourceURI= getParam( 'resourceURI', 'file:/home/jbf/uploads/rte_0335135130_20241212_090733_jbf.xml', 'example file to load' )
+
+ff= getFile( resourceURI )
+inputStream = FileInputStream(ff)
+
+builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+source = InputSource(InputStreamReader(inputStream))
+doc = builder.parse(source)
+inputStream.close()
+
+factory = XPathFactory.newInstance()
+xpath =  factory.newXPath()
+screenshot =  xpath.evaluate( "//exceptionReport/screenshot/text()", doc, XPathConstants.STRING )
+for s in screenshot[0:10]:
+    print s, ord(s)
+for s in screenshot[-10:]:
+    print s, ord(s)
+
+if len(screenshot)>0:
+    pngfile= resourceURI[:-4]+'.png'
+    array = Base64.getDecoder().decode(screenshot.strip())
+    newImage = ImageIO.read( ByteArrayInputStream(array) )
+    ImageIO.write( newImage,'png', File( str(ff)[0:-4] + '.png' ) )
+else:
+    setStatus('warning: Image not found in runtime report')
