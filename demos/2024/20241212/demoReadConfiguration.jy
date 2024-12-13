@@ -1,0 +1,5 @@
+setScriptDescription('Demo readConfiguration')
+
+myconfig = readConfiguration(PWD+'config.txt')
+print myconfig['name']
+print myconfig['args']

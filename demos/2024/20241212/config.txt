@@ -1,0 +1,4 @@
+name=Study1
+description=Run first, this case works properly
+args=100,1
+
