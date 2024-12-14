@@ -2,11 +2,14 @@ setScriptTitle('Load Voyager PRA Lowband')
 setScriptDescription('''The Voyager PRA Lowband data is stored with an integer yymmdd and then
 seconds offset.  This script forms timetags for this and one of the sweep channels.''')
 
+sc= getParam( 'sc', 2, 'Voyager Spacecraft, VG1 is not available', [ 2 ] )  
+
 sweepNumber= getParam( 'sweepNumber', 1, 'Sweep Number', [1,2,3,4,5,6,7,8] )
 
-sweep1= getDataSet('https://pds-ppi.igpp.ucla.edu/data/VG2-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG2_URN_PRA_6SEC.LBL?SWEEP%d' % sweepNumber )
-date= getDataSet('https://pds-ppi.igpp.ucla.edu/data/VG2-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG2_URN_PRA_6SEC.LBL?DATE')
-second= getDataSet('https://pds-ppi.igpp.ucla.edu/data/VG2-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG2_URN_PRA_6SEC.LBL?SECOND',units='s')
+ff= 'https://pds-ppi.igpp.ucla.edu/data/VG%d-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG%d_URN_PRA_6SEC.LBL' % ( sc, sc )
+sweep1= getDataSet('%s?SWEEP%d' % ( ff, sweepNumber ) )
+date= getDataSet('%s?DATE' % ff )
+second= getDataSet('%s?SECOND' % ff,units='s')
 
 tp= TimeParser.create('$y$m$d')
 
