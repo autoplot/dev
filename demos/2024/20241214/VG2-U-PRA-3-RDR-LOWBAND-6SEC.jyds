@@ -7,7 +7,10 @@ sc= getParam( 'sc', 2, 'Voyager Spacecraft, VG1 is not available', [ 2 ] )
 sweepNumber= getParam( 'sweepNumber', 1, 'Sweep Number', [1,2,3,4,5,6,7,8] )
 
 ff= 'https://pds-ppi.igpp.ucla.edu/data/VG%d-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG%d_URN_PRA_6SEC.LBL' % ( sc, sc )
-sweep1= getDataSet('%s?SWEEP%d' % ( ff, sweepNumber ) )
+sweep= getDataSet('%s?SWEEP%d' % ( ff, sweepNumber ) )
+
+sweep1= sweep[:,1:]
+
 date= getDataSet('%s?DATE' % ff )
 second= getDataSet('%s?SECOND' % ff,units='s')
 
