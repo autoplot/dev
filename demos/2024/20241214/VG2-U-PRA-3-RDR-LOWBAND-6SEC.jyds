@@ -1,0 +1,18 @@
+setScriptTitle('Load Voyager PRA Lowband')
+setScriptDescription('''The Voyager PRA Lowband data is stored with an integer yymmdd and then
+seconds offset.  This script forms timetags for this and one of the sweep channels.''')
+
+sweepNumber= getParam( 'sweepNumber', 1, 'Sweep Number', [1,2,3,4,5,6,7,8] )
+
+sweep1= getDataSet('https://pds-ppi.igpp.ucla.edu/data/VG2-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG2_URN_PRA_6SEC.LBL?SWEEP%d' % sweepNumber )
+date= getDataSet('https://pds-ppi.igpp.ucla.edu/data/VG2-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG2_URN_PRA_6SEC.LBL?DATE')
+second= getDataSet('https://pds-ppi.igpp.ucla.edu/data/VG2-U-PRA-3-RDR-LOWBAND-6SEC-V1.0/DATA/VG2_URN_PRA_6SEC.LBL?SECOND',units='s')
+
+tp= TimeParser.create('$y$m$d')
+
+tt= dataset( zeros(len(date)), resetUnits='t2000' )
+
+for i in xrange(len(date)):
+    tt[i]= tp.parse('%d' % date[i]).getTimeRange().min() + second[i]
+
+result= link( tt, sweep1 )
