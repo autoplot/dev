@@ -1,0 +1,13 @@
+from java.lang import Double,Math
+uu= [ Units.t1970, Units.cdfTT2000, Units.us2000 ]
+
+for u in uu:
+    print '|' , str(u) ,
+    d= u.parse('2025-01-01T00:00')
+    doub= d.doubleValue(u)
+    print '|' , doub , 
+    print '|' , d.toString(),
+    if u==Units.cdfTT2000:
+        print '| 1ns |'
+    else:
+        print '| %e %s |' % ( Math.nextUp(doub) - doub, u.getOffsetUnits() )
