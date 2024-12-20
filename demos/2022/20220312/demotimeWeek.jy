@@ -1,5 +1,4 @@
 from org.das2.datum import TimeUtil
-from org.das2.jythoncompletion import JavadocLookup
 setScriptDescription('''Download the jar file for URITemplates and show its use.''')
 
 lib= 'https://github.com/hapi-server/uri-templates/raw/master/UriTemplatesJava/store/UriTemplatesJava.jar'

@@ -5,10 +5,15 @@ causes problems in some use cases, so this script can
 be used to remove it.  This removes the first 2650 bytes
 and verifies that this is followed by "PK"''')
 
-vers= getParam( 'vers', 'devel', 'devel or latest', ['devel','latest'] )
+vers= getParam( 'vers', 'devel', 'devel or latest', { 'examples':['devel','latest','v2024a_14']} )
 
-inf= getParam( 'inf', URI('https://autoplot.org/'+vers+'/autoplot.jar'), 'Autoplot file location' )
-outf= getParam( 'outf', URI('file:/home/jbf/local/autoplot.'+vers+'.jar'), 'output file location' )
+if vers[0]=='v':
+   versa= 'latest'
+else:
+   versa= vers
+
+inf= getParam( 'inf', URI('https://autoplot.org/jnlp/'+vers+'/autoplot.jar'), 'Autoplot file location' )
+outf= getParam( 'outf', URI('file:/tmp/autoplot.'+versa+'.jar'), 'output file location' )
 
 print 'vers: ', vers
 print 'inf:  ', inf
