@@ -1,0 +1,50 @@
+setScriptDescription('''Parse sunrise sunset times file from aa.usno.navy.mil, for example
+https://aa.usno.navy.mil/calculated/rstt/year?ID=AA&year=2024&task=0&lat=41.67&lon=-91.53&label=Iowa+City%2C+IA&tz=6&tz_sign=-1&submit=Get+Data''')
+
+"""
+01  0733 1646  0718 1721  0640 1757  0548 1832  0502 1905  0434 1935  0436 1944  0501 1923  0533 1838  0604 1747  0639 1700  0714 1636
+"""
+
+resourceURI= getParam('resourceURI', 'file:/home/jbf/ct/autoplot/git/dev/demos/2024/20241220/sunriseSunset.txt' )
+
+ff= getFile( resourceURI )
+rr= open(str(ff),'r')
+
+riseSet= DataSetBuilder(2,7,12*31)
+
+state= ''
+for line in rr.readlines():
+    if state=='':
+        idx= line.find('Rise and Set for the Sun for ')
+        if idx>-1:
+            iyear= int(line[idx+29:idx+33])
+        if line.startswith('     h m'):
+            state= 'reading'
+            continue
+    else:
+        if  not line[0].isdigit(): 
+            continue
+        dayOfMonth= int(line[0:2])
+        for imonth in xrange(1,13):
+            i0= (imonth-1)*11 +4
+            if line[i0]!=' ':
+                risehour= int(line[i0+0:i0+2])
+                risemins= int(line[i0+2:i0+4])
+                sethour= int(line[i0+5:i0+7])
+                setmins= int(line[i0+7:i0+9])
+                riseSet.nextRecord( [ iyear, imonth, dayOfMonth, risehour,risemins,sethour, setmins ] )
+
+ds= riseSet.getDataSet()
+rise= toTimeDataSet( ds[:,0], ds[:,1], ds[:,2], ds[:,3], ds[:,4], 0, 0 )
+sset= toTimeDataSet( ds[:,0], ds[:,1], ds[:,2], ds[:,5], ds[:,6], 0, 0 )
+
+s= sort( rise )
+rise= rise[s]
+rise= link( rise,  mod(rise,'24hr') )
+sset= sset[s]
+sset= link( sset, mod(sset,'24hr' ) )
+
+#setLayoutOverplot(2)
+#plot( 0, rise, mod(rise,'24hr'), ytitle='Hour of Day (local time)', ytickValues='+4/4' )
+#plot( 1, rise, mod(sset,'24hr'), ytitle='Hour of Day (local time)', ytickValues='+4/4' )
+
