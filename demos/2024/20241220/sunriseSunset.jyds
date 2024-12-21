@@ -6,7 +6,7 @@ Example Record:
 01  0733 1646  0718 1721  0640 1757  0548 1832  0502 1905  0434 1935  0436 1944  0501 1923  0533 1838  0604 1747  0639 1700  0714 1636
 """
 
-resourceURI= getParam('resourceURI', PWD + '/sunriseSunset.txt' )
+resourceURI= getParam('resourceURI', PWD + 'sunriseSunset.txt' )
 
 ff= getFile( resourceURI )
 rr= open(str(ff),'r')
