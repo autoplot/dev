@@ -10,8 +10,6 @@ timeOfDay= modp( tt, '24hr' )
 
 day= tt - timeOfDay
 
-ds= grid( bundle( day, timeOfDay, solarRadiation ) )
-
 setLayoutOverplot(3)
 dom.options.background= Color.BLACK
 dom.options.foreground= Color.WHITE
@@ -21,7 +19,7 @@ plot( 0, day, timeOfDay, solarRadiation, zrange=[0,100],
      ytitle='Hour of Day (CST)', ytickValues='+4/4', 
      title='Solar Irradiance on Tempest Weather Station'  )
 dom.plots[0].background= Color.DARK_GRAY
-#plot( 1, ds, ytickValues='+4/4', renderType='spectrogram' )
+
 plot( 1, 'https://github.com/autoplot/dev/blob/master/demos/2024/20241220/sunriseSunset.jyds?rise',
      color=Color.GRAY )
 plot( 2, 'https://github.com/autoplot/dev/blob/master/demos/2024/20241220/sunriseSunset.jyds?sset',
