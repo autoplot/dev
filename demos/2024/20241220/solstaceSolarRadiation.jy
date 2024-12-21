@@ -1,0 +1,29 @@
+setScriptDescription('Compare solarRadiation data from Tempest to sunrise and sunset times')
+
+tr= '2024-01-01/2024-12-21'
+solarRadiation= getDataSet('file:///home/jbf/data/tempest/34803/$Y/$m/34803.obs.$Y$m$d.csv?column=solarRadiation',tr,monitor)
+
+tt= xtags(solarRadiation)
+tt= tt-'6hr'  # cheat and make them Central USA
+
+timeOfDay= modp( tt, '24hr' )
+
+day= tt - timeOfDay
+
+ds= grid( bundle( day, timeOfDay, solarRadiation ) )
+
+setLayoutOverplot(3)
+dom.options.background= Color.BLACK
+dom.options.foreground= Color.WHITE
+
+plot( 0, day, timeOfDay, solarRadiation, zrange=[0,100],
+     renderType='spectrogram', colorTable='inverse_white_blue_black',
+     ytitle='Hour of Day (CST)', ytickValues='+4/4', 
+     title='Solar Irradiance on Tempest Weather Station'  )
+dom.plots[0].background= Color.DARK_GRAY
+#plot( 1, ds, ytickValues='+4/4', renderType='spectrogram' )
+plot( 1, 'https://github.com/autoplot/dev/blob/master/demos/2024/20241220/sunriseSunset.jyds?rise',
+     color=Color.GRAY )
+plot( 2, 'https://github.com/autoplot/dev/blob/master/demos/2024/20241220/sunriseSunset.jyds?sset',
+     color=Color.GRAY )
+
