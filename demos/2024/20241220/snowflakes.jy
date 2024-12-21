@@ -1,0 +1,28 @@
+from java.lang import Math
+from javax.imageio import ImageIO
+from org.das2.graph import Painter
+setScriptDescription('''add snowflakes to the background margins around
+the one plot.''')
+
+im= ImageIO.read( getFile(PWD + 'snowflake.png' ))
+
+randomSeed(2)
+
+xx= randu(30) * dom.canvases[0].width 
+yy= randu(30) * dom.canvases[0].height
+
+class MyPainter(Painter):
+    def paint(self,g):
+        print 'paint'
+        for i in xrange(10):
+            ix= int( xx[i] )
+            iy= int( yy[i] )
+            g.drawImage(im, ix,iy, None )
+        g.color= dom.options.background
+        for p in dom.plots:
+            row1= p.controller.dasPlot.getRow()
+            col1= p.controller.dasPlot.getColumn()
+            g.fillRect( col1.getDMinimum(), row1.getDMinimum(), 
+                col1.getWidth(), row1.getHeight() )
+
+dom.canvases[0].controller.dasCanvas.addBottomDecorator(MyPainter())
