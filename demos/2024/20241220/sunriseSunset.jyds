@@ -7,8 +7,9 @@ https://aa.usno.navy.mil/calculated/rstt/year?ID=AA&year=2024&task=0&lat=41.67&l
 
 resourceURI= getParam('resourceURI', PWD + '/sunriseSunset.txt' )
 
-ff= getFile( resourceURI )
+ff= getFile( resourceURI,True,monitor )  # True means allow HTML code
 rr= open(str(ff),'r')
+print ff
 
 riseSet= DataSetBuilder(2,7,12*31) # Year, Month, Day, riseHr, riseMn, ssetHr, ssetMin 
 
@@ -22,7 +23,7 @@ for line in rr.readlines():
             state= 'reading'
             continue
     else:
-        if  not line[0].isdigit(): 
+        if not line[0].isdigit(): 
             continue
         dayOfMonth= int(line[0:2])
         for imonth in xrange(1,13):
@@ -40,11 +41,12 @@ sset= toTimeDataSet( ds[:,0], ds[:,1], ds[:,2], ds[:,5], ds[:,6], 0, 0 )
 
 s= sort( rise )
 rise= rise[s]
-rise= dataset( rise, mod(rise,'24hr'), label='Sun Rise' )
 sset= sset[s]
-sset= dataset( sset, mod(sset,'24hr' ), label='Sun Set' )
 
-#setLayoutOverplot(2)
-#plot( 0, rise, mod(rise,'24hr'), ytitle='Hour of Day (local time)', ytickValues='+4/4' )
-#plot( 1, rise, mod(sset,'24hr'), ytitle='Hour of Day (local time)', ytickValues='+4/4' )
+middle= rise + ( sset-rise ) / 2
+
+rise= dataset( rise, mod(rise,'24hr'), label='Sun Rise', name='sunrise' )
+sset= dataset( sset, mod(sset,'24hr' ), label='Sun Set', name='sunset' )
+
+result= link( middle, bundle( rise,sset ) )
 

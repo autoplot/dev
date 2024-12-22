@@ -1,0 +1,45 @@
+from org.das2.util import FileUtil
+from java.text import DateFormat
+
+setScriptTitle('Sunrise Sunset')
+setScriptDescription('''Read Sunrise and Sunset times from aa.usno.navy.mil''')
+
+tr= getParam('timerange','2024')
+
+location= getParam('location','','Location to look up',{'values':['','Iowa City']})
+
+if location=='':
+    lat= getParam('lat',41.67,'Latitude')
+    lon= getParam('lon',-91.53,'Longitude')
+elif location=='Iowa City':
+    lat=41.67
+    lon=-91.53
+    
+tz= getParam('timezone','','timezone',['','UTC'])
+
+if tz=='':
+    tz= -1 * DateFormat.getDateInstance().getTimeZone().getRawOffset() / 3600000
+elif tz=='UTC':
+    tz= 0
+
+tp= TimeParser.create('$Y')
+year= int( tp.format(datumRange(tr)) )
+
+stopYear= int( tp.format(datumRange(tr).max()) )
+
+riseset= None
+
+while year<=stopYear:
+    
+    url= 'https://aa.usno.navy.mil/calculated/rstt/year?ID=AA&year=%(year)s&task=0&lat=%(lat)f&lon=%(lon)f&label=&tz=%(tz)d&tz_sign=-1&submit=Get+Data' \
+        % { 'lat':lat, 'lon':lon, 'tz':tz, 'year':year }
+
+    ff= downloadResourceAsTempFile(URL(url),3600,monitor)
+
+    riseset1= getDataSet( PWD + 'sunriseSunset.jyds?resourceURI=' + str(ff) )
+    riseset= concatenate( riseset, riseset1 )
+    
+    year= year + 1
+
+result= riseset
+
