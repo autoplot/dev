@@ -2,10 +2,11 @@ setScriptDescription('''Parse sunrise sunset times file from aa.usno.navy.mil, f
 https://aa.usno.navy.mil/calculated/rstt/year?ID=AA&year=2024&task=0&lat=41.67&lon=-91.53&label=Iowa+City%2C+IA&tz=6&tz_sign=-1&submit=Get+Data''')
 
 """
+Example Record:
 01  0733 1646  0718 1721  0640 1757  0548 1832  0502 1905  0434 1935  0436 1944  0501 1923  0533 1838  0604 1747  0639 1700  0714 1636
 """
 
-resourceURI= getParam('resourceURI', PWD + '/sunriseSunset.txt' )
+resourceURI= getParam('resourceURI', PWD + 'sunriseSunset.txt' )
 
 ff= getFile( resourceURI,True,monitor )  # True means allow HTML code
 rr= open(str(ff),'r')
