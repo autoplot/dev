@@ -22,3 +22,5 @@ print validateParam('timerange', '2001-02-03', {'min':'2001-02-03','max':'2012-0
 print validateParam('foo','alpha',{'values':['alpha','beta','gamma']})
 print validateParam('foo','alpha',['alpha','beta','gamma'])
 
+print validateParam('foo','alpha',{'regex':'alpha|beta|gamma'})
+print validateParam('foo','aaa',{'regex':'[abc]{3}','examples':['aaa','bbb','ccc','abc']})
