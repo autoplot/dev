@@ -1,4 +1,7 @@
-setScriptDescription('''Demonstrate validateParam.''')
+setScriptDescription('''Demonstrate validateParam.  Starting in v2025a_1, this is called for
+each parameter read in from the getParam calls.''')
+
+print validateParam('timerange','2023-04-06',{'min':'2023-04-05','max':'2023-04-06'})
 print validateParam('foo','2023-04-05',{'format':'$Y-$m'})
 print validateParam('foo',4,{'format':'%05d'} )
 print validateParam('foo',3.1415962,{'format':'%.2f'} )
@@ -14,4 +17,8 @@ except:
     print 'validate caught error'
 print validateParam('foo',2.139,{'max':3,'format':'%.2f'} )
 
-print validateParam('timeRange', '2001-104', {'min':'2001-02-03','max':'2012-03-02'} )
+print validateParam('timerange', '2001-02-03', {'min':'2001-02-03','max':'2012-03-02'} )
+
+print validateParam('foo','alpha',{'values':['alpha','beta','gamma']})
+print validateParam('foo','alpha',['alpha','beta','gamma'])
+
