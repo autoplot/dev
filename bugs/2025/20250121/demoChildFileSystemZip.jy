@@ -1,0 +1,18 @@
+from org.das2.util.filesystem import FileSystem
+from org.das2.fsm import FileStorageModel
+# cd ~/data/1wire/gardenhousepi/server-python-master/hapi_home/data
+# zip -r /tmp/ap/zipfs.zip cputemp/2018
+
+FileSystem.reset() # important if zip file changes...  TODO: REALLY?
+
+zipfs= FileSystem.create('file:/tmp/ap/zipfs.zip/')
+subfs= FileSystem.create('file:/tmp/ap/zipfs.zip/cputemp/')
+
+print zipfs.listDirectory('/cputemp/')
+
+subfs1= FileStorageModel.getChildFileSystem( zipfs,'/cputemp/',None)
+print subfs1.listDirectory('/2018/')
+
+subfs2= FileStorageModel.getChildFileSystem( subfs1,'/2018/',None)
+print subfs2.listDirectory('/')
+print subfs.listDirectory('/2018/')
