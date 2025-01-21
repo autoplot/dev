@@ -1,3 +1,6 @@
+setScriptDescription('''Demo bug with Autoplot ZipFileSystem, which is fixed in v2025a_1.
+https://sourceforge.net/p/autoplot/bugs/2662/''')
+
 from org.das2.util.filesystem import FileSystem
 from org.das2.fsm import FileStorageModel
 # cd ~/data/1wire/gardenhousepi/server-python-master/hapi_home/data
