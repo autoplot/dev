@@ -9,6 +9,8 @@ from javax.swing import JPanel
 
 setScriptDescription('''Add tab which shows the layout, graphically''')
 
+indent= getParam( 'indent', 150, 'amount to indent for children' )
+
 panel=JPanel()
 panel.layout= BorderLayout()
 
@@ -44,10 +46,10 @@ class RowsComponent(JPanel):
             top= r.controller.dasRow.top()
             bottom= r.controller.dasRow.bottom()
             g.color= ColorUtil.DARK_BLUE
-            g.draw(Rectangle2D.Double( 110, top, 40, bottom-top ) )
-            g.drawString( r.top + ',' + r.bottom, 110, top )
+            g.draw(Rectangle2D.Double( indent + 10, top, 40, bottom-top ) )
+            g.drawString( r.top + ',' + r.bottom, indent + 10, top )
             gr= g.create()
-            drawRotate( g, 110+ascent, top+ascent, 90, r.id)
+            drawRotate( g, indent + 10 + ascent, top+ascent, 90, r.id)
             
 rowsComponent= RowsComponent()     
 rowsComponent.opaque=True
