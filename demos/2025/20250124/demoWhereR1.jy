@@ -1,0 +1,14 @@
+setScriptTitle('Demo whereR1')
+setScriptDescription('''Demo whereR1, which will throw a runtime error if the data passed in is not rank 1.''')
+
+randomSeed(0)
+
+ds= randu(100)
+r= whereR1(ds.gt(0.6))
+print r
+try:
+    ds= randu(100,4)
+    r= whereR1(ds.gt(0.6))
+except:
+    print('Exception raised as expected')
+    
