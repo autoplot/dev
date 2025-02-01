@@ -9,7 +9,7 @@ http://autoplot.org/data/sst.mnmean.nc?sst
 #vap+wdc:ftp://ftp.ngdc.noaa.gov/STP/GEOMAGNETIC_DATA/INDICES/KP_AP/$Y?apkp=kp&timerange=1940+through+1942
 
 # error bars
-https://github.com/autoplot/vap/errorBarsRPI.vap
+https://github.com/autoplot/vap/blob/master/errorBarsRPI.vap
 
 # translucent colors
 https://github.com/autoplot/dev/blob/master/bugs/sf/2200/demoSaveColors.vap
