@@ -1,0 +1,2 @@
+gg= getParam('gg')
+result= dataset([1,2,3,4])
