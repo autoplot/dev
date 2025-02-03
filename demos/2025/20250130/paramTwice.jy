@@ -1,5 +1,0 @@
-plot( 0, PWD + "paramTwice.jyds?gg=2" )
-
-
-plot( 1, PWD + "paramTwice.jyds?gg=2&gg=3" )
-
