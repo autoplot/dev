@@ -39,15 +39,15 @@ class RowsComponent(JPanel):
         g.draw(Rectangle2D.Double( 10, top, 40, bottom-top ) )
         g.drawString( r.top + ',' + r.bottom, 0, top )
         drawRotate( g, 10+ascent, top+ascent, 90, r.id)
-        
+        xpos= 150
         for r in dom.canvases[0].rows:
             top= r.controller.dasRow.top()
             bottom= r.controller.dasRow.bottom()
             g.color= ColorUtil.DARK_BLUE
-            g.draw(Rectangle2D.Double( 110, top, 40, bottom-top ) )
-            g.drawString( r.top + ',' + r.bottom, 110, top )
+            g.draw(Rectangle2D.Double( xpos, top, 40, bottom-top ) )
+            g.drawString( r.top + ',' + r.bottom, xpos, top )
             gr= g.create()
-            drawRotate( g, 110+ascent, top+ascent, 90, r.id)
+            drawRotate( g, xpos+ascent, top+ascent, 90, r.id)
             
 rowsComponent= RowsComponent()     
 rowsComponent.opaque=True
