@@ -1,0 +1,38 @@
+from java.awt.geom import AffineTransform
+from java.awt.image import AffineTransformOp
+from java.awt.image import BufferedImage
+from java.io import File
+from javax.imageio import ImageIO
+class TrapezoidScale:
+    def main(args):
+        try:
+            print 'here'
+            originalImage = ImageIO.read(File('/Users/jbf/fun/2025/family/brazil/pages/x.png'))
+            width = originalImage.getWidth()
+            height = originalImage.getHeight()
+            # Define the trapezoid dimensions
+            topWidth = width / 2
+            bottomWidth = width
+            trapezoidHeight = height
+            # Create the affine transform
+            at = AffineTransform()
+            at.translate(0, 0)
+            #at.shear((width - topWidth) / 2.0 / height, 0)
+            #at.scale((topWidth) / width, 1)
+            print at
+            # Apply the transform
+            op = AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR)
+            trapezoidImage = op.filter(originalImage, None)
+            print trapezoidImage
+            # Save the trapezoid image
+            ff=File('/Users/jbf/fun/2025/family/brazil/pages/trapezoid_image.jpg')
+            ImageIO.write(trapezoidImage, 'jpg', ff)
+            print 'done'
+            setStatus('done')
+        except Exception, e:
+            e.printStackTrace()
+    main = staticmethod(main)    
+
+
+TrapezoidScale.main([])
+

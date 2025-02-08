@@ -1,0 +1,5 @@
+from org.autoplot.datasource import URISplit
+
+uri="vap+inline:ds=getDataSet('vap+cdaweb:ds=IM_ELECTRON_DENSITY_RPI&filter=density&id=fce&timerange=Dec+2005')&stddev=getDataSet('vap+cdaweb:ds=IM_ELECTRON_DENSITY_RPI&id=stdevFCE&filter=density&timerange=Dec 2005')&putProperty(putProperty(ds,QDataSet.DELTA_PLUS,stddev),QDataSet.DELTA_MINUS,stddev)&timerange=2005-12-08 18:00+to+19:00"
+split= URISplit.parse(uri)
+print URISplit.parseParams(split.params)

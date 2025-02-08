@@ -1,0 +1,13 @@
+setScriptDescription('''Plot all the data for an interval''')
+
+#fln= getParam( 'resourceURI', 'https://pds-ppi.igpp.ucla.edu/data/JNO-J_SW-JAD-5-CALIBRATED-V1.0/DATA/2018/2018091/ELECTRONS/JAD_L50_HRS_ELC_TWO_DEF_2018091_V01.LBL', 'example file to load' )
+#fln= getParam( 'resourceURI', 'https://pds-ppi.igpp.ucla.edu/data/JNO-J_SW-JAD-5-CALIBRATED-V1.0/DATA/2018/2018240/ELECTRONS/JAD_L50_LRS_ELC_ANY_DEF_2018240_V01.LBL', 'example file to load' )
+
+#idx= getParam( 'index', 1043, 'record number to load. For 2016-240, index 1043 is 2018-08-27T08:41:57.229Z, 8799 for 2018091' )
+
+                               
+fln= getParam( 'resourceURI', 'https://pds-ppi.igpp.ucla.edu/data/JNO-J_SW-JAD-5-CALIBRATED-V1.0/DATA/2018/2018197/ELECTRONS/JAD_L50_HRS_ELC_TWO_DEF_2018197_V01.LBL', 'example file to load' )
+idx= getParam( 'index', 1773, 'record number to load. For 2016-240, index 1043 is 2018-08-27T08:41:57.229Z, 8799 for 2018091' )
+    
+print fln
+print idx

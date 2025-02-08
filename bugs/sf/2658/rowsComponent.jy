@@ -41,7 +41,7 @@ class RowsComponent(JPanel):
         g.draw(Rectangle2D.Double( 10, top, 40, bottom-top ) )
         g.drawString( r.top + ',' + r.bottom, 0, top )
         drawRotate( g, 10+ascent, top+ascent, 90, r.id)
-        
+        xpos= 150
         for r in dom.canvases[0].rows:
             print 
             if ( r.parent==dom.canvases[0].marginRow.id ):

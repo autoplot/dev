@@ -1,0 +1,17 @@
+#inputs: Date:YYYYMMDD,filter by: wake angle, amplitude (1,2,3), what you want to plot (i.e. E amp, B amp, E freq, B freq)
+
+tr = '2024-03-30'
+kind =  'E_freq'
+reset()
+if kind == 'E_freq':
+    spec2= getDataSet('vap+cdaweb:ds=PSP_FLD_L2_DFB_DC_BPF_DV34HG&filter=psp_fld_l2_dfb_dc_b&id=psp_fld_l2_dfb_dc_bpf_dV34hg_peak',tr)
+    spec= getDataSet('vap+cdaweb:ds=PSP_FLD_L2_DFB_AC_BPF_DV34HG&filter=psp_fld_l2_dfb_ac_b&id=psp_fld_l2_dfb_ac_bpf_dV34hg_peak',tr)
+    p,_ = plot(0, spec)
+    plot(1, spec2, overplotOf = p)
+elif kind == 'B_freq':
+    spec2 = getDataSet('vap+cdaweb:ds=PSP_FLD_L2_DFB_DC_BPF_SCMVLFHG&filter=psp_fld_l2_dfb_dc_b&id=psp_fld_l2_dfb_dc_bpf_SCMvlfhg_peak',tr)
+    spec = getDataSet('vap+cdaweb:ds=PSP_FLD_L2_DFB_AC_BPF_SCMVLFHG&filter=psp_fld_l2_dfb_ac_b&id=psp_fld_l2_dfb_ac_bpf_SCMvlfhg_peak',tr)
+    p,_ = plot(0, spec)
+    plot(1, spec2, overplotOf = p)
+
+setStatus('Adjust Y')
