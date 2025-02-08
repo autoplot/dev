@@ -43,13 +43,23 @@ class RowsComponent(JPanel):
         drawRotate( g, 10+ascent, top+ascent, 90, r.id)
         
         for r in dom.canvases[0].rows:
-            top= r.controller.dasRow.top()
-            bottom= r.controller.dasRow.bottom()
-            g.color= ColorUtil.DARK_BLUE
-            g.draw(Rectangle2D.Double( indent + 10, top, 40, bottom-top ) )
-            g.drawString( r.top + ',' + r.bottom, indent + 10, top )
-            gr= g.create()
-            drawRotate( g, indent + 10 + ascent, top+ascent, 90, r.id)
+            print 
+            if ( r.parent==dom.canvases[0].marginRow.id ):
+                top= r.controller.dasRow.top()
+                bottom= r.controller.dasRow.bottom()
+                g.color= ColorUtil.DARK_BLUE
+                g.draw(Rectangle2D.Double( indent + 10, top, 40, bottom-top ) )
+                g.drawString( r.top + ',' + r.bottom, indent + 10, top )
+                gr= g.create()
+                drawRotate( g, indent + 10 + ascent, top+ascent, 90, r.id)
+            else:
+                top= r.controller.dasRow.top()
+                bottom= r.controller.dasRow.bottom()
+                g.color= ColorUtil.BLUE
+                g.draw(Rectangle2D.Double( indent*2 + 10, top, 40, bottom-top ) )
+                g.drawString( r.top + ',' + r.bottom + ' '+ r.parent, indent*2 + 10, top )
+                gr= g.create()
+                drawRotate( g, indent*2 + 10 + ascent, top+ascent, 90, r.id)                
             
 rowsComponent= RowsComponent()     
 rowsComponent.opaque=True
