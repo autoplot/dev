@@ -43,7 +43,6 @@ class RowsComponent(JPanel):
         drawRotate( g, 10+ascent, top+ascent, 90, r.id)
         xpos= 150
         for r in dom.canvases[0].rows:
-            print 
             if ( r.parent==dom.canvases[0].marginRow.id ):
                 top= r.controller.dasRow.top()
                 bottom= r.controller.dasRow.bottom()
