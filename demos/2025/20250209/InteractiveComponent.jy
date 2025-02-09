@@ -1,0 +1,46 @@
+from java.awt import RenderingHints
+from org.das2.util import ColorUtil
+from java.awt.geom import Point2D
+from javax.swing import JPanel
+from javax.swing.event import MouseInputAdapter
+
+setScriptDescription('''Demo of interactive component, showing how one is drawn
+and how mouse clicks can be received.  Note that with the Das2 canvas, more 
+abstract, science-ready, mouse handling is available.''')
+
+clicks=[]
+
+class MyMouseInputAdapter(MouseInputAdapter):
+    def mouseClicked(self,mouseEvent):
+        global clicks,panel
+        print mouseEvent.point.distance(Point2D.Double(450,450))
+        if mouseEvent.point.distance(Point2D.Double(450,450))<50:
+            clicks=[]
+        else:
+            clicks.append(mouseEvent.point)
+        panel.repaint()
+
+class MyPanel(JPanel):
+    def __init__(self):
+        self.opaque=True
+        self.addMouseListener(MyMouseInputAdapter())
+    def paintComponent(self,g):
+        global clicks
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON)
+        g.color=Color.WHITE
+        g.fillRect(0,0,self.width,self.height)
+        
+        g.color= ColorUtil.DARK_GRAY
+        g.drawOval(400,400,100,100)
+        g.drawString('CLEAR',430,440)
+        
+        g.color= ColorUtil.CORNFLOWER_BLUE
+        for p in clicks:
+            g.fillOval(p.x-10,p.y-10,20,20)
+        g.color= ColorUtil.DARK_BLUE
+        for p in clicks:
+            g.drawOval(p.x-10,p.y-10,20,20)
+        
+panel= MyPanel() 
+
+addTab('ClickMe',panel)
