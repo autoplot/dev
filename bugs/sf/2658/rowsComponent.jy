@@ -1,3 +1,4 @@
+from java.util import HashMap
 from java.lang import Math
 from com.itextpdf.text import Rectangle
 from java.beans import PropertyChangeListener
@@ -20,7 +21,7 @@ def drawRotate( g2d, x,  y,  angle, text):
     g2d.drawString(text,0,0)
     g2d.rotate(-Math.toRadians(angle))
     g2d.translate(-x,-y)
-
+    
 class RowsComponent(JPanel):
     def paintComponent( self,g ):
         ascent= g.getFontMetrics().ascent/2
@@ -41,6 +42,25 @@ class RowsComponent(JPanel):
         g.draw(Rectangle2D.Double( 10, top, 40, bottom-top ) )
         g.drawString( r.top + ',' + r.bottom, 0, top )
         drawRotate( g, 10+ascent, top+ascent, 90, r.id)
+        
+        rowDepth= HashMap()
+
+        again=True
+        while again:   
+            again=False
+            for i in xrange(len(dom.canvases[0].rows)):
+                id= dom.canvases[0].rows[i].id
+                parent=dom.canvases[0].rows[i].parent
+                if ( parent==dom.canvases[0].marginRow.id ):
+                    rowDepth.put(id,1)
+                else:
+                    if rowDepth.containsKey(parent):
+                        next= rowDepth.get(parent)+1
+                        rowDepth.put(id,next)
+                    else:
+                        print 'dont have '+parent+' so cant calculate '+id
+                        again=True
+        
         xpos= 150
         for r in dom.canvases[0].rows:
             if ( r.parent==dom.canvases[0].marginRow.id ):
@@ -55,10 +75,10 @@ class RowsComponent(JPanel):
                 top= r.controller.dasRow.top()
                 bottom= r.controller.dasRow.bottom()
                 g.color= ColorUtil.BLUE
-                g.draw(Rectangle2D.Double( indent*2 + 10, top, 40, bottom-top ) )
-                g.drawString( r.top + ',' + r.bottom + ' '+ r.parent, indent*2 + 10, top )
+                g.draw(Rectangle2D.Double( indent*rowDepth[r.id]  + 10, top, 40, bottom-top ) )
+                g.drawString( r.top + ',' + r.bottom + ' '+ r.parent, indent*rowDepth[r.id] + 10, top )
                 gr= g.create()
-                drawRotate( g, indent*2 + 10 + ascent, top+ascent, 90, r.id)                
+                drawRotate( g, indent*rowDepth[r.id] + 10 + ascent, top+ascent, 90, r.id)                
             
 rowsComponent= RowsComponent()     
 rowsComponent.opaque=True
