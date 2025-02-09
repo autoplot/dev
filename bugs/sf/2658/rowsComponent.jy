@@ -1,3 +1,5 @@
+from org.das2.components.propertyeditor import PropertyEditor
+from javax.swing.event import MouseInputAdapter
 from java.util import HashMap
 from java.lang import Math
 from com.itextpdf.text import Rectangle
@@ -22,8 +24,24 @@ def drawRotate( g2d, x,  y,  angle, text):
     g2d.rotate(-Math.toRadians(angle))
     g2d.translate(-x,-y)
     
+
+class MyMouseInputAdapter(MouseInputAdapter):
+    def mouseClicked(self,mouseEvent):
+        global selector
+        for e in selector.entrySet():
+            if e.value.contains(mouseEvent.point):
+                print e.key
+                edit= PropertyEditor(e.key)
+                edit.showDialog(mouseEvent.source)
+                
+        
 class RowsComponent(JPanel):
+    def __init__(self):
+        self.opaque=True
+        self.addMouseListener(MyMouseInputAdapter())
+   
     def paintComponent( self,g ):
+        global selector
         ascent= g.getFontMetrics().ascent/2
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON)
         c= g.getClip()
@@ -44,6 +62,7 @@ class RowsComponent(JPanel):
         drawRotate( g, 10+ascent, top+ascent, 90, r.id)
         
         rowDepth= HashMap()
+        selector= HashMap()
 
         again=True
         while again:   
@@ -67,7 +86,9 @@ class RowsComponent(JPanel):
                 top= r.controller.dasRow.top()
                 bottom= r.controller.dasRow.bottom()
                 g.color= ColorUtil.DARK_BLUE
-                g.draw(Rectangle2D.Double( indent + 10, top, 40, bottom-top ) )
+                shape= Rectangle2D.Double( indent + 10, top, 40, bottom-top )
+                g.draw( shape )
+                selector.put( r, shape )
                 g.drawString( r.top + ',' + r.bottom, indent + 10, top )
                 gr= g.create()
                 drawRotate( g, indent + 10 + ascent, top+ascent, 90, r.id)
@@ -75,13 +96,16 @@ class RowsComponent(JPanel):
                 top= r.controller.dasRow.top()
                 bottom= r.controller.dasRow.bottom()
                 g.color= ColorUtil.BLUE
-                g.draw(Rectangle2D.Double( indent*rowDepth[r.id]  + 10, top, 40, bottom-top ) )
+                shape= Rectangle2D.Double( indent*rowDepth[r.id]  + 10, top, 40, bottom-top ) 
+                selector.put( r, shape )
+                g.draw(shape)
                 g.drawString( r.top + ',' + r.bottom + ' '+ r.parent, indent*rowDepth[r.id] + 10, top )
                 gr= g.create()
                 drawRotate( g, indent*rowDepth[r.id] + 10 + ascent, top+ascent, 90, r.id)                
+    
             
-rowsComponent= RowsComponent()     
-rowsComponent.opaque=True
+rowsComponent= RowsComponent()
+
 panel.add( rowsComponent, BorderLayout.CENTER )
 panel.preferredSize= Dimension(600,600)
 panel.minimumSize= panel.preferredSize
