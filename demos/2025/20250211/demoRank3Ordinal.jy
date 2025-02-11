@@ -1,0 +1,13 @@
+setScriptTitle('Rank3 Ordinal')
+setScriptDescription('''Demo that rank 3 ordinal dataset from CDF reads properly.''')
+
+h_ChanP_Energy_LABL= getDataSet('https://spp-isois.sr.unh.edu/data/EPILo/level2/psp_isois-epilo_l2-ic_20200828_v6.0.0.cdf?H_ChanP_Energy_LABL')
+
+
+def printOne(i,j,k,ds):
+    print '%d:[%d,%d]: = "%s"' % ( i,j,k, ds[i-1,j-1,k-1].svalue() )
+    
+printOne(1,1,1,h_ChanP_Energy_LABL)
+printOne(1,80,1,h_ChanP_Energy_LABL)
+printOne(1,1,41,h_ChanP_Energy_LABL)
+
