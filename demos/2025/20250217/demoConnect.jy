@@ -1,0 +1,56 @@
+from java.lang import Math
+from java.awt import RenderingHints,Dimension,Font
+from javax.swing import JPanel,JScrollPane
+
+setScriptDescription("""draw connections between two sets""")
+
+fh=getParam('fontHeight',14,'The height of the font')
+rc=getParam('rightColumn',110,'The horizontal location of the right column')
+
+class ConnectPanel( JPanel ):
+    
+    def __init__(self):
+        self.group1= [1,2,3,4]
+        self.group2= [2,3]
+        
+        
+    def setGroup1(self,group1):
+        self.group1= group1
+        
+    def setGroup2(self,group2):
+        self.group2= group2
+    
+    def paintComponent( self, g ):
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON)
+        g.font= Font.decode('sans-'+str(fh))
+        fwd= 0
+        for i in xrange(len(self.group1)):
+            t= str(self.group1[i])
+            g.drawString( t, 10, (i+2)*fh )
+            b=g.fontMetrics.stringWidth(t)
+            fwd= Math.max(fwd,b)
+        for i in xrange(len(self.group2)):
+            t= str(self.group2[i])
+            g.drawString( t, rc, (i+2)*fh )
+        taken= [False]*len(self.group2)
+        for i in xrange(len(self.group1)):
+            t= str(self.group1[i])
+            for j in xrange(len(self.group2)):
+                if ( str(self.group2[j])==str(t) and ( not taken[j] ) ):
+                    g.drawLine( 10+fwd, (i+2)*fh-fh/3, rc-1, (j+2)*fh-fh/3 )
+                    taken[j]=True
+                    break
+
+cp= ConnectPanel()
+
+cp.setGroup1([ 1,2,2,4,5 ] )
+cp.setGroup2([ 1,1,2,3,2 ] )
+
+cp.setGroup1([ 'apple','boy','cat','dog'] )
+cp.setGroup2([ 'cat','apple','boy' ] )
+
+cp.setMinimumSize(Dimension(400,400))
+cp.setPreferredSize(Dimension(400,400))
+
+
+addTab( 'connect',JScrollPane(cp) )
