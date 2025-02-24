@@ -1,0 +1,48 @@
+from org.autoplot.dom import DomUtil
+from org.das2.components.propertyeditor import PropertyEditor
+from javax.swing.event import MouseInputAdapter
+from java.util import HashMap
+from java.lang import Math
+from com.itextpdf.text import Rectangle
+from java.beans import PropertyChangeListener
+from org.das2.graph import DasCanvas,Painter
+from org.das2.util import ColorUtil,GrannyTextRenderer
+from java.awt.geom import Rectangle2D,AffineTransform
+from java.awt import BorderLayout,RenderingHints,Dimension,FlowLayout
+from javax.swing import JPanel
+
+setScriptDescription('''Add tab which shows all the autorange status''')
+
+row= DomUtil.getRow(dom,dom.plots[0].rowId).getController().getDasRow().top()
+col= DomUtil.getRow(dom,dom.plots[0].rowId)
+
+def drawBubble( g, text, x, y ):
+    gtr= GrannyTextRenderer()
+    gtr.setString( g, text )
+    gtr.glow=True
+    gtr.draw( g, x, y )
+    g.drawRoundRect( x, y-int(gtr.height), int(x+gtr.width),int(gtr.height),5,5)
+    
+class MyDecorator(Painter):
+    def paint( self, g ):
+        for p in dom.plots:
+            row= DomUtil.getRow(dom,p.rowId)
+            col= DomUtil.getColumn(dom,p.columnId)
+            dasRow=row.controller.getDasRow()
+            dasColumn=col.controller.getDasColumn()
+            if ( p.xaxis.autoRange ):
+                print 'autorange'
+                drawBubble( g, 'autorange', dasColumn.left(),dasRow.bottom()+16 )
+            if ( p.yaxis.autoRange ):
+                print 'autorange'
+                drawBubble( g, 'autorange', dasColumn.left()-40,dasRow.top()+16 )
+            
+dasCanvas=dom.canvases[0].controller.getDasCanvas()
+
+class RepaintPropertyChangeListener( PropertyChangeListener ):
+    def propertyChange(self,evt):
+         dasCanvas.repaint()
+    
+dom.controller.getDasCanvas().addPropertyChangeListener(DasCanvas.PROP_PAINTCOUNT,RepaintPropertyChangeListener())
+
+dasCanvas.addTopDecorator(MyDecorator())
