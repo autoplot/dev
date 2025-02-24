@@ -1,0 +1,58 @@
+from org.das2.graph import Renderer
+from java.awt.geom import GeneralPath
+
+randomSeed(0)
+
+m=20
+xrange=[-m,m]
+yrange=[-m,m]
+
+ds1= link( randn(1000)-4, randn(1000)-5 )
+ds2= link( randn(500)+3.5, randn(500)+7.7 )
+ds= append(ds1,ds2)
+
+setLayout(2,2)
+
+class HistogramRenderer( Renderer ):
+   def autorange( self, ds ):
+       xr= extent( ds )
+       yr= extent( ds.property( QDataSet.DEPEND_0 ) )
+       bds= join(rescaleRange(xr,-0.1,1.1),rescaleRange(yr,-0.1,1.1))
+       return bds
+
+   def render( self, g, xaxis, yaxis, monitor=None ):
+       xzero= xaxis.transform(0,xaxis.getUnits())
+       ds= self.getDataSet()
+       if ( ds==None ): return
+       yds= ds.property(QDataSet.DEPEND_0)
+       ddy= float( ( yds[1]-yds[0] ) / 2 )
+       cc= self.getColorControl('color',Color.BLACK)
+       cb= cc.darker()
+       gp= GeneralPath()
+       yd= yaxis.transform(yds[0]-ddy,yaxis.getUnits())
+       gp.moveTo( xzero, yd )
+       for i in range(ds.length()):
+           y= yds.value(i)
+           x= ds.value(i)
+           xd= xaxis.transform(x,xaxis.getUnits())
+           yd= yaxis.transform(y,yaxis.getUnits())
+           yd0= yaxis.transform(y-ddy,yaxis.getUnits())
+           yd1= yaxis.transform(y+ddy,yaxis.getUnits())
+           gp.lineTo( xd, yd0 )
+           gp.lineTo( xd, yd1 )
+       gp.lineTo( xzero, yd1 )       
+       g.setColor( cc )
+       g.fill( gp )
+       g.setColor( cb )
+       g.draw( gp )
+       
+p3,_= plot(3,ds,xrange=xrange,yrange=yrange,renderType='scatter')
+p1,_= plot(1,histogram(xtags(ds),-10,10,0.5),xrange=xrange)
+p2,_= plot(2,histogram(ds,-10,10,0.5),renderer= HistogramRenderer(),yrange=yrange)
+
+bind( p3.xaxis, 'range', p1.xaxis, 'range' )
+bind( p3.yaxis, 'range', p2.yaxis, 'range' )
+
+dom.plots[3].visible=False
+dom.plots[3].xaxis.visible=False
+dom.plots[3].yaxis.visible=False
