@@ -1,0 +1,15 @@
+setScriptTitle('Dataset Copy Caveat')
+setScriptDescription('''Making a copy of a reference to a dataset can lead to bugs, when you are used to 
+languages which always copy data.''')
+
+docopy= getParam('copy',False,'do copy the data',[True,False])
+
+A= dataset( [1,2,3,4,5] )
+
+if docopy:
+    B= copy(A)
+else:
+    B= A
+    
+B[0]= 9
+print B[0], A[0], 'B[0] is the same as A[0] when the data is not copied'
