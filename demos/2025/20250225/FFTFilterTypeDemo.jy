@@ -1,0 +1,10 @@
+from org.das2.qds.ops import Ops
+
+setLayout(2,2)
+
+plot( 0, Ops.windowFunction( Ops.FFTFilterType.TenPercentEdgeCosine,512) )
+plot( 1, Ops.windowFunction( Ops.FFTFilterType.Hann,512) )
+plot( 2, Ops.windowFunction( Ops.FFTFilterType.Boxcar,512) )
+plot( 3, Ops.windowFunction( Ops.FFTFilterType.Unity,512) )
+
+
