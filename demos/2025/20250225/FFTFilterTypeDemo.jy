@@ -1,5 +1,7 @@
 from org.das2.qds.ops import Ops
 
+setScriptDescription('Demo FFTFilterType')
+
 setLayout(2,2)
 
 plot( 0, Ops.windowFunction( Ops.FFTFilterType.TenPercentEdgeCosine,512) )
