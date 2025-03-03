@@ -55,8 +55,9 @@ class ColorLabelDragRenderer( AbstractDragRenderer ):
         g2.draw( Line2D.Double( p1, p2 ) )
     def isUpdatingDragSelection(self):
         return True
-        
-mm= addMouseModule(dom.plots[0],'wacom',boxSelected)
-mm.keyEvents= True
-mm.releaseEvents= True
-mm.dragRenderer= ColorLabelDragRenderer(None)
+
+for p in dom.plots:
+    mm= addMouseModule(p,'wacom',boxSelected)
+    mm.keyEvents= True
+    mm.releaseEvents= True
+    mm.dragRenderer= ColorLabelDragRenderer(None)
