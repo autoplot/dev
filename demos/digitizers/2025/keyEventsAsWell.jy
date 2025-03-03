@@ -23,11 +23,12 @@ class FeedbackPainter( Painter ):
          ds= dpr.getDataPoints()
          print ds
          if ( ds!=None ):
-             for d in ds:
-                 x1= dom.plots[0].controller.dasPlot.getXAxis().transform( d[0] )
-                 y1= dom.plots[0].controller.dasPlot.getYAxis().transform( d[1] )
-                 x2= dom.plots[0].controller.dasPlot.getXAxis().transform( d[2] )
-                 y2= dom.plots[0].controller.dasPlot.getYAxis().transform( d[3] )
+             for p in dom.plots:
+               for d in ds:
+                 x1= p.controller.dasPlot.getXAxis().transform( d[0] )
+                 y1= p.controller.dasPlot.getYAxis().transform( d[1] )
+                 x2= p.controller.dasPlot.getXAxis().transform( d[2] )
+                 y2= p.controller.dasPlot.getYAxis().transform( d[3] )
                  p1= Point2D.Double( x1, y1 )
                  p2= Point2D.Double( x2, y2 )                 
                  g.color= Color.GRAY
