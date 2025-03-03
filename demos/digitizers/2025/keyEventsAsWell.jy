@@ -58,8 +58,8 @@ class ColorLabelDragRenderer( AbstractDragRenderer ):
         return True
 
 for p in dom.plots:
-    mm= addMouseModule(p,'wacom',boxSelected)
+    mm= addMouseModule(p,'Slope Selection',boxSelected)
     mm.keyEvents= True
     mm.releaseEvents= True
     mm.dragRenderer= ColorLabelDragRenderer(None)
-    p.controller.dasPlot.setMouseModule(mm)
+    p.controller.dasPlot.getDasMouseInputAdapter().setPrimaryModule(mm)
