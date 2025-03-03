@@ -62,3 +62,4 @@ for p in dom.plots:
     mm.keyEvents= True
     mm.releaseEvents= True
     mm.dragRenderer= ColorLabelDragRenderer(None)
+    p.controller.dasPlot.setMouseModule(mm)
