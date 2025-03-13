@@ -14,8 +14,8 @@ else:
 
 bs= getParam( 'bs', True, 'another parameter', [True,False] )
 
-print dispOpt
-print orbitNumber
-print TimeOpt
-print timerange
-print bs
+print 'dispOpt=', dispOpt
+print 'orbitNumber=', orbitNumber
+print 'TimeOpt=', TimeOpt
+print 'tr=', tr
+print 'bs=', bs
