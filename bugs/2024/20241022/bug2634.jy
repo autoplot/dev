@@ -13,3 +13,9 @@ else:
   tr= junoorbits.getDatumRange(orbitNumber)
 
 bs= getParam( 'bs', True, 'another parameter', [True,False] )
+
+print dispOpt
+print orbitNumber
+print TimeOpt
+print timerange
+print bs
