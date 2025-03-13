@@ -10,7 +10,7 @@ TimeOpt= getParam( 'specificTime','T', 'the specific time', [ 'T', 'F' ] )
 if TimeOpt == 'T':
   tr= getParam( 'timerange', str(junoorbits.getDatumRange(str(orbitNumber))), 'timerange to load' )
 else:
-  tr= junoorbits.getDatumRange(orbitNumber)
+  tr= junoorbits.getDatumRange(str(orbitNumber))
 
 bs= getParam( 'bs', True, 'another parameter', [True,False] )
 
