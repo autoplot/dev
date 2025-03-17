@@ -76,7 +76,7 @@ def followChain( bbuf, iptr, dsb, context=None ):
    
    lastPointer=-1
    while (True):
-       if ( iptr==lastPointer ): stop
+       if ( iptr==lastPointer ): break
        lastPointer=iptr
        siz= bbuf.getLong(iptr+0)
        typ= bbuf.getInt(iptr+8)
@@ -107,11 +107,10 @@ def followChain( bbuf, iptr, dsb, context=None ):
            name= getCString(bbuf,iptr+84)
            dsb.nextRecord([iptr,iptr+siz,ZVDR_COLOR, 'zVDR:'+name] )
            vxrhead= bbuf.getLong(iptr+28)
-           if vxrhead==iptr:
-               stop
-           followChain( bbuf, vxrhead, dsb, context=name )
-           if vdrnext==0:
-               break
+           if vxrhead!=iptr:               
+               followChain( bbuf, vxrhead, dsb, context=name )
+               if vdrnext==0:
+                   break
            iptr= vdrnext
        elif styp=='VVR': # VVR
            dsb.nextRecord([iptr,iptr+siz,VVR_COLOR, 'VVR:'+context] )
@@ -134,4 +133,4 @@ iptr= 8
 
 followChain( bbuf, iptr, dsb )
 
-plot( dsb.getDataSet() )
+plot( dsb.getDataSet(), renderType='eventsBar>fontSize=1em&ganttMode=T' )

@@ -9,7 +9,7 @@ ds= getDataSet('https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspb/l4/emfisis/wna-
 reset()
 addPlots(1,2,'below')
 
-p,pe= plot( 0, ds )
+p,_= plot( 0, ds )
 
 def action(evt):
     print evt

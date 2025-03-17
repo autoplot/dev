@@ -1,0 +1,65 @@
+# Goal is to accept key events, and to mark where the key events were.
+setScriptTitle('demo key events')
+setScriptDescription('''This demos how key strokes can be caught by the mouse module, 
+firing off events to a different handler.  Note the key is only captured during the drag.''')
+
+plt= dom.plots[0]
+
+key=None
+
+from org.das2.components import DataPointRecorder
+dpr= DataPointRecorder()
+addTab( 'digitizer', dpr )
+
+from org.das2.components import DataPointRecorder
+from org.das2.graph import Painter
+from org.das2.graph import Arrow
+from org.das2.graph import GraphUtil
+from java.awt.geom import Point2D
+from org.das2.util import GrannyTextRenderer
+
+class FeedbackPainter( Painter ):
+     def paint( self, g ):
+         ds= dpr.getDataPoints()
+         print ds
+         if ( ds!=None ):
+             for p in dom.plots:
+               for d in ds:
+                 x1= p.controller.dasPlot.getXAxis().transform( d[0] )
+                 y1= p.controller.dasPlot.getYAxis().transform( d[1] )
+                 x2= p.controller.dasPlot.getXAxis().transform( d[2] )
+                 y2= p.controller.dasPlot.getYAxis().transform( d[3] )
+                 p1= Point2D.Double( x1, y1 )
+                 p2= Point2D.Double( x2, y2 )                 
+                 g.color= Color.GRAY
+                 Arrow.paintArrow( g, p2, p1, 15, Arrow.HeadStyle.DRAFTING )
+
+dom.canvases[0].controller.dasCanvas.addTopDecorator( FeedbackPainter() )           
+
+def boxSelected(evt):
+    x0= evt.getStartX()
+    y0= evt.getStartY()
+    x= evt.getFinishX()
+    y= evt.getFinishY()
+    # if the event was caused by a keypress, then keyChar will be non-None.
+    if ( evt.getPlane( 'keyChar' )!=None ):
+        setStatus( 'Keypressed: '+evt.getPlane('keyChar') )
+    else:
+        dpr.addDataPoint( bundle(dataset(x0),dataset(y0),dataset(x),dataset(y)) )
+        setStatus( 'Keypressed: ' )
+
+                
+from org.das2.event import AbstractDragRenderer,MouseBoxEvent
+class ColorLabelDragRenderer( AbstractDragRenderer ):
+    def renderDrag( self, g2, p1, p2 ):
+        from java.awt.geom import Line2D
+        g2.draw( Line2D.Double( p1, p2 ) )
+    def isUpdatingDragSelection(self):
+        return True
+
+for p in dom.plots:
+    mm= addMouseModule(p,'Slope Selection',boxSelected)
+    mm.keyEvents= True
+    mm.releaseEvents= True
+    mm.dragRenderer= ColorLabelDragRenderer(None)
+    p.controller.dasPlot.getDasMouseInputAdapter().setPrimaryModule(mm)
