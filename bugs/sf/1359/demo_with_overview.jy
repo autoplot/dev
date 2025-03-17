@@ -1,0 +1,13 @@
+setScriptDescription('''See bug https://sourceforge.net/p/autoplot/bugs/1359/, where
+the scan and step buttons don't quite work as you would expect.''')
+
+reset()
+
+ds= 'file:///project/voyager/pds/voyager-2-pws-sa/data/$Y/vg2pws_lr_$Y$m$d_v$(v;sep).xml?electric_field&timerange=2016-08-26/P3D'
+p,_= plot(ds,xrange='2016-08-27')
+
+dom.plots[0].controller.contextOverview()
+
+dom.plots[1].xaxis.range= datumRange('2016-Aug')
+
+

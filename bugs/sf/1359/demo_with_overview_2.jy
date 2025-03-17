@@ -1,0 +1,25 @@
+setScriptDescription('''See bug https://sourceforge.net/p/autoplot/bugs/1359/, where
+the scan and step buttons don't quite work as you would expect.''')
+
+t0= datum('2025-03-17T00:00Z')
+
+t=t0
+dsb= DataSetBuilder(1,30*128)
+
+for i in xrange(30):
+    b= randu()*10
+    for j in xrange(128):
+        dsb.nextRecord(t)
+        t=t+'1s'
+    t= t+'600s'
+
+t= dsb.getDataSet()
+ds= randn(len(t))/10
+ds= link( t, ds )
+
+plot( ds )
+
+dom.plots[0].controller.contextOverview()
+
+
+
