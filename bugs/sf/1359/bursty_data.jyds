@@ -17,11 +17,8 @@ t= dsb.getDataSet()
 ds= randn(len(t))/10
 ds= link( t, ds )
 
-reset()
+result= ds
 
-plot( ds )
-
-dom.plots[0].controller.contextOverview()
 
 
 

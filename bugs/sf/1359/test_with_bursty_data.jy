@@ -1,0 +1,56 @@
+from java.awt import FlowLayout
+from javax.swing import JPanel,JButton
+from org.das2.util import ColorUtil
+from org.das2.qds import DataSetUtil
+setScriptDescription('''See bug https://sourceforge.net/p/autoplot/bugs/1359/, where
+the scan and step buttons don't quite work as you would expect.''')
+
+ds= getDataSet( '/home/jbf/project/autoplot/git/dev/bugs/sf/1359/bursty_data.jyds' )
+ds= ds[1000:2000]
+
+reset()
+setLayoutOverplot(3)
+
+plot( ds )
+
+rang= datumRange( '2025-03-17 1:51 to 1:52' )
+newrange= DataSetUtil.getNextInterval( ds, rang )
+
+ds= createEvent( rang, 0xE0E0E0, str(rang.width()) )
+plot( 1, ds, renderType='eventsBar>orbitMode=T' )
+
+ds= createEvent( newrange, 0xA0E0A0, str(newrange.width()) )
+plot( 2, ds, renderType='eventsBar>orbitMode=T' )
+
+current= newrange
+
+def nextImmediately(e):
+    global current, ds
+    current= DataSetUtil.getNextInterval( ds, current )
+    ds= createEvent( current, 0xA0E050, str(current.width()) )
+    plot( 2, ds, renderType='eventsBar>orbitMode=T' )
+    print 'Next! '+str(current)
+
+def prevImmediately(e):
+    global current, ds
+    current= DataSetUtil.getPreviousInterval( ds, current )
+    ds= createEvent( current, 0x50E0A0, str(current.width()) )
+    plot( 2, ds, renderType='eventsBar>orbitMode=T' )
+    print 'Prev! '+str(current)
+    
+def next(e):
+    invokeLater(nextImmediately,e)
+    
+def prev(e):
+    invokeLater(prevImmediately,e)
+
+panel= JPanel()
+panel.layout= FlowLayout(FlowLayout.LEADING)
+
+button= JButton("<<",actionPerformed=prev )
+panel.add(button)
+
+button= JButton(">>",actionPerformed=next )
+panel.add(button)
+
+getApplication().setBottomPanel(panel)
