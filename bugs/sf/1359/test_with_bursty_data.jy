@@ -16,26 +16,27 @@ plot( ds )
 rang= datumRange( '2025-03-17 1:51 to 1:52' )
 newrange= DataSetUtil.getNextInterval( ds, rang )
 
-ds= createEvent( rang, 0xE0E0E0, str(rang.width()) )
-plot( 1, ds, renderType='eventsBar>orbitMode=T' )
+plot( 1, createEvent( rang, 0xE0E0E0, str(rang.width()) ), renderType='eventsBar>orbitMode=T' )
 
-ds= createEvent( newrange, 0xA0E0A0, str(newrange.width()) )
-plot( 2, ds, renderType='eventsBar>orbitMode=T' )
+plot( 2, createEvent( newrange, 0xA0E0A0, str(newrange.width()) ), renderType='eventsBar>orbitMode=T' )
 
 current= newrange
 
 def nextImmediately(e):
     global current, ds
+    last= current
     current= DataSetUtil.getNextInterval( ds, current )
-    ds= createEvent( current, 0xA0E050, str(current.width()) )
-    plot( 2, ds, renderType='eventsBar>orbitMode=T' )
-    print 'Next! '+str(current)
+    currentds= createEvent( None, current, 0xA0E050, str(current.width()) )
+    currentds= createEvent( currentds, datumRange(last), 0x80E030, 'old ' + str(last.width()))
+    plot( 2, currentds, renderType='eventsBar>orbitMode=T' )
 
 def prevImmediately(e):
     global current, ds
+    last= current
     current= DataSetUtil.getPreviousInterval( ds, current )
-    ds= createEvent( current, 0x50E0A0, str(current.width()) )
-    plot( 2, ds, renderType='eventsBar>orbitMode=T' )
+    currentds= createEvent( None, current, 0x50E0A0, str(current.width()) )
+    currentds= createEvent( currentds, datumRange(last), 0x30E080, '<old ' + str(last.width()))
+    plot( 2, currentds, renderType='eventsBar>orbitMode=T' )
     print 'Prev! '+str(current)
     
 def next(e):
