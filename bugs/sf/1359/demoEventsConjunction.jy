@@ -1,0 +1,15 @@
+from org.das2.datum import DatumRangeUtil
+setScriptTitle('Demo eventsConjunction')
+setScriptDescription('''Demo eventsConjunction function''')
+
+ev1= datumRange( 'May 2000' )
+ev2= datumRange( 'May 15 2000 - June 15 2000' )
+r= eventsConjunction( dataset(ev1), dataset(ev2) )
+r= datumRange( r[0] )
+print r, r.width()
+
+ev1= datumRange( 'May 2000' )
+ev2= datumRange( 'May 15 2000 - June 15 2000' )
+r= DatumRangeUtil.intersection( [ev1], [ev2], False )
+r= datumRange( r[0] )
+print r, r.width()
