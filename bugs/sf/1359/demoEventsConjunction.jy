@@ -1,6 +1,7 @@
 from org.das2.datum import DatumRangeUtil
 setScriptTitle('Demo eventsConjunction')
-setScriptDescription('''Demo eventsConjunction function''')
+setScriptDescription('''Demo eventsConjunction function, which shows the
+regions where two events lists overlap.''')
 
 ev1= datumRange( 'May 2000' )
 ev2= datumRange( 'May 15 2000 - June 15 2000' )
