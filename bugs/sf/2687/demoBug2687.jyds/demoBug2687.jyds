@@ -1,0 +1,6 @@
+ds= randn(100,40) + ( 10 * outerProduct( ones(100), sin(linspace(0,PI,40)) ) + 10 )
+ff= dataset( linspace(1000,5000,40), units=Units.hertz )
+tt= linspace( '2025-03-19T00:00',  '2025-03-20T00:00', 100 )
+
+result= link( tt, ff, ds )
+
