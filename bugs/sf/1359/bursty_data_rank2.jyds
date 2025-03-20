@@ -2,14 +2,20 @@ setScriptDescription('''See bug https://sourceforge.net/p/autoplot/bugs/1359/, w
 the scan and step buttons don't quite work as you would expect.  This returns a
 rank 2 waves dataset, with time the first dimension and time offset the second dimension.''')
 
+dutyCycle= getParam( 'dutyCycle', '15', 'Duty Cycle %', ['15','100'] )
+
 t0= datum('2025-03-17T00:00Z')
 
 t=t0
 
-t= findgen(30)*'600s' + t0
+if dutyCycle=='15':
+    t= findgen(30)*'600s' + t0
+else:
+    t= findgen(30)*'100s' + t0
+    
 ds= randn(len(t),128)/10 + ( distance(30,128,15,60,30,30) ).lt(2) * 3
 
-toff= dataset( linspace(0.,100.,128), units='s' )
+toff= dataset( linspace(0.,100.,129)[0:128], units='s' )
 
 ds= link( t, toff, ds )
 

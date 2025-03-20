@@ -5,6 +5,8 @@ from org.das2.qds import DataSetUtil
 setScriptDescription('''See bug https://sourceforge.net/p/autoplot/bugs/1359/, where
 the scan and step buttons don't quite work as you would expect.''')
 
+scale= getParam( 'scale', '60S', 'interval length', [ '60S', '240S' ] )
+
 ds= getDataSet( '/home/jbf/project/autoplot/git/dev/bugs/sf/1359/bursty_data.jyds' )
 ds= ds[1000:2000]
 
@@ -13,7 +15,7 @@ setLayoutOverplot(3)
 
 plot( ds )
 
-rang= datumRange( '2025-03-17 1:51 to 1:52' )
+rang= datumRange( '2025-03-17T1:51/PT'+scale )
 newrange= DataSetUtil.getNextInterval( ds, rang )
 
 plot( 1, createEvent( rang, 0xE0E0E0, str(rang.width()) ), renderType='eventsBar>orbitMode=T' )
