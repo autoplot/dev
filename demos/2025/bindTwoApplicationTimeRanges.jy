@@ -1,6 +1,6 @@
 from org.autoplot import AppManager
 
-setScriptDescription('''Bind two application timeranges together.  Follow the steps to
+setScriptDescription('''Binds all application timeranges together.  Follow the steps to
 demo:<br>
 <li>plot some time series
 <li>File->new window
@@ -9,10 +9,8 @@ demo:<br>
 Note this method can also bind two PNGWalks together, or a PNGWalk to an application.
 ''')
     
-if ( AppManager.getInstance().getApplicationCount()!=2 ):
-    raise Exception('Expecting two Autoplot applications')
-    
 ap1= AppManager.getInstance().getApplication(0).getDom()
-ap2= AppManager.getInstance().getApplication(1).getDom()
 
-bind( ap1, ap1.PROP_TIMERANGE, ap2, ap2.PROP_TIMERANGE )
+for i in range(1,AppManager.getInstance().getApplicationCount()):
+    ap2= AppManager.getInstance().getApplication(i).getDom()
+    bind( ap1, ap1.PROP_TIMERANGE, ap2, ap2.PROP_TIMERANGE )
