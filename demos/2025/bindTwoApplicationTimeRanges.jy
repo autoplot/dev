@@ -6,7 +6,9 @@ demo:<br>
 <li>File->new window
 <li>in the new window, plot another time series
 <li>run this script.
-Note this method can also bind two PNGWalks together, or a PNGWalk to an application.
+Note this method can also bind two PNGWalks together, or a PNGWalk to an application.  
+Note this binding may cause problems for you later, so you might want to close and 
+restart Autoplot when you are finished.
 ''')
     
 ap1= AppManager.getInstance().getApplication(0).getDom()
