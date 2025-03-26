@@ -1,3 +1,5 @@
+from java.util import HashMap
+from org.autoplot.dom import DomOps
 setScriptDescription('Double Slice')
 setScriptLabel('Double Slice')
 
@@ -7,7 +9,10 @@ if ( len(dom.plots)!=2 ):
 orig= getApplication()
 slicer= newApplication('doubleSlicer')
 setApplication(slicer)
-setLayoutOverplot(2)
+setLayout(2)
+
+slicer.dom.plots[1].rowId= slicer.dom.plots[0].rowId
+DomOps.fixLayout( slicer.dom, HashMap() );
 
 def doubleSlice1(evt):
     setApplication(orig)
@@ -15,7 +20,7 @@ def doubleSlice1(evt):
     
     setApplication(slicer)
     plot( 0, slice0( ds, dataset(evt.finishX) ) )
-    
+    setApplication(orig)
 
 def doubleSlice2(evt):
     setApplication(orig)
@@ -23,6 +28,7 @@ def doubleSlice2(evt):
     
     setApplication(slicer)
     plot( 1, slice0( ds, dataset(evt.finishX) ) )
+    setApplication(orig)
     
 addMouseModule( dom.plots[0],'double slice',doubleSlice1)
     
