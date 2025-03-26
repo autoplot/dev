@@ -1,0 +1,29 @@
+setScriptDescription('Double Slice')
+setScriptLabel('Double Slice')
+
+if ( len(dom.plots)!=2 ):
+    raise Exception('only two plots')
+
+orig= getApplication()
+slicer= newApplication('doubleSlicer')
+setApplication(slicer)
+setLayoutOverplot(2)
+
+def doubleSlice1(evt):
+    setApplication(orig)
+    ds= dom.plotElements[0].controller.dataSet
+    
+    setApplication(slicer)
+    plot( 0, slice0( ds, dataset(evt.finishX) ) )
+    
+
+def doubleSlice2(evt):
+    setApplication(orig)
+    ds= dom.plotElements[1].controller.dataSet
+    
+    setApplication(slicer)
+    plot( 1, slice0( ds, dataset(evt.finishX) ) )
+    
+addMouseModule( dom.plots[0],'double slice',doubleSlice1)
+    
+addMouseModule( dom.plots[1],'double slice',doubleSlice2)
