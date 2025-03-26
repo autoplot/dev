@@ -1,7 +1,11 @@
 from java.util import HashMap
 from org.autoplot.dom import DomOps
-setScriptDescription('Double Slice')
 setScriptLabel('Double Slice')
+setScriptDescription('''Double Slice will slice either of two spectrograms,
+drawing the slice on a second Autoplot window.  The two slices have 
+separate plots which are on top of one another, so the xaxis ranges can 
+be adjusted separately.
+''')
 
 if ( len(dom.plots)!=2 ):
     raise Exception('only two plots')
@@ -12,7 +16,12 @@ setApplication(slicer)
 setLayout(2)
 
 slicer.dom.plots[1].rowId= slicer.dom.plots[0].rowId
+
 DomOps.fixLayout( slicer.dom, HashMap() );
+bind( slicer.dom.plots[0].yaxis, 'range', slicer.dom.plots[1].yaxis, 'range' )
+bind( slicer.dom.plots[0].yaxis, 'log', slicer.dom.plots[1].yaxis, 'log' )
+
+setApplication(orig)
 
 def doubleSlice1(evt):
     setApplication(orig)
