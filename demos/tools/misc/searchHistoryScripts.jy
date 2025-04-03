@@ -1,34 +1,70 @@
-from java.util import HashMap
-from org.autoplot.state import StatePersistence
-setScriptDescription('Search history for scripts with search string')
-
-search= getParam('search','createEvent','text to search for')
-
+from java.lang import Exception
+from java.util.regex import Pattern
+from org.das2.util import FileUtil
 from org.autoplot.datasource import AutoplotSettings,URISplit
-autoplotData= AutoplotSettings.settings().resolveProperty(AutoplotSettings.PROP_AUTOPLOTDATA)
 
-checkedAlready= HashMap()
+setScriptTitle('Search Script History')
+setScriptDescription('''Look through old scripts named in autoplot_data/bookmarks/history.txt
+for strings.  Suppose you have a dataset you know was used to produce a graphic.  Run this
+script find the scripts which used the dataset.  Suppose you know the name of the png file
+produced.  Maybe you are looking for an example of a code which uses a function.''')
 
-f= open( autoplotData + "/bookmarks/history.txt" )
-for line in f.readlines():
-    if line.endswith('.jy\n'):
-        ll= line.split('\t')
-        try:
-            uri= ll[-1].strip()
-            split= URISplit.parse(uri)
-            ff= split.file
-            name= split.file[len(split.path):]
-            if not fileExists(ff): continue
-            ff= str(getFile(uri))
-            if ( checkedAlready.containsKey(ff) ): continue
-            checkedAlready.put(ff,ff)
-            
-            lineNum=0
-            for ll in open(ff):
-                lineNum=lineNum+1
-                if ll.find(search)>-1:
-                    print ll.strip() + ' \t('+ ff + ":"+str(lineNum)+")"
-        except:
-            import traceback
-            traceback.print_exc()
+regex= getParam('regex','history','Regular Expression')
+history= getParam('history', '~/autoplot_data/bookmarks/history.txt' )
 
+hh= getDataSet( history )
+hh= createEvents(hh)
+
+done= {}
+
+for h in hh:
+    uri= h[-1].svalue()
+    split= URISplit.parse(uri)
+    ff= split.file
+    
+    if ( ff!=None and ff.endswith('.jy') ):
+        if ff.startswith('file:///'):
+            ff= 'file:/'+ff[8:]
+        if ( done.has_key(ff) ):
+            continue
+        print ff
+        done[ff]= ff
+
+reg= Pattern.compile(regex)
+
+found= {}
+exceptions= {}
+
+monitor.taskSize= len(done)
+monitor.started()
+
+for d in done:
+    monitor.taskProgress= monitor.taskProgress+1
+    try:
+        ff= getFile(d)
+        lines= FileUtil.readFileToString(ff)
+    except Exception, e:
+        exceptions[d]= e.message
+        continue
+    foundAtLine=-1
+    lineNum=0
+    for line in lines.splitlines():
+        lineNum=lineNum+1
+        print lineNum, line
+        if reg.matcher(line).find():
+            foundAtLine= lineNum
+            break
+    if foundAtLine>-1:
+        found[ff]= foundAtLine
+monitor.finished()
+
+print '-------------'
+print 'Exceptions: '
+for e in exceptions:
+    print e, '\t', exceptions[e]
+    
+print '-------------'
+print 'Found: '
+for f in found:
+    print f, ' at line '+ str(found[f])
+    
