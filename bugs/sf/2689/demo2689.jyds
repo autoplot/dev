@@ -1,0 +1,7 @@
+which= getParam('which','DST','Which parameter',['DST','KP'])
+
+if which=='DST':
+    result= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&filter=OMNI&timerange=Jan+through+June+2025')
+else:
+    result= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=KP1800&filter=OMNI&timerange=Jan+through+June+2025')
+    
