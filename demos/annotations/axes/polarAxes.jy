@@ -1,6 +1,6 @@
-# paint polar axes for the Juno mission.  This should be used like so:
+# paint polar axes.  This should be used like so:
 # 
-# f= getFile('https://research-git.uiowa.edu/abbith/juno/-/blob/main/resources/polarAxes.jy')
+# f= getFile('https://github.com/autoplot/dev/master/demos/annotations/axes/polarAxes.jy')
 # execfile(str(f))
 # ap= AxisPainter(dom.plots[0])
 # dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
@@ -9,45 +9,46 @@ from org.das2.graph import Painter,DasDevicePosition
 from java.awt import BasicStroke
 
 class AxisPainter( Painter ):
-    def __init__( self, plot, pole='N', flip='T' ):
+    def __init__( self, plot, pole='N', flip='T', radius=10 ):
         self.plot= plot
         self.flip= flip
         self.pole= pole
         self.units= plot.xaxis.range.units
+        self.radius= radius
         if ( plot.yaxis.range.units!=self.units ):
             raise Exception("units must be dimensionless or degress and match")
         
     def paint( self,g ):
         g.setColor( Color.GRAY )
-        for r in [ 90, 80, 70, 60, 50, 40 ]:
+        for r in [ 2, 4, 6, 8, 10 ]:
             g= g.create()
             s= BasicStroke( 0.5,BasicStroke.CAP_BUTT,BasicStroke.JOIN_MITER,10.0, [2.,2.], 0. )
             g.setStroke(s)
             p= self.plot.controller.dasPlot
             g.setClip( DasDevicePosition.toRectangle( p.getRow(), p.getColumn() ) )
-            xmin= p.XAxis.transform( self.units.createDatum( r-90 ) )
-            ymin= p.YAxis.transform( self.units.createDatum( 90-r ) )
-            xmax= p.XAxis.transform( self.units.createDatum( 90-r ) )
-            ymax= p.YAxis.transform( self.units.createDatum( r-90 ) )
+            xmin= p.XAxis.transform( self.units.createDatum( r-10 ) )
+            ymin= p.YAxis.transform( self.units.createDatum( 10-r ) )
+            xmax= p.XAxis.transform( self.units.createDatum( 10-r ) )
+            ymax= p.YAxis.transform( self.units.createDatum( r-10 ) )
             g.drawOval( int( xmin ), int( ymin ), int( xmax-xmin ), int( ymax-ymin ) )
             m='%d'
             if ( self.pole=='S' ): m='-%d'
-            if ( r==70 or r==50 ): g.drawString( m%r, p.XAxis.transform( datum( (r-90)*cos(TAU/8) ) )-4, p.YAxis.transform( datum( (90-r)*cos(TAU/8) ) )-4 )
+            g.drawString( m%r, p.XAxis.transform( datum( (r)*cos(TAU/8) ) )-4, p.YAxis.transform( datum( (r)*cos(TAU/8) ) )-4 )
         x0= p.XAxis.transform( self.units.createDatum(0) )
         y0= p.YAxis.transform( self.units.createDatum(0) ) 
         for r in [ 0,1,2,3,4,5,6,7,8,9,10,11 ]:
             t= TAU * r / 12.
-            x= p.XAxis.transform( self.units.createDatum( cos( t ) * ( 90-40 ) ) )
-            y= p.YAxis.transform( self.units.createDatum( sin( t ) * ( 90-40 ) ) )  
+            x= p.XAxis.transform( self.units.createDatum( cos( t ) * ( self.radius ) ) )
+            y= p.YAxis.transform( self.units.createDatum( sin( t ) * ( self.radius ) ) )  
             g.drawLine(int(x0), int(y0), int(x), int(y)) 
-        g.drawString( '270', p.XAxis.transform( self.units.createDatum( -50 ) ), p.YAxis.transform( self.units.createDatum( 0 ) ) )
-        g.drawString( '90', p.XAxis.transform( self.units.createDatum(50) ), p.YAxis.transform( self.units.createDatum( 0 ) ) )
+        g.drawString( '270', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum( 0 ) ) )
+        g.drawString( '90', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum( 0 ) ) )
         if ( self.flip=='T' or self.pole=='N' ):
-            g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum( 50 ) ) )
-            g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum( -50 ) ) )
+            g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+            g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
         else:
-            g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum( -50 ) ) )
-            g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum( 50 ) ) )
+            g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+            g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
         
 #ap= AxisPainter(dom.plots[0])
 #dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
