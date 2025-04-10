@@ -41,15 +41,14 @@ class AxisPainter( Painter ):
             x= p.XAxis.transform( self.units.createDatum( cos( t ) * ( self.radius ) ) )
             y= p.YAxis.transform( self.units.createDatum( sin( t ) * ( self.radius ) ) )  
             g.drawLine(int(x0), int(y0), int(x), int(y)) 
-        g.drawString( '270', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum( 0 ) ) )
-        g.drawString( '90', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum( 0 ) ) )
+        g.drawString( '270', p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
+        g.drawString( '90', p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
         if ( self.flip=='T' or self.pole=='N' ):
-            g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
-            g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+            g.drawString( '0', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+            g.drawString( '180', p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
         else:
             g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
             g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
         
 #ap= AxisPainter(dom.plots[0])
 #dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
-
