@@ -20,16 +20,16 @@ class AxisPainter( Painter ):
         
     def paint( self,g ):
         g.setColor( Color.GRAY )
-        for r in [ 2, 4, 6, 8, 10 ]:
+        for r in [ 0, 2, 4, 6, 8, 10 ]:
             g= g.create()
             s= BasicStroke( 0.5,BasicStroke.CAP_BUTT,BasicStroke.JOIN_MITER,10.0, [2.,2.], 0. )
             g.setStroke(s)
             p= self.plot.controller.dasPlot
             g.setClip( DasDevicePosition.toRectangle( p.getRow(), p.getColumn() ) )
-            xmin= p.XAxis.transform( self.units.createDatum( r-10 ) )
-            ymin= p.YAxis.transform( self.units.createDatum( 10-r ) )
-            xmax= p.XAxis.transform( self.units.createDatum( 10-r ) )
-            ymax= p.YAxis.transform( self.units.createDatum( r-10 ) )
+            xmin= p.XAxis.transform( self.units.createDatum( -r ) )
+            ymin= p.YAxis.transform( self.units.createDatum( r ) )
+            xmax= p.XAxis.transform( self.units.createDatum( r ) )
+            ymax= p.YAxis.transform( self.units.createDatum( -r ) )
             g.drawOval( int( xmin ), int( ymin ), int( xmax-xmin ), int( ymax-ymin ) )
             m='%d'
             if ( self.pole=='S' ): m='-%d'
