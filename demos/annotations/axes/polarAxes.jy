@@ -15,8 +15,6 @@ class PolarAxisPainter( Painter ):
     def __init__( self, plot, radius=10, angleUnits='degrees' ):
         '''angleUnits can be degrees or hours'''
         self.plot= plot
-        self.flip= flip
-        self.pole= pole
         self.units= plot.xaxis.range.units # radius units
         self.radius= radius
         self.angleUnits= angleUnits
