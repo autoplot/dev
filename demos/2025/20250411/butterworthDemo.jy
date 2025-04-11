@@ -1,0 +1,16 @@
+setScriptTitle('Demo Butterworth')
+setScriptDescription('''This demonstrates the butterworth filter, loading in a .wav file and exporting
+the data to a wav file.''')
+
+wav= getDataSet( 'http://autoplot.org/data/trainMono.wav' )
+
+low= getParam( 'low', '600Hz', 'lower bound of the filter' )
+high= '800Hz'
+
+bwav= butterworth( wav,2,datum(low),datum(high),True )
+
+plot( 0, wav )
+plot( 1, bwav )
+
+#formatDataSet( bwav, 'vap+audiosystem:/tmp/foo.audiosystem' )
+formatDataSet( bwav, '/tmp/ap/trainMono.filtered.wav' )
