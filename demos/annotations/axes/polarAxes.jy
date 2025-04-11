@@ -12,7 +12,7 @@ from java.awt import BasicStroke
 
 class PolarAxisPainter( Painter ):
     
-    def __init__( self, plot, pole='E', flip='T', radius=10 ):
+    def __init__( self, plot, radius=10 ):
         self.plot= plot
         self.flip= flip
         self.pole= pole
@@ -54,12 +54,8 @@ class PolarAxisPainter( Painter ):
             g.drawLine(int(x0), int(y0), int(x), int(y)) 
         g.drawString( '270', p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
         g.drawString( '90', p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
-        if ( self.flip=='T' or self.pole=='E' ):
-            g.drawString( '0', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
-            g.drawString( '180', p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
-        else:
-            g.drawString( '0', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
-            g.drawString( '180', p.XAxis.transform( self.units.createDatum(0) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+        g.drawString( '0', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        g.drawString( '180', p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
         
 #ap= AxisPainter(dom.plots[0])
 #dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
