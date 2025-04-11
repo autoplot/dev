@@ -56,9 +56,9 @@ class PolarAxisPainter( Painter ):
         elif self.angleUnits=='hours':
             labels= [ '0', '6', '12', '18' ]
         g.drawString( labels[0], p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
-        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
-        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
-        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
+        g.drawString( labels[1], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+        g.drawString( labels[2], p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        g.drawString( labels[3], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
         
 #ap= AxisPainter(dom.plots[0])
 #dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
