@@ -1,0 +1,20 @@
+setScriptTitle('Demo Polar Axes')
+setScriptDescription('''Script demonstrates how another script which draws a polar axis can be added.  The
+script defines an AxisPainter which draws the polar axis when needed.''')
+
+# clear existing decorators
+reset()  
+
+ff= getFile( PWD + 'polarAxes.jy' )
+execfile(str(ff))
+
+ap= PolarAxisPainter(dom.plots[0],radius=50)
+dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
+
+rr= linspace(1.,50.,20)
+aa= linspace(0,TAU,20)
+plot( cos(aa)*rr, sin(aa)*rr, lineThick=3,yrange=[-12,12], symbolSize=5 )
+
+dom.plots[0].xaxis.visible=False
+dom.plots[0].yaxis.visible=False
+bind( dom.plots[0].xaxis, 'scale', dom.plots[0].yaxis, 'scale' )
