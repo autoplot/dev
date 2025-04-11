@@ -12,12 +12,14 @@ from java.awt import BasicStroke
 
 class PolarAxisPainter( Painter ):
     
-    def __init__( self, plot, radius=10 ):
+    def __init__( self, plot, radius=10, angleUnits='degrees' ):
+        '''angleUnits can be degrees or hours'''
         self.plot= plot
         self.flip= flip
         self.pole= pole
-        self.units= plot.xaxis.range.units
+        self.units= plot.xaxis.range.units # radius units
         self.radius= radius
+        self.angleUnits= angleUnits
         dd= DomainDividerUtil.getDomainDivider(datum(0),datum(radius))
         while ( dd.boundaryCount(datum(0),datum(radius)) )>6:
             dd= dd.coarserDivider(False)
@@ -25,7 +27,7 @@ class PolarAxisPainter( Painter ):
             dd= dd.finerDivider(False)
         self.dd= dd
         if ( plot.yaxis.range.units!=self.units ):
-            raise Exception("units must be dimensionless or degress and match")
+            raise Exception("units must be dimensionless or degrees and match")
         
     def paint( self,g ):
         g.setColor( Color.GRAY )
@@ -52,10 +54,14 @@ class PolarAxisPainter( Painter ):
             x= p.XAxis.transform( self.units.createDatum( cos( t ) * ( self.radius ) ) )
             y= p.YAxis.transform( self.units.createDatum( sin( t ) * ( self.radius ) ) )  
             g.drawLine(int(x0), int(y0), int(x), int(y)) 
-        g.drawString( '270', p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
-        g.drawString( '90', p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
-        g.drawString( '0', p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
-        g.drawString( '180', p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        if self.angleUnits=='degrees':
+            labels= [ '0', '90', '180', '270' ]
+        elif self.angleUnits=='hours':
+            labels= [ '0', '6', '12', '18' ]
+        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
         
 #ap= AxisPainter(dom.plots[0])
 #dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
