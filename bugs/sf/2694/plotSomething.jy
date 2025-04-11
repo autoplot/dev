@@ -1,0 +1,3 @@
+setScriptDescription('plot something in the current window')
+
+plot( circle(8) )
