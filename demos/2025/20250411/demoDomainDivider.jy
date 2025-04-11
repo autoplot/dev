@@ -1,0 +1,11 @@
+from org.das2.datum import DomainDividerUtil
+
+dd= DomainDividerUtil.getDomainDivider(datum(0),datum(100))
+
+print 'ndiv=', dd.boundaryCount(datum(0),datum(100))
+dd= dd.coarserDivider(False)
+dd= dd.coarserDivider(False)
+
+dv= dd.boundaries(datum(0),datum(100))
+for i in xrange(dv.length):
+    print dv.get(i)
