@@ -5,7 +5,7 @@ setScriptDescription('Plots data with error bars in X')
 t= linspace(0,TAU,100)
 
 x= cos(t)
-dx= sin(t/2)
+dx= ( sin(4*t/2) + 4 )  * sin(t/2)
 
 x= dataset( x, binMin=x-dx, binMax=x+dx )
 y= linspace(0,10,100)
