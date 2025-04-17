@@ -10,7 +10,6 @@ resourceURI= getParam('resourceURI', PWD + 'sunriseSunset.txt' )
 
 ff= getFile( resourceURI,True,monitor )  # True means allow HTML code
 rr= open(str(ff),'r')
-print ff
 
 riseSet= DataSetBuilder(2,7,12*31) # Year, Month, Day, riseHr, riseMn, ssetHr, ssetMin 
 
