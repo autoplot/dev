@@ -8,6 +8,9 @@ glob= getParam( 'glob', '*.md', 'glob to match', { 'examples':['','*.md'] } )
 ff1= listDirectory(dir1+glob)
 ff2= listDirectory(dir2+glob)
 
+print 'dir1: ', dir1
+print 'dir2: ', dir2
+
 ff= ArrayList( Arrays.asList(ff1) )
 for f in ff2: 
     ff.remove(f)
