@@ -5,7 +5,7 @@ from javax.swing import JPanel,JScrollPane
 setScriptDescription("""draw connections between two sets""")
 
 fh=getParam('fontHeight',14,'The height of the font')
-rc=getParam('rightColumn',110,'The horizontal location of the right column')
+rc=getParam('rightColumn',310,'The horizontal location of the right column')
 
 class ConnectPanel( JPanel ):
     
@@ -33,21 +33,48 @@ class ConnectPanel( JPanel ):
             t= str(self.group2[i])
             g.drawString( t, rc, (i+2)*fh )
         taken= [False]*len(self.group2)
+        total=0
+        connect=0
         for i in xrange(len(self.group1)):
+            total=total+1
             t= str(self.group1[i])
             for j in xrange(len(self.group2)):
                 if ( str(self.group2[j])==str(t) and ( not taken[j] ) ):
                     g.drawLine( 10+fwd, (i+2)*fh-fh/3, rc-1, (j+2)*fh-fh/3 )
                     taken[j]=True
+                    connect= connect+1
                     break
+        g.drawString('%d of %d (%.2f%%)' % ( connect, total, connect*100./total ), rc*2-100,14)
 
 cp= ConnectPanel()
 
-cp.setGroup1([ 1,2,2,4,5 ] )
-cp.setGroup2([ 1,1,2,3,2 ] )
+def toStringArray(ds):
+    print ds[0].svalue()
+    result=[None] * len(ds)
+    for i in xrange(len(ds)):
+        print i
+        result[i]=ds[i].svalue()
+    return result
 
-cp.setGroup1([ 'apple','boy','cat','dog'] )
-cp.setGroup2([ 'cat','apple','boy' ] )
+tw= 'P2M'    
+tr1= datumRange(tw+'/2025-02-22')
+tr2= tr1.previous()
+
+g1= getDataSet('file:///home/jbf/ct/autoplot/userlog/20240827/uniqUsers.jyds?who',tr1)
+g2= getDataSet('file:///home/jbf/ct/autoplot/userlog/20240827/uniqUsers.jyds?who',tr2)
+g1= toStringArray(g1)
+g2= toStringArray(g2)
+g1.sort()
+g2.sort()
+
+cp.setGroup1(g1)
+cp.setGroup2(g2)
+
+#cp.setGroup1([ 1,2,2,4,5 ] )
+#cp.setGroup2([ 1,1,2,3,2 ] )
+
+#cp.setGroup1([ 'apple','boy','cat','dog'] )
+#cp.setGroup2([ 'cat','apple','boy' ] )
 
 cp.setMinimumSize(Dimension(400,400))
 cp.setPreferredSize(Dimension(400,400))
