@@ -1,11 +1,18 @@
+from org.das2.datum import TimeUtil
+setScriptTitle('Demo Decimal Year')
+setScriptDescription('''Write decimal year file demonstrating bug.  Alternatively decimal day-of-year file can 
+be written, because this is currently supported by Autoplot's parser.''')
+
+which= getParam('which','year','decimal day or year',['day','year'])
+
 ds= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2000-2020')
 
 # decimate to reduce file size for demonstration
-ds= ds[::24]
+ds= ds[::12]
 
 tt= xtags(ds)
 
-fname= URL(PWD).path + 'decimal_year.dat'
+fname= URL(PWD).path + 'decimal_' + which + '.dat'
 f= open( fname, 'w' )
 for i in xrange(len(ds)):
     t= tt[i].svalue()  # represent the time as $Y-$m-$dT$H:$M.$S
@@ -14,8 +21,14 @@ for i in xrange(len(ds)):
     d= int(t[8:10])
     H= int(t[11:13])
     M= int(t[14:16])
-    tdouble= Y + (m-1)/12. + d/(366.)+ H/(366*24.) + M/(366*1440.) # Not Correct-do not use elsewhere
-    f.write( '%s %17.13f %4d %2d %2d %2d %2d %.2f\n' % ( t, tdouble, Y, m, d, H, M, ds[i].value() ) )
+    if which=='year':
+        tdouble= Y + (m-1)/12. + d/(366.)+ H/(366*24.) + M/(366*1440.) # Not Correct-do not use elsewhere
+        f.write( '%s %17.13f %4d %2d %2d %2d %2d %.2f\n' % ( t, tdouble, Y, m, d, H, M, ds[i].value() ) )
+    else:
+        doy= TimeUtil.dayOfYear(m,d,Y)
+        tdouble= doy + H/24. + M/1440.  # Not Correct-do not use elsewhere
+        f.write( '%s %4d %14.10f %.2f\n' % ( t, Y, tdouble, ds[i].value() ) )
+        
 
 f.close()
 
