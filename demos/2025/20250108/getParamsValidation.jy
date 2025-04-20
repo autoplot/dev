@@ -1,3 +1,6 @@
+setScriptTitle('Script Title')
+setScriptDescription('Demonstrate constraints in parameters.')
+
 includedModes = getParam('incl','ab', 'Include modes', { 'regex':'[abcd]+' } )
 print includedModes
 
@@ -6,3 +9,5 @@ print timeRange
 
 minMaxInt = getParam('percent', 50, 'percent', { 'min':0, 'max':100 } )
 print minMaxInt
+
+setOutputParam('output',minMaxInt/2,'result output', { 'min':0, 'max':50 } )

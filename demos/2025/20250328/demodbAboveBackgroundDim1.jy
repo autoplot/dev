@@ -1,0 +1,12 @@
+from org.das2.qds import DataSetOps
+
+setScriptDescription('''Demo dbAboveBackgroundDim1 function, which will normalize
+each channel against the 10th percentile for that channel.''')
+
+ds= getDataSet('vap+das2server:http://planet.physics.uiowa.edu/das/das2Server?dataset=Cassini/RPWS/Survey','2015-12-28/2016-01-03')
+
+reset()
+
+plot( 0, ds, zrange='1.9E-16 to 1.9E-12', zlog=True, ylog=True, xrange='2015-12-28/2016-01-03' )
+
+plot( 1, DataSetOps.dbAboveBackgroundDim1( ds, 10 ), zrange=[20,100], ylog=True, xrange='2015-12-28/2016-01-03' )

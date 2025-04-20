@@ -1,0 +1,15 @@
+setScriptDescription('Autoplot v2025a_3 allows fftPower of waveform without xtags, using indgen for tags.')
+
+tags= getParam( 'tags', False, 'Add tags to data', [ True, False ] )
+
+n= 64000
+t= linspace(0,TAU,n)
+wave= randn(n)/10 + sin(t*1171) + cos(t*2219) + sin(t*3279+TAU/2) + cos(t*4314+TAU/2)
+
+if tags:
+    t= findgen(n)
+    wave= dataset( t, wave )
+    
+plot(0,wave)
+
+plot(1,fftPower(wave,1000,monitor))

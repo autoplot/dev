@@ -1,0 +1,21 @@
+from org.json import JSONObject
+from org.das2.util import FileUtil
+setScriptDescription('Find HAPI Servers which serve JSON data responses')
+
+ff= getFile('https://github.com/hapi-server/servers/blob/master/all.txt')
+
+for f in open(str(ff)):
+    f= f.strip()
+    s= f + '/capabilities'
+    print type(s), s
+    capfile= getFile( s,False,None ) # Note redirect on http://lasp.colorado.edu/lisird/hapi/capabilities fails
+    sjson= FileUtil.readFileToString(capfile)
+    jo= JSONObject(sjson)
+    formats= jo.getJSONArray('outputFormats')
+    for i in xrange(formats.length()):
+        format= formats.get(i)
+        print format
+    
+    
+    
+    

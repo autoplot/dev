@@ -1,0 +1,17 @@
+from org.das2.graph import ErrorBarType
+
+setScriptDescription('Plots data with error bars in X')
+
+t= linspace(0,TAU,100)
+
+x= cos(t)
+dx= ( sin(4*t/2) + 4 )  * sin(t/2)
+
+x= dataset( x, binMin=x-dx, binMax=x+dx )
+y= linspace(0,10,100)
+
+p,pe= plot( x,y )
+
+pe.style.showLimits=True
+pe.style.errorBarType=ErrorBarType.SHADE
+pe.style.drawError=True

@@ -1,15 +1,14 @@
 setScriptDescription('''New features for IDLSav export including text strings and
-named variables.''')
+named variables.  Note this tries to match the output of the IDL-produced sav
+file at https://jfaden.net/~jbf/autoplot/data/sav/stringVsStrarr.sav''')
 
-author= dataset('Jeremy')
+S= dataset('abcd')
 
-ds= sawtooth(linspace(0,TAU*10,1001))
+#ds= sawtooth(linspace(0,TAU*10,1001))
 
-sds= labelsDataset(['aaaa','bbbb','cccc'])
+ss= labelsDataset(['A','BBBBBCCCCC','aa'])
 
-ds.putProperty(QDataSet.UNITS,Units.dimensionless)
-
-formatDataSet( author,'/tmp/ap/newfeaturesidl.sav?Author')
-#formatDataSet( ds,'/tmp/ap/newfeaturesidl.sav?Data1')
-#formatDataSet( sds,'/tmp/ap/newfeaturesidl.sav?SDATA')
+formatDataSet( S,'/tmp/ap/newfeaturesidl.sav?S')
+formatDataSet( ss,'/tmp/ap/newfeaturesidl.sav?SS')
+#formatDataSet( ds,'/tmp/ap/newfeaturesidl.sav?ds')
 

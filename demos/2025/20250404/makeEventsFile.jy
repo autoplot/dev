@@ -1,0 +1,15 @@
+dd= generateTimeRanges('$Y-$m-$d','2016-2023')
+for d in dd:
+    print '# '+d
+    uri= 'vap+das2server:https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/WAV/Burst_Waveforms'
+    try:
+        ds= getDataSet(uri,d)
+        yy= ytags(ds)
+        tt= xtags(ds)
+        mkdir('/tmp/ap/')
+        ff= open( '/tmp/ap/waveforms_'+d+'.dat','w' )
+        for i in xrange(len(tt)):
+            ff.write( '%s %s\n' % ( tt[i]+yy[0], tt[i]+yy[-1] ) )
+        ff.close()
+    except:
+        print 'exception'

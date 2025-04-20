@@ -1,0 +1,40 @@
+from org.das2.graph import DasColorBar
+setScriptTitle('Grab Colorbar')
+setScriptDescription('''Grabs the color bar from a png of gif image.  Import this with
+the following code:<pre>
+ff= getFile( 'https://github.com/autoplot/dev/blob/master/demos/tools/misc/grabColorbar.jy' )
+execfile(str(ff)) 
+</pre>
+''')
+
+def addColorbar( fil, name, xmin=-1, xmax=-1, ymin=-1, ymax=-1 ):
+    try:
+        DasColorBar.Type.parse( name )
+        return
+    except:
+        print 'add new colorbar type ' + name
+    color_ds = getDataSet(fil)
+    if xmax-xmin > ymax-ymin:
+        if xmax==-1: raise Exception('expected xmax')
+        colort= color_ds[xmin:xmax,ymin:ymax,:]
+        step= (ymax-ymin)/250
+        if step<1: step=1
+        colort= colort[0:-1:step,(ymax-ymin)/2]
+    else:
+        if xmax==-1: raise Exception('expected xmax')
+        colort= color_ds[xmin:xmax,ymin:ymax,:]
+        step= (ymax-ymin)/250
+        if step<1: step=1
+        colort= colort[(xmax-xmin)/2,0:-1:step,:]
+    
+    def toInt(qds):
+        import jarray
+        result= jarray.zeros(qds.length(),'i')
+        for i in xrange(qds.length()):
+            result[i]= int(qds.value(i))
+        return result
+    tt= DasColorBar.Type.makeColorTable( toInt(linspace(0,255,colort.length())),
+                                         toInt(colort[:,0]),
+                                         toInt(colort[:,1]),
+                                         toInt(colort[:,2]), 240,0,240 )
+    myColortableType= DasColorBar.Type( name,tt )

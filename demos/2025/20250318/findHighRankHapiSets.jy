@@ -1,0 +1,30 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject
+setScriptTitle('Find Excludes because of Size')
+setScriptLabel('Find Excludes Size')
+setScriptDescription('''Scan the HAPI server looking for Rank 5 stuff which cannot be supported''')
+
+hapiserver= getParam( 'hapiserver', 'http://localhost:8280/HapiServer/hapi', 'The HAPI server', \
+   { 'examples' : [ 'https://cottagesystems.com/server/cdaweb/hapi', 'http://localhost:8280/HapiServer/hapi'] } ) 
+
+catalogFile= downloadResourceAsTempFile( URL(hapiserver + '/catalog'), None )
+cjson= JSONObject( FileUtil.readFileToString(catalogFile) )
+
+dss= cjson.getJSONArray('catalog')
+
+for i in xrange(dss.length()):
+    dataset= dss.getJSONObject(i).getString('id')
+    u= URL(hapiserver + '/info?dataset='+dataset )
+    try:
+        infoFile= downloadResourceAsTempFile( u, None )
+    except:
+        print 'Exception! '+str(u)
+        continue
+    info= JSONObject( FileUtil.readFileToString(infoFile))
+    parameters= info.getJSONArray('parameters')
+    for j in xrange(parameters.length()):
+        p= parameters.getJSONObject(j)
+        if p.has('size') and p.getJSONArray('size').length()>3:
+            print dataset, p.get('name'), p.getJSONArray('size')
+            
+        

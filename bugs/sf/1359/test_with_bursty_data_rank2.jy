@@ -1,0 +1,59 @@
+from java.awt import FlowLayout
+from javax.swing import JPanel,JButton
+from org.das2.util import ColorUtil
+from org.das2.qds import DataSetUtil
+setScriptDescription('''See bug https://sourceforge.net/p/autoplot/bugs/1359/, where
+the scan and step buttons don't quite work as you would expect.''')
+
+scale= getParam( 'scale', '60S', 'interval length', [ '30S', '60S', '240S', '1000S' ] )
+dutyCycle= getParam( 'dutyCycle', '15', 'Duty Cycle %', ['15','100'] )
+
+ds= getDataSet( '/home/jbf/project/autoplot/git/dev/bugs/sf/1359/bursty_data_rank2.jyds?dutyCycle='+dutyCycle )
+
+reset()
+setLayoutOverplot(3)
+
+plot( ds )
+
+rang= datumRange( '2025-03-17T1:51/PT'+scale )
+newrange= DataSetUtil.getNextInterval( ds, rang )
+
+plot( 1, createEvent( rang, 0xE0E0E0, str(rang.width()) ), renderType='eventsBar>orbitMode=T' )
+
+plot( 2, createEvent( newrange, 0xA0E0A0, str(newrange.width()) ), renderType='eventsBar>orbitMode=T' )
+
+current= newrange
+
+def nextImmediately(e):
+    global current, ds
+    last= current
+    current= DataSetUtil.getNextInterval( ds, current )
+    currentds= createEvent( None, current, 0xA0E050, str(current.width()) )
+    currentds= createEvent( currentds, datumRange(last), 0x80E030, 'old ' + str(last.width()))
+    plot( 2, currentds, renderType='eventsBar>orbitMode=T' )
+
+def prevImmediately(e):
+    global current, ds
+    last= current
+    current= DataSetUtil.getPreviousInterval( ds, current )
+    currentds= createEvent( None, current, 0x50E0A0, str(current.width()) )
+    currentds= createEvent( currentds, datumRange(last), 0x30E080, '<old ' + str(last.width()))
+    plot( 2, currentds, renderType='eventsBar>orbitMode=T' )
+    print 'Prev! '+str(current)
+    
+def next(e):
+    invokeLater(nextImmediately,e)
+    
+def prev(e):
+    invokeLater(prevImmediately,e)
+
+panel= JPanel()
+panel.layout= FlowLayout(FlowLayout.LEADING)
+
+button= JButton("<<",actionPerformed=prev )
+panel.add(button)
+
+button= JButton(">>",actionPerformed=next )
+panel.add(button)
+
+getApplication().setBottomPanel(panel)

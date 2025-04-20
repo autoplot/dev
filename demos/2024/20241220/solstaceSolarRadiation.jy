@@ -1,6 +1,6 @@
 setScriptDescription('Compare solarRadiation data from Tempest to sunrise and sunset times')
 
-tr= '2024-01-01/2024-12-21'
+tr= getParam( 'timerange', '2024-01-01/2024-12-21' )
 solarRadiation= getDataSet('file:///home/jbf/data/tempest/34803/$Y/$m/34803.obs.$Y$m$d.csv?column=solarRadiation',tr,monitor)
 
 tt= xtags(solarRadiation)

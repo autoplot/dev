@@ -1,0 +1,64 @@
+# paint polar axes.  This should be used like so:
+# 
+# f= getFile('https://github.com/autoplot/dev/blob/master/demos/annotations/axes/polarAxes.jy')
+# execfile(str(f))
+# ap= AxisPainter(dom.plots[0])
+# dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
+
+from org.das2.graph import Painter,DasDevicePosition
+from org.das2.datum import DomainDividerUtil
+
+from java.awt import BasicStroke
+
+class PolarAxisPainter( Painter ):
+    
+    def __init__( self, plot, radius=10, angleUnits='degrees' ):
+        '''angleUnits can be degrees or hours'''
+        self.plot= plot
+        self.units= plot.xaxis.range.units # radius units
+        self.radius= radius
+        self.angleUnits= angleUnits
+        dd= DomainDividerUtil.getDomainDivider(datum(0),datum(radius))
+        while ( dd.boundaryCount(datum(0),datum(radius)) )>6:
+            dd= dd.coarserDivider(False)
+        while ( dd.boundaryCount(datum(0),datum(radius)) )<4:
+            dd= dd.finerDivider(False)
+        self.dd= dd
+        if ( plot.yaxis.range.units!=self.units ):
+            raise Exception("units must be dimensionless or degrees and match")
+        
+    def paint( self,g ):
+        g.setColor( Color.GRAY )
+        s= BasicStroke( 0.5,BasicStroke.CAP_BUTT,BasicStroke.JOIN_MITER,10.0, [2.,2.], 0. )        
+        dv= self.dd.boundaries(datum(0),datum(self.radius))
+        for ir in xrange(dv.length):
+            r= dv.get(ir)
+            g= g.create()
+            g.setStroke(s)
+            p= self.plot.controller.dasPlot
+            g.setClip( DasDevicePosition.toRectangle( p.getRow(), p.getColumn() ) )
+            xmin= p.XAxis.transform( self.units.createDatum( -r ) )
+            ymin= p.YAxis.transform( self.units.createDatum( r ) )
+            xmax= p.XAxis.transform( self.units.createDatum( r ) )
+            ymax= p.YAxis.transform( self.units.createDatum( -r ) )
+            g.drawOval( int( xmin ), int( ymin ), int( xmax-xmin ), int( ymax-ymin ) )
+            m='%d'
+            g.drawString( m%r, p.XAxis.transform( datum( (r)*cos(TAU/8) ) )-4, p.YAxis.transform( datum( (r)*cos(TAU/8) ) )-4 )
+        x0= p.XAxis.transform( self.units.createDatum(0) )
+        y0= p.YAxis.transform( self.units.createDatum(0) ) 
+        for r in [ 0,1,2,3,4,5,6,7,8,9,10,11 ]:
+            t= TAU * r / 12.
+            x= p.XAxis.transform( self.units.createDatum( cos( t ) * ( self.radius ) ) )
+            y= p.YAxis.transform( self.units.createDatum( sin( t ) * ( self.radius ) ) )  
+            g.drawLine(int(x0), int(y0), int(x), int(y)) 
+        if self.angleUnits=='degrees':
+            labels= [ '0', '90', '180', '270' ]
+        elif self.angleUnits=='hours':
+            labels= [ '0', '6', '12', '18' ]
+        g.drawString( labels[0], p.XAxis.transform( self.units.createDatum(self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        g.drawString( labels[1], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum(self.radius) ) )
+        g.drawString( labels[2], p.XAxis.transform( self.units.createDatum(-self.radius) ), p.YAxis.transform( self.units.createDatum(0) ) )
+        g.drawString( labels[3], p.XAxis.transform( self.units.createDatum( 0 ) ), p.YAxis.transform( self.units.createDatum( self.units.createDatum(-self.radius) ) ) )
+        
+#ap= AxisPainter(dom.plots[0])
+#dom.canvases[0].controller.dasCanvas.addBottomDecorator( ap )
