@@ -12,7 +12,8 @@ class ConnectPanel( JPanel ):
     def __init__(self):
         self.group1= [1,2,3,4]
         self.group2= [2,3]
-        
+        self.preferredHeight=  10000
+        self.setPreferredSize(Dimension(1000,self.preferredHeight))
         
     def setGroup1(self,group1):
         self.group1= group1
@@ -80,4 +81,4 @@ cp.setMinimumSize(Dimension(400,400))
 cp.setPreferredSize(Dimension(400,400))
 
 
-addTab( 'connect',JScrollPane(cp) )
+addTab( 'connect',JScrollPane(cp,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS ) )
