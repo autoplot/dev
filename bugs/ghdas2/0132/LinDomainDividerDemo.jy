@@ -1,0 +1,22 @@
+from org.das2.datum import LinearDomainDivider
+
+setScriptTitle('LogLinDomainDivider Demo')
+setScriptDescription('''Demonstrates where LogLinDomainDivider seems to fail.''')
+
+dd1 = LinearDomainDivider.create(1,-11)
+dd2 = LinearDomainDivider.create(1,0)
+
+print 'Getting the boundaries are negative and positive decades...'
+d= datum
+bb1= dd1.boundaries(d(2.82e-11),d(2.3e-10))
+bb2= dd2.boundaries(d(2.82e0),d(2.3e1))
+
+for i in xrange(max(bb1.getLength(),bb2.getLength())):
+    sbb1=''
+    sbb2=''
+    if i<bb1.getLength():
+        sbb1= str(bb1.get(i))
+    if i<bb2.getLength():
+        sbb2= str(bb2.get(i))
+    print '%s\t%s' % ( sbb1, sbb2 )
+
