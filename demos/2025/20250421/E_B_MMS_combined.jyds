@@ -1,0 +1,195 @@
+from org.das2.qds import DataSetUtil
+tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+#tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
+typ = getParam('type', 'E', 'E or B', ['E','B'])
+
+def smoothTruncate( ds, len ):
+    'implement IDL smooth with edge_truncate keyword set.'
+    ds= dataset(ds)
+    mm= append( append( replicate( ds[0], len ), ds), replicate( ds[-1], len ) )
+    mm= smooth( mm, len )
+    return mm[len:-len]
+#get B and E field data for MMS    
+if typ== 'B':
+    ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/srvy/l2/$Y/$m/mms1_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?mms1_fgm_b_gse_srvy_l2',tr)
+    ###ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/scm/srvy/l2/scsrvy/$Y/$m/mms1_scm_srvy_l2_scsrvy_$Y$m$d_v$(v,sep).cdf?mms1_scm_acb_gse_scsrvy_srvy_l2',tr)
+    #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/$Y/$m/mms1_fgm_brst_l2_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_fgm_b_gsm_brst_l2',tr)
+    #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/2015/10/mms1_fgm_brst_l2_20151016133904_v4.18.1.cdf?mms1_fgm_b_gsm_brst_l2',tr)
+else:
+    ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/slow/l2/dce/$Y/$m/mms1_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?mms1_edp_dce_gse_slow_l2',tr)
+    #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/brst/l2/dce/$Y/$m/mms1_edp_brst_l2_dce_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_edp_dce_gse_brst_l2',tr)
+#coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/mec/srvy/l2/ephts04d/$Y/$m/mms1_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?mms1_mec_r_gse',tr)
+coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/mec/srvy/l2/ephts04d/$Y/$m/mms1_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?mms1_mec_r_gse',tr)
+
+#perform transform for B
+
+ds = trim(ds, tr)
+
+
+xtags1 = ds.property(QDataSet.DEPEND_0)
+#coords = trim(coords,tr)
+coords = synchronizeNN(ds, coords)
+
+
+dtime = xtags(ds)
+datax= ds[:,0:3]
+
+coorx = coords
+mins = 1
+sec = 0
+
+deltat = DataSetUtil.guessCadenceNew( dtime, None )
+if deltat == None:
+    deltat = '7.0 ms'
+
+facavg = int(1+(datum('60.0 s')*mins+sec)/deltat)
+
+
+#---------------------------------------------------------------------------------------------------------
+#PRO TRANSFORM_DATA,dtime,datax,coorx,facavg,deltat,tdat
+#-----------------------------------------------
+
+#put dtime, datax, coorx into one new array named data
+data = fltarr(len(dtime),7)
+bt=fltarr(len(dtime))
+#data[:,0]=dtime
+data[:,1:4]=datax[:,0:3] # x,y,z
+#data[:,4:7]=coorx[:,1:4] # x,y,z
+data[:,4:7]=coorx[:,0:3] # x,y,z
+
+
+
+#-----------------------------------------------
+#Set the value for the range to smooth the data set in terms of minutes and seconds
+
+#deltat is the sampleing rate of the data and is determined in a previous routine
+#facavg= int(1+(60.0*mins+sec)/deltat)
+
+#------------------------------------------------
+#Calculate the mean value of the magnetic field
+#using a boxcar average
+print 'facavg', facavg
+beta= bundle( smoothTruncate(data[:,1],facavg), smoothTruncate(data[:,2],facavg), smoothTruncate(data[:,3],facavg) )
+#beta= bundle( data[:,1], data[:,2], data[:,3] )
+  
+#------------------------------------------------
+#Extract the information regarding the position
+#of the satellite
+
+rho=data[:,4:7]
+
+#irec=970
+irec=0
+
+gamma=fltarr(len(data),3)
+
+chi= copy( gamma )
+tdat=fltarr(len(data),6)
+
+#gamma=rho cross beta / magnitude(rho cross beta)
+def norm(dd):
+    return magnitude(dd)
+    
+def mmult( vvs, mat ):
+    #return matrixMultiply( transpose(mat), vvs )
+    return matrixMultiply( mat, vvs )
+
+def vectorFormat( vv ):
+    return '%.5f %.5f %.5f' % ( vv[0], vv[1], vv[2] )
+ 
+for j in xrange(len(data)):
+    if ( j ==irec):
+        cp= crossProduct(rho[j,:],beta[j,:])
+    gamma[j,:] = crossProduct(rho[j,:],beta[j,:]) / norm(crossProduct(rho[j,:],beta[j,:]))
+
+
+for k in xrange(len(data)):
+    if ( k ==irec):
+        cp= crossProduct(gamma[irec,:],beta[irec,:])
+    chi[k,:] = crossProduct(gamma[k,:],beta[k,:]) / norm(crossProduct(gamma[k,:],beta[k,:]))
+
+#------------------------------------------------
+#Perform the transformation
+
+tmatx=fltarr(3,3)
+
+monitor.taskSize= len(data)
+monitor.started()
+
+for i in xrange(len(data) ):
+  monitor.taskProgress= i
+  
+
+      
+  beta[i,:]=beta[i,:]/norm(beta[i,:])
+  
+
+
+  tmatx= dataset( [[chi[i,0],chi[i,1],chi[i,2]],
+                   [gamma[i,0],gamma[i,1],gamma[i,2]], 
+                   [beta[i,0],beta[i,1],beta[i,2]]] )
+
+  tdat[i,1:4] = mmult( data[i,1:4], tmatx )
+
+  
+  #      The line below reverses the X component to outward
+  #
+  
+  ##tdat[i,1] = - tdat[i,1]
+  
+  tdat[i,5]=norm(tdat[i,1:4])
+  bt[i]=norm(data[i,1:4]) # total field in GSM
+
+
+##tdat[:,4] = tdat[:,3] - smooth(tdat[:,3],facavg)  #<=Subtract quiet time field
+#tdat[:,2] = tdat[:,2] - smooth(tdat[:,2],facavg)
+monitor.finished()
+
+ds = link(dtime, tdat[:,1])
+ds1 = link(dtime, tdat[:,2])
+ds2 = link(dtime, tdat[:,3])
+
+#ds = diff(ds)
+#ds1 = diff(ds1)
+#ds2 = diff(ds2)
+
+'''
+ny = 2/(dtime[1]-dtime[0])
+low = 2/(dtime[-1]-dtime[0])
+
+ds = butterworth(ds,2,datum(ny),True)
+ds1 = butterworth(ds1,2,datum(ny),True)
+ds2 = butterworth(ds2,2,datum(ny),True)
+
+   
+'''  
+'''
+if typ=='B':
+    ds = butterworth(ds,2,Units.hertz.createDatum(0.1),False)
+    ds1 = butterworth(ds1,2,Units.hertz.createDatum(0.1),False)
+    ds2 = butterworth(ds2,2,Units.hertz.createDatum(0.1),False)
+'''   
+#ds = fftPower(ds,128,1,'Hanning', None)
+ds = fftPower(ds,512,2,'Hanning', None)
+ds1 = fftPower(ds1,512,2,'Hanning', None)
+ds2 = fftPower(ds2,512,2,'Hanning', None)
+ds = synchronize(ds1,ds)
+#ds = fftPower(ds,1024,1,'Hanning', None)
+xtags1 = ds.property(QDataSet.DEPEND_0)
+
+
+#ds = (ds+ds1+ds2)
+
+
+
+ds = sqrt(ds**2+ds1**2+ds2**2)
+if typ=='E':
+    ds = ds*1E6
+
+
+
+###
+#ds= putProperty( ds, QDataSet.DEPEND_0, putProperty( ds.property(QDataSet.DEPEND_0), QDataSet.CADENCE, '50 s') )
+xtags1 = putProperty( xtags1, QDataSet.CADENCE, '50 s') 
+
+result= putProperty( ds, QDataSet.DEPEND_0, xtags1 )

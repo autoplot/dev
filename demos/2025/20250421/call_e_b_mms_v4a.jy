@@ -1,0 +1,126 @@
+from org.das2.util.monitor import NullProgressMonitor
+from java.lang.Double import NaN
+from org.das2.qds.ops.Ops import FFTFilterType 
+from org.das2.graph import DasColorBar
+from org.das2.qds import DataSetUtil,LongReadAccess
+
+tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+#tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
+
+#tr = getParam('timerange','2015-10-16T12:00 to 14:00', 'timerange to load')
+#width = getParam('binsize', 128, 'bin size')
+width = getParam('binsize', 512, 'bin size')
+slide = getParam('slide', 8, 'sliding window')
+
+monitor.taskSize= 100
+
+e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E&timerange='+tr,\
+        monitor.getSubtaskMonitor(0,20,'Load E'))
+b = getDataSet(PWD+'E_B_MMS_combined.jyds?type=B&timerange='+tr,\
+        monitor.getSubtaskMonitor(20,40,'Load B'))
+
+e_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E&timerange='+tr,\
+              monitor.getSubtaskMonitor(40,60,'Load E Transformed') )
+b_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=B&timerange='+tr,\
+              monitor.getSubtaskMonitor(60,80,'Load B Transformed') )
+              
+'''
+#high pass filter
+b_trans_x = butterworth(b_trans[:,0],2,Units.hertz.createDatum(0.1),False)
+b_trans_y = butterworth(b_trans[:,1],2,Units.hertz.createDatum(0.1),False)
+b_trans_z = butterworth(b_trans[:,2],2,Units.hertz.createDatum(0.1),False)
+
+xtags1 = b_trans.property(QDataSet.DEPEND_0)
+
+b_trans = link(xtags1,bundle(b_trans_x, b_trans_y, b_trans_z))
+'''
+###
+
+monitor.taskProgress= 83
+monitor.progressMessage= 'sync up data'
+
+e_trans = synchronize(b_trans, e_trans)
+e = synchronize(b,e)
+
+monitor.taskProgress= 85
+monitor.progressMessage= 'do ffts'
+
+fftmon= monitor.getSubtaskMonitor('ffts')
+
+w = windowFunction(FFTFilterType.Hanning, width)
+ex_spec = fft(e_trans[:,0],w,slide,NullProgressMonitor())
+
+ey_spec = fft(e_trans[:,1],w,slide,NullProgressMonitor())
+
+ez_spec = fft(e_trans[:,2],w,slide,NullProgressMonitor())
+
+#e_trans_fft = fft(e_trans,windowFunction( FFTFilterType.Hanning, 256 ),2,monitor)
+
+bx_spec = fft(b_trans[:,0],w,slide,NullProgressMonitor())
+
+by_spec = fft(b_trans[:,1],w,slide,NullProgressMonitor())
+
+bz_spec = fft(b_trans[:,2],w,slide,NullProgressMonitor())
+
+monitor.taskProgress= 89
+monitor.progressMessage= 'calculate poynting flux'
+
+def mycomplexMultiply(a,b):
+    c = a*0
+    for i in xrange(len(a)):
+        print a[i],b[i]
+        c[i] = complexMultiply(a[i],b[i])
+    return c
+        
+  
+poynt_fft_x = (mycomplexMultiply(complexConj(ey_spec),bz_spec) - \
+    mycomplexMultiply(complexConj(ez_spec),by_spec)) + \
+    (mycomplexMultiply(ey_spec, complexConj(bz_spec)) - \
+    mycomplexMultiply(ez_spec, complexConj(by_spec)))
+
+poynt_fft_y = -(mycomplexMultiply(complexConj(ex_spec),bz_spec) - \
+    mycomplexMultiply(complexConj(ez_spec),bx_spec)) - \
+    (mycomplexMultiply(ex_spec, complexConj(bz_spec)) - \
+    mycomplexMultiply(ez_spec, complexConj(bx_spec)))
+
+poynt_fft_z = (mycomplexMultiply(complexConj(ex_spec),by_spec) - \
+    mycomplexMultiply(complexConj(ey_spec),bx_spec)) + \
+    (mycomplexMultiply(ex_spec, complexConj(by_spec)) - \
+    mycomplexMultiply(ey_spec, complexConj(bx_spec)))       
+    
+mu = 4*PI*10**-7
+
+factor = 1E-3*1E-9*1E6
+
+poynt_x = ((1/mu)*(poynt_fft_x))*factor
+poynt_y = ((1/mu)*(poynt_fft_y))*factor
+poynt_z = ((1/mu)*(poynt_fft_z))*factor
+
+
+poynt_x = poynt_x/width
+poynt_y = poynt_y/width
+poynt_z = poynt_z/width
+
+s_mag = sqrt(poynt_x**2+poynt_y**2+poynt_z**2)
+
+#s_mag = poynt_x+ poynt_y+ poynt_z
+
+r = where(s_mag.le(9*10**-3))
+poynt_x[r] = NaN
+poynt_y[r] = NaN
+poynt_z[r] = NaN
+
+monitor.taskProgress= 95
+monitor.progressMessage= 'display data'
+
+setLayout(6)
+
+p,pe0 = plot(0,b, zrange = [1E-6, 1E-1], yrange = [0,2])
+p,pe1 = plot(1,e,zrange = [1E-3, 10], yrange = [0,2])
+p,pe2 = plot(2, s_mag, zrange = [1E-8,1E0], yrange= [0,2], renderType = 'nnSpectrogram')
+p,pe3 =plot(3, poynt_x, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram')
+p,pe4 =plot(4, poynt_y,zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram')
+p,pe5 =plot(5, poynt_z,zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram')
+
+
+monitor.finished()
