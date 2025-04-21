@@ -115,12 +115,19 @@ monitor.progressMessage= 'display data'
 
 setLayout(6)
 
-p,pe0 = plot(0,b, zrange = [1E-6, 1E-1], yrange = [0,2])
-p,pe1 = plot(1,e,zrange = [1E-3, 10], yrange = [0,2])
-p,pe2 = plot(2, s_mag, zrange = [1E-8,1E0], yrange= [0,2], renderType = 'nnSpectrogram')
-p,pe3 =plot(3, poynt_x, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram')
-p,pe4 =plot(4, poynt_y,zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram')
-p,pe5 =plot(5, poynt_z,zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram')
+p,pe0 = plot(0, b, zrange = [1E-6, 1E-1], yrange = [0,2], \
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='B Power<br>(nT!e2!nHz!e-1!n)' )
+p,pe1 = plot(1, e, zrange = [1E-3, 10], yrange = [0,2], \
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='E Power<br>(mV!e2!nm!e-2!nHz!e-1!n)' )
+p,pe2 = plot(2, s_mag, zrange = [1E-8,1E0], yrange= [0,2], renderType = 'nnSpectrogram', \
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='|S|<br>W km!e-2!n', title='' )
+p,pe3 =plot(3, poynt_x, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram', \
+    xdrawTickLabels=False, ytitle='f (Hz)',  ztitle='S!DX!n<br>W km!e-2!n',title='' )
+p,pe4 =plot(4, poynt_y, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram', \
+    xdrawTickLabels=False, ytitle='f (Hz)',  ztitle='S!DY!n<br>W km!e-2!n',title='' )
+p,pe5 =plot(5, poynt_z, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram', \
+    xdrawTickLabels=True, ytitle='f (Hz)',  ztitle='S!DZ!n<br>W km!e-2!n',title='' )
 
+fixLayout()
 
 monitor.finished()
