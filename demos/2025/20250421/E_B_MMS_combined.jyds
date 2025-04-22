@@ -1,7 +1,10 @@
+from org.das2.dataset import NoDataInIntervalException
 from org.das2.qds import DataSetUtil
 tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 #tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
 typ = getParam('type', 'E', 'E or B', ['E','B'])
+
+sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 
 def smoothTruncate( ds, len ):
     'implement IDL smooth with edge_truncate keyword set.'
@@ -10,16 +13,34 @@ def smoothTruncate( ds, len ):
     mm= smooth( mm, len )
     return mm[len:-len]
 #get B and E field data for MMS    
+
 if typ== 'B':
-    ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/srvy/l2/$Y/$m/mms1_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?mms1_fgm_b_gse_srvy_l2',tr)
+    dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/srvy/l2/$Y/$m/%s_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?%s_fgm_b_gse_srvy_l2' % (sc,sc,sc),tr)
+    dsFast=  getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/brst/l2/$Y/$m/%s_fgm_brst_l2_$Y$m$d$(H;delta=6)$M$S_v$(v,sep).cdf?%s_fgm_b_gse_brst_l2' % (sc,sc,sc),tr)
     ###ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/scm/srvy/l2/scsrvy/$Y/$m/mms1_scm_srvy_l2_scsrvy_$Y$m$d_v$(v,sep).cdf?mms1_scm_acb_gse_scsrvy_srvy_l2',tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/$Y/$m/mms1_fgm_brst_l2_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_fgm_b_gsm_brst_l2',tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/2015/10/mms1_fgm_brst_l2_20151016133904_v4.18.1.cdf?mms1_fgm_b_gsm_brst_l2',tr)
 else:
-    ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/slow/l2/dce/$Y/$m/mms1_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?mms1_edp_dce_gse_slow_l2',tr)
+    dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
+    dsFast = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/fast/l2/dce/$Y/$m/%s_edp_fast_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_fast_l2' % (sc,sc,sc),tr)
+    #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/brst/l2/dce/$Y/$m/mms1_edp_brst_l2_dce_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_edp_dce_gse_brst_l2',tr)
-#coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/mec/srvy/l2/ephts04d/$Y/$m/mms1_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?mms1_mec_r_gse',tr)
-coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/mec/srvy/l2/ephts04d/$Y/$m/mms1_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?mms1_mec_r_gse',tr)
+
+if dsSlow!=None and dsFast!=None:
+    print 'dsSlow', dsSlow
+    print 'dsFast', dsFast
+    ds= concatenate(dsSlow,dsFast)
+    s= sort(xtags(ds))
+    ds= ds[s]
+    print 'sorted the tags'
+elif dsSlow!=None:
+    ds= dsSlow
+elif dsFast!=None:
+    ds= dsFast
+else:
+    raise NoDataInIntervalException('no data found')
+    
+coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/mec/srvy/l2/ephts04d/$Y/$m/%s_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?%s_mec_r_gse' % (sc,sc,sc),tr)
 
 #perform transform for B
 
