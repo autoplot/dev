@@ -1,8 +1,15 @@
+
 from org.das2.util.monitor import NullProgressMonitor
 from java.lang.Double import NaN
 from org.das2.qds.ops.Ops import FFTFilterType 
 from org.das2.graph import DasColorBar
 from org.das2.qds import DataSetUtil,LongReadAccess
+
+setScriptTitle('MMS Poynting Flux in FAC')
+setScriptLabel('MMS Poynting Flux')
+setScriptDescription('''Frequency versus time spectrograms of total wave power in the magnetic field B, 
+the electric field E, and the magnitude of the Poynting vector S.  The components 
+of the Poynting flux S are in the field-aligned coordinate X, Y, and Z directions.''')
 
 tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 #tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
