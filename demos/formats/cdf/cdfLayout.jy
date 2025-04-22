@@ -11,6 +11,8 @@ TODO: use FileChannel and NIO to allow CDFs>2GB.''')
 
 resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/pub/data/rbsp/rbspa/l4/emfisis/density/2018/rbsp-a_density_emfisis-l4_20180119_v1.5.16.cdf', 'example file to load' )
 
+onlyData= getParam( 'onlyData', False, 'Only show data positions, useful for PDS4', [ True, False ] )
+
 ff= getFile(resourceURI,monitor)
 print ff
 
@@ -37,11 +39,11 @@ types= {
     2: 'GDR',
     3: 'rVDR',
     4: 'ADR',
-    5:'AgrEDR',
-    6:'VXR',
-    7:'VVR',
-    8:'zVDR',
-    9:'AzEDR',
+    5: 'AgrEDR',
+    6: 'VXR',
+    7: 'VVR',
+    8: 'zVDR',
+    9: 'AzEDR',
     10:'CCR',
     11:'CPR',
     12:'SPR',
@@ -69,7 +71,13 @@ def getCString( bbuf, isptr):
          bb[j]= bbuf.get(isptr+j)
     name= String(bb).trim()
     return name
-    
+
+def include( styp ):
+    if onlyData:
+        return styp=='VVR' or styp=='CVVR'
+    else:
+        return True
+            
 def followChain( bbuf, iptr, dsb, context=None ):
    
    if (iptr==0): return # empty chain
@@ -82,53 +90,55 @@ def followChain( bbuf, iptr, dsb, context=None ):
        typ= bbuf.getInt(iptr+8)
        styp= typeStr(typ)
        print styp, iptr, context
-       if styp=='CDR': # CDR
+       if styp=='CDR': # CDR - CDF Descriptor Record
            offs= bbuf.getLong(iptr+12)
-           dsb.nextRecord([iptr,iptr+siz,CDR_COLOR, 'CDR'] )
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,CDR_COLOR, 'CDR'] )
            iptr= offs
-       elif styp=='GDR': # GDR
-           dsb.nextRecord([iptr,iptr+siz,GDR_COLOR, 'GDR'] )
+       elif styp=='GDR': # GDR - Global Descriptor Record
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,GDR_COLOR, 'GDR'] )
            zVDRhead= bbuf.getLong(iptr+20)
            followChain( bbuf, zVDRhead, dsb )
            ADRhead= bbuf.getLong(iptr+28)
            followChain( bbuf, ADRhead, dsb )
            break
-       elif styp=='ADR':
+       elif styp=='ADR': # ADR - Attribute Descriptor Record
            name= getCString(bbuf,iptr+68)
-           dsb.nextRecord([iptr,iptr+siz,ADR_COLOR, 'ADR: '+name] )
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,ADR_COLOR, 'ADR: '+name] )
            adrnext= bbuf.getLong(iptr+12)
            if adrnext==0:
                break
            iptr= adrnext
-       elif styp=='zVDR': # zVDR
+       elif styp=='zVDR': # zVDR - Variable Descriptor Record
            vdrnext= bbuf.getLong(iptr+12)
            last= bbuf.getLong(iptr+36)
            
            name= getCString(bbuf,iptr+84)
-           dsb.nextRecord([iptr,iptr+siz,ZVDR_COLOR, 'zVDR:'+name] )
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,ZVDR_COLOR, 'zVDR:'+name] )
            vxrhead= bbuf.getLong(iptr+28)
            if vxrhead!=iptr:               
                followChain( bbuf, vxrhead, dsb, context=name )
                if vdrnext==0:
                    break
            iptr= vdrnext
-       elif styp=='VVR': # VVR
-           dsb.nextRecord([iptr,iptr+siz,VVR_COLOR, 'VVR:'+context] )
+       elif styp=='VVR': # VVR - Variable Values Record
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,VVR_COLOR, 'VVR:'+context] )
            break
-       elif styp=='CVVR': # CVVR
-           dsb.nextRecord([iptr,iptr+siz,CVVR_COLOR, 'CVVR:'+context] )
+       elif styp=='CVVR': # CVVR - Compressed Variable Values Record
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,CVVR_COLOR, 'CVVR:'+context] )
            break
-       elif styp=='VXR': # VXR
+       elif styp=='VXR': # VXR - Variable Index Record
            nentries=bbuf.getInt(iptr+20)
            nusedentries=bbuf.getInt(iptr+24)
            s= 'VXR:%s uses %d of %d blocks' % ( context,nusedentries,nentries )
-           dsb.nextRecord([iptr,iptr+siz,VXR_COLOR, s ] )
+           if include(styp): dsb.nextRecord([iptr,iptr+siz,VXR_COLOR, s ] )
            for j in xrange(nusedentries):
                ptr= bbuf.getLong(iptr+28+8*nentries+j*8)
                followChain( bbuf, ptr, dsb, context=context+' block '+str(j) )
            break
 
 dsb= DataSetBuilder(2,100,4)
+dsb.putProperty( QDataSet.FORMAT, '%d' )
+
 iptr= 8
 
 followChain( bbuf, iptr, dsb )
