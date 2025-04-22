@@ -19,6 +19,10 @@ tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 width = getParam('binsize', 512, 'bin size')
 slide = getParam('slide', 8, 'sliding window')
 
+doPntFilt= getParam( 'doPntFilt', True, 'apply the poynting flux filter', [ True, False ] )
+
+pntFilt= getParam( 'pntFilt', 9E-3, 'filter poynting flux below this value in watts/km**2' )
+
 monitor.taskSize= 100
 
 e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E&timerange='+tr,\
@@ -112,10 +116,11 @@ s_mag = sqrt(poynt_x**2+poynt_y**2+poynt_z**2)
 
 #s_mag = poynt_x+ poynt_y+ poynt_z
 
-r = where(s_mag.le(9*10**-3))
-poynt_x[r] = NaN
-poynt_y[r] = NaN
-poynt_z[r] = NaN
+if doPntFilt:
+    r = where(s_mag.le(pntFilt))
+    poynt_x[r] = NaN
+    poynt_y[r] = NaN
+    poynt_z[r] = NaN
 
 monitor.taskProgress= 95
 monitor.progressMessage= 'display data'
