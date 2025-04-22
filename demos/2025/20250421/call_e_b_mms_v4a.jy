@@ -18,6 +18,8 @@ sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 
 flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
+modes= getParam( 'modes', 'slow', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
+
 #tr = getParam('timerange','2015-10-16T12:00 to 14:00', 'timerange to load')
 #width = getParam('binsize', 128, 'bin size')
 width = getParam('binsize', 512, 'bin size')
@@ -29,15 +31,23 @@ pntFilt= getParam( 'pntFilt', 9E-3, 'filter poynting flux below this value in wa
 
 monitor.taskSize= 100
 
-e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E&sc='+sc+'&flipx='+str(flipx)+'&timerange='+tr,\
+e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
         monitor.getSubtaskMonitor(0,20,'Load E'))
-b = getDataSet(PWD+'E_B_MMS_combined.jyds?type=B&sc='+sc+'&flipx='+str(flipx)+'&timerange='+tr,\
+b = getDataSet(PWD+'E_B_MMS_combined.jyds?type=B'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
         monitor.getSubtaskMonitor(20,40,'Load B'))
 
-e_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E&sc='+sc+'&flipx='+str(flipx)+'&timerange='+tr,\
-              monitor.getSubtaskMonitor(40,60,'Load E Transformed') )
-b_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=B&sc='+sc+'&flipx='+str(flipx)+'&timerange='+tr,\
-              monitor.getSubtaskMonitor(60,80,'Load B Transformed') )
+e_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
+        monitor.getSubtaskMonitor(40,60,'Load E Transformed') )
+b_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=B'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
+        monitor.getSubtaskMonitor(60,80,'Load B Transformed') )
               
 '''
 #high pass filter
@@ -51,6 +61,9 @@ b_trans = link(xtags1,bundle(b_trans_x, b_trans_y, b_trans_z))
 '''
 ###
 
+print 'e,b, e_trans, b_trans'
+print e,b, e_trans, b_trans
+
 monitor.taskProgress= 83
 monitor.progressMessage= 'sync up data'
 
@@ -61,6 +74,8 @@ monitor.taskProgress= 85
 monitor.progressMessage= 'do ffts'
 
 fftmon= monitor.getSubtaskMonitor('ffts')
+
+print 'e_trans', e_trans
 
 w = windowFunction(FFTFilterType.Hanning, width)
 ex_spec = fft(e_trans[:,0],w,slide,NullProgressMonitor())

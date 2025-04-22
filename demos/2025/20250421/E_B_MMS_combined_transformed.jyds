@@ -6,23 +6,33 @@ sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 typ = getParam('type', 'E', 'E or B', ['E','B'])
 flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
+modes= getParam( 'modes', 'slow', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
+
 def smoothTruncate( ds, len ):
     'implement IDL smooth with edge_truncate keyword set.'
     ds= dataset(ds)
+    if ds.length()==0: return ds
     mm= append( append( replicate( ds[0], len ), ds), replicate( ds[-1], len ) )
     mm= smooth( mm, len )
     return mm[len:-len]
 #get B and E field data for MMS    
 
+dsSlow=None
+dsFast=None
+
 if typ== 'B':
-    dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/srvy/l2/$Y/$m/%s_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?%s_fgm_b_gse_srvy_l2' % (sc,sc,sc),tr)
-    dsFast=  getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/brst/l2/$Y/$m/%s_fgm_brst_l2_$Y$m$d$(H;delta=6)$M$S_v$(v,sep).cdf?%s_fgm_b_gse_brst_l2' % (sc,sc,sc),tr)
+    if modes=='slow' or modes=='both':
+        dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/srvy/l2/$Y/$m/%s_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?%s_fgm_b_gse_srvy_l2' % (sc,sc,sc),tr)
+    if modes=='fast' or modes=='both':
+        dsFast=  getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/brst/l2/$Y/$m/%s_fgm_brst_l2_$Y$m$d$(H;delta=6)$M$S_v$(v,sep).cdf?%s_fgm_b_gse_brst_l2' % (sc,sc,sc),tr)
     ###ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/scm/srvy/l2/scsrvy/$Y/$m/mms1_scm_srvy_l2_scsrvy_$Y$m$d_v$(v,sep).cdf?mms1_scm_acb_gse_scsrvy_srvy_l2',tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/$Y/$m/mms1_fgm_brst_l2_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_fgm_b_gsm_brst_l2',tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/2015/10/mms1_fgm_brst_l2_20151016133904_v4.18.1.cdf?mms1_fgm_b_gsm_brst_l2',tr)
 else:
-    dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
-    dsFast = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/fast/l2/dce/$Y/$m/%s_edp_fast_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_fast_l2' % (sc,sc,sc),tr)
+    if modes=='slow' or modes=='both':
+        dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
+    if modes=='fast' or modes=='both':
+        dsFast = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/fast/l2/dce/$Y/$m/%s_edp_fast_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_fast_l2' % (sc,sc,sc),tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/brst/l2/dce/$Y/$m/mms1_edp_brst_l2_dce_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_edp_dce_gse_brst_l2',tr)
 
@@ -46,6 +56,8 @@ coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/mec/srvy/l2/epht
 
 ds = trim(ds, tr)
 
+if ds.length()==0:
+    raise NoDataInIntervalException('no records found')
 
 xtags1 = ds.property(QDataSet.DEPEND_0)
 #coords = trim(coords,tr)
@@ -173,43 +185,6 @@ ds2 = link(dtime, tdat[:,3])
 #ds1 = diff(ds1)
 #ds2 = diff(ds2)
 
-'''
-ny = 2/(dtime[1]-dtime[0])
-low = 2/(dtime[-1]-dtime[0])
-
-ds = butterworth(ds,2,datum(ny),True)
-ds1 = butterworth(ds1,2,datum(ny),True)
-ds2 = butterworth(ds2,2,datum(ny),True)
-
-   
-'''  
-'''
-if typ=='B':
-    ds = butterworth(ds,2,Units.hertz.createDatum(0.1),False)
-    ds1 = butterworth(ds1,2,Units.hertz.createDatum(0.1),False)
-    ds2 = butterworth(ds2,2,Units.hertz.createDatum(0.1),False)
-'''   
-#ds = fftPower(ds,128,1,'Hanning', None)
-ds = fftPower(ds,512,2,'Hanning', None)
-ds1 = fftPower(ds1,512,2,'Hanning', None)
-ds2 = fftPower(ds2,512,2,'Hanning', None)
-ds = synchronize(ds1,ds)
-#ds = fftPower(ds,1024,1,'Hanning', None)
 xtags1 = ds.property(QDataSet.DEPEND_0)
 
-
-#ds = (ds+ds1+ds2)
-
-
-
-ds = sqrt(ds**2+ds1**2+ds2**2)
-if typ=='E':
-    ds = ds*1E6
-
-
-
-###
-#ds= putProperty( ds, QDataSet.DEPEND_0, putProperty( ds.property(QDataSet.DEPEND_0), QDataSet.CADENCE, '50 s') )
-xtags1 = putProperty( xtags1, QDataSet.CADENCE, '50 s') 
-
-result= putProperty( ds, QDataSet.DEPEND_0, xtags1 )
+result = link(xtags1,bundle(ds,ds1,ds2))
