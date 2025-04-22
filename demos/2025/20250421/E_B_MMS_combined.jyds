@@ -68,7 +68,7 @@ data[:,4:7]=coorx[:,0:3] # x,y,z
 #------------------------------------------------
 #Calculate the mean value of the magnetic field
 #using a boxcar average
-print 'facavg', facavg
+
 beta= bundle( smoothTruncate(data[:,1],facavg), smoothTruncate(data[:,2],facavg), smoothTruncate(data[:,3],facavg) )
 #beta= bundle( data[:,1], data[:,2], data[:,3] )
   
