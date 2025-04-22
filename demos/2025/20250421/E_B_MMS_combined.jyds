@@ -2,9 +2,9 @@ from org.das2.dataset import NoDataInIntervalException
 from org.das2.qds import DataSetUtil
 tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 #tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
-typ = getParam('type', 'E', 'E or B', ['E','B'])
-
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
+typ = getParam('type', 'E', 'E or B', ['E','B'])
+flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
 def smoothTruncate( ds, len ):
     'implement IDL smooth with edge_truncate keyword set.'
@@ -27,8 +27,8 @@ else:
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/brst/l2/dce/$Y/$m/mms1_edp_brst_l2_dce_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_edp_dce_gse_brst_l2',tr)
 
 if dsSlow!=None and dsFast!=None:
-    print 'dsSlow', dsSlow
-    print 'dsFast', dsFast
+    print 'dsSlow', dsSlow, extent(xtags(dsSlow))
+    print 'dsFast', dsFast, extent(xtags(dsFast))
     ds= concatenate(dsSlow,dsFast)
     s= sort(xtags(ds))
     ds= ds[s]
@@ -152,11 +152,10 @@ for i in xrange(len(data) ):
 
   tdat[i,1:4] = mmult( data[i,1:4], tmatx )
 
-  
-  #      The line below reverses the X component to outward
-  #
-  
-  ##tdat[i,1] = - tdat[i,1]
+  if flipx:
+      # The line below reverses the X component to outward
+      #
+      tdat[i,1] = - tdat[i,1]
   
   tdat[i,5]=norm(tdat[i,1:4])
   bt[i]=norm(data[i,1:4]) # total field in GSM

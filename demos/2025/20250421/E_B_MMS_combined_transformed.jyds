@@ -1,9 +1,10 @@
+from org.das2.dataset import NoDataInIntervalException
 from org.das2.qds import DataSetUtil
 tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 #tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
-typ = getParam('type', 'E', 'E or B', ['E','B'])
-
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
+typ = getParam('type', 'E', 'E or B', ['E','B'])
+flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
 def smoothTruncate( ds, len ):
     'implement IDL smooth with edge_truncate keyword set.'
@@ -11,6 +12,7 @@ def smoothTruncate( ds, len ):
     mm= append( append( replicate( ds[0], len ), ds), replicate( ds[-1], len ) )
     mm= smooth( mm, len )
     return mm[len:-len]
+#get B and E field data for MMS    
 
 if typ== 'B':
     dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/srvy/l2/$Y/$m/%s_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?%s_fgm_b_gse_srvy_l2' % (sc,sc,sc),tr)
@@ -25,8 +27,8 @@ else:
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/brst/l2/dce/$Y/$m/mms1_edp_brst_l2_dce_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_edp_dce_gse_brst_l2',tr)
 
 if dsSlow!=None and dsFast!=None:
-    print 'dsSlow', dsSlow
-    print 'dsFast', dsFast
+    print 'dsSlow', dsSlow, extent(xtags(dsSlow))
+    print 'dsFast', dsFast, extent(xtags(dsFast))
     ds= concatenate(dsSlow,dsFast)
     s= sort(xtags(ds))
     ds= ds[s]
@@ -37,29 +39,15 @@ elif dsFast!=None:
     ds= dsFast
 else:
     raise NoDataInIntervalException('no data found')
-
+    
 coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/mec/srvy/l2/ephts04d/$Y/$m/%s_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?%s_mec_r_gse' % (sc,sc,sc),tr)
-    
+
+#perform transform for B
+
 ds = trim(ds, tr)
-if typ =='B':
-    filt = False
-else:
-    filt = False
-if filt == True:
-    #high pass filter
-    ds_x = butterworth(ds[:,0],2,Units.hertz.createDatum(0.1),Units.hertz.createDatum(2.0),True)
-    ds_y = butterworth(ds[:,1],2,Units.hertz.createDatum(0.1),Units.hertz.createDatum(2.0),True)
-    ds_z = butterworth(ds[:,2],2,Units.hertz.createDatum(0.1),Units.hertz.createDatum(2.0),True)
-    
-    xtags1 = ds.property(QDataSet.DEPEND_0)
-    
-    ds = link(xtags1,bundle(ds_x, ds_y, ds_z))
-    
+
+
 xtags1 = ds.property(QDataSet.DEPEND_0)
-
-
-
-
 #coords = trim(coords,tr)
 coords = synchronizeNN(ds, coords)
 
@@ -101,7 +89,7 @@ data[:,4:7]=coorx[:,0:3] # x,y,z
 #------------------------------------------------
 #Calculate the mean value of the magnetic field
 #using a boxcar average
-print 'facavg', facavg
+
 beta= bundle( smoothTruncate(data[:,1],facavg), smoothTruncate(data[:,2],facavg), smoothTruncate(data[:,3],facavg) )
 #beta= bundle( data[:,1], data[:,2], data[:,3] )
   
@@ -164,10 +152,10 @@ for i in xrange(len(data) ):
 
   tdat[i,1:4] = mmult( data[i,1:4], tmatx )
 
-  
-  #      The line below reverses the X component to outward
-  #
-  ##tdat[i,1] = - tdat[i,1]
+  if flipx:
+      # The line below reverses the X component to outward
+      #
+      tdat[i,1] = - tdat[i,1]
   
   tdat[i,5]=norm(tdat[i,1:4])
   bt[i]=norm(data[i,1:4]) # total field in GSM
@@ -181,26 +169,47 @@ ds = link(dtime, tdat[:,1])
 ds1 = link(dtime, tdat[:,2])
 ds2 = link(dtime, tdat[:,3])
 
-xtags1 = ds.property(QDataSet.DEPEND_0)
-
 #ds = diff(ds)
 #ds1 = diff(ds1)
 #ds2 = diff(ds2)
 
-#xtags1 = xtags1[:-1]+diff(xtags1)/2
-result = link(xtags1,bundle(ds,ds1,ds2))
-
 '''
+ny = 2/(dtime[1]-dtime[0])
+low = 2/(dtime[-1]-dtime[0])
 
+ds = butterworth(ds,2,datum(ny),True)
+ds1 = butterworth(ds1,2,datum(ny),True)
+ds2 = butterworth(ds2,2,datum(ny),True)
 
+   
+'''  
+'''
+if typ=='B':
+    ds = butterworth(ds,2,Units.hertz.createDatum(0.1),False)
+    ds1 = butterworth(ds1,2,Units.hertz.createDatum(0.1),False)
+    ds2 = butterworth(ds2,2,Units.hertz.createDatum(0.1),False)
+'''   
+#ds = fftPower(ds,128,1,'Hanning', None)
+ds = fftPower(ds,512,2,'Hanning', None)
+ds1 = fftPower(ds1,512,2,'Hanning', None)
+ds2 = fftPower(ds2,512,2,'Hanning', None)
+ds = synchronize(ds1,ds)
+#ds = fftPower(ds,1024,1,'Hanning', None)
 xtags1 = ds.property(QDataSet.DEPEND_0)
 
 
+#ds = (ds+ds1+ds2)
 
-print 'ds', ds
-print 'xtags', xtags1
+
+
+ds = sqrt(ds**2+ds1**2+ds2**2)
+if typ=='E':
+    ds = ds*1E6
+
+
+
+###
 #ds= putProperty( ds, QDataSet.DEPEND_0, putProperty( ds.property(QDataSet.DEPEND_0), QDataSet.CADENCE, '50 s') )
 xtags1 = putProperty( xtags1, QDataSet.CADENCE, '50 s') 
 
 result= putProperty( ds, QDataSet.DEPEND_0, xtags1 )
-'''
