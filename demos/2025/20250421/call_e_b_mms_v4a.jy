@@ -11,14 +11,14 @@ setScriptDescription('''Frequency versus time spectrograms of total wave power i
 the electric field E, and the magnitude of the Poynting vector S.  The components 
 of the Poynting flux S are in the field-aligned coordinate X, Y, and Z directions.''')
 
-tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
-#tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
+#tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+tr = getParam('timerange','2015-10-16 13:00:00 to 14:00:00', 'timerange to load')
 
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 
 flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
-modes= getParam( 'modes', 'slow', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
+modes= getParam( 'modes', 'both', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
 
 #tr = getParam('timerange','2015-10-16T12:00 to 14:00', 'timerange to load')
 #width = getParam('binsize', 128, 'bin size')
@@ -31,6 +31,13 @@ pntFilt= getParam( 'pntFilt', 9E-3, 'filter poynting flux below this value in wa
 
 monitor.taskSize= 100
 
+print PWD+'E_B_MMS_combined.jyds?type=E'+ \
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+ \
+        '&timerange='+tr
+print PWD+'E_B_MMS_combined.jyds?type=B'+ \
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+ \
+        '&timerange='+tr
+        
 e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E'+
         '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
         '&timerange='+tr,
@@ -61,8 +68,6 @@ b_trans = link(xtags1,bundle(b_trans_x, b_trans_y, b_trans_z))
 '''
 ###
 
-print 'e,b, e_trans, b_trans'
-print e,b, e_trans, b_trans
 
 monitor.taskProgress= 83
 monitor.progressMessage= 'sync up data'
@@ -98,7 +103,6 @@ monitor.progressMessage= 'calculate poynting flux'
 def mycomplexMultiply(a,b):
     c = a*0
     for i in xrange(len(a)):
-        print a[i],b[i]
         c[i] = complexMultiply(a[i],b[i])
     return c
         
