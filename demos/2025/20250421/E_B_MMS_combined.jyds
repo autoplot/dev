@@ -1,12 +1,12 @@
 from org.das2.dataset import NoDataInIntervalException
 from org.das2.qds import DataSetUtil
-tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
-#tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
+#tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+tr = getParam('timerange','2015-10-16 13:00:00 to 14:00:00', 'timerange to load')
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
-typ = getParam('type', 'E', 'E or B', ['E','B'])
+typ = getParam('type', 'B', 'E or B', ['E','B'])
 flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
-modes= getParam( 'modes', 'fast', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
+modes= getParam( 'modes', 'both', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
 
 def smoothTruncate( ds, len ):
     'implement IDL smooth with edge_truncate keyword set.'
@@ -54,7 +54,14 @@ coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/mec/srvy/l2/epht
 
 #perform transform for B
 
-ds = trim(ds, tr)
+ds1 = trim(ds, tr)
+if len(ds1)<1024:
+    ds1 = trim(ds, datumRange(tr).rescale(-1,2) )
+    
+if len(ds1)<1024:
+    raise NoDataInIntervalException("not enough data found in interval")
+    
+ds= ds1
 
 if ds.length()==0:
     raise NoDataInIntervalException('no records found')
@@ -205,7 +212,7 @@ if typ=='B':
 ds = fftPower(ds,512,2,'Hanning', None)
 ds1 = fftPower(ds1,512,2,'Hanning', None)
 ds2 = fftPower(ds2,512,2,'Hanning', None)
-ds = synchronize(ds1,ds)
+
 #ds = fftPower(ds,1024,1,'Hanning', None)
 xtags1 = ds.property(QDataSet.DEPEND_0)
 
