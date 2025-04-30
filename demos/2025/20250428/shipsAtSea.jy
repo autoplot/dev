@@ -1,0 +1,13 @@
+setScriptDescription('''Download and plot ship trajectory data. These are delivered
+in a csv file.  The csv file read is slow, and it would be interesting to study
+performance.''')
+
+uri='https://coast.noaa.gov/htdata/CMSP/AISDataHandler/2024/AIS_2024_01_%02d.zip/AIS_2024_01_%02d.csv?column=LAT&depend0=LON'
+for i in xrange(1,31):
+    reset()
+    p,_=plot( uri % (i,i), title='2024-01-%02d' % i, xrange=[-160,-40] )
+    bind( p.xaxis, 'scale', p.yaxis, 'scale' )
+    p.yaxis.range= datumRange([10,55])
+    p.xaxis.range= datumRange([-160,-60])
+    writeToPng('/home/jbf/tmp/20250428/shipsAtSea/%02d.png'%i )
+    
