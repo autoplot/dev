@@ -2,7 +2,7 @@ from org.das2.util import ColorUtil
 
 setScriptDescription('''Code suitable for testing debugger''')
 
-colors= [ ColorUtil.BROWN, ColorUtil.CORNFLOWER_BLUE, ColorUtil.MEDIUM_AQUAMARINE, ColorUtil.TOMATO ]
+colors= [ ColorUtil.BROWN, ColorUtil.CORNFLOWER_BLUE, ColorUtil.MEDIUM_SEA_GREEN, ColorUtil.LIGHT_PINK ]
 
 def testdbg():
     '''This code will run from 1 through 4, summing the data, then returning the result.  It
@@ -20,6 +20,6 @@ def testdbg():
         plot(i-1,circle(s),color=colors[i-1],lineThick=4)
     return s
     
-setLayoutOverplot(5)
+setLayoutOverplot(4)
 print testdbg()
 
