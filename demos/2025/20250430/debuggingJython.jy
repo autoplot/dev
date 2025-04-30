@@ -1,0 +1,25 @@
+from org.das2.util import ColorUtil
+
+setScriptDescription('''Code suitable for testing debugger''')
+
+colors= [ ColorUtil.BROWN, ColorUtil.CORNFLOWER_BLUE, ColorUtil.MEDIUM_AQUAMARINE, ColorUtil.TOMATO ]
+
+def testdbg():
+    '''This code will run from 1 through 4, summing the data, then returning the result.  It
+    seems useful to plot concentric circles as well, so this is done.'''
+    s=0
+    # see https://github.com/autoplot/documentation/wiki/developer.jython.pdb
+    # System.setProperty("jythonDebugger","true") should be set
+    from java.lang import System
+    if "true"==System.getProperty("jythonDebugger"):
+        import pdb
+        pdb.set_trace()
+    for i in xrange(1,5):
+        print i
+        s=s+i
+        plot(i-1,circle(s),color=colors[i-1],lineThick=4)
+    return s
+    
+setLayoutOverplot(5)
+print testdbg()
+
