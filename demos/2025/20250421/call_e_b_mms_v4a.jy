@@ -1,9 +1,10 @@
+from java.util import ArrayList
+from java.lang.Double import NaN
 
 from org.das2.util.monitor import NullProgressMonitor
-from java.lang.Double import NaN
 from org.das2.qds.ops.Ops import FFTFilterType 
 from org.das2.graph import DasColorBar
-from org.das2.qds import DataSetUtil,LongReadAccess
+from org.das2.qds import DataSetUtil,LongReadAccess,DataSetOps
 
 setScriptTitle('MMS Poynting Flux in FAC')
 setScriptLabel('MMS Poynting Flux')
@@ -11,8 +12,10 @@ setScriptDescription('''Frequency versus time spectrograms of total wave power i
 the electric field E, and the magnitude of the Poynting vector S.  The components 
 of the Poynting flux S are in the field-aligned coordinate X, Y, and Z directions.''')
 
-#tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
-tr = getParam('timerange','2015-10-16 13:00:00 to 14:00:00', 'timerange to load')
+# See 2025-04-22 11:23am email from Mark
+
+tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+#tr = getParam('timerange','2015-10-28+13:00+to+17:00', 'timerange to load')
 
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 
@@ -37,25 +40,48 @@ print PWD+'E_B_MMS_combined.jyds?type=E'+ \
 print PWD+'E_B_MMS_combined.jyds?type=B'+ \
         '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+ \
         '&timerange='+tr
-        
-e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E'+
-        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
-        '&timerange='+tr,
-        monitor.getSubtaskMonitor(0,20,'Load E'))
-b = getDataSet(PWD+'E_B_MMS_combined.jyds?type=B'+
-        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
-        '&timerange='+tr,
-        monitor.getSubtaskMonitor(20,40,'Load B'))
+
+def do_ffts( eb ):
+    'perform sliding ffts on each of the component of the vector, and return the magnitude'
+    ds0= eb[:,0]
+    ds1= eb[:,1]
+    ds2= eb[:,2]
+    ds0 = fftPower(ds0,width,slide,'Hanning', None)
+    ds1 = fftPower(ds1,width,slide,'Hanning', None)
+    ds2 = fftPower(ds2,width,slide,'Hanning', None)
+    ds= sqrt(ds0**2+ds1**2+ds2**2)
+    xtags1 = ds.property(QDataSet.DEPEND_0)
+    xtags1 = putProperty( xtags1, QDataSet.CADENCE, '50 s') 
+    result = putProperty( ds, QDataSet.DEPEND_0, xtags1 )
+    return result
+
+#e = getDataSet(PWD+'E_B_MMS_combined.jyds?type=E'+
+#        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+#        '&timerange='+tr,
+#        monitor.getSubtaskMonitor(0,20,'Load E'))
+#b = getDataSet(PWD+'E_B_MMS_combined.jyds?type=B'+
+#        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+#        '&timerange='+tr,
+#        monitor.getSubtaskMonitor(20,40,'Load B'))
 
 e_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E'+
         '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
         '&timerange='+tr,
-        monitor.getSubtaskMonitor(40,60,'Load E Transformed') )
+        monitor.getSubtaskMonitor(0,40,'Load E Transformed') )
 b_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=B'+
         '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
         '&timerange='+tr,
-        monitor.getSubtaskMonitor(60,80,'Load B Transformed') )
-              
+        monitor.getSubtaskMonitor(40,80,'Load B Transformed') )
+
+monitor.progressMessage= 'Do e,b FFTs'
+
+e = do_ffts( e_trans ) * 1e6
+monitor.taskProgress= 82
+b = do_ffts( b_trans )
+monitor.progressMessage='Do FFTs'
+monitor.taskProgress= 84
+
+
 '''
 #high pass filter
 b_trans_x = butterworth(b_trans[:,0],2,Units.hertz.createDatum(0.1),False)
@@ -69,16 +95,21 @@ b_trans = link(xtags1,bundle(b_trans_x, b_trans_y, b_trans_z))
 ###
 
 
-monitor.taskProgress= 83
-monitor.progressMessage= 'sync up data'
+
+
+problems= ArrayList()
+if not DataSetUtil.validate(e, problems):
+    raise Exception('e not valid')
 
 e_trans = synchronize(b_trans, e_trans)
 e = synchronize(b,e)
 
-monitor.taskProgress= 85
-monitor.progressMessage= 'do ffts'
+if not DataSetUtil.validate(e, problems):
+    raise Exception('e not valid')
 
-fftmon= monitor.getSubtaskMonitor('ffts')
+monitor.taskProgress= 85
+
+fftmon= monitor.getSubtaskMonitor('more ffts')
 
 print 'e_trans', e_trans
 
@@ -98,8 +129,8 @@ by_spec = fft(b_trans[:,1],w,slide,NullProgressMonitor())
 bz_spec = fft(b_trans[:,2],w,slide,NullProgressMonitor())
 
 monitor.taskProgress= 89
-monitor.progressMessage= 'calculate poynting flux'
-
+monitor.progressMessage= 'calculate poynting flux'    
+    
 def mycomplexMultiply(a,b):
     c = a*0
     for i in xrange(len(a)):
@@ -121,6 +152,9 @@ poynt_fft_z = (mycomplexMultiply(complexConj(ex_spec),by_spec) - \
     mycomplexMultiply(complexConj(ey_spec),bx_spec)) + \
     (mycomplexMultiply(ex_spec, complexConj(by_spec)) - \
     mycomplexMultiply(ey_spec, complexConj(bx_spec)))       
+
+monitor.progressMessage= 'done calculate poynting flux'    
+monitor.taskProgress= 92
     
 mu = 4*PI*10**-7
 
@@ -150,10 +184,12 @@ monitor.progressMessage= 'display data'
 
 setLayout(6)
 
-p,pe0 = plot(0, b, zrange = [1E-6, 1E-1], yrange = [0,2], \
-    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='B Power<br>(nT!e2!nHz!e-1!n)' )
-p,pe1 = plot(1, e, zrange = [1E-3, 10], yrange = [0,2], \
-    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='E Power<br>(mV!e2!nm!e-2!nHz!e-1!n)' )
+p,pe0 = plot(0, b, yrange = [0,2], \
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='B Power<br>(nT!e2!nHz!e-1!n)',
+    zrange='0.001 to 10.0' )
+p,pe1 = plot(1, e, yrange = [0,2], \
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='E Power<br>(mV!e2!nm!e-2!nHz!e-1!n)',
+    zrange='0.001 to 10.0', zlog=True )
 p,pe2 = plot(2, s_mag, zrange = [1E-8,1E0], yrange= [0,2], renderType = 'nnSpectrogram', \
     xdrawTickLabels=False, ytitle='f (Hz)', ztitle='|S|<br>W km!e-2!n', title='' )
 p,pe3 =plot(3, poynt_x, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram', \
@@ -163,6 +199,9 @@ p,pe4 =plot(4, poynt_y, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpe
 p,pe5 =plot(5, poynt_z, zrange= [-0.04,0.04], yrange= [0,2], renderType = 'nnSpectrogram', \
     xdrawTickLabels=True, ytitle='f (Hz)',  ztitle='S!DZ!n<br>W km!e-2!n',title='' )
 
+monitor.taskProgress= 99
+
 fixLayout()
 
 monitor.finished()
+print('done')
