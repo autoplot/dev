@@ -3,8 +3,7 @@ from java.lang.Double import NaN
 
 from org.das2.util.monitor import NullProgressMonitor
 from org.das2.qds.ops.Ops import FFTFilterType 
-from org.das2.graph import DasColorBar
-from org.das2.qds import DataSetUtil,LongReadAccess,DataSetOps
+from org.das2.qds import DataSetUtil
 
 setScriptTitle('MMS Poynting Flux in FAC')
 setScriptLabel('MMS Poynting Flux')
@@ -14,8 +13,10 @@ of the Poynting flux S are in the field-aligned coordinate X, Y, and Z direction
 
 # See 2025-04-22 11:23am email from Mark
 
-tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+#tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 #tr = getParam('timerange','2015-10-28+13:00+to+17:00', 'timerange to load')
+
+tr= getParam('timerange','2015-10-28 15:50 to 16:10', 'timerange to load')
 
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 
@@ -33,13 +34,6 @@ doPntFilt= getParam( 'doPntFilt', True, 'apply the poynting flux filter', [ True
 pntFilt= getParam( 'pntFilt', 9E-3, 'filter poynting flux below this value in watts/km**2' )
 
 monitor.taskSize= 100
-
-print PWD+'E_B_MMS_combined.jyds?type=E'+ \
-        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+ \
-        '&timerange='+tr
-print PWD+'E_B_MMS_combined.jyds?type=B'+ \
-        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+ \
-        '&timerange='+tr
 
 def do_ffts( eb ):
     'perform sliding ffts on each of the component of the vector, and return the magnitude'
@@ -64,6 +58,14 @@ def do_ffts( eb ):
 #        '&timerange='+tr,
 #        monitor.getSubtaskMonitor(20,40,'Load B'))
 
+print PWD+'E_B_MMS_combined_transformed.jyds?type=E'+     \
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+   \
+        '&timerange='+tr
+        
+print PWD+'E_B_MMS_combined_transformed.jyds?type=B'+     \
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+   \
+        '&timerange='+tr
+        
 e_trans = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E'+
         '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
         '&timerange='+tr,
@@ -94,24 +96,17 @@ b_trans = link(xtags1,bundle(b_trans_x, b_trans_y, b_trans_z))
 '''
 ###
 
-
-
-
 problems= ArrayList()
 if not DataSetUtil.validate(e, problems):
     raise Exception('e not valid')
 
 e_trans = synchronize(b_trans, e_trans)
-e = synchronize(b,e)
-
-if not DataSetUtil.validate(e, problems):
-    raise Exception('e not valid')
 
 monitor.taskProgress= 85
 
-fftmon= monitor.getSubtaskMonitor('more ffts')
+monitor.progressMessage= 'more ffts...'
 
-print 'e_trans', e_trans
+e = synchronize(b,e)
 
 w = windowFunction(FFTFilterType.Hanning, width)
 ex_spec = fft(e_trans[:,0],w,slide,NullProgressMonitor())
@@ -185,10 +180,10 @@ monitor.progressMessage= 'display data'
 setLayout(6)
 
 p,pe0 = plot(0, b, yrange = [0,2], \
-    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='B Power<br>(nT!e2!nHz!e-1!n)',
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='B Power<br>(nT!e2!nHz!e-1!n)', \
     zrange='0.001 to 10.0' )
 p,pe1 = plot(1, e, yrange = [0,2], \
-    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='E Power<br>(mV!e2!nm!e-2!nHz!e-1!n)',
+    xdrawTickLabels=False, ytitle='f (Hz)', ztitle='E Power<br>(mV!e2!nm!e-2!nHz!e-1!n)', \
     zrange='0.001 to 10.0', zlog=True )
 p,pe2 = plot(2, s_mag, zrange = [1E-8,1E0], yrange= [0,2], renderType = 'nnSpectrogram', \
     xdrawTickLabels=False, ytitle='f (Hz)', ztitle='|S|<br>W km!e-2!n', title='' )
