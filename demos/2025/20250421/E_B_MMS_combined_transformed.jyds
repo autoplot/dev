@@ -1,5 +1,9 @@
 from org.das2.dataset import NoDataInIntervalException
 from org.das2.qds import DataSetUtil
+
+setScriptTitle('Load E or B FAC')
+setScriptDescription('''Load E or B field, rotating it into a new frame using resampled ephemeris''')
+
 tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
 #tr = getParam('timerange','2015-10-16 13:05:40 to 13:05:50', 'timerange to load')
 sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
@@ -49,7 +53,9 @@ elif dsFast!=None:
     ds= dsFast
 else:
     raise NoDataInIntervalException('no data found')
-    
+
+ds.putProperty( QDataSet.DEPEND_0, putProperty( xtags(ds), QDataSet.CADENCE, '140ms' ) )
+
 coords = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/mec/srvy/l2/ephts04d/$Y/$m/%s_mec_srvy_l2_ephts04d_$Y$m$d_v$(v,sep).cdf?%s_mec_r_gse' % (sc,sc,sc),tr)
 
 #perform transform for B
@@ -129,57 +135,52 @@ def mmult( vvs, mat ):
 
 def vectorFormat( vv ):
     return '%.5f %.5f %.5f' % ( vv[0], vv[1], vv[2] )
- 
-for j in xrange(len(data)):
-    if ( j ==irec):
-        cp= crossProduct(rho[j,:],beta[j,:])
-    gamma[j,:] = crossProduct(rho[j,:],beta[j,:]) / norm(crossProduct(rho[j,:],beta[j,:]))
 
+def pprint(d):
+    if d.rank()==0:
+        print d
+    elif d.rank()==1:
+        for i in range(len(d)):
+            print d[i],
+        print ''
+    else:
+        print 'Rank not supported for '+str(d)
+    
+cp1= crossProduct(rho,beta)
+gamma= cp1/norm(cp1)
 
-for k in xrange(len(data)):
-    if ( k ==irec):
-        cp= crossProduct(gamma[irec,:],beta[irec,:])
-    chi[k,:] = crossProduct(gamma[k,:],beta[k,:]) / norm(crossProduct(gamma[k,:],beta[k,:]))
+cp1= crossProduct(gamma,beta)
+chi= cp1/norm(cp1)
 
 #------------------------------------------------
 #Perform the transformation
 
-tmatx=fltarr(3,3)
-
 monitor.taskSize= len(data)
 monitor.started()
 
-for i in xrange(len(data) ):
-  monitor.taskProgress= i
+beta= beta/norm(beta)
+
+tmatx= zeros( len(beta), 3, 3 ) 
+tmatx[:,0,:] = chi
+tmatx[:,1,:] = gamma
+tmatx[:,2,:] = beta
+
+tdat[:,1:4] = mmult( data[:,1:4], tmatx )
+tdat[:,5]=norm(tdat[:,1:4])
+
+bt=norm(data[:,1:4]) # total field in GSM
+
+if flipx:
+  # The line below reverses the X component to outward
+  tdat[:,1] = - tdat[:,1]
   
-
-      
-  beta[i,:]=beta[i,:]/norm(beta[i,:])
-  
-
-
-  tmatx= dataset( [[chi[i,0],chi[i,1],chi[i,2]],
-                   [gamma[i,0],gamma[i,1],gamma[i,2]], 
-                   [beta[i,0],beta[i,1],beta[i,2]]] )
-
-  tdat[i,1:4] = mmult( data[i,1:4], tmatx )
-
-  if flipx:
-      # The line below reverses the X component to outward
-      #
-      tdat[i,1] = - tdat[i,1]
-  
-  tdat[i,5]=norm(tdat[i,1:4])
-  bt[i]=norm(data[i,1:4]) # total field in GSM
-
-
 ##tdat[:,4] = tdat[:,3] - smooth(tdat[:,3],facavg)  #<=Subtract quiet time field
 #tdat[:,2] = tdat[:,2] - smooth(tdat[:,2],facavg)
 monitor.finished()
 
-ds = link(dtime, tdat[:,1])
-ds1 = link(dtime, tdat[:,2])
-ds2 = link(dtime, tdat[:,3])
+dsx = dataset( link(dtime, tdat[:,1]), label=typ+'X', name=typ+'X' )
+dsy = dataset( link(dtime, tdat[:,2]), label=typ+'Y', name=typ+'Y' )
+dsz = dataset( link(dtime, tdat[:,3]), label=typ+'Z', name=typ+'Z' )
 
 #ds = diff(ds)
 #ds1 = diff(ds1)
@@ -187,4 +188,4 @@ ds2 = link(dtime, tdat[:,3])
 
 xtags1 = ds.property(QDataSet.DEPEND_0)
 
-result = link(xtags1,bundle(ds,ds1,ds2))
+result = link(xtags1,bundle(dsx,dsy,dsz))
