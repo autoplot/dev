@@ -24,19 +24,26 @@ def smoothTruncate( ds, len ):
 dsSlow=None
 dsFast=None
 
+monitor.taskSize=100
+monitor.started()
+
 if typ== 'B':
     if modes=='slow' or modes=='both':
-        dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/srvy/l2/$Y/$m/%s_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?%s_fgm_b_gse_srvy_l2' % (sc,sc,sc),tr)
+        dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/srvy/l2/$Y/$m/%s_fgm_srvy_l2_$Y$m$d_v$(v,sep).cdf?%s_fgm_b_gse_srvy_l2' \
+            % (sc,sc,sc),tr,monitor.getSubtaskMonitor(0,40,'read slow '+typ))
     if modes=='fast' or modes=='both':
-        dsFast=  getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/brst/l2/$Y/$m/%s_fgm_brst_l2_$Y$m$d$(H;delta=6)$M$S_v$(v,sep).cdf?%s_fgm_b_gse_brst_l2' % (sc,sc,sc),tr)
+        dsFast=  getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/fgm/brst/l2/$Y/$m/%s_fgm_brst_l2_$Y$m$d$(H;delta=6)$M$S_v$(v,sep).cdf?%s_fgm_b_gse_brst_l2' \
+            % (sc,sc,sc),tr,monitor.getSubtaskMonitor(40,80,'read fast '+typ))
     ###ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/scm/srvy/l2/scsrvy/$Y/$m/mms1_scm_srvy_l2_scsrvy_$Y$m$d_v$(v,sep).cdf?mms1_scm_acb_gse_scsrvy_srvy_l2',tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/$Y/$m/mms1_fgm_brst_l2_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_fgm_b_gsm_brst_l2',tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/fgm/brst/l2/2015/10/mms1_fgm_brst_l2_20151016133904_v4.18.1.cdf?mms1_fgm_b_gsm_brst_l2',tr)
 else:
     if modes=='slow' or modes=='both':
-        dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
+        dsSlow = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' \
+            % (sc,sc,sc),tr,monitor.getSubtaskMonitor(0,40,'read slow '+typ))
     if modes=='fast' or modes=='both':
-        dsFast = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/fast/l2/dce/$Y/$m/%s_edp_fast_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_fast_l2' % (sc,sc,sc),tr)
+        dsFast = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/fast/l2/dce/$Y/$m/%s_edp_fast_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_fast_l2' \
+            % (sc,sc,sc),tr,monitor.getSubtaskMonitor(40,80,'read fast '+typ))
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/%s/edp/slow/l2/dce/$Y/$m/%s_edp_slow_l2_dce_$Y$m$d_v$(v,sep).cdf?%s_edp_dce_gse_slow_l2' % (sc,sc,sc),tr)
     #ds = getDataSet('https://spdf.gsfc.nasa.gov/pub/data/mms/mms1/edp/brst/l2/dce/$Y/$m/mms1_edp_brst_l2_dce_$Y$m$d$H$(M;delta=10)$S_v$(v,sep).cdf?mms1_edp_dce_gse_brst_l2',tr)
 
@@ -145,6 +152,8 @@ def pprint(d):
         print ''
     else:
         print 'Rank not supported for '+str(d)
+
+monitor.taskProgress=90
     
 cp1= crossProduct(rho,beta)
 gamma= cp1/norm(cp1)
@@ -160,6 +169,8 @@ monitor.started()
 
 beta= beta/norm(beta)
 
+monitor.taskProgress=95
+
 tmatx= zeros( len(beta), 3, 3 ) 
 tmatx[:,0,:] = chi
 tmatx[:,1,:] = gamma
@@ -173,7 +184,9 @@ bt=norm(data[:,1:4]) # total field in GSM
 if flipx:
   # The line below reverses the X component to outward
   tdat[:,1] = - tdat[:,1]
-  
+
+monitor.taskProgress=98
+
 ##tdat[:,4] = tdat[:,3] - smooth(tdat[:,3],facavg)  #<=Subtract quiet time field
 #tdat[:,2] = tdat[:,2] - smooth(tdat[:,2],facavg)
 monitor.finished()
