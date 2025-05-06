@@ -2,8 +2,9 @@ auroral_region= getDataSet('vap+cdaweb:ds=DMSP-F17_SSM_MAGNETOMETER&id=AURORAL_R
 eu= Units.nominal()
 
 result= zeros(auroral_region.length())
+result.putProperty( QDataSet.UNITS, eu )
 
-undef= eu.createDatum( '' )
+undef= eu.createDatum( 'undefined' )
 equatorial= eu.createDatum('Equatorial')
 auroral= eu.createDatum('Auroral')
 polar= eu.createDatum('Polar')
@@ -19,5 +20,7 @@ result[r]= auroral
 r= where( auroral_region.eq(3) )
 result[r]= polar
 
-result.putProperty( QDataSet.UNITS, eu )
 result= link( xtags(auroral_region), result )
+
+result.putProperty( QDataSet.RENDER_TYPE, 'Events>mode=gantt2' )
+result= eventsCoalesce(createEvents(result))
