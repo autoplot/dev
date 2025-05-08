@@ -1,0 +1,51 @@
+from java.util import ArrayList
+
+from org.das2.qds import DataSetUtil
+setScriptDescription('''Demo bug in synchronize, where the last third of the result is all fill.''')
+
+#tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+tr = '2015-10-28 15:50 to 16:10'
+
+sc= 'mms1'
+
+flipx= False
+
+showBug= getParam( 'showBug', True, 'Show the bug where cadence limit prevents interpolation', [ True, False ] )
+
+modes= 'both'
+
+monitor.taskSize=100
+
+b = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=B'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
+        monitor.getSubtaskMonitor(0,50,'Load B'))
+
+e = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
+        monitor.getSubtaskMonitor(50,100,'Load E'))
+
+monitor.finished()
+        
+problems= ArrayList()
+if not DataSetUtil.validate(e, problems):
+    raise Exception('e not valid')
+
+if not showBug:
+    e.putProperty( QDataSet.DEPEND_0, putProperty( xtags( e ), QDataSet.CADENCE, '140ms' ) )
+    
+e_in = e
+
+e_out = synchronize(b,e_in)
+
+formatDataSet(e_out,'/tmp/20250501/e_out.txt')
+
+if not DataSetUtil.validate(e, problems):
+    raise Exception('e not valid')
+
+setLayout(4)
+plot( 0, e_in )
+plot( 1, b )
+plot( 2, e_out )
+plot( 3, valid(e_out[:,0]) )

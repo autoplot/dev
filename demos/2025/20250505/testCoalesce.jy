@@ -1,0 +1,9 @@
+ds= getDataSet(PWD + 'nominalUnitsDemo.jyds')
+ds= createEvents(ds)
+ds= eventsCoalesce(ds)
+
+if ( ds.length()>100 ):
+    ds= ds[0:100]
+    
+for d in ds:
+    print d[0], d[1], d[2], d[3]

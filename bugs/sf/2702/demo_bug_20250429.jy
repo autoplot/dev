@@ -1,0 +1,44 @@
+from java.util import ArrayList
+
+from org.das2.qds import DataSetUtil
+setScriptDescription('''Demo bug in synchronize, where the last third of the result is all fill.''')
+
+#tr = getParam('timerange','2015-12-14T13:00 to 14:00', 'timerange to load')
+tr = getParam('timerange','2015-10-28 15:50 to 16:10', 'timerange to load')
+
+sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
+
+flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
+
+modes= getParam( 'modes', 'both', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
+
+monitor.taskSize=100
+
+b = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=B'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
+        monitor.getSubtaskMonitor(0,50,'Load B'))
+
+e = getDataSet(PWD+'E_B_MMS_combined_transformed.jyds?type=E'+
+        '&sc='+sc+'&flipx='+str(flipx)+'&modes='+modes+
+        '&timerange='+tr,
+        monitor.getSubtaskMonitor(50,100,'Load E'))
+
+monitor.finished()
+        
+problems= ArrayList()
+if not DataSetUtil.validate(e, problems):
+    raise Exception('e not valid')
+
+#<C> Completions fail here
+e_in = e
+
+e_out = synchronize(b,e_in)
+
+if not DataSetUtil.validate(e, problems):
+    raise Exception('e not valid')
+
+plot( 0, e_in )
+plot( 1, b )
+plot( 2, e_out )
+plot( 3, valid(e_out[:,0]) )

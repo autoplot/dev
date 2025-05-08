@@ -1,0 +1,12 @@
+
+ds= createEvent( "2024-05-06",0x005555,"sunny")
+ds= createEvent( ds, "2024-05-07",0x005555,"sunny")
+ds= createEvent( ds, "2024-05-08",0x555555,"cloudy")
+ds= createEvent( ds, "2024-05-09",0x005555,"sunny")
+ds= createEvent( ds, "2024-05-08",0x555555,"cloudy")
+
+ds= eventsCoalesce(ds)
+
+for d in ds:
+    print d
+    

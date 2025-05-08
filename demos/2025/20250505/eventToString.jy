@@ -1,0 +1,5 @@
+from org.das2.qds import DataSetUtil
+from org.das2.qds.examples import Schemes
+x= Schemes.canonicalEvent()
+print DataSetUtil.toString(x)
+
