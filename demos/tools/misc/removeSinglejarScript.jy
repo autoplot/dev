@@ -1,4 +1,4 @@
-setScriptTitle('Remove Singlejar Launch Script')
+setScriptTitle('Remove Singlejar Launch Script to Make Release')
 
 setScriptDescription('''The header script which makes the single-jar launchable 
 causes problems in some use cases, so this script can
