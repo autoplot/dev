@@ -1,0 +1,21 @@
+from java.awt.geom import Point2D
+from org.das2.graph import Arrow
+plot( circle(10), isotropic=True )
+
+dom.plots[0].xaxis.visible= False
+dom.plots[0].yaxis.visible= False
+dom.plots[0].visible= False
+
+def decorate(g):
+    print g
+    u= Units.dimensionless
+    x0= dom.plots[0].xaxis.controller.dasAxis.transform(0,u)
+    y0= dom.plots[0].yaxis.controller.dasAxis.transform(0,u)
+    x1= dom.plots[0].xaxis.controller.dasAxis.column.left()
+    x2= dom.plots[0].xaxis.controller.dasAxis.column.right()
+    y1= dom.plots[0].yaxis.controller.dasAxis.row.top()
+    y2= dom.plots[0].yaxis.controller.dasAxis.row.bottom()
+    Arrow.paintArrow( g, Point2D.Double(x0,y1), Point2D.Double(x0,y0), 16, Arrow.HeadStyle.DRAFTING )
+    Arrow.paintArrow( g, Point2D.Double(x2,y0), Point2D.Double(x0,y0), 16, Arrow.HeadStyle.DRAFTING )
+    
+addTopDecoration(dom.plots[0],decorate)
