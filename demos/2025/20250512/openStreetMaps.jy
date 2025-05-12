@@ -1,0 +1,50 @@
+from javax.imageio import ImageIO
+from org.autoplot.imagedatasource import ImageDataSet
+import math
+
+lat= getParam('lat',41.656528,'latitude',{'min':-90,'max':90} )
+lon= getParam('lon',-91.517180,'longitude',{'min':-180,'max':180} )
+zoom = getParam('zoom',1,'Zoom Level',range(0,16))
+
+# Here's one which works, for reference.
+# https://tile.openstreetmap.org/6/15/23.png
+
+# For Iowa City, found by experiment
+# https://tile.openstreetmap.org/1/0/0.png
+# https://tile.openstreetmap.org/2/1/1.png
+# https://tile.openstreetmap.org/3/2/2.png
+# https://tile.openstreetmap.org/4/3/5.png
+
+# returns BufferedImage
+def getTileImage( x,  y, intzoom):
+    urlStr = "https://tile.openstreetmap.org/%d/%d/%d.png" % ( zoom, x, y )
+    print urlStr
+    url = URL(urlStr)
+    iss = url.openStream()
+    return ImageIO.read(iss)
+
+
+def latToTileY(lat, zoom):
+    rad = lat * 180 / PI
+    # sec = 1 / cos
+    return int(math.floor((1 - math.log(math.tan(rad) + 1 / math.cos(rad)) / math.pi) / 2 * (1 << zoom)))
+
+def lonToTileX(lon, zoom):
+    return int(math.floor((lon + 180) / 360 * (1 << zoom)))
+
+def getTileImage(x, y, zoom):
+    urlStr = 'https://tile.openstreetmap.org/%d/%d/%d.png' % (zoom, x, y)
+    url = URL(urlStr)
+    ImageIO.read( url.openStream() )
+
+ix= lonToTileX( -91.517180, zoom )
+iy= latToTileY( 41.656528, zoom )
+
+
+urlStr = "https://tile.openstreetmap.org/%d/%d/%d.png" % ( zoom, ix, iy )
+print urlStr
+
+
+#tile= getTileImage(ix,iy,zoom)
+
+#plot( ImageDataSet(tile ) )
