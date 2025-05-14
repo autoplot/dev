@@ -1,0 +1,7 @@
+ds= randn(100,4)
+toff= linspace('0ns','1e9ns',5)[0:-1]
+time= linspace('2025-05-13T00:00:00Z','2025-05-13T00:01:40Z',101)[0:-1]
+
+ds= link( time, toff, ds )
+
+plot( ds )

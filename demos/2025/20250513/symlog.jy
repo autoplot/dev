@@ -1,0 +1,7 @@
+ds= randn(1000)
+
+plot( 0, ds, yrange=[0.1,10], ylog=True )
+plot( 1, ds, yrange=[-0.1,0.1], ylog=False )
+p,_= plot( 2, -ds, yrange=[0.1,10], ylog=True )
+p.yaxis.flipped=True
+
