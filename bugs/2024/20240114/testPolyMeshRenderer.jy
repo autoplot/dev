@@ -31,8 +31,8 @@ zz= dataset( [ ColorUtil.CHOCOLATE.getRGB(),
 
 DataSetUtil.validate( pm, None )
 
-print zz
-print pm
+print 'xx: ', zz
+print 'pm: ', pm
 
 dd= link(pm,zz)
 print dd.property(QDataSet.DEPEND_0)
