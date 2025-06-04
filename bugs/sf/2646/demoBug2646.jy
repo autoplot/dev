@@ -1,0 +1,13 @@
+from java.util.logging import Level
+from org.das2.util import LoggerManager
+logger= LoggerManager.getLogger('apdss.idlsav')
+logger.setLevel(Level.CONFIG)
+
+case= getParam('case',1,'case number',
+    {'values':[1,2],'labels':['Wind_TDS_OneDay_corrected_19981228.sav','Wind_TDS_OneDay_corrected_19980101.sav']} )
+
+if case==1:
+    cc= getCompletions('https://jfaden.net/~jbf/autoplot/data/sav/2646/1998/Wind_TDS_OneDay_corrected_19981228.sav?')
+elif case==2:
+    cc= getCompletions('https://jfaden.net/~jbf/autoplot/data/sav/2646/1998/Wind_TDS_OneDay_corrected_19980101.sav?')
+
