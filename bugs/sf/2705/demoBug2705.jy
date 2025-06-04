@@ -1,0 +1,17 @@
+from org.autoplot.state import DatumSerializeDelegate
+
+setScriptDescription('''Dave saw where a runtime error would occur when a time 
+was formatted with a space.''')
+
+s= '2025-06-04 11:00:00.123456'
+d= datum(s)
+
+dsd= DatumSerializeDelegate()
+s2= dsd.format( d )
+print s2
+
+i= s2.find(':')
+
+s2= s2[0:i] + ': 2025-06-04 11:00:00.123456'
+print dsd.parse( '', s2 )
+
