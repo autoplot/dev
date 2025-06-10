@@ -3,7 +3,7 @@ from org.das2.util import LoggerManager
 logger= LoggerManager.getLogger('apdss.idlsav')
 logger.setLevel(Level.CONFIG)
 
-case= getParam('case',1,'case number',
+case= getParam('case',2,'case number',
     {'values':[1,2],'labels':['Wind_TDS_OneDay_corrected_19981228.sav','Wind_TDS_OneDay_corrected_19980101.sav']} )
 
 if case==1:
