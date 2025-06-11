@@ -1,6 +1,10 @@
 from org.autoplot import RenderType
 from org.autoplot.dom import PlotElementController
 
+setScriptDescription('''Create a markdown table showing render type transitions which 
+are supported.  For example, one can take a spectrogram and view it as a stack of line
+plots''')
+
 print '|   |',
 for rt1 in RenderType.values():
     print 'to ' +str(rt1),
