@@ -1,0 +1,4 @@
+setScriptDescription('''This prints fill, not 0 as it should.''')
+from java.lang import Double
+dsinvalid= dataset( [ Double.NaN, Double.NaN ] )
+print valid(dsinvalid.slice(0))
