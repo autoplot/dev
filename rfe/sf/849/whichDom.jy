@@ -1,0 +1,10 @@
+setScriptDescription('''Run this script in two windows, and by default it will just
+print which window it is.''')
+
+title= getParam( 'app', '', 'set the title to this', ['','Apple','Orange'] )
+
+if not title=='':
+    dom.plots[0].title = title
+    
+print 'hello ' + dom.plots[0].title
+
