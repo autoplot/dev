@@ -1,0 +1,4 @@
+tr= getParam( 'timerange', '2014-01', 'timerange to load', { 'min':'2010-01-01', 'max':'2020-01-01' } )
+
+plot( 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800', tr )
+

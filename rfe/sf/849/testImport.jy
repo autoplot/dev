@@ -1,0 +1,24 @@
+class MyClass:
+    def __init__(self,d):
+        self.d= d
+    def printit(self):
+        print self.d
+
+m= MyClass(4)
+m.printit()
+
+pr= m.printit
+
+pr()
+
+sc= scriptContext
+sc.plot(dataset([1,2,3,4]))
+
+pr= sc.peekAt
+
+pr(4)
+
+sc.setLayout(2,2)
+
+alert= sc.alert
+alert("help!!!!")

@@ -1,0 +1,11 @@
+setScriptDescription('''Run this script in two windows, and by default it will just
+print which window it is.''')
+
+tt= getParam('tt',2,'number of turns',range(1,50))
+
+t= linspace(0,PI,100000)
+
+mm= int( ceil( tt / 10. ) )
+x= cos(t*tt)
+y= sin(t*mm)
+plot( x, y )
