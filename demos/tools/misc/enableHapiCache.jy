@@ -1,0 +1,11 @@
+from javax.swing import JOptionPane
+from java.lang import System
+setScriptDescription('''Enable the HAPI cache.  This will set the system property
+hapi-cache-command to the location of an executable string, which when the URL
+is appended (without a space) the resource will be loaded.''')
+
+command= getParam( 'command', 'java -jar /home/jbf/ct/hapi/git/cache-tools/java/dist/cache-tools.jar', 'the command' )
+
+System.setProperty( 'hapi-cache-command', command )
+
+JOptionPane.showMessageDialog( getViewWindow(), 'Cache command is set' )

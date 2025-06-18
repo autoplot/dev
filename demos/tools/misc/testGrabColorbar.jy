@@ -1,0 +1,10 @@
+setScriptTitle('Grab Colorbar')
+setScriptDescription('''Grabs the color bar from a png of gif image.''')
+
+ff= getFile( PWD + 'grabColorbar.jy' )
+execfile(str(ff)) 
+
+addColorbar('/home/jbf/ct/autoplot/u/2025/sadie/20250219/mms_colorbar.gif','Jeremy', \
+   xmin=729, ymin=181, xmax=732, ymax=420 )
+   
+plot( rand(300,300) + sin(distance(300,300,150,150,10,10)), colorTable='Jeremy' )
