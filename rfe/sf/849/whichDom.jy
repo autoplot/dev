@@ -5,6 +5,16 @@ title= getParam( 'app', '', 'set the title to this', ['','Apple','Orange'] )
 
 if not title=='':
     dom.plots[0].title = title
-    
+elif dom.plots[0].title=='Apple':
+    dom.plots[0].title = 'Orange'
+elif dom.plots[0].title=='Orange':
+    dom.plots[0].title = 'Apple'
+        
 print 'hello ' + dom.plots[0].title
 
+if not title=='':
+    dom.plots[0].title = title
+
+app= getApplication()
+
+annotation(0,plotId=dom.plots[0].id,text='App width='+str(app.getWidth()))
