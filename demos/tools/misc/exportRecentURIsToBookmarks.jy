@@ -1,0 +1,26 @@
+from org.das2.util import FileUtil
+from javax.swing import JFileChooser
+from javax.swing.filechooser import FileNameExtensionFilter
+
+setScriptTitle('Export Recent Bookmarks')
+setScriptDescription('''Export the recent list of URIs a bookmarks file.  See https://sourceforge.net/p/autoplot/feature-requests/39/''')
+
+ap= getApplication()
+recentURIs= ap.getDataSetSelector().getRecent()
+
+from org.autoplot.bookmarks import Bookmark
+
+bookmarks=[]
+for uri in recentURIs:
+    item = Bookmark.Item(uri);
+    bookmarks.append(item)
+    
+ss= Bookmark.formatBooks(bookmarks)
+
+choose= JFileChooser()
+choose.fileFilter= FileNameExtensionFilter("Bookmarks file (.xml)", ["xml"])
+
+if choose.showSaveDialog(getApplication())==JFileChooser.APPROVE_OPTION:
+    FileUtil.writeStringToFile(choose.selectedFile,ss)
+    setStatus('wrote to '+str(choose.selectedFile))
+    
