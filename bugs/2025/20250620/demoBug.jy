@@ -1,0 +1,16 @@
+setScriptDescription('''Show completions of github filesystems...''')
+
+h= {}
+cc= getCompletions('https://github.com/autoplot/dev/')
+for c in cc:
+    if h.has_key(c):
+        print c, '(repeat bug!)'
+    else:
+        print c
+        h[c]=c
+
+cc= getCompletions('https://github.com/autoplot/dev/demos/')
+if len(cc)==0:
+    print '(no results from https://github.com/autoplot/dev/demos/ bug!)'
+    
+    
