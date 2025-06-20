@@ -1,6 +1,6 @@
 setScriptDescription('''Show completions of github filesystems...  I think I remember the bug.  The
 listing is done later in JavaScript.  I'm also pretty sure there's an API which can be used, and
-this should be studied more at some point.''')
+this should be studied more at some point.  See https://github.com/das-developers/das2java/issues/135''')
 
 h= {}
 cc= getCompletions('https://github.com/autoplot/dev/')
