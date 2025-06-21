@@ -1,0 +1,22 @@
+setScriptDescription('Demo GitLab API listing')
+
+ff= listDirectory('https://research-git.uiowa.edu/abbith/juno/team/')
+print len(ff), ff[0], ff[-1]
+
+ff= listDirectory('https://research-git.uiowa.edu/abbith/juno/team/digitizer/')
+print len(ff), ff[0], ff[-1]
+
+ff= listDirectory('https://research-git.uiowa.edu/abbith/autoplot/agu/1/')
+print len(ff)
+
+# This is a protected repo--Autoplot cannot list it
+#ff= listDirectory('https://research-git.uiowa.edu/space-physics/voyager/voyager-pds-lowrate-volume/-/tree/main/misc')
+#print len(ff)
+
+# This isn't working... TODO: me first!
+#ff= listDirectory('https://research-git.uiowa.edu/space-physics/juno/waves/studies_mtl/-/blob/main/autoplot_stuff/')
+#print len(ff)
+
+# My free gitlab repo doesn't appear to suppor the API.
+#ff= listDirectory('https://jfaden.net/git/jbfaden/public/-/tree/main/2021/')
+#print len(ff)
