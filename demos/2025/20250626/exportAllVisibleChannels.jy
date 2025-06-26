@@ -1,0 +1,11 @@
+setScriptTitle('Export Visible Channels')
+setScriptDescription('''This exports the datasets shown, where each dataset must have the same timetags
+and be single-indexed (rank 1).''')
+
+result= None
+
+for pe in dom.plotElements:
+    r1= pe.controller.dataSet
+    result= bundle( result, r1 )
+
+formatDataSet( result, '/home/jbf/tmp/channelSubset.csv' )
