@@ -8,13 +8,18 @@ half= getParam( 'half', 'all', 'read half 1 or 2, all reads four, P is old', \
    ['all','0','1'] )
     
 print half
-
 def checkDeepStack():
     stes= Thread.currentThread().getStackTrace()
+    count=0
     for ste in stes:
         sste= str(ste)
         print sste
-
+        if sste.find('demoBugAll.jyds:26')>-1:
+            count=count+1
+    print 'depth estimate:', count
+    if count>1:
+        raise Exception('recursion may not terminate, stopping')
+        
 checkDeepStack()
     
 if half=='all':
