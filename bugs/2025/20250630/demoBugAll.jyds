@@ -1,0 +1,33 @@
+from java.lang import Thread
+setScriptDescription('''Demo bug where half=0 is misinterpretted, and there's some
+issue when this is called recursively.''')
+
+# file:/home/jbf/project/juno/research-git/abbith/team/trajPlot/readScmodes.jyds?orbit=34&half=0
+
+half= getParam( 'half', 'all', 'read half 1 or 2, all reads four, P is old', \
+   ['all','0','1'] )
+    
+print half
+
+def checkDeepStack():
+    stes= Thread.currentThread().getStackTrace()
+    for ste in stes:
+        sste= str(ste)
+        print sste
+
+checkDeepStack()
+    
+if half=='all':
+    ds0= getDataSet(PWD+'demoBugAll.jyds?half=0')
+    ds1= getDataSet(PWD+'demoBugAll.jyds?half=1')
+    result= ds0+ds1
+
+elif half=='0':
+    result= dataset( [1,2,3,4,5,6] )
+    
+elif half=='1':
+    result= dataset( [6,5,4,3,2,1] )
+
+else:
+    raise Exception('case not handled')
+    
