@@ -1,0 +1,14 @@
+ds= zeros(50,50)
+n= 1000000
+print dom
+for i in xrange(n):
+   ix= rand()*50
+   iy= rand()*50
+   w= 1./ ( sqrt( ( (ix-25.5)**2 + ( (iy-25.5)**2) ) ) * 0.5 )
+   if rand()<(w):
+       ds[ix,iy]= ds[ix,iy]+1
+   else:
+       print w
+   if i%1000==0:
+       dom.plots[0].title= '%d of %d' % ( i, n )
+plot( ds )
