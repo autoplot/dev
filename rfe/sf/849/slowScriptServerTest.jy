@@ -1,5 +1,5 @@
 ds= zeros(50,50)
-n= 1000000
+n= 100000
 print dom
 for i in xrange(n):
    ix= rand()*50
