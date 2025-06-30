@@ -1,6 +1,6 @@
 from org.das2.graph import DasColorBar
 ds= zeros(50,50)
-n= getParam('niter',100000,'Number of Iterations',[50000,250000,1000000])
+n= getParam('niter',50000,'Number of Iterations',[50000,250000,1000000])
 cb= getParam('cb','black_blue','Color bar',['black_blue','white_blue'])
 
 print dom
@@ -10,7 +10,7 @@ for i in xrange(n):
    w= 1./ ( sqrt( ( (ix-25.5)**2 + ( (iy-25.5)**2) ) ) * 0.5 )
    if rand()<(w):
        ds[ix,iy]= ds[ix,iy]+1
-   if i%1000==0:
+   if i%5000==0:
        print dom.plots[0].title
        plot(ds,colorTable=cb,title='%d of %d' % ( i, n ))
 plot( ds, title=dom.plots[0].title )
