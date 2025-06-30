@@ -2,10 +2,12 @@ setScriptTitle('Export Visible Channels')
 setScriptDescription('''This exports the datasets shown, where each dataset must have the same timetags
 and be single-indexed (rank 1).''')
 
-result= None
+tr= dom.timeRange
 
 for pe in dom.plotElements:
-    r1= pe.controller.dataSet
-    result= bundle( result, r1 )
-
-formatDataSet( result, '/home/jbf/tmp/channelSubset.csv' )
+    r1= copy( pe.controller.dataSet )
+    r1= trim( r1, tr )
+    context= r1.property(QDataSet.CONTEXT_0)
+    context= context[0]
+    r1.putProperty(QDataSet.LABEL, "Ch "+context.svalue() )
+    formatDataSet( r1, '/Users/cattell/tmp/channelSubset_%010.1f.csv' % context.value() )
