@@ -17,4 +17,4 @@ for i in xrange(n):
        print dom.plots[0].title
        plot(ds,colorTable=cb,title='%d of %d' % ( i, n ))
 
-plot( ds, title=dom.plots[0].title )
+plot( ds, colorTable=cb, title=dom.plots[0].title )
