@@ -1,5 +1,6 @@
 ds= zeros(50,50)
-n= 100000
+n= getParam('niter',100000,'Number of Iterations',[50000,250000,1000000])
+
 print dom
 for i in xrange(n):
    ix= rand()*50
@@ -7,8 +8,7 @@ for i in xrange(n):
    w= 1./ ( sqrt( ( (ix-25.5)**2 + ( (iy-25.5)**2) ) ) * 0.5 )
    if rand()<(w):
        ds[ix,iy]= ds[ix,iy]+1
-   else:
-       print w
    if i%1000==0:
+       print dom.plots[0].title
        dom.plots[0].title= '%d of %d' % ( i, n )
-plot( ds )
+plot( ds, title=dom.plots[0].title )
