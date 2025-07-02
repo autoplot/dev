@@ -1,0 +1,11 @@
+from org.das2.qds import DataSetUtil
+from org.das2.qds.examples import Schemes
+
+setScriptDescription('''See if I can recreate the strange bug I saw with 
+rank1AlongTrajectory, where reset zoom on xaxis created
+dataset which would not validate''')
+
+ds= Schemes.rank1AlongTrajectory()
+problems= []
+DataSetUtil.validate(ds,problems)
+print problems
