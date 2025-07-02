@@ -1,0 +1,23 @@
+from org.das2.graph import DasColorBar
+ds= zeros(50,50)
+n= getParam('niter',50000,'Number of Iterations',[50000,250000,1000000])
+cb= getParam('cb','WHITE_RED','Color bar',[ 'AJ4CO_RAINBOW', 'APL_COLOR_QUANTIZATION', 'APL_RAINBOW_BLACK0', 'APL_RAINBOW_WHITE0', 'BLACK_BLUE', 'BLACK_GREEN', 'BLACK_RED', 'BLUE_BLACK_RED_WEDG
+E', 'BLUE_GREEN_WHITE_YELLOW_RED', 'BLUE_TO_ORANGE', 'BLUE_WHITE_ORANGE', 'BLUE_WHITE_RED_WEDGE', 'COLOR_WEDGE', 'GRAYSCALE', 'GSFC_RP_SPECIAL', 'INVERSE_GRAYSCALE', 'INVERSE_WHITE_BLUE_BLACK',
+ 'MATLAB_HSV', 'MATLAB_JET', 'MATLAB_JET_BLACK0', 'RED_CYAN_BLUE_YELLOW_RED', 'SCIPY_PLASMA', 'VIOLET_YELLOW', 'WHITE_BLUE', 'WHITE_BLUE_BLACK', 'WHITE_GREEN', 'WHITE_RED', 'WRAPPED_COLOR_WEDGE
+'])
+
+print 'dom=', dom
+print 'n=', n
+print 'cb=', cb
+
+for i in xrange(n):
+   ix= rand()*50
+   iy= rand()*50
+   w= 1./ ( sqrt( ( (ix-25.5)**2 + ( (iy-25.5)**2) ) ) * 0.5 )
+   if rand()<(w):
+       ds[ix,iy]= ds[ix,iy]+1
+   if i%5000==0:
+       print dom.plots[0].title
+       plot(ds,colorTable=cb,title='%d of %d' % ( i, n ))
+
+plot( ds, colorTable=cb, title=dom.plots[0].title )
