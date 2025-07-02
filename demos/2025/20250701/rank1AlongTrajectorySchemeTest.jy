@@ -6,6 +6,10 @@ rank1AlongTrajectory, where reset zoom on xaxis created
 dataset which would not validate''')
 
 ds= Schemes.rank1AlongTrajectory()
+
+print xtags(ds)
+# with the bug, dep0 was dep0[DEPEND_0=1440,BUNDLE_1=1440].
+
 problems= []
-DataSetUtil.validate(ds,problems)
+DataSetUtil.validate(ds,problems) 
 print problems
