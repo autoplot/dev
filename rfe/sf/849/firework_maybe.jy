@@ -26,6 +26,6 @@ xx= cos(aa) * rr
 yy= sin(aa) * rr
 
 plot( xx, yy, zz, symbolSize=4, xrange=[-10,10], yrange=[-10,10], isotropic=True,
-    lineThick=0.1, lineStyle='solid' )
+    lineThick=0.1, lineStyle='solid', colorTable='blue_to_orange' )
 
 annotation( 0, text='!(painter;img;https://autoplot.org/Logo32.png)', anchorPosition='NW' )
