@@ -14,7 +14,7 @@ if method==1:
     evt= dataset('2025-02-03T02:00:00Z') - t0
 elif method==2:
     ttag= xtags( ds )
-    ttag= convertUnitsTo( ttag, Units.lookupTimeUnits('seconds since 2025-02-02T07:07:15Z') )
+    ttag= convertUnitsTo( ttag, Units.lookupTimeUnits('seconds since 2025-02-02T23:59:59Z') )
     evt= dataset('2025-02-03T02:00:00Z')
 
 ds= link( ttag, ds )
