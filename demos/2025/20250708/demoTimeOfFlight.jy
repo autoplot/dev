@@ -1,0 +1,23 @@
+from org.das2.datum import UnitsUtil
+
+setScriptDescription('Model Rocket Data')
+method= getParam('method',1,'Pick one of two methods for displaying',[1,2])
+
+ds= getDataSet('vap+cdaweb:ds=AC_H3_MFI&id=Magnitude&timerange=2025-02-03') # load some fun time series
+ds.putProperty(QDataSet.LABEL,'Fake Data')
+ds.putProperty(QDataSet.TITLE,'Fake Data')
+
+if method==1:
+    t0= '2025-02-02T07:07:15Z'
+    ttag= xtags( ds ) - t0
+    evt= dataset('2025-02-03T02:00:00Z') - t0
+elif method==2:
+    ttag= xtags( ds )
+    ttag= convertUnitsTo( ttag, Units.lookupTimeUnits('seconds since 2025-02-02T07:07:15Z') )
+    evt= dataset('2025-02-03T02:00:00Z')
+
+ds= link( ttag, ds )
+
+reset()
+plot( ds )
+plot( 1, evt, overplotOf=dom.plots[0], renderType='eventsBar>color=blue&lineThick=3px' )
