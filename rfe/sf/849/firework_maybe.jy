@@ -1,0 +1,31 @@
+setScriptDescription('Make a firework, maybe?')
+
+t= getParam( 't', 0.0, 'parameter t', { 'min':0, 'max':15 } )
+
+rmin= greaterOf( 0, t-5 )
+rmax= t
+
+nn= 1000
+randomSeed(0)
+
+xx= randn(nn)
+yy= randn(nn)
+aa= atan2(yy,xx)
+rr= sqrt( xx**2 + yy**2 )
+zz= rr
+
+rr= rescale( rr, dataset(rmin), dataset(rmax) )
+
+s= sort(aa)
+
+rr= rr[s]
+aa= aa[s]
+zz= zz[s]
+
+xx= cos(aa) * rr
+yy= sin(aa) * rr
+
+plot( xx, yy, zz, symbolSize=4, xrange=[-10,10], yrange=[-10,10], isotropic=True,
+    lineThick=0.1, lineStyle='solid' )
+
+annotation( 0, text='!(painter;img;https://autoplot.org/Logo32.png)', anchorPosition='NW' )
