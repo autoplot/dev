@@ -1,8 +1,8 @@
 setScriptDescription('Make a firework, maybe?')
 
-t= getParam( 't', 0.0, 'parameter t', { 'min':0, 'max':15 } )
+t= getParam( 't', 5.0, 'parameter t', { 'min':0, 'max':15 } )
 
-rmin= greaterOf( 0, t-5 )
+rmin= greaterOf( 0.0, t-5.0 )
 rmax= t
 
 nn= 1000
