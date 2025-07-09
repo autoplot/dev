@@ -1,0 +1,41 @@
+setScriptTitle('Magic Time Decoder')
+setScriptDescription('Magic Time Decoder tries to guess what times are.')
+
+tt= getParam( 'tt', '2018-091T08:05 to 08:20', 'time range approximate', \
+    { 'examples':['2018-091T08:05 to 08:20'] } )
+
+tbase= getParam( 'tbase', 2458209.8, 'offset for t0 and tn' )
+
+t0= getParam( 't0', 0.086993808, 'the lower extent' )
+tn= getParam( 'tn', 0.097063253, 'the upper extent' )
+
+t0= t0 + tbase
+tn= tn + tbase 
+
+drtr= datumRange(tt) 
+w= drtr.width()
+print 'expected time range: ', drtr
+print 'expected time duration: ', w
+
+print 'tn-t0: ', tn-t0
+
+print 'exact ratio:',  drtr.width() / ( tn-t0 )
+
+uu= [ Units.nanoseconds, Units.microseconds, Units.milliseconds, Units.seconds, Units.hours, Units.hours, Units.days ]
+
+# find the unit where ratio of widths is closest to 1.
+theU= None
+for u in uu:
+    d= ( u.createDatum(tn-t0) / w ).value()
+    if ( d>0.95 and d<1.05 ):
+        print 'Offset units appear to be: ',u 
+        theU= u
+        
+base= ( drtr.min() - theU.createDatum(t0) )
+
+if base.isFill():    
+    base1000= Units.lookupTimeUnits( str(theU) + ' since 1000-01-01T00:00')
+    print 'Base would be at year 1000-01-01: ', drtr.min().doubleValue(base1000)
+    
+else:
+    print 'Base time would then appear to be: ', base
