@@ -1,0 +1,20 @@
+setScriptTitle('demo toTimeDataSet bug')
+setScriptDescription('''Andrei demonstrated this bug where toTimeDataSet doesn't properly promote 
+rank 0 components to rank 1.
+''')
+
+workAround= getParam( 'workAround', False, 'Use work-around to resolve problem', [True,False] )
+
+nano= linspace( '0 microseconds','1e9 microseconds', 100 )
+
+trdr= DatumRangeUtil.parseTimeRange('2025-07-11')
+tmin = trdr.min()
+t0 = TimeUtil.fromDatum(tmin)
+print t0[0], t0[1], t0[2], 0, 0, 0, nano 
+
+if workAround:
+    x = toTimeDataSet(replicate(t0[0],100), t0[1], t0[2], 0, 0, 0, nano)
+else:
+    x = toTimeDataSet(t0[0], t0[1], t0[2], 0, 0, 0, nano)
+    
+plot(x)
