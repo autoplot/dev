@@ -1,0 +1,20 @@
+from java.awt import GridLayout
+from javax.swing import JPanel,JButton
+
+goButtons= JPanel()
+goButtons.layout= GridLayout(3,3)
+
+def bhandler(evt):
+    print evt.source.text
+    
+goButtons.add( JButton('cdf',actionPerformed= bhandler ) )
+goButtons.add( JButton('dat',actionPerformed= bhandler ) )
+goButtons.add( JButton('xls' ,actionPerformed= bhandler ) )
+goButtons.add( JButton('nc',actionPerformed= bhandler ) )
+goButtons.add( JButton('lbl',actionPerformed= bhandler ) )
+goButtons.add( JButton('lblx',actionPerformed= bhandler ) )
+goButtons.add( JButton('hdf' ,actionPerformed= bhandler ) )
+goButtons.add( JButton('d2s',actionPerformed= bhandler ) )
+goButtons.add( JButton('fits',actionPerformed= bhandler ) )
+
+addTab('tabb',goButtons)
