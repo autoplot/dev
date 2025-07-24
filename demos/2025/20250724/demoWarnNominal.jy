@@ -1,0 +1,18 @@
+from java.util import HashMap
+
+setScriptTitle('Demo Warnings and Nominal ranges')
+setScriptDescription('''Show how warning band can be shown.  This is a bit of a kludge,
+where when LIMITS_WARN_MAX and LIMITS_WARN_MIN appear in the METADATA property, then 
+lines are shown.''')
+
+randomSeed(0)
+ds= accum( randn(1000) )
+meta= HashMap()
+meta.put( "LIMITS_WARN_MAX", 15 )
+meta.put( "LIMITS_WARN_MIN", -15 )
+meta.put( "LIMITS_NOMINAL_MAX", 10 )
+meta.put( "LIMITS_NOMINAL_MIN", -10 )
+
+ds.putProperty( QDataSet.METADATA, meta )
+
+plot(ds)
