@@ -4,7 +4,7 @@ setScriptDescription('Demonstrate constraints in parameters.')
 includedModes = getParam('incl','ab', 'Include modes', { 'regex':'[abcd]+' } )
 print includedModes
 
-timeRange= getParam( 'timerange', '2025-01-08', 'time range', { 'format': '$Y-$m-$d' } )
+timeRange= getParam( 'timerange', '2025-01-08', 'time range', { 'format': '$Y-$j' } )
 print timeRange
 
 minMaxInt = getParam('percent', 50, 'percent', { 'min':0, 'max':100 } )
