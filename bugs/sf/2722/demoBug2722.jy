@@ -1,0 +1,2 @@
+ds2= getDataSet(PWD+'demoBug.num=2722.dat')
+ds1= getDataSet(PWD+'demoBug2722.dat')
