@@ -1,0 +1,14 @@
+from org.das2.qds.examples import Schemes
+
+setScriptDescription('Demo where FFT Power can not stitch records together')
+
+ds= Schemes.rank2Waveform()
+
+window= windowFunction('Hann',1024)
+
+ff= fftPower(ds,window,1,monitor)
+
+print ds
+print ff
+
+plot(ff)
