@@ -1,0 +1,26 @@
+setScriptDescription('Demo of Jython QDataSet indexing, copied from sftp://jfaden.net:/home/jbf/ct/autoplot/tests/weigel/PythonIndexing.jy')
+
+r1= linspace( 0, 9.9, 100 )
+r2= findgen( 5, 100 ) / 500
+r3= findgen( 10, 5, 100 ) / 5000
+
+print r1, r2, r3
+
+print 'IDX is a scalar'
+print r1[0], r2[0], r3[0]
+
+print 'array, or N-index array'
+idx= [ 4,2,3 ]
+#print r1[idx], r2[idx], r3[idx]
+idx= [ [0,1], [ 4,2,3 ] ]
+#print r1[idx], r2[idx], r3[idx]
+
+print 'rank 1 dataset'
+idx= shuffle( findgen(3) )
+print r1[idx]           # rank 3
+print r2[idx], r3[idx]  # fail, should preserve rank
+
+print 'where to index'
+r1= ripples(100,100)
+r= where( r1.lt(0) )
+r1[r]= abs(r1[r])
