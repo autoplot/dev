@@ -7,7 +7,7 @@ if ( apkp=='ap' ):
 else:
   getAp= 0
 
-resourceURI= getParam( 'resourceURI', 'ftp://ftp.ngdc.noaa.gov/STP/GEOMAGNETIC_DATA/INDICES/KP_AP/1942', 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'https://www.ngdc.noaa.gov/stp/space-weather/geomagnetic-data/INDICES/KP_AP/1942', 'example file to load' )
 
 # Download the file to make it local.  Monitor is a progress monitor for the download.
 afile= getFile( resourceURI, monitor ).toString()
