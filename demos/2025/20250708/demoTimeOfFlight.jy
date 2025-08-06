@@ -3,7 +3,7 @@ from org.das2.datum import UnitsUtil
 setScriptDescription('Model Rocket Data')
 method= getParam('method',2,'Pick one of two methods for displaying',[1,2])
 
-ds= getDataSet('vap+cdaweb:ds=AC_H3_MFI&id=Magnitude&timerange=2025-02-03') # load some fun time series
+ds= getDataSet('vap+cdaweb:ds=AC_H3_MFI&id=Magnitude&timerange=2025-02-03',monitor) # load some fun time series
 ds.putProperty(QDataSet.LABEL,'Fake Data')
 ds.putProperty(QDataSet.TITLE,'Fake Data')
 
@@ -21,6 +21,10 @@ ds= link( ttag, ds )
 
 reset()
 plot( ds )
+print xtags(ds).property(QDataSet.UNITS)
+print dom.plots[0].xaxis.range.units
+stop
+
 plot( 1, evt, overplotOf=dom.plots[0], renderType='eventsBar>color=blue&lineThick=3px' )
 
 if method==2:
