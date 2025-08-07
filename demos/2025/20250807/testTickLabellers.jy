@@ -8,13 +8,10 @@ setScriptDescription('''Demo TickLabellers.  I'd forgotten about this class whic
 you customize the labels along a curve.''')
 
 tt= linspace( PI,3*PI/2, 100 )
-
 xx= cos(tt)
 yy= sin(tt)
 
 plot( xx, yy, tt, renderType=RenderType.orbitPlot ) 
-
-r= dom.plotElements[0].controller.renderer
 
 class FunTickLabeller( TickLabeller ):
     def init(self,ticks):
@@ -41,4 +38,5 @@ class FunDatumFormatter( DatumFormatter ):
 gtr= FunTickLabeller()
 #gtr= GrannyTickLabeller(formatter=FunDatumFormatter())
 
+r= dom.plotElements[0].controller.renderer
 r.setTickLabeller(gtr)
