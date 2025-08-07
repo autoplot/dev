@@ -1,0 +1,43 @@
+from java.awt import FontMetrics
+from org.das2.util import GrannyTextRenderer
+from org.das2.datum.format import DatumFormatter
+from org.autoplot import RenderType
+from org.das2.graph import TickLabeller,TickCurveRenderer,GrannyTickLabeller,TickVDescriptor
+
+setScriptDescription('''Demo TickLabellers.  I'd forgotten about this class which lets
+you customize the labels along a curve.''')
+
+tt= linspace( PI,3*PI/2, 100 )
+
+xx= cos(tt)
+yy= sin(tt)
+
+plot( xx, yy, tt, renderType=RenderType.orbitPlot ) 
+
+r= dom.plotElements[0].controller.renderer
+
+class FunTickLabeller( TickLabeller ):
+    def init(self,ticks):
+        self.ticks= ticks
+        
+    def labelMajorTick(self, g, tickNumber, tickLine ):
+        v= self.ticks.getMajorTicks().get(tickNumber)
+        centerX= tickLine.getX2() + (tickLine.getX2()-tickLine.getX1())
+        centerY= tickLine.getY2() + (tickLine.getY2()-tickLine.getY1())
+        gtr= GrannyTextRenderer()
+        gtr.setString(g,str(int(v)))
+        bb= gtr.bounds
+        g.drawOval(int(centerX)-10, int(centerY)-10, 21, 21)
+        g.drawString( str(int(v)), centerX-bb.width/2, centerY+(bb.height/3) )
+        return None
+    def finished(self):
+        return
+
+class FunDatumFormatter( DatumFormatter ):
+    def format(self, datum):
+        return 'd:'+str(datum)
+        
+gtr= FunTickLabeller()
+#gtr= GrannyTickLabeller(formatter=FunDatumFormatter())
+
+r.setTickLabeller(gtr)
