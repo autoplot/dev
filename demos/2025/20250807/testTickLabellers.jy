@@ -30,6 +30,7 @@ class FunTickLabeller( TickLabeller ):
         g.drawOval(int(centerX)-10, int(centerY)-10, 21, 21)
         g.drawString( str(int(v)), centerX-bb.width/2, centerY+(bb.height/3) )
         return None
+        
     def finished(self):
         return
 
