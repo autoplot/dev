@@ -1,6 +1,7 @@
 from org.das2.qds.examples import Schemes
 
-setScriptDescription('Demo where FFT Power can not stitch records together')
+setScriptDescription('''Demo where FFT Power cannot stitch records together, George
+has asked that this limitation be avoided, and Chris has 4-element packets.''')
 
 ds= Schemes.rank2Waveform()
 
