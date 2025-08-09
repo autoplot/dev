@@ -8,8 +8,8 @@ be adjusted separately.
 ''')
 
 if ( len(dom.plots)!=2 ):
-    plot( 0, 'vap+inline:randn(100,100)+distance(100,100,60,60,10,30)' )
-    plot( 1, 'vap+inline:randn(100,100)+distance(100,100,60,60,30,10)' )
+    plot( 0, 'vap+inline:randn(100,100)+distance(100,100,60,60,10,30)', title='Data 1' )
+    plot( 1, 'vap+inline:randn(100,100)+distance(100,100,60,60,30,10)', title='Data 2' )
         
     #raise Exception('only two plots')
 
@@ -21,15 +21,7 @@ print 'rang', rang
 orig= getApplication()
 slicer= newApplication('doubleSlicer')
 setApplication(slicer)
-setLayout(2)
-
-slicer.dom.plots[1].rowId= slicer.dom.plots[0].rowId
-
-DomOps.fixLayout( slicer.dom, HashMap() );
-bind( slicer.dom.plots[0].yaxis, 'range', slicer.dom.plots[1].yaxis, 'range' )
-bind( slicer.dom.plots[0].yaxis, 'log', slicer.dom.plots[1].yaxis, 'log' )
-bind( slicer.dom.plots[0].xaxis, 'range', slicer.dom.plots[1].xaxis, 'range' )
-bind( slicer.dom.plots[0].xaxis, 'log', slicer.dom.plots[1].xaxis, 'log' )
+setLayoutOverplot(2)
 
 setApplication(orig)
 
@@ -40,8 +32,10 @@ def doubleSlice(which,evtx):
     
     setApplication(slicer)
     print 'slice2', rang
-    plot( which, slice0( ds, dataset( evtx) ), yrange=rang, color=['red','blue'][which] ) # rang
-    
+    try:
+        plot( which, slice0( ds, dataset( evtx) ), yrange=rang, color=['red','blue'][which], legendLabel=dom.plots[which].title ) # rang
+    except:
+        print 'exception, probably index out of bounds'
     #setApplication(orig)
     
 def sliceEvt0( evt ):
