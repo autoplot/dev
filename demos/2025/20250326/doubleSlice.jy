@@ -8,7 +8,15 @@ be adjusted separately.
 ''')
 
 if ( len(dom.plots)!=2 ):
-    raise Exception('only two plots')
+    plot( 0, 'vap+inline:randn(100,100)+distance(100,100,60,60,10,30)' )
+    plot( 1, 'vap+inline:randn(100,100)+distance(100,100,60,60,30,10)' )
+        
+    #raise Exception('only two plots')
+
+rang= extent( dom.plotElements[0].controller.dataSet )
+rang= extent( dom.plotElements[1].controller.dataSet, rang )
+rang= datumRange([-1,11])
+print 'rang', rang
 
 orig= getApplication()
 slicer= newApplication('doubleSlicer')
@@ -20,25 +28,28 @@ slicer.dom.plots[1].rowId= slicer.dom.plots[0].rowId
 DomOps.fixLayout( slicer.dom, HashMap() );
 bind( slicer.dom.plots[0].yaxis, 'range', slicer.dom.plots[1].yaxis, 'range' )
 bind( slicer.dom.plots[0].yaxis, 'log', slicer.dom.plots[1].yaxis, 'log' )
+bind( slicer.dom.plots[0].xaxis, 'range', slicer.dom.plots[1].xaxis, 'range' )
+bind( slicer.dom.plots[0].xaxis, 'log', slicer.dom.plots[1].xaxis, 'log' )
 
 setApplication(orig)
 
-def doubleSlice1(evt):
+def doubleSlice(which,evtx):
+    global rang
     setApplication(orig)
-    ds= dom.plotElements[0].controller.dataSet
+    ds= dom.plotElements[which].controller.dataSet
     
     setApplication(slicer)
-    plot( 0, slice0( ds, dataset(evt.finishX) ) )
-    setApplication(orig)
-
-def doubleSlice2(evt):
-    setApplication(orig)
-    ds= dom.plotElements[1].controller.dataSet
+    print 'slice2', rang
+    plot( which, slice0( ds, dataset( evtx) ), yrange=rang, color=['red','blue'][which] ) # rang
     
-    setApplication(slicer)
-    plot( 1, slice0( ds, dataset(evt.finishX) ) )
-    setApplication(orig)
+    #setApplication(orig)
     
-addMouseModule( dom.plots[0],'double slice',doubleSlice1)
+def sliceEvt0( evt ):
+    invokeLater( doubleSlice, 0, evt.getFinishX() )
     
-addMouseModule( dom.plots[1],'double slice',doubleSlice2)
+def sliceEvt1( evt ):
+    invokeLater( doubleSlice, 1, evt.getFinishX() )
+        
+addMouseModule( dom.plots[0],'double slice',sliceEvt0)
+    
+addMouseModule( dom.plots[1],'double slice',sliceEvt1)
