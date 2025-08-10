@@ -1,11 +1,14 @@
 from java.util import HashMap
 from org.autoplot.dom import DomOps
+from org.das2.event import DataPointSelectionListener,DataPointSelectorMouseModule
 setScriptLabel('Double Slice')
 setScriptDescription('''Double Slice will slice either of two spectrograms,
 drawing the slice on a second Autoplot window.  The two slices have 
 separate plots which are on top of one another, so the xaxis ranges can 
 be adjusted separately.
 ''')
+
+reset()
 
 if ( len(dom.plots)!=2 ):
     plot( 0, 'vap+inline:randn(100,100)+distance(100,100,60,60,10,30)', title='Data 1' )
@@ -36,14 +39,28 @@ def doubleSlice(which,evtx):
         plot( which, slice0( ds, dataset( evtx) ), yrange=rang, color=['red','blue'][which], legendLabel=dom.plots[which].title ) # rang
     except:
         print 'exception, probably index out of bounds'
-    #setApplication(orig)
-    
-def sliceEvt0( evt ):
-    invokeLater( doubleSlice, 0, evt.getFinishX() )
-    
-def sliceEvt1( evt ):
-    invokeLater( doubleSlice, 1, evt.getFinishX() )
+    setApplication(orig)
         
-addMouseModule( dom.plots[0],'double slice',sliceEvt0)
+from org.das2.event import AbstractDragRenderer
+
+class MyDragRenderer( AbstractDragRenderer ):
+    def renderDrag( self, g, p1, p2 ):
+        g.drawLine( p2.x, 0, p2.x, dom.canvases[0].height )
+    #def isUpdatingSelection( self ):
+    #    return True
+
+class MyDataPointSelectionListener0(DataPointSelectionListener):
+    def dataPointSelected(self,evt):
+        doubleSlice( 0, evt.x )
     
-addMouseModule( dom.plots[1],'double slice',sliceEvt1)
+class MyDataPointSelectionListener1(DataPointSelectionListener):
+    def dataPointSelected(self,evt):
+        doubleSlice( 1, evt.x )
+
+mm= DataPointSelectorMouseModule( dom.plots[0].controller.dasPlot,None,MyDragRenderer(),'double slice' )
+mm.addDataPointSelectionListener(MyDataPointSelectionListener0())
+dom.plots[0].controller.dasPlot.getDasMouseInputAdapter().setPrimaryModule(mm)
+
+mm= DataPointSelectorMouseModule( dom.plots[1].controller.dasPlot,None,MyDragRenderer(),'double slice' )
+mm.addDataPointSelectionListener(MyDataPointSelectionListener1())
+dom.plots[1].controller.dasPlot.getDasMouseInputAdapter().setPrimaryModule(mm)
