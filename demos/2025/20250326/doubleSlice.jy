@@ -8,9 +8,9 @@ separate plots which are on top of one another, so the xaxis ranges can
 be adjusted separately.
 ''')
 
-reset()
-
 if ( len(dom.plots)!=2 ):
+    reset()
+
     plot( 0, 'vap+inline:randn(100,100)+distance(100,100,60,60,10,30)', title='Data 1' )
     plot( 1, 'vap+inline:randn(100,100)+distance(100,100,60,60,30,10)', title='Data 2' )
         
