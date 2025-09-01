@@ -1,0 +1,34 @@
+from java.lang import System
+setScriptDescription('''Interpolation of these two datasets is time-expensive, so synchronize should verify that 
+interpolation is actually needed.  This code is to verify that the equivalent test is quick.
+
+The result is "tall", Connor's case, is dramatically improved with no risk. The case "wide" adds an additional 
+750ms to the 5224ms process, when they are not equivalent.
+''')
+
+wideOrTall= getParam('wideOrTall','tall','lots of records or lots of fields per record',['wide','tall'])
+
+if wideOrTall=='tall':
+    ds1=randn(360,14998)
+    ds2=randn(360,14998)
+    t1= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',360)
+    t2= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',360)
+    ds1= link(t1,ds1)
+    ds2= link(t2,ds2)
+    
+elif wideOrTall=='wide':
+    ds1=randn(14000000)
+    ds2=randn(14000000)
+    t1= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',14000000)
+    t2= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',14000000)
+    ds1= link(t1,ds1)
+    ds2= link(t2,ds2)
+
+
+t0= System.currentTimeMillis()
+e= equivalent(xtags(ds1),xtags(ds2))
+print 'equivalent', System.currentTimeMillis()-t0, e
+
+t0= System.currentTimeMillis()
+ds2= synchronize( ds1, ds2 )
+print 'synchronize', System.currentTimeMillis()-t0, e
