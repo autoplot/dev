@@ -1,0 +1,22 @@
+from org.das2.util import FileUtil
+from org.json import JSONObject,JSONArray
+
+setScriptDescription('Read solar wind data from NOAA Space Weather Prediction Center')
+
+ff = getFile( 'https://services.swpc.noaa.gov/products/solar-wind/plasma-3-day.json' )
+ss = FileUtil.readFileToString(ff)
+ja= JSONArray(ss)
+
+dsb= DataSetBuilder(2,100,2)
+
+for i in xrange(ja.length()):
+    ja1= ja.get(i)
+    print ja1
+    if ( ja1.getString(1)!='None' and ja1.getString(1)!='density'):
+        try:
+            print  [ja1.getString(0), ja1.getString(1)]
+            dsb.nextRecord( [ ja1.getString(0), float(ja1.getString(1)) ] )
+        except:
+            print 'Bad record: ', ja1
+    
+result= dsb.getDataSet() 
