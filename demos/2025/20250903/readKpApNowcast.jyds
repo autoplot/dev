@@ -9,6 +9,7 @@ ff= downloadResourceAsTempFile(URL('https://kp.gfz.de/app/files/Kp_ap_nowcast.tx
 
 dsb= DataSetBuilder(2,100,2)
 dsb.putProperty( QDataSet.NAME, name )
+dsb.putProperty( QDataSet.LABEL, name )  # weird--I shouldn't have to do this
 
 ##YYY MM DD hh.h hh._m        days      days_m     Kp   ap D
 #2025 08 06 00.0 01.50 34186.00000 34186.06250  1.667    6 0
