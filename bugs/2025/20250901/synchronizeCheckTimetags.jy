@@ -7,12 +7,15 @@ The result is "tall", Connor's case, is dramatically improved with no risk. The 
 ''')
 
 wideOrTall= getParam('wideOrTall','tall','lots of records or lots of fields per record',['wide','tall'])
+equiv= getParam('equiv',True,'are timetags actually equivalent',[True,False])
 
 if wideOrTall=='tall':
     ds1=randn(360,14998)
     ds2=randn(360,14998)
     t1= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',360)
     t2= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',360)
+    if not equiv:
+        t2= t2 + (t2[1]-t2[0])
     ds1= link(t1,ds1)
     ds2= link(t2,ds2)
     
@@ -21,6 +24,8 @@ elif wideOrTall=='wide':
     ds2=randn(14000000)
     t1= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',14000000)
     t2= linspace('2006-01-01T00:00Z','2006-01-02T00:00Z',14000000)
+    if not equiv:
+        t2= t2 + (t2[1]-t2[0])
     ds1= link(t1,ds1)
     ds2= link(t2,ds2)
 
