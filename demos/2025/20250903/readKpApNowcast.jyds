@@ -1,0 +1,31 @@
+# Autoplot's remote File Systems require that the parent be listed, so when the file is 
+# known but the parent cannot be read, downloadResourceAsTempFile must be used.
+
+setScriptDescription('Read nowcast data for kp and ap from kp.gfz.de')
+
+name= getParam('name','Kp','parameter to load',['Kp','ap'])
+
+ff= downloadResourceAsTempFile(URL('https://kp.gfz.de/app/files/Kp_ap_nowcast.txt'),None)
+
+dsb= DataSetBuilder(2,100,2)
+dsb.putProperty( QDataSet.NAME, name )
+
+##YYY MM DD hh.h hh._m        days      days_m     Kp   ap D
+#2025 08 06 00.0 01.50 34186.00000 34186.06250  1.667    6 0
+tp= TimeParser.create('$Y $m $d $x $H.$M')
+
+for line in open(str(ff)).readlines():
+    if len(line)==0: continue
+    if line[0]=='#': continue
+        
+    print line[:21], line[46:52]
+    t= tp.parse(line[:21]).getTimeDatum()
+    
+    if ( name=='Kp' ):
+        p= float(line[46:52])
+    elif ( name=='ap' ):
+        p= float(line[52:57])
+    
+    dsb.nextRecord([t,p])
+    
+result= dsb.getDataSet()
