@@ -1,0 +1,8 @@
+from org.das2.util import LoggerManager
+
+print 'error message with print'
+
+logger= LoggerManager.getLogger('analysis')
+logger.fine('fine level message')
+logger.info('info level message')
+logger.warning('warning level message')
