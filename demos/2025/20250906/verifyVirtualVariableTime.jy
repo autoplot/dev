@@ -7,6 +7,8 @@ from java.nio import ByteBuffer,ByteOrder
 from java.io import FileInputStream
 import jarray,array
 
+setScriptDescription('List the variables in a CDF file, or a subset of variables which match a regular expression')
+
 #resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/tds_wf/2025/psp_fld_l2_tds_wf_20250408_v00.cdf' )
 resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/pub/software/cdawlib/0MASTERS/psp_fld_l2_tds_wf_00000000_v01.cdf')
 
