@@ -1,0 +1,25 @@
+from java.util.regex import Pattern
+from org.das2.util import ColorUtil
+from java.lang import String
+from gov.nasa.gsfc.spdf.cdfj import CDFDataType,CDFReader
+from java.nio.channels import Channels
+from java.nio import ByteBuffer,ByteOrder
+from java.io import FileInputStream
+import jarray,array
+
+#resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/sp_phys/data/psp/fields/l2/tds_wf/2025/psp_fld_l2_tds_wf_20250408_v00.cdf' )
+resourceURI= getParam( 'resourceURI', 'https://cdaweb.gsfc.nasa.gov/pub/software/cdawlib/0MASTERS/psp_fld_l2_tds_wf_00000000_v01.cdf')
+
+include= getParam('include','PSP_FLD_L2_TDS_WF_Burst_Time_Series_Times_TT2000_f','Regex to include')
+
+ff= getFile(resourceURI,monitor)
+
+pinclude= Pattern.compile(include)
+
+cdf= CDFReader(str(ff))
+nn= cdf.getVariableNames()
+for n in nn:
+    if pinclude.matcher(n).matches():
+        print n
+    
+print 'looking for '+'PSP_FLD_L2_TDS_WF_Burst_Time_Series_Times_TT2000_f'
