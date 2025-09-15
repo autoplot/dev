@@ -1,0 +1,29 @@
+setScriptDescription('Verify rank 1 multi-cadence FFTPower')
+
+nn= getParam( 'nn', 1024, 'The window size', {'examples':[ 512, 1024, 2048, 3072 ]} )
+
+randomSeed(0)
+t0= '2025-09-15T13:19'
+
+tt= linspace('2025-09-15T13:19','2025-09-15T13:20',4096)
+ds1= link( tt, randn(4096)+sin((tt-t0)/'.5s'*TAU) )
+
+tt= linspace('2025-09-15T13:20','2025-09-15T13:21',5120)
+ds2= link( tt, randn(5120)+sin((tt-t0)/'.5s'*TAU) )
+
+tt= linspace('2025-09-15T13:21','2025-09-15T13:22',3072)
+ds3= link( tt, randn(3072)+sin((tt-t0)/'.5s'*TAU) )
+
+result= concatenate( concatenate( ds1,ds2 ), ds3 )
+
+reset()
+
+plot( result )
+
+plot( 1, fftPower( result, nn, monitor ), zrange=[1e-2,1e1] )
+
+t= xtags(result)
+ff= findex(t,linspace('2025-09-15T13:19','2025-09-15T13:22',12288))
+result1= interpolate( result,ff )
+
+plot( 2, fftPower( result1, 512, monitor ), zrange=[1e-2,1e1] )
