@@ -1,0 +1,76 @@
+from org.das2.util import ColorUtil
+from java.awt.geom import Rectangle2D,Area
+from org.das2.graph import Painter
+from java.awt import Rectangle
+from java.lang import Math
+
+def getRotatedBoundingBox(rect, angle):
+    """
+    Returns the axis-aligned bounding box of a Rectangle rotated about its center.
+    
+    rect  - java.awt.Rectangle
+    angle - rotation angle in radians (use Math.toRadians(deg) for degrees)
+    returns - new java.awt.Rectangle that bounds the rotated rect
+    """
+    cx = rect.getCenterX()
+    cy = rect.getCenterY()
+    w = rect.getWidth()
+    h = rect.getHeight()
+
+    hw = w / 2.0
+    hh = h / 2.0
+
+    cos = Math.cos(angle)
+    sin = Math.sin(angle)
+
+    corners = [
+        (-hw, -hh),
+        ( hw, -hh),
+        ( hw,  hh),
+        (-hw,  hh)
+    ]
+
+    minX =  1e300
+    maxX = -1e300
+    minY =  1e300
+    maxY = -1e300
+
+    for x, y in corners:
+        xr = x * cos - y * sin
+        yr = x * sin + y * cos
+
+        X = cx + xr
+        Y = cy + yr
+
+        if X < minX: minX = X
+        if X > maxX: maxX = X
+        if Y < minY: minY = Y
+        if Y > maxY: maxY = Y
+
+    newX = int(Math.floor(minX))
+    newY = int(Math.floor(minY))
+    newW = int(Math.ceil(maxX - minX))
+    newH = int(Math.ceil(maxY - minY))
+
+    return Rectangle(newX, newY, newW, newH)
+    
+def paintit(g):
+    print 'here'
+    angle= 45*PI/180.
+    R= Rectangle( 200,200,200,250 )
+    g.color= ColorUtil.HONEYDEW
+    g.fillRect( R.x, R.y, R.width, R.height )
+    
+    g2d= g.create()
+    g2d.translate(  R.x + R.width/2, R.y + R.height/2 )
+    g2d.rotate(angle)
+    #g2d.rotate(angle, 300, 325)
+    g2d.setColor(Color.BLUE)
+    g2d.translate( -R.width/2, -R.height/2 )
+    g2d.drawRect(0, 0, R.width, R.height)
+
+    R2= getRotatedBoundingBox(R,angle)
+    g.color= ColorUtil.SIENNA
+    g.drawRect( R2.x, R2.y, R2.width, R2.height )
+    
+addTopDecoration( dom.plots[0], paintit )
