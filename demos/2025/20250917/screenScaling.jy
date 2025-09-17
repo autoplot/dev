@@ -1,0 +1,32 @@
+from org.das2.util import ColorUtil
+from java.lang import Math
+from java.awt import Font,GraphicsEnvironment,Toolkit
+
+ge = GraphicsEnvironment.getLocalGraphicsEnvironment()
+gd = ge.getDefaultScreenDevice()
+gc = gd.getDefaultConfiguration()
+
+def paintInchSquare(g):
+    try:
+        scalex = gc.getDefaultTransform().getScaleX() 
+        scaley = gc.getDefaultTransform().getScaleY() 
+        msg= None
+    except:
+        scalex = 1.0
+        scaley = 1.0
+        msg= 'Older versions of Java do not provide scaling info'
+    dpi = Toolkit.getDefaultToolkit().getScreenResolution()
+    sizeInches= 4
+    sizex= int( sizeInches * dpi * scalex )
+    sizey= int( sizeInches * dpi * scaley )
+    g.color= ColorUtil.PLUM
+    g.fillRoundRect( 100, 100, sizex, sizey, 10, 10 )
+    g.color= ColorUtil.BLACK
+    g.drawRoundRect( 100, 100, sizex, sizey, 10, 10 )
+    g.drawString( '%d inch square.' % sizeInches, 114, 100 + 14*1 )
+    g.drawString( 'screen resolution is %d dpi' % dpi, 114, 100 + 14*2 )
+    g.drawString( 'screen scaling is x=%.2f y=%.2f' % ( scalex, scaley ), 114, 100 + 14*3 )
+    if msg!=None:
+        g.drawString( msg, 114, 100+14*4 )
+    
+addTopDecoration(dom.canvases[0],paintInchSquare)
