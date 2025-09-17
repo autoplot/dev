@@ -1,3 +1,4 @@
+from org.das2.dataset import NoDataInIntervalException
 setScriptDescription('''Load WNA Data and plot refractive
 index as a function of time and frequency.''')
 
@@ -5,11 +6,16 @@ tr= getParam( 'timerange', '2019-10-12', 'timerange to load' )
 sc= getParam( 'sc', 'A', 'the spacecraft name', ['A','B'] )
 
 theta= getDataSet('vap+cdaweb:ds=RBSP-%s_WNA-SURVEY_EMFISIS-L4&id=thsvd'%sc,tr)
+freqs= getDataSet('vap+cdaweb:ds=RBSP-A_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies&timerange=2019-10-12')
 fce= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fce'%sc,tr)
 fpe= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fpe'%sc,tr)
 
+if fce==None:
+    raise NoDataInIntervalException('No fce or fpe data available')
+if theta==None:
+    raise NoDataInIntervalException('No WNA data available')
+    
 fce,fpe= synchronize(theta,[fce,fpe])
-freqs= getDataSet('vap+cdaweb:ds=RBSP-A_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies&timerange=2019-10-12')
 
 fce= outerProduct( fce, ones(freqs.length()) )
 fpe= outerProduct( fpe, ones(freqs.length()) )
