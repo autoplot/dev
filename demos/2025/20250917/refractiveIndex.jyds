@@ -6,7 +6,7 @@ tr= getParam( 'timerange', '2019-10-12', 'timerange to load' )
 sc= getParam( 'sc', 'A', 'the spacecraft name', ['A','B'] )
 
 theta= getDataSet('vap+cdaweb:ds=RBSP-%s_WNA-SURVEY_EMFISIS-L4&id=thsvd'%sc,tr)
-freqs= getDataSet('vap+cdaweb:ds=RBSP-A_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies&timerange=2019-10-12')
+freqs= getDataSet('vap+cdaweb:ds=RBSP-A_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies',tr)
 fce= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fce'%sc,tr)
 fpe= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fpe'%sc,tr)
 
@@ -26,8 +26,8 @@ fpe.putProperty( QDataSet.UNITS, None )
 
 print fpe, f, fce
 
-R= 1 - fpe**2 / ( f * f - fce )
-L= 1 - fpe**2 / ( f * f + fce )
+R= 1 - fpe**2 / ( f * ( f - fce ) )
+L= 1 - fpe**2 / ( f * ( f + fce ) )
 P= 1 - fpe**2 / f**2
 D= 1/2. * ( R - L )
 S= 1/2. * ( R + L )
