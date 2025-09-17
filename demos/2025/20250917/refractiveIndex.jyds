@@ -6,7 +6,7 @@ tr= getParam( 'timerange', '2019-10-12', 'timerange to load' )
 sc= getParam( 'sc', 'A', 'the spacecraft name', ['A','B'] )
 
 theta= getDataSet('vap+cdaweb:ds=RBSP-%s_WNA-SURVEY_EMFISIS-L4&id=thsvd'%sc,tr)
-freqs= getDataSet('vap+cdaweb:ds=RBSP-A_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies',tr)
+freqs= getDataSet('vap+cdaweb:ds=RBSP-%s_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies'%sc,tr)
 fce= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fce'%sc,tr)
 fpe= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fpe'%sc,tr)
 
