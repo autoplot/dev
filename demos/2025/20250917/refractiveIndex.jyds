@@ -9,11 +9,11 @@ fce= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fce'%sc,tr)
 fpe= getDataSet('vap+cdaweb:ds=RBSP-%s_DENSITY_EMFISIS-L4&id=fpe'%sc,tr)
 
 fce,fpe= synchronize(theta,[fce,fpe])
-f= ytags(theta)
+freqs= getDataSet('vap+cdaweb:ds=RBSP-A_WNA-SURVEY_EMFISIS-L4&id=WFR_frequencies&timerange=2019-10-12')
 
-fce= outerProduct( fce, ones(f.length()) )
-fpe= outerProduct( fpe, ones(f.length()) )
-f= outerProduct( ones(fce.length()),f )
+fce= outerProduct( fce, ones(freqs.length()) )
+fpe= outerProduct( fpe, ones(freqs.length()) )
+f= outerProduct( ones(fce.length()),freqs )
 f.putProperty( QDataSet.UNITS, None )
 fce.putProperty( QDataSet.UNITS, None )
 fpe.putProperty( QDataSet.UNITS, None )
@@ -42,5 +42,5 @@ print f, fce, fpe, n2
 result= sqrt( n2 ) 
 
 result.putProperty( QDataSet.LABEL, 'refractive index' )
-result.putProperty( QDataSet.DEPEND_1, f[0] )
+result.putProperty( QDataSet.DEPEND_1, freqs )
 
