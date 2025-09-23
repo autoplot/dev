@@ -10,6 +10,8 @@ monitor.started()
 
 outs= open('/tmp/ap/virtualVariables.md','w')
 
+count= {}
+
 outs.write('| spid | name | funct | components | uri |\n')
 outs.write('| ---- | ---- | ----- | ---------- | --- |\n')
 for f in ffs:
@@ -36,6 +38,14 @@ for f in ffs:
         n= parameter.getString("name")
         v= parameter.optString("x_cdf_FUNCT","")
         if ( len(v)>0 ):
+            if count.has_key(v):
+                cnt= count[v]+1
+            else:
+                cnt= 1
+            count[v]= cnt
+            if cnt>10:
+                print 'seen enough already: ', v
+                continue
             components= parameter.getJSONArray("x_cdf_COMPONENTS")
             c=""
             for cc in xrange(components.length()):
@@ -43,6 +53,18 @@ for f in ffs:
             if len(c)>0: c= c[1:]
             u= 'hapi?id='+spid+'&parameters='+n+'&timerange='+tr
             outs.write('| %s | %s | %s | %s | %s |\n' % ( spid, n, v, c, u ) )
-        
+            
+outs.close()
+
+outs= open('/tmp/ap/virtualVariablesSummary.md','w')
+outs.write('| funct | count |\n')
+outs.write('| ---- | ---- |\n')
+ss= count.keys()
+ss.sort()
+for k in ss:
+    cnt= count[k]
+    outs.write('| '+k+' | '+str(cnt) +'|\n')
     
 outs.close()
+
+    
