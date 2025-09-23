@@ -65,7 +65,7 @@
                     type="datum" value="us2000: 2025-08-29T12:29:03.945Z"/>
                 <property default="0.0 (dimensionless)" name="pointAtY"
                     type="datum" value="keV/micron: 182"/>
-                <property default="0" name="rotate" type="Integer" value="30"/>
+                <property default="0" name="rotate" type="Integer" value="-30"/>
                 <property default="" name="rowId" type="String" value="row_1"/>
                 <property name="scale" type="Double" value="1.0"/>
                 <property default="false" name="showArrow"
