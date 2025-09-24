@@ -1,0 +1,11 @@
+setScriptDescription('''List the variables found in a CDF file.''')
+
+resourceURI= getParam( 'resourceURI', 'https://spdf.gsfc.nasa.gov/pub/software/cdawlib/0MASTERS/rbspa_rel04_ect-mageis-l3_00000000_v01.cdf', 'CDF file to list' )
+
+if resourceURI.startswith('/'):
+    resourceURI= 'file:' + resourceURI
+    
+ff= getCompletions(resourceURI+"?")
+n=len(resourceURI)
+for f in ff:
+    print f[(n+1):]
