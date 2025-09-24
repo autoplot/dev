@@ -1,7 +1,21 @@
 from java.io import File
 from org.das2.util import FileUtil
 from org.json import JSONObject
-setScriptDescription('''Scan over infos, create HAPI request for every virtual variable.''')
+setScriptDescription('''Scan over infos, create HAPI request for every virtual 
+variable.  This was written for development of the new HAPI server for CDAWeb.''')
+
+# which virtual variables are implemented in Autoplot
+autoplot= [ "compute_magnitude", "convert_log10", \
+          "fftpowerdelta512", "fftpowerdelta1024", "fftpowerdelta2048",\
+          "fftpower","fftPower512","fftPower1024","fftpowerdeltatranslation512", \
+                "alternate_view", "calc_p", "region_filt", \
+                "apply_esa_qflag", "apply_qflag",\
+                "sum_values", "arr_slice", "apply_filter_flag" ]
+autoplot= dict( zip( autoplot, autoplot ) )
+
+# where virtual variables are implemented in the new HAPI Server
+hapi= "alternate_view apply_esa_qflag apply_fgm_qflag apply_gmom_qflag apply_rtn_qflag comp_themis_epoch add_1800 apply_filter_flag convert_log10 clamp_to_zero arr_slice".split()
+hapi= dict( zip( hapi, hapi ) )
 
 dir='https://jfaden.net/~jbf/hapi/p/cdaweb/data/hapi/info/'
 ffs= listDirectory(dir+'*.json')
@@ -57,14 +71,30 @@ for f in ffs:
 outs.close()
 
 outs= open('/tmp/ap/virtualVariablesSummary.md','w')
-outs.write('| funct | count |\n')
-outs.write('| ---- | ---- |\n')
+outs.write('| funct | count | autoplot | hapi |\n')
+outs.write('| ---- | ---- | ---- | ---- |\n')
 ss= count.keys()
 ss.sort()
+
+total=0
+apTotal= 0
+hpTotal= 0
 for k in ss:
     cnt= count[k]
-    outs.write('| '+k+' | '+str(cnt) +'|\n')
-    
+    total=total+cnt
+    if ( autoplot.has_key(k) ): 
+        ap='&checkmark;'
+        apTotal= apTotal + cnt
+    else:
+        ap= ''
+    hp= ''
+    if ( hapi.has_key(k) ): 
+        hp='&checkmark;'
+        hpTotal= hpTotal + cnt
+    else:
+        hp= ''
+    outs.write('| '+k+' | '+str(cnt) +'| '+ap+' | '+hp+' |\n')
+outs.write('| <b>Totals</b> | <b>%d</b>| <b>%d</b> | <b>%d</b> |\n' % ( total, apTotal, hpTotal ) )
 outs.close()
 
     
