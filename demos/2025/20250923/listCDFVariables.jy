@@ -8,4 +8,6 @@ if resourceURI.startswith('/'):
 ff= getCompletions(resourceURI+"?")
 n=len(resourceURI)
 for f in ff:
+    if ( f.endswith('=') ):
+        continue
     print f[(n+1):]
