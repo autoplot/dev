@@ -1,7 +1,7 @@
 ann0= annotation(1,text='This annotation should not jump as it spins',
    anchorPosition='NW')
 
-ann= annotation(text='Hello',anchorOffset='',borderType='rectangle')
+ann= annotation(text='Hello Jeremy Faden',anchorOffset='',borderType='rectangle')
 
 for i in xrange(40):
     for a in xrange(0,360,1):
