@@ -1,0 +1,6 @@
+bz_sun_state= getDataSet('https://pds-ppi.igpp.ucla.edu/data/maven-mag-calibrated/data/ss/1sec/2025/01/mvn_mag_l2_2025001ss1s_20250101_v01_r01.xml?BZ SUN-STATE&X=SAMPLE UTC')
+tt= xtags( bz_sun_state )
+tt1= zeros(len(tt))
+
+for t in tt:
+    print t
