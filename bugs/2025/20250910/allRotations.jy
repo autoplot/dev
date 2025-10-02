@@ -1,0 +1,24 @@
+from org.das2.graph import AnchorPosition
+from org.autoplot.dom import Annotation
+setScriptDescription('Demo annotation rotation')
+
+reset()
+setCanvasSize(800,600)
+
+ann= annotation(0,text='Annotation<br>~~~',\
+    xrange=[20,80], yrange=[20,80], 
+    anchorOffset='',borderType='rounded_rectangle', anchorBorderType='rectangle', anchorType='data',
+    fontSize='2em' )  # confusion: Annotation here is wrong and gives terrible feedback
+
+for r in [0,90,180,270]:
+    ann.controller.dasAnnotation.rotate= r
+    i=0
+    for p in [ 'Center', 'NW', 'N', 'NE','E', 'SE','S', 'SW', 'W', 'OutsideNNW', 'OutsideN', 'OutsideNNE', 'OutsideNE',  'OutsideE', 'OutsideSE' , 'OutsideSSE', 'OutsideS', 'OutsideSSW', 'OutsideSW',  'OutsideW', 'OutsideNW' ]:
+        ann.setAnchorPosition(AnchorPosition.valueOf(p))
+        writeToPng('/tmp/ap/annotation.'+('%03d'%r)+'.' + ('%02d'%i) + p+'.'+'png')
+        i=i+1
+
+print 'done'
+
+ann.controller.dasAnnotation.rotate= 90
+ann.anchorPosition = AnchorPosition.valueOf('Center')

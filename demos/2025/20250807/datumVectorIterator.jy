@@ -1,0 +1,14 @@
+from org.das2.datum import DatumVector
+from java.util import ArrayList
+aa= ArrayList()
+aa.addAll([1,2,3,4,5])
+
+for a in aa:
+    print a
+
+dv= DatumVector.newDatumVector([1,2,3,4,5],Units.cmps)
+
+print dv
+
+for d in dv:
+    print d
