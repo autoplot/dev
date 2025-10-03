@@ -43,18 +43,20 @@ try:
         else:
             bind( firstRightP.xaxis, 'range', pright.xaxis, 'range' )
             
-        pes0= p.controller.getPlotElement() # this is a dumb routine and really should not be used.    
-        peright=  dom.controller.addPlotElement(pright,None)
-        peright.syncTo( pes0, ['plotId','id'] )
-        pright.xaxis.range= rang.rescale(0.5,1.0)
+        for pes0 in dom.controller.getPlotElementsFor(p):            
+            peright= dom.controller.addPlotElement(pright,None)
+            peright.syncTo( pes0, ['plotId','id'] )
+            pright.xaxis.range= rang.rescale(0.5,1.0)
         
         bind( p.yaxis, 'range', pright.yaxis, 'range' )
         bind( p.zaxis, 'range', pright.zaxis, 'range' )
         bind( p.yaxis, 'log', pright.yaxis, 'log' )
         bind( p.zaxis, 'log', pright.zaxis, 'log' )
+        
         p.zaxis.visible=False
         pright.yaxis.drawTickLabels= False
         bind( p.xaxis, 'scale', pright.xaxis, 'scale' )
+        
     cols[0].right='50%-1em'
     cols[1].left= '50%+1em'
     
