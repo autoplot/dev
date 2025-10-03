@@ -57,6 +57,9 @@ try:
         pright.yaxis.drawTickLabels= False
         bind( p.xaxis, 'scale', pright.xaxis, 'scale' )
         
+        if p.displayLegend:
+            p.displayLegend= False
+    
     cols[0].right='50%-1em'
     cols[1].left= '50%+1em'
     
