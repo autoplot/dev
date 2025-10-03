@@ -1,0 +1,19 @@
+from org.das2.util import ColorUtil
+setScriptDescription('Test karate chop operation for multiple plot elements')
+
+randomSeed(0)
+
+xx= append( randn(100)*2+20, randn(100)*2+100 )
+s= sort(xx)
+xx=xx[s]
+
+ds1= sin( xx/10 ) + randn(200)/40
+ds2= sin( xx/9 ) + randn(200)/30
+ds3= sin( xx/10+1 ) + randn(200)/35
+
+reset()
+p,_= plot( xx,ds1,color=ColorUtil.CRIMSON, renderType='scatter' )
+plot( xx,ds2,overplotOf=p, color=ColorUtil.CADET_BLUE, renderType='scatter' )
+plot( xx,ds3,overplotOf=p, color=ColorUtil.DARK_BLUE, renderType='scatter' )
+
+#see 
