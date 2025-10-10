@@ -1,0 +1,4 @@
+from org.das2.qds.examples import Schemes
+cc= Schemes.complexNumbers()
+print Schemes.isComplexNumbers(cc)
+plot( cc )
