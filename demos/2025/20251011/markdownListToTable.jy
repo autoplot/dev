@@ -1,0 +1,34 @@
+from org.das2.util import FileUtil
+setScriptDescription('''Markdown list to table.  Takes Markdown list and prints code 
+to make it into a table''')
+
+extraColumns= getParam('columns',3,'Number of columns in the table',{'examples':[1,2,3,4,5]} )
+
+resourceURI= getParam( 'resourceURI', 'file:/tmp/code.md', 'example file to load' )
+
+fil= getFile(resourceURI)
+
+inList=False
+
+iline=0
+for line in open(str(fil)):
+    iline=iline+1
+    if ( line.startswith("* ") ):
+        if not inList:
+            print '| name | ',
+            for icol in range(1, extraColumns):
+                print ' ', '|',
+            print ''
+            print '|---|',
+            for icol in range(1, extraColumns):
+                print '---', '|',
+            print ''
+            inList=True
+        print '|', line[2:].strip(), '|',
+        for icol in range(1, extraColumns):
+            print ' ', '|',
+        print ''
+    else:
+        inList= False
+        print line
+    
