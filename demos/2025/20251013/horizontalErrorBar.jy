@@ -1,0 +1,13 @@
+from org.das2.graph import ErrorBarType
+
+setScriptDescription('Demonstrate a horizontal error bar')
+ds= dataset( [30.2], deltaPlus=2.1, deltaMinus=1.1 )
+ds= link( ds, dataset([10]) )
+
+from org.autoplot.dom import PlotElementStyle
+
+reset()
+p,pe= plot( ds, symbolSize=5, lineThick=1 )
+pe.style.errorBarType= ErrorBarType.SERIF_BAR
+pe.style.drawError= True
+
