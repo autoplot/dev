@@ -1,0 +1,50 @@
+from java.awt.geom import Line2D
+from org.das2.graph import Painter
+from org.das2.event import EmptyDragRenderer
+
+setScriptDescription('''Demo scatter vertical slice.  This shows the 
+points within 0.2 of the slice location.  I have to relearn how
+to do events each time, and I don't think I'm doing it right here
+either.''')
+
+N=800
+
+randomSeed(5334)
+
+xx= randn(N)
+yy= randn(N)
+zz= exp( 1 - (xx/3)**2 - yy**2 ) + randn(N)/10
+
+def vslice(evt):
+    global p,xr
+    x= evt.finishX
+    xr= datumRange([x-0.1,x+0.1])
+    r= where( within( xx, xr ) )
+    app= newApplication('vslice')
+    setApplication(app)
+    p2,_= plot( yy[r], zz[r], symbolSize=5, lineThick=0.2, \
+       yrange=p.zaxis.range, xrange=p.yaxis.range,
+       renderType='scatter' )
+    bind( p.zaxis, 'range', p2.yaxis, 'range' )
+    bind( p.yaxis, 'range', p2.xaxis, 'range' )
+
+def feedbackPaint( g ):
+    global p,xr
+    print p,xr, 'line25'
+    g.color= Color( 200, 200, 140, 200 )
+    x1= p.xaxis.controller.dasAxis.transform(xr.min())
+    x2= p.xaxis.controller.dasAxis.transform(xr.max())
+    y0= p.yaxis.controller.dasAxis.transform(p.yaxis.range.min())
+    y1= p.yaxis.controller.dasAxis.transform(p.yaxis.range.max())
+    g.draw( Line2D.Double( x1, y0, x1, y1 ) )
+    g.draw( Line2D.Double( x2, y0, x2, y1 ) )
+        
+p,_= plot( xx, yy, zz, symbolSize=10 )
+x= None
+    
+mm= addMouseModule( p, 'Scatter Digitizer', vslice )
+mm.setDirections('Click on plot')
+mm.dragEvents=True
+#mm.dragRenderer= EmptyDragRenderer.renderer
+
+addTopDecoration( p, feedbackPaint )
