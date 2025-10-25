@@ -1,8 +1,15 @@
 setScriptDescription('''Start writing screenshots, with privacy mask, to a directory.  
 These can be combined with the pngwalk tool to make an animated gif.  This provides
-the community with a way of easily making tutorial videos or demonstrating a bug.''')
+the community with a way of easily making tutorial videos or demonstrating a bug.
+
+The PNG Walk Tool can then be used to remove unwanted frames and will write an 
+animated gif.  This can then be converted with
+
+ffmpeg -i pngwalk.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" video.mp4
+
+''')
 setScriptTitle('Start Screenshots')
 
-from org.virbo.autoplot import ScreenshotsTool
+from org.autoplot import ScreenshotsTool
 
 ScreenshotsTool.start( getViewWindow() )
