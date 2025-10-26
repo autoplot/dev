@@ -1,6 +1,6 @@
 from org.json import JSONObject,Cookie
 
-setScriptDescription('''Rich ASCII files contain JSON metadata describing plot 
+setScriptDescription('''Rich PNG files contain JSON metadata describing plot 
 location, axis bounds and units, and axis titles. see 
 <a href='http://autoplot.org/richPng'>http://autoplot.org/richPng</a>''')
 
