@@ -1,0 +1,15 @@
+nano= linspace( '0 microseconds','1e9 microseconds', 100 )
+trdr= DatumRangeUtil.parseTimeRange('2025-07-11')
+tmin = trdr.min()
+t0 = TimeUtil.fromDatum(tmin)
+print t0[0], t0[1], t0[2], 0, 0, 0, nano
+x = toTimeDataSet(t0[0], t0[1], t0[2], 0, 0, 0, nano)
+plot(x)
+
+nano= 0
+trdr= DatumRangeUtil.parseTimeRange('2025-07-11')
+tmin = trdr.min()
+t0 = TimeUtil.fromDatum(tmin)
+print t0[0], t0[1], t0[2], 0, 0, 0, nano
+x = toTimeDataSet(t0[0], t0[1], t0[2], 0, 0, 0, nano)
+plot(x)
