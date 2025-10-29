@@ -1,0 +1,6 @@
+from org.das2.qds import DataSetOps
+ds= getDataSet('vap+das2server:https://jupiter.physics.uiowa.edu/das/server?dataset=Juno/WAV/Survey&start_time=2024-05-05T23:58:24.000Z&end_time=2024-05-06T00:01:04.000Z')
+ds= slice0(ds,0)
+ds= DataSetOps.dbAboveBackgroundDim1( ds , 10 )
+ds= smooth1( ds,13 )
+plot( ds )

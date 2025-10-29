@@ -1,0 +1,8 @@
+N= 100000
+aa= randn(N)-2
+bb= randn(N)+2
+aah= histogram( aa, -10,10, 0.01 ) + 0.1
+bbh= histogram( bb, -10,10, 0.01 ) + 0.1
+plot( 0, aah )
+plot( 1, bbh )
+plot( 2, aah/bbh )

@@ -1,0 +1,13 @@
+setScriptDescription('Point this files within a zip file from https://pswsnetwork.eng.ua.edu/observations/select_download_range/2424/')
+
+resourceURI= getParam( 'resourceURI', 'file:///home/jbf/ct/autoplot/data.backup/hdf5/hamsci/OBS2023-10-21T00-00.zip/ch0/2023-10-21T00-00-00/rf@1697846460.000.h5', 'example file to load' )
+
+r= getDataSet( resourceURI + '?rf_data.r')
+i= getDataSet( resourceURI + '?rf_data.i')
+t= getDataSet( resourceURI + '?rf_data_index')
+t= dataset( t[:,0]/10, units='seconds since 1970-01-01' )
+
+r= dataset( t, r, label='Real' )
+i= dataset( t, i, label='Imag' )
+
+result=  r**2 + i**2

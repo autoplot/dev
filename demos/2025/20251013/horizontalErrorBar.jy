@@ -1,11 +1,35 @@
 from org.das2.graph import ErrorBarType
 
 setScriptDescription('Demonstrate a horizontal error bar')
-ds= dataset( [30.2], deltaPlus=2.1, deltaMinus=1.1 )
+ds= dataset( [30.2], deltaPlus=[2.1], deltaMinus=[1.1] )
 ds= link( ds, dataset([10]) )
 
+ds2= dataset( [30.2,30.7], deltaPlus=[2.1,1.5], deltaMinus=[1.1,0.7] )
+ds2= link( ds2, dataset([8,9]) )
+
+randomSeed(0)
+a=linspace(PI/4,3*PI/4,100)
+ds3= dataset( accum(randn(100)), deltaPlus=sin(a)+0.4, deltaMinus=sin(a)+0.4 )
+ds3= link( linspace(0,10,100), ds3 )
+
+ds4= dataset( ['2024-05-06T00:00Z'], deltaPlus='30s', deltaMinus='50s' )
+ds4= link( ds4, dataset([10]) )
+
 reset()
+setLayout(2,2)
+
 p,pe= plot( ds, symbolSize=5, lineThick=1 )
 pe.style.errorBarType= ErrorBarType.SERIF_BAR
 pe.style.drawError= True
 
+p,pe= plot( 1, ds2, symbolSize=5, lineThick=1, renderType='scatter' )
+pe.style.errorBarType= ErrorBarType.SERIF_BAR
+pe.style.drawError= True
+
+p,pe= plot( 2, ds3, symbolSize=5, lineThick=1, renderType='scatter' )
+pe.style.errorBarType= ErrorBarType.SERIF_BAR
+pe.style.drawError= True
+
+p,pe= plot( 3, ds4, symbolSize=5, lineThick=1 )
+pe.style.errorBarType= ErrorBarType.SERIF_BAR
+pe.style.drawError= True

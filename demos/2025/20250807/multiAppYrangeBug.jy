@@ -1,0 +1,13 @@
+setScriptDescription('Demonstrate bug where yrange is applied to the wrong app')
+
+app1= getApplication()
+app2= newApplication('app2')
+
+setApplication(app2)
+plot( [1,2,3,4,5], yrange=[-100,100] )
+
+setApplication(app1)
+plot( [1,-2,3,-4,5], yrange=[-10,10] )
+
+setApplication(app2)
+plot( [1,2,3,4,5], yrange=[-50,50] )

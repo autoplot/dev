@@ -1,0 +1,40 @@
+setScriptDescription('''Bug where if the static non-TSB dataset is used 
+for ticks, and the first tick is outside of the range of the data, then
+there will be an error because the units change.''')
+
+ff= open('/Users/jbf/tmp/20251023.ticks.d2s','w')
+
+head= '''[00]000296<stream compression="none" version="2.2" >
+  <properties String:title="Space Weather at L1 propagted to the Cusp Region"
+              String:software="TRACERS SOC Solar Wind Scrapper, version 2025.10.20"
+              Datum:xTagWidth="180"
+              String:sourceId="das2_ascii"/>
+</stream>
+[01]000542<packet>
+  <x name="time" type="time24" units="UTC">
+    <properties String:xLabel="Time @ CUSP"/>
+  </x>
+  <y name="location_x" type="ascii6" units="RE">
+    <properties String:yLabel="Obs. X (GSE)"
+                String:yFormat="%6.2f"/>
+  </y>
+  <y name="location_y" type="ascii6" units="RE">
+    <properties String:yLabel="Obs. Y (GSE)"
+                String:yFormat="%6.2f"/>
+  </y>
+  <y name="location_z" type="ascii7" units="RE">
+    <properties String:yLabel="Obs. Z (GSE)"
+                String:yFormat="%6.2f"/>
+  </y>
+</packet>
+'''
+#:01:2010-01-01T00:00:01.000Z  0.02  0.86 -0.87
+ff.write(head)
+
+for i in xrange(86401):
+    tt= datum('2010-01-01T00:00')+Units.seconds.createDatum(i)
+    x= sin(i/86400.*5*TAU)
+    y= sin(i/86400.*5*TAU+TAU/3)
+    z= sin(i/86400.*5*TAU+2*TAU/3)
+    ff.write( ':01:%20s%6.2f%6.2f%6.2f\n' % ( str(tt),x,y,z ) )
+ff.close()
