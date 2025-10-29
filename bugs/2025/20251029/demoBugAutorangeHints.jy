@@ -1,0 +1,4 @@
+ds=[0.1,1,10,100]
+p,pe= plot( ds, title='Demo of Bug', ytitle='Z (km)', xtitle='Rho (km)', \
+   ztitle='Number of Impacts in 1 Z by Rho bin', 
+   ylog=True, yautoRangeHints='min=0' )
