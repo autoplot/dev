@@ -1,5 +1,5 @@
 setScriptDescription('''Demo bug 2751, where yautoRangeHints can cause
-stack overflow crash.''')
+stack overflow crash.  See https://sourceforge.net/p/autoplot/bugs/2751/.''')
 
 ds=[0.1,1,10,100]
 p,pe= plot( ds, title='Demo of Bug', ytitle='Z (km)', xtitle='Rho (km)', \
