@@ -1,0 +1,22 @@
+from java.awt.geom import Line2D
+ds= getDataSet('https://github.com/autoplot/dev/blob/master/demos/2025/20251031/halloween2025.csv?field2')
+
+xx= xtags(ds) - '5hr'
+yy= ds
+
+plot( xx, yy, renderType='scatter', symbolSize=10, ytitle='# of monsters',
+      yrange=[0,7] )
+
+def mydeco(g):
+    xax= dom.plots[0].controller.dasPlot.getXAxis()
+    yax= dom.plots[0].controller.dasPlot.getYAxis()
+    for i in xrange(len(ds)):
+        ix= xax.transform(xx[i])
+        iy= yax.transform(yy[i])
+        y0= yax.transform(dataset(0))
+        g.draw(Line2D.Double(ix,iy,ix,y0))
+
+addBottomDecoration( dom.plots[0],mydeco )
+
+annotation(0,plotId=dom.plots[0],anchorPosition='OutsideN',text='Halloween Visitors',
+           anchorOffset='')
