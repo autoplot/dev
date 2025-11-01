@@ -1,0 +1,29 @@
+from java.awt import FlowLayout
+from javax.swing import JTextField,JButton,JPanel
+from java.lang import System
+
+setScriptDescription('''Quick script to record times when Halloween 
+trick-or-treaters arrive''')
+
+def press(evt):
+    t0= System.currentTimeMillis()
+    print Units.ms1970.createDatum(t0), ',', tf.text, ',', count.text  
+
+def clear(evt):
+    global tf
+    tf.text=''
+    
+tf= JTextField(30);
+count= JTextField(10);
+
+butt= JButton("Best Creature",actionPerformed=press)
+clrs= JButton("Clear",actionPerformed=clear)
+
+p= JPanel()
+p.layout= FlowLayout()
+p.add(count)
+p.add(tf)
+p.add(clrs)
+p.add(butt)
+
+getApplication().setBottomPanel(p)
