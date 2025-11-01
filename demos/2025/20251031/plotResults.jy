@@ -1,5 +1,5 @@
 from java.awt.geom import Line2D
-ds= getDataSet('https://github.com/autoplot/dev/blob/master/demos/2025/20251031/halloween2025.csv?field2')
+ds= getDataSet(PWD+'/halloween2025.csv?field2')
 
 xx= xtags(ds) - '5hr'
 yy= ds
