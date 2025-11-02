@@ -1,6 +1,11 @@
 from java.awt.geom import Line2D
+
+setScriptDescription('''Show Halloween visitors as vertical lines showing the number of visitors 
+at each time.''')
+
 ds= getDataSet(PWD+'/halloween2025.csv?field2')
 
+# display times in Central USA time
 xx= xtags(ds) - '5hr'
 yy= ds
 
@@ -8,6 +13,7 @@ plot( xx, yy, renderType='scatter', symbolSize=10, ytitle='# of monsters',
       yrange=[0,7] )
 
 def mydeco(g):
+    'draw line from each point to zero'
     xax= dom.plots[0].controller.dasPlot.getXAxis()
     yax= dom.plots[0].controller.dasPlot.getYAxis()
     for i in xrange(len(ds)):
