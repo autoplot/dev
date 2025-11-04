@@ -1,5 +1,6 @@
 setScriptDescription('''This assumes public/private keys are set up so that
-one can sftp to the system without a password.''')
+one can sftp to the system without a password. See 
+https://sourceforge.net/p/autoplot/bugs/2758/''')
 
 from org.das2.util.filesystem import FileSystem
 fs= FileSystem.create('sftp://jfaden.net/home/jbf/project/juno/u/bill/2023/')
