@@ -1,0 +1,16 @@
+reset()
+
+img= getDataSet('https://space.physics.uiowa.edu/~jbf/autoplot/data/img/cat_20250715.jpg' )
+#p,_= plot( 'https://space.physics.uiowa.edu/~jbf/autoplot/data/img/cat_20250715.jpg' )
+
+#img= dom.dataSourceFilters[0].controller.dataSet
+
+for i in xrange(1000):
+    x= rand()*img.length()
+    y= rand()*img.length(0)
+    
+    rgb= img[x,y]
+    
+    from org.das2.util import ColorUtil
+    plot( i, x+randn(10), y+randn(10), color=rgbColorDataset(rgb[0],rgb[1],rgb[2]),
+      renderType='scatter', symbolSize=5, overplotOf=dom.plots[0]  )
