@@ -1,0 +1,6 @@
+setScriptDescription('''This assumes public/private keys are set up so that
+one can sftp to the system without a password.''')
+
+from org.das2.util.filesystem import FileSystem
+fs= FileSystem.create('sftp://jfaden.net/home/jbf/project/juno/u/bill/2023/')
+print fs.listDirectory('/20230201/')
