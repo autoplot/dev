@@ -30,30 +30,31 @@ ax1.grid(True)
 cxy, f = ax2.csd(s1, s2, NFFT=256, Fs=1. / dt)
 ax2.set_ylabel('CSD (dB)')
 
-def get_rich_png_meta( plt ):
+def get_rich_png_meta( w_in, h_in, plt ):
     text= []
     # find the first figure
     for fig_num in plt.get_fignums():
         fig = plt.figure(fig_num)
         if len(fig.axes)>0:
             break        
-    w_in, h_in = fig.get_size_inches()
-    dpi = fig.dpi
-    canvasJson= '{ "size":[%d,%d], \n  "plots": [' % ( w_in*dpi, h_in*dpi )
+    #w_in, h_in = fig.get_size_inches()
+    #dpi = fig.dpi
+    canvasJson= '{ "size":[%d,%d], \n  "plots": [' % ( w_in, h_in )
     text.append(canvasJson)    
     plots= []
     for ax in fig.axes:
             bbox = ax.get_position()
             print(bbox)
-            w_in, h_in = fig.get_size_inches()
-            dpi = fig.dpi
-            x0 = bbox.x0 * w_in * dpi
-            y0 = bbox.y0 * h_in * dpi
-            x1 = bbox.x1 * w_in * dpi
-            y1 = bbox.y1 * h_in * dpi
+            #w_in, h_in = fig.get_size_inches()
+            #dpi = fig.dpi
+            x0 = bbox.x0 * w_in 
+            y0 = bbox.y0 * h_in 
+            x1 = bbox.x1 * w_in 
+            y1 = bbox.y1 * h_in 
             print( '%.2f %.2f ' % ( y0, y1 ), ax.get_ylabel())
-            y0 = h_in*dpi - y0 # flip so that 0,0 is upper-left
-            y1 = h_in*dpi - y1
+            y0 = h_in - y0 # flip so that 0,0 is upper-left
+            y1 = h_in - y1
+            y1,y0=y0,y1
             print( '%.2f %.2f ' % ( y0, y1 ), ax.get_ylabel(), 'flip')            
             xlim= ax.get_xlim()
             xaxis= '{ "label": "%s", "min":%s, "max":%s, "units":"", "left":%.1f, "right":%.1f, "type":"lin" }' \
@@ -68,6 +69,7 @@ def get_rich_png_meta( plt ):
     text.append(' ], ')
     text.append( '"numberOfPlots":%d' % len(fig.axes)  )
     text.append('}')
+    print('\n'.join(text))
     return '\n'.join(text)
     
 def add_rich_png_meta( pngfile, richMeta ):
@@ -85,9 +87,8 @@ def add_rich_png_meta( pngfile, richMeta ):
     im.save(pngfile+'.1.png', pnginfo=meta)
     os.rename( pngfile+'.1.png',pngfile )
 
-richMeta= get_rich_png_meta( plt )
 plt.savefig('example.png')
-
+richMeta= get_rich_png_meta( 640, 480, plt )
 add_rich_png_meta( 'example.png', richMeta )
 
 
