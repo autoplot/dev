@@ -30,18 +30,19 @@ ax1.grid(True)
 cxy, f = ax2.csd(s1, s2, NFFT=256, Fs=1. / dt)
 ax2.set_ylabel('CSD (dB)')
 
-def get_rich_png_meta( w_in, h_in, plt ):
+def get_rich_png_meta( plt ):
+    'w_in, h_in in pixels'
     text= []
     # find the first figure
     for fig_num in plt.get_fignums():
         fig = plt.figure(fig_num)
         if len(fig.axes)>0:
             break        
-    #w_in, h_in = fig.get_size_inches()
-    #dpi = fig.dpi
+    w_in, h_in= fig.canvas.get_width_height()
     canvasJson= '{ "size":[%d,%d], \n  "plots": [' % ( w_in, h_in )
     text.append(canvasJson)    
     plots= []
+    
     for ax in fig.axes:
             bbox = ax.get_position()
             print(bbox)
@@ -87,9 +88,8 @@ def add_rich_png_meta( pngfile, richMeta ):
     im.save(pngfile+'.1.png', pnginfo=meta)
     os.rename( pngfile+'.1.png',pngfile )
 
+
 plt.savefig('example.png')
-richMeta= get_rich_png_meta( 640, 480, plt )
+richMeta= get_rich_png_meta( plt )
 add_rich_png_meta( 'example.png', richMeta )
-
-
 
