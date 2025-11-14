@@ -45,17 +45,17 @@ def get_rich_png_meta( plt ):
     
     for ax in fig.axes:
             bbox = ax.get_position()
-            print(bbox)
-            #w_in, h_in = fig.get_size_inches()
-            #dpi = fig.dpi
-            x0 = bbox.x0 * w_in 
-            y0 = bbox.y0 * h_in 
-            x1 = bbox.x1 * w_in 
-            y1 = bbox.y1 * h_in 
+            w_in, h_in = fig.get_size_inches()
+            dpi = fig.dpi
+            x0 = bbox.x0 * w_in * dpi
+            y0 = bbox.y0 * h_in * dpi
+            x1 = bbox.x1 * w_in * dpi
+            y1 = bbox.y1 * h_in * dpi
+            print( 'w_in=%.1f h_in=%.1f dpi=%f' % ( w_in, h_in, dpi ) )
             print( '%.2f %.2f ' % ( y0, y1 ), ax.get_ylabel())
-            y0 = h_in - y0 # flip so that 0,0 is upper-left
-            y1 = h_in - y1
-            y1,y0=y0,y1
+            y0 = h_in*dpi - y0 # flip so that 0,0 is upper-left
+            y1 = h_in*dpi - y1
+            y0,y1=y1,y0
             print( '%.2f %.2f ' % ( y0, y1 ), ax.get_ylabel(), 'flip')            
             xlim= ax.get_xlim()
             xaxis= '{ "label": "%s", "min":%s, "max":%s, "units":"", "left":%.1f, "right":%.1f, "type":"lin" }' \
