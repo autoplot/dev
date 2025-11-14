@@ -1,0 +1,25 @@
+from java.lang import Runnable
+from java.awt import Font,FlowLayout
+from javax.swing import UIManager,SwingUtilities,JFrame,JLabel,JButton,JPanel
+setScriptDescription('Attempt to deal with small fonts on high resolution displays')
+
+from com.formdev.flatlaf import FlatLightLaf
+
+FlatLightLaf.setup()
+
+UIManager.put("defaultFont", Font("Roboto", Font.PLAIN, 24));
+
+class DemoLAFRunnable(Runnable):
+  def run(self):
+    f = JFrame("FlatLaf Font Test")
+    p= JPanel()
+    p.layout= FlowLayout()
+    p.add(JLabel("Hello world"))
+    p.add(JButton("Press Me"))
+    f.add(p)
+    f.setSize(300, 200)
+    f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
+    f.setVisible(True)
+
+SwingUtilities.invokeLater( DemoLAFRunnable() )
+        
