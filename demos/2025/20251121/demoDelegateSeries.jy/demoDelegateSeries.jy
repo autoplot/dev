@@ -1,0 +1,54 @@
+from org.das2.graph import Painter, SeriesRenderer, HugeScatterRenderer
+
+setScriptDescription('''Demonstrate how to delegate to a SeriesRenderer or
+HugeScatter to draw continent outlines for reference.  This allows other
+data to be painted on top without the continents data interfering.''')
+
+class NorthPolePainter( Painter ):
+    def __init__(self,p):
+        asia= getDataSet('https://autoplot.org/data/coastlines.zip/coastlines/asia-cil.txt')
+        namer= getDataSet('https://autoplot.org/data/coastlines.zip/coastlines/namer-cil.txt')
+        europ= getDataSet('https://autoplot.org/data/coastlines.zip/coastlines/europe-cil.txt')
+     
+        # transform to North pole coordinates lat,lon -> r,a
+        lat= ytags(asia)
+        lon= xtags(asia)
+        r= 90-lat
+        r= putProperty( r, QDataSet.UNITS, Units.dimensionless )
+        a= toRadians(lon)
+        x= r * cos(a)
+        y= r* sin(a)
+    
+        lat= ytags(namer)
+        lon= xtags(namer)
+    
+        r= 90-lat
+        r= putProperty( r, QDataSet.UNITS, Units.dimensionless )
+        a= toRadians(lon)
+        x= append( x, r * cos(a) )
+        y= append( y, r* sin(a) )
+        
+        lat= ytags(europ)
+        lon= xtags(europ)
+    
+        r= 90-lat
+        r= putProperty( r, QDataSet.UNITS, Units.dimensionless )
+        a= toRadians(lon)
+        
+        x= append( x, r * cos(a) )
+        y= append( y, r* sin(a) )
+        self.plot= p.controller.dasPlot
+        self.rend= HugeScatterRenderer(None)
+        self.rend.setParent( self.plot )
+        self.rend.setDataSet( link(x,y) )
+        
+    def paint( self, g ):
+        xaxis= self.plot.getXAxis()
+        yaxis= self.plot.getYAxis()
+        self.rend.updatePlotImage( xaxis, yaxis, None )
+        self.rend.render( g, xaxis, yaxis )
+     
+p= dom.plots[0]
+
+dom.plots[0].controller.dasPlot.bottomDecorator=  NorthPolePainter(p)
+
