@@ -1,0 +1,14 @@
+'/Users/jbf/Desktop/git/dev/demos/2025/20251120/annotationGlow.vap'
+print PWD
+
+load( PWD + 'annotationGlow.vap' )
+    
+for i in xrange(5):
+    dom.annotations[0].glow=True
+    sleep(500)
+    dom.annotations[0].glow=False
+    sleep(500)
+
+dom.annotations[0].glow=True
+    
+
