@@ -39,7 +39,7 @@ class HistogramRenderer( Renderer ):
 # demo code below shows its use.
 reset()
 randomSeed(5334)
-ds= append( randomn(5334,10000) , 3+randomn(5335,20000) )
+ds= append( randn(10000) , 3+randn(20000) )
 setCanvasSize(724,460)
 plot( ds, xpos='3em,70%-3em', ypos='50px,400px', color=Color.BLUE, renderType='scatter', symbolSize=3 )
 
