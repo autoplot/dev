@@ -1,4 +1,4 @@
-# See http://autoplot.org//CustomRenderers#Adding_Custom_Renderers
+# See https://github.com/autoplot/documentation/blob/main/md/CustomRenderers.md#adding-custom-renderers
 
 from org.das2.graph import Renderer
 from java.awt.geom import GeneralPath
