@@ -1,0 +1,18 @@
+from java.io import File
+setScriptDescription('Write script which will revert all nbproject to another reference.')
+tt= getParam('target','/home/jbf/temp/autoplot/','folder containing broken netbeans projects',\
+    [ '/home/jbf/temp/autoplot/', '/home/jbf/temp/autoplot/das2java/' ] )
+ss= getParam('source','/home/jbf/temp/autoplot.20251119/', 'folder to source nbprojects', \
+    [ '/home/jbf/temp/autoplot.20251119/', '/home/jbf/temp/autoplot.20251119/das2java/' ] )
+
+
+def fixProjectProperties(s,t):
+    print 'rsync -av ' + s + ' ' + t
+
+ff= listDirectory(tt)
+        
+for f in ff:
+    if ( not fileExists(tt+f+'nbproject/') ):
+        continue
+    fixProjectProperties(ss+f+'nbproject/',tt+f+'nbproject/')
+    
