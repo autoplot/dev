@@ -1,0 +1,26 @@
+from java.io import File
+setScriptDescription('Fix all Netbeans project platform.active.')
+rr= getParam('root','/home/jbf/temp/autoplot/','folder containing netbeans projects',\
+    [ '/home/jbf/temp/autoplot/', '/home/jbf/temp/autoplot/das2java/' ] )
+ff= listDirectory(rr)
+
+def fixProjectProperties(f):
+    print f+'.temp'
+    t= open(f+'.temp','w')
+    for line in open(f):
+        inn= 'platform.active=default_platform'
+        out= 'platform.active=JDK_1.8'
+        line= line.replace(inn,out)
+        inn= 'platform.active=JDK_8__System_'
+        out= 'platform.active=JDK_1.8'
+        line= line.replace(inn,out)
+        t.write(line)
+    t.close()
+    File(f+'.temp').renameTo(File(f))
+        
+for f in ff:
+    print f
+    if ( not fileExists(rr+f+'/nbproject/') ):
+        continue
+    fixProjectProperties(rr+f+'/nbproject/project.properties')
+    
