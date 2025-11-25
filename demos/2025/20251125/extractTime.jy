@@ -1,0 +1,15 @@
+from org.das2.datum import DatumRangeUtil
+from org.autoplot.datasource import DataSetURI
+from org.autoplot.pngwalk import PngWalkTool,PngWalkView,RichPngUtil
+from org.das2.util import ImageUtil
+
+setScriptDescription('''Extract times from PNG files, using RichPNG.  This can be
+used with the run batch tool to generate a list of times.''')
+resourceURI= getParam( 'resourceURI', 'https://autoplot.org/data/product_20140102.png', 'example file to load' )
+
+fil = getFile( resourceURI, monitor )
+json= ImageUtil.getJSONMetadata( fil )
+if ( json!=None ):
+    jsonTimeRange= RichPngUtil.getXRange(json)
+    print '%s/%s' % ( jsonTimeRange.min(), jsonTimeRange.max() )
+    
