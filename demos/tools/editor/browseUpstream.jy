@@ -4,8 +4,9 @@ This constructs the name and opens the browser.''')
 from java.lang import ProcessBuilder
 from java.io import File, InputStreamReader, BufferedReader
 from java.util.regex import Pattern
-from org.das2.util.filesystem import FileSystem
 from javax.swing import JOptionPane
+from org.das2.util.filesystem import FileSystem
+from org.autoplot.datasource import DataSourceUtil
 
 # git config --get remote.origin.url
 # git worktree list
@@ -24,52 +25,68 @@ process= pb.start()
 
 br= BufferedReader(InputStreamReader(process.getInputStream()))
 line = br.lines().toArray()
-gitRemote= line[0]
 
-
-cwd= File( script ).parentFile
-
-pb= ProcessBuilder(['git','worktree', 'list'])
-pb.directory( cwd )
-
-pb.redirectErrorStream(True)
-
-process= pb.start()
-br= BufferedReader(InputStreamReader(process.getInputStream()))
-line = br.lines().toArray()
-localRoot= line[0]
-
-pat= Pattern.compile( '(.+)  .+ \[(.+)\]' )
-matcher= pat.matcher( localRoot )
-
-if ( matcher.matches() ) :
-    localRoot= matcher.group(1)
-    branch= matcher.group(2) 
+if ( len(line)==0 ):
+    i= script.find('fscache/')
+    if i>-1:
+        remote= script[i+8:]
+        ss= remote.split('/')
+        imain=-1
+        i=0
+        for s in ss:
+            if s=='main': 
+                imain=i
+                break
+            i=i+1
+            
+        remote= ss[0] + '://' + '/'.join(ss[1:imain]) + '/-/blob/' + '/'.join(ss[imain:])
+        DataSourceUtil.openBrowser( remote )
 else:
-    raise Exception('expected match for "(.+)  .+ \[(.+)\]", got '+localRoot)
-
-localRoot= File(localRoot).getCanonicalPath()
-cwd= File(cwd.path).getCanonicalPath()
-path= cwd[len(localRoot):]
-
-print 'browseUpstream: 0'
-print 'gitRemote: ', gitRemote
-print 'branch: ', branch
-print 'localRoot: ', localRoot
-print 'cwd: ', cwd
-print 'path: ', path
-print 'name: ', File( script ).name
-
-pat= Pattern.compile( '[a-z]*@([a-zA-Z\.a-z\-]+):(.+)\.git' )
-matcher= pat.matcher( gitRemote )
-
-from org.autoplot.datasource import DataSourceUtil
-
-if ( matcher.matches() ):
-    print 'matcher.group(1)', matcher.group(1)
-    remote= 'https://'+matcher.group(1)+'/'+matcher.group(2) + '/blob/' + branch + path + '/' + File( script ).name
-    print remote
-    DataSourceUtil.openBrowser( remote )
-else:
-    raise Exception('expected match for "[a-z]*@([a-zA-Z\.a-z\-]+):(.+)\.git", got '+gitRemote) 
+        
+    gitRemote= line[0]
     
+    
+    cwd= File( script ).parentFile
+    
+    pb= ProcessBuilder(['git','worktree', 'list'])
+    pb.directory( cwd )
+    
+    pb.redirectErrorStream(True)
+    
+    process= pb.start()
+    br= BufferedReader(InputStreamReader(process.getInputStream()))
+    line = br.lines().toArray()
+    localRoot= line[0]
+    
+    pat= Pattern.compile( '(.+)  .+ \[(.+)\]' )
+    matcher= pat.matcher( localRoot )
+    
+    if ( matcher.matches() ) :
+        localRoot= matcher.group(1)
+        branch= matcher.group(2) 
+    else:
+        raise Exception('expected match for "(.+)  .+ \[(.+)\]", got '+localRoot)
+    
+    localRoot= File(localRoot).getCanonicalPath()
+    cwd= File(cwd.path).getCanonicalPath()
+    path= cwd[len(localRoot):]
+    
+    print 'browseUpstream: 0'
+    print 'gitRemote: ', gitRemote
+    print 'branch: ', branch
+    print 'localRoot: ', localRoot
+    print 'cwd: ', cwd
+    print 'path: ', path
+    print 'name: ', File( script ).name
+    
+    pat= Pattern.compile( '[a-z]*@([a-zA-Z\.a-z\-]+):(.+)\.git' )
+    matcher= pat.matcher( gitRemote )
+    
+    if ( matcher.matches() ):
+        print 'matcher.group(1)', matcher.group(1)
+        remote= 'https://'+matcher.group(1)+'/'+matcher.group(2) + '/blob/' + branch + path + '/' + File( script ).name
+        print remote
+        DataSourceUtil.openBrowser( remote )
+    else:
+        raise Exception('expected match for "[a-z]*@([a-zA-Z\.a-z\-]+):(.+)\.git", got '+gitRemote) 
+        
