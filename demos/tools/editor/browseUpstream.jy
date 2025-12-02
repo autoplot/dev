@@ -27,7 +27,8 @@ br= BufferedReader(InputStreamReader(process.getInputStream()))
 line = br.lines().toArray()
 
 if ( len(line)==0 ):
-    i= script.find('fscache/')
+    # TODO: kludge assumes fscache locates the local store (which can be moved).  There's a method for getting the fscache location.
+    i= script.find('fscache/') 
     if i>-1:
         remote= script[i+8:]
         ss= remote.split('/')
