@@ -1,3 +1,8 @@
+
+setScriptDescription('''Demo how Arc2D.Double can be used to draw wedge with inner and outer radius.  See also
+https://research-git.uiowa.edu/space-physics/tracers/autoplot/-/blob/main/jy/misc/NorthSouthPolePainters.jy
+where this is used to draw the auroral region''')
+
 reset()
 
 from org.das2.graph import Painter
