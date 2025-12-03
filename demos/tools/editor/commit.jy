@@ -83,7 +83,10 @@ else:
 
     from org.das2.util import FileUtil
     msg= FileUtil.readFileToString( log )
-    showMessageDialog(msg)
+    try:
+        showMessageDialog(getApplication().getScriptPanel(),msg)
+    except:
+        showMessageDialog(msg)
 
     setStatus( "Commit complete, see " + str(log) )
     editor= getApplication().getScriptPanel().getEditorPanel()
