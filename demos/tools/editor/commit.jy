@@ -60,9 +60,9 @@ autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP
 notTracked = not isTracked(File(script))
 
 if notTracked:
-    msg= JOptionPane.showInputDialog('<html>Add and commit.<br>Commit Message:')
+    msg= JOptionPane.showInputDialog(getApplication().getScriptPanel(),'<html>Add and commit.<br>Commit Message:')
 else:
-    msg= JOptionPane.showInputDialog('Commit Message:')
+    msg= JOptionPane.showInputDialog(getApplication().getScriptPanel(),'Commit Message:')
     
 if ( msg==None ):
     setStatus( 'git commit cancelled.' )
