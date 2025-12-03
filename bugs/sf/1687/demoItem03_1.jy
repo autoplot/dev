@@ -6,9 +6,9 @@ class MyPainter(Painter):
     from java.awt.geom import GeneralPath
     from java.awt.geom import Arc2D
     p2 = GeneralPath()
-    arc = Arc2D.Double(100,100,200,200,0,60,Arc2D.OPEN)
+    arc = Arc2D.Double(100,100,200,200,30,60,Arc2D.OPEN)
     p2.append(arc.getPathIterator(None),True)
-    arc = Arc2D.Double(150,150,100,100,60,-60,Arc2D.OPEN)
+    arc = Arc2D.Double(150,150,100,100,90,-60,Arc2D.OPEN)
     p2.append(arc.getPathIterator(None),True)
     p2.closePath()
 
