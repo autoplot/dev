@@ -1,0 +1,19 @@
+from org.das2.datum import TimeUtil
+tr= getParam( 'timerange', '2014-01-09', 'timerange to load' )
+
+phase= getParam('phase',0.0,'phase within day',{'min':0.0, 'max':1.0})
+drtr0= datumRange(tr)
+m= TimeUtil.prevMidnight(drtr0.min())
+drtr= datumRange( [ m, TimeUtil.nextMidnight(drtr0.max())] )
+
+n= int( ceil( drtr.width() / '86400s' ) * 1440 )
+
+tt= drtr.min() + dindgen(n)*'60s'
+angle= ((tt-'2025-12-03T00:00Z')/'3600s') * TAU + TAU * phase
+
+radius= 3 + cos( ((tt-'2025-12-03T00:00Z')/'86400s') * TAU )
+
+result= link( radius * cos( angle ), radius * sin(angle) )
+
+r= where( within( tt, drtr0 ) )
+result= result[r]
