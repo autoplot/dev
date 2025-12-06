@@ -7,7 +7,8 @@ setScriptTitle('Search Script History')
 setScriptDescription('''Look through old scripts named in autoplot_data/bookmarks/history.txt
 for strings.  Suppose you have a dataset you know was used to produce a graphic.  Run this
 script find the scripts which used the dataset.  Suppose you know the name of the png file
-produced.  Maybe you are looking for an example of a code which uses a function.''')
+produced.  Maybe you are looking for an example of a code which uses a function.  This basically
+runs grep on all scripts.''')
 
 regex= getParam('regex','history','Regular Expression')
 history= getParam('history', '~/autoplot_data/bookmarks/history.txt' )

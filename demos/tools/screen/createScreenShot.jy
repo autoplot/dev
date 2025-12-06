@@ -1,8 +1,6 @@
 from javax.swing import ImageIcon
-# label: Take Screenshot
-# title: Built-in tool for creating screenshots
-# the caps lock key can be used as a shutter release.
 
+setScriptTitle('Built-in tool for creating screenshots the caps lock key can be used as a shutter release.')
 setScriptDescription( '''Create screenshot of Autoplot, grabbing the desktop and 
 masking out the non-Autoplot windows.  This is used to create the screenshots 
 with each release, and to create the screenshots which can be embedded within 
@@ -54,7 +52,7 @@ thumb= ImageResize.getScaledInstance( ss, 400 )
 from javax.swing import JLabel, JPanel, JOptionPane, JButton, JCheckBox
 from javax.swing import ImageIcon
 from java.awt import BorderLayout
-from java.awt import Toolkit
+from java.awt import Toolkit,Dimension
 
 label= JLabel( ImageIcon(thumb) )
 
@@ -115,6 +113,7 @@ class SaveFileRunnable( Runnable ):
     
 class MyRunnable( Runnable ):
     def run( self ):
+        jf.setPreferredSize(Dimension(800,600))
         r= jf.showSaveDialog( getViewWindow() )
         if ( r==JFileChooser.APPROVE_OPTION ):
             Thread(SaveFileRunnable(),'SaveFileRunnable').start()

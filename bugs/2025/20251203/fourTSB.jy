@@ -1,0 +1,5 @@
+setLayout(2,2)
+plot( 0, PWD + '/signal.jyds?phase=.00&timerange=2014-07-07+8:00+to+9:00' )
+plot( 1, PWD + '/signal.jyds?phase=.25&timerange=2014-07-07+8:00+to+9:00' )
+plot( 2, PWD + '/signal.jyds?phase=.50&timerange=2014-07-07+8:00+to+9:00' )
+plot( 3, PWD + '/signal.jyds?phase=.75&timerange=2014-07-07+8:00+to+9:00' )

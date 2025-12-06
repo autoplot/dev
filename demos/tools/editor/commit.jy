@@ -60,9 +60,9 @@ autoplotData= AutoplotSettings.settings().resolveProperty( AutoplotSettings.PROP
 notTracked = not isTracked(File(script))
 
 if notTracked:
-    msg= JOptionPane.showInputDialog('<html>Add and commit.<br>Commit Message:')
+    msg= JOptionPane.showInputDialog(getApplication().getScriptPanel(),'<html>Add and commit.<br>Commit Message:')
 else:
-    msg= JOptionPane.showInputDialog('Commit Message:')
+    msg= JOptionPane.showInputDialog(getApplication().getScriptPanel(),'Commit Message:')
     
 if ( msg==None ):
     setStatus( 'git commit cancelled.' )
@@ -83,7 +83,10 @@ else:
 
     from org.das2.util import FileUtil
     msg= FileUtil.readFileToString( log )
-    showMessageDialog(msg)
+    try:
+        showMessageDialog(getApplication().getScriptPanel(),msg)
+    except:
+        showMessageDialog(msg)
 
     setStatus( "Commit complete, see " + str(log) )
     editor= getApplication().getScriptPanel().getEditorPanel()
