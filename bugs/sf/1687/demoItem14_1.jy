@@ -1,0 +1,31 @@
+setScriptDescription('Compare ROI 1021, 1022, and 1023 plotted against MLAT or LAT')
+
+X= getParam('X','MLAT','Plot against mlat or mlt',['MLAT','LAT'])
+sc= '2'
+
+def getData(tr):
+    ds= getDataSet('https://tracers-portal.physics.uiowa.edu/teams/flight/ACI/ts%s/l2/aci/ipd/ts%s_l2_aci_ipd_$Y$m$d_v$(v;sep).cdf?ts%s_l2_aci_tscs_def' % (sc,sc,sc),tr,trim=True)
+    ds= collapse2(ds)
+    ephem= getDataSet( 'vap+das2server:https://tracers-dev.physics.uiowa.edu/stream?dataset=TRACERS-%s/SPICE/GeomagCoords&interval=15' % sc,tr)
+    ephem= synchronize(ds,ephem)
+    
+    if X=='MLAT':
+        xds= unbundle( ephem, 'MLAT' )
+    elif X=='LAT':
+        xds= unbundle( ephem, 'LAT' )
+    else:
+        raise Exception('Huh?')
+    return link( xds, ds )
+
+ds= getDataSet('https://tracers-portal.physics.uiowa.edu/teams/flight/ACI/ts%s/l2/aci/ipd/ts%s_l2_aci_ipd_$Y$m$d_v$(v;sep).cdf?ts%s_l2_aci_tscs_def' % (sc,sc,sc),tr,trim=True)
+ds= collapse2(ds)
+ephem= getDataSet( 'vap+das2server:https://tracers-dev.physics.uiowa.edu/stream?dataset=TRACERS-%s/SPICE/GeomagCoords&interval=15' % sc,tr)
+ephem= synchronize(ds,ephem)
+    
+if X=='MLAT':
+    xds= unbundle( ephem, 'MLAT' )
+elif X=='LAT':
+    xds= unbundle( ephem, 'LAT' )
+else:
+    raise Exception('Huh?')
+plot( link( xds, ds ) )

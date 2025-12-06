@@ -7,3 +7,8 @@ If you right-click in the autoplot script editor, then developer->"Show simplifi
 it uses to implement completions.
 
 See https://sourceforge.net/p/autoplot/bugs/1687/.
+
+# demoItem14_1.jy
+This shows where the getDataSet call is handled differently within a function than within the initial part of the script.
+
+
