@@ -1,0 +1,6 @@
+randomSeed(5334)
+ds= accum(randn(100))
+error= sin(linspace(0,PI,100))+1.1
+
+ds= dataset( ds,deltaPlus=error, deltaMinus=error)
+plot(ds)
