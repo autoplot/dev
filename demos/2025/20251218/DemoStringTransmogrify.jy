@@ -1,0 +1,9 @@
+setScriptDescription('String Transmogrifier Demo')
+
+regex= getParam('regex','orbit_c(\d+)','Regular expression')
+form= getParam('form','C$1','format result, where $1 is the first group, etc.')
+ins= getParam('ins','orbit_c51','The string to transmogrify')
+
+from org.das2.util import StringTransmogrifier
+st= StringTransmogrifier(regex,form)
+print st.transmogrify(ins)
