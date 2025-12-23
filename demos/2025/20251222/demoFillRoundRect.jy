@@ -1,0 +1,16 @@
+from java.awt import Color
+from java.awt.geom import RoundRectangle2D
+def myPaint(g):
+    label= 'wow!'
+    fm= g.getFontMetrics()
+    stringWidth  = fm.stringWidth(label)
+    stringHeight = fm.getHeight()
+    x= 200
+    y= 200
+    shape= RoundRectangle2D.Double(x-stringWidth/2, y-stringHeight/2, stringWidth, stringHeight, 5, 5 )
+    g.color= Color.lightGray
+    g.fill(shape)
+    g.color= Color.black
+    g.draw(shape)
+    
+addBottomDecoration( dom.plots[0],myPaint )
