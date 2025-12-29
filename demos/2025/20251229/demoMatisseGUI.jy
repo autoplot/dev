@@ -1,0 +1,80 @@
+from javax.swing import JOptionPane,JPanel
+import javax.swing.JLabel
+import javax.swing.JCheckBox
+import javax.swing.JSlider
+import java.awt.Font
+import javax.swing.GroupLayout
+from java.lang import Short
+
+def initComponents(panel) :
+
+        jLabel1 = javax.swing.JLabel()
+        jCheckBox1 = javax.swing.JCheckBox()
+        jLabel2 = javax.swing.JLabel()
+        jCheckBox2 = javax.swing.JCheckBox()
+        jCheckBox3 = javax.swing.JCheckBox()
+        jSlider1 = javax.swing.JSlider()
+        jLabel3 = javax.swing.JLabel()
+
+        jLabel1.setFont(java.awt.Font("Liberation Sans", 1, 18)); # NOI18N
+        jLabel1.setText("The Script Label")
+
+        jCheckBox1.setText("option 1")
+
+        jLabel2.setText("Left Options")
+
+        jCheckBox2.setText("option 2")
+
+        jCheckBox3.setText("option 3")
+
+        jLabel3.setText("Other adjustments")
+
+        layout = javax.swing.GroupLayout(panel)
+        panel.setLayout(layout)
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jCheckBox2)
+                            .addComponent(jCheckBox3)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCheckBox1)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(39, 39, 39))
+        )
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(4, 4, 4)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCheckBox1)
+                    .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox3)
+                .addContainerGap(170, Short.MAX_VALUE))
+        )
+    # </editor-fold>
+    
+
+jpanel= JPanel()
+initComponents(jpanel)    
+JOptionPane.showConfirmDialog(getApplication(),jpanel)
