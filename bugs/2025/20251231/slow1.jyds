@@ -1,0 +1,6 @@
+result= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=Oct+2016')
+monitor.taskSize=100
+monitor.started()
+for i in xrange(100):
+    monitor.taskProgress=i
+    sleep(100)
