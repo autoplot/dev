@@ -1,0 +1,127 @@
+from java.awt.geom.Point2D import Double as Point
+from java.awt.geom.Line2D import Double as Line
+from java.awt.geom.Rectangle2D import Double as Rectangle
+from java.awt.geom import Area
+
+setScriptDescription('''Custom renderer is used to show Koch curve at arbitrary resolution, used to draw
+a snow flake.  Note numerical precision limits this.  This old script was found in a pile of scripts
+on my computer, /home/jbf/ct/autoplot/script/2017/20171221/snowFlake.jy.''')
+
+#from math import cos,sin
+
+rect= Rectangle(0,0,1000,1000)
+
+class Turtle:
+    """
+    The turtle keeps track of pen position and direction, so that commands like "forward" can draw a line so many
+    steps long.
+    """
+    def __init__(self,g,p):
+        """
+        Create a new turtle instance on the graphics context g at position p.  The will be pointed north.
+        """
+        self.g= g
+        self.p= p
+        self.a= 0.
+    def forward(self,s):
+        p2= Point( self.p.x + cos(self.a) * s, self.p.y + sin(self.a) * s )
+        line= Line( self.p, p2 )
+        #print '%6d %6d' % ( line.x1, line.x2 )
+        if ( line.intersects(rect) ):
+             self.g.draw( line )
+        self.p= p2
+    def left(self,a):
+        """
+        Turn the turtle to the left so many degrees.
+
+        Parameters
+        ----------
+        a : float
+            the number of degrees to turn left
+        """
+        self.a+= a*TAU/360
+    def right(self,a):
+        """
+        Turn the turle to the right so many degrees.
+        
+        Parameters
+        ----------
+        a : float
+            the number of degrees to turn right
+        """
+        self.a-= a*TAU/360
+    def project(self,s):
+        """
+        like forward, but just return the line segment
+        Parameters
+        ----------
+        s : float
+            the line segment length
+        
+        Returns
+        -------
+        java.awt.geom.Line2D.Double (as Line)
+        """
+        p2= Point( self.p.x + cos(self.a) * s, self.p.y + sin(self.a) * s )
+        return Line( self.p, p2 )
+        
+def koch( t, s, n ):
+    """
+    draw a koch segment, typically using smaller koch segments.  The
+    recursion is stopped once the linesegment length is less than 2.
+    
+    Parameters
+    ----------
+    t : Turtle
+        The turtle object
+    s : float
+        The line segment length
+    n : depth
+        The integer depth, when 0 the recursion is stopped.
+    
+    """
+    line= t.project(s)
+    if ( s<2 or n==0 ):
+        t.forward(s)
+        return
+    koch( t, s/3, n-1 )
+    t.left( 60 )
+    koch( t, s/3, n-1 )
+    t.right( 120 )
+    koch( t, s/3, n-1 )
+    t.left( 60 )
+    koch( t, s/3, n-1 )
+
+def snowflake( t, s, n ):
+    for i in range(6):
+        koch( t, s, n )
+        t.left(60)
+
+from org.das2.graph import Renderer
+class MyRenderer(Renderer):
+    def __init__(self,drawOther):
+        self.drawOther= drawOther
+    def render( self, g, xaxis, yaxis ):
+        if ( self.drawOther ):
+            xx= dom.plots[1].xaxis.range
+            yy= dom.plots[1].yaxis.range
+            xx= [ xaxis.transform(xx.min()), xaxis.transform(xx.max()) ]
+            yy= [ yaxis.transform(yy.min()), yaxis.transform(yy.max()) ]
+            g.draw( Rectangle( xx[0], yy[1], xx[1]-xx[0], yy[0]-yy[1] ) )
+        t= Turtle( g, Point( xaxis.transform(datum(0)), yaxis.transform(datum(0)) ) )
+        l= xaxis.transform(datum(1))-xaxis.transform(datum(0))
+        depth= max( int(l/100), 1 )
+        snowflake( t, l, depth )
+        
+        
+plot( None, renderer=MyRenderer(True), xrange=[-2,2], yrange=[-2,2], isotropic=1 )
+(p,pe)=plot( 1, None, renderer=MyRenderer(False), xpos='55%,80%', ypos='10%,40%', xrange=[1.0,1.04], yrange=[-0.41,-0.36], isotropic=1 ) 
+p.controller.dasPlot.drawBackground= Color.WHITE
+
+from java.beans import PropertyChangeListener
+class MyPropertyChangeListener(PropertyChangeListener):
+    def propertyChange( self, x ):
+        dom.plots[0].controller.dasPlot.invalidateCacheImage()
+        dom.plots[0].controller.dasPlot.repaint()
+dom.plots[1].xaxis.addPropertyChangeListener(MyPropertyChangeListener())
+
