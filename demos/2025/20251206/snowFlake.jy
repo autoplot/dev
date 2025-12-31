@@ -5,7 +5,8 @@ from java.awt.geom import Area
 
 setScriptDescription('''Custom renderer is used to show Koch curve at arbitrary resolution, used to draw
 a snow flake.  Note numerical precision limits this.  This old script was found in a pile of scripts
-on my computer, /home/jbf/ct/autoplot/script/2017/20171221/snowFlake.jy.''')
+on my computer, /home/jbf/ct/autoplot/script/2017/20171221/snowFlake.jy.  This also serves
+as an example of a well-documented script.''')
 
 #from math import cos,sin
 
@@ -19,6 +20,13 @@ class Turtle:
     def __init__(self,g,p):
         """
         Create a new turtle instance on the graphics context g at position p.  The will be pointed north.
+        
+        Parameters
+        ----------
+        g : java.awt.Graphics2D
+            the Java 2D graphics context
+        p : java.awt.geom.Point2D.Double
+            the initial Turtle position, where (0,0) is the upper left corner, in pixels.
         """
         self.g= g
         self.p= p
