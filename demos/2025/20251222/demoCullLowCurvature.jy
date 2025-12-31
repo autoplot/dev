@@ -1,0 +1,24 @@
+from org.das2.graph import GraphUtil
+
+case= getParam( 'case', 1, 'case number', [1,2] )
+
+if case==1:
+    t= linspace(0,PI,1000)
+    ds= sin(t)
+    ds= link(t,ds)
+    c= 0.0001
+elif case==2:
+    ds= getDataSet('https://autoplot.org/data/coastlines.zip/coastlines/namer-cil.txt')
+    c= 0.01
+
+reset()
+plot( ds )
+
+d= GraphUtil.cullLowCurvature(ds,c)
+plot( 1, d )
+
+annotation( 0, text='# Points: %d'%len(ds), plotId= dom.plots[0].id )
+annotation( 1, text='# Points: %d'%len(d), plotId= dom.plots[1].id )
+
+bind( dom.plots[0].xaxis, 'range', dom.plots[1].xaxis, 'range' )
+bind( dom.plots[0].yaxis, 'range', dom.plots[1].yaxis, 'range' )
