@@ -1,0 +1,12 @@
+setScriptDescription('''Demo bug where scientific formatting is modified.  There is no
+way Autoplot can "see" the format used, 1e2 vs 100.0, so a string must be used
+for the case where this is important.''')
+
+limit1= getParam('limit1', 1.0, 'limit of resolution', [1,1e2,1e4] )
+limit2= getParam('limit2', '1', 'limit of resolution', ['1','1e2','1e4'] )
+limit3= getParam('limit3', 1.0, 'limit of resolution',\
+    { 'values':[1,1e2,1e4], 'labels':['1','1e2','1e4'] } )
+    
+print limit1
+print float(limit2)
+print limit3

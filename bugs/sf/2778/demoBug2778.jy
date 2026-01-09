@@ -1,0 +1,4 @@
+setScriptDescription('''Demo bug where 1 and 2 can not be selected from the droplist.''')
+
+limit1= getParam('limit1', 0.1, 'limit of resolution', [0.1,1,2] )
+limit2= getParam('limit2', 0.1, 'limit of resolution', [0.1,1.0,2.0] )
