@@ -1,0 +1,11 @@
+setScriptDescription('''Demonstrate that getDataSets uses the monitor property, 
+when all URIs provide progress.''')
+
+uri1= 'vap+jyds:'+PWD+'slow1.jyds'
+uri2= 'vap+jyds:'+PWD+'slow2.jyds'
+
+(d1,d2)= getDataSets([uri1,uri2],None,monitor)
+
+reset()
+plot( 0,d1 )
+plot( 1,d2 )
