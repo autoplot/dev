@@ -1,0 +1,19 @@
+ff=getFile('https://github.com/hapi-server/servers/blob/master/dev.txt')
+
+print '['
+
+for line in open(str(ff)).readlines():
+    ss= line.strip().split(',')
+    sss='''    {
+    "x_url": "%(url)s",
+    "id": "%(id)s",
+    "title": "%(title)s",
+    "contact": "%(contact)s",
+    "contactID": "%(contactID)s"
+    },
+'''
+    cc= { "url": ss[0].strip(), "title":ss[1].strip(), "id":ss[2].strip(), "contact":ss[3].strip(), "contactID":ss[4].strip() }
+    print sss % cc
+
+print ']'
+
