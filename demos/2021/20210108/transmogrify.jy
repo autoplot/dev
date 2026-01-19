@@ -9,10 +9,11 @@ setScriptLabel('Transmography')
 setScriptDescription('''Transmography command takes a regular expression and a
 format specification and converts each line of the input (on stdin) by matching
 it and then formatting it. <p>java -jar autoplot.jar --script=transmogrify.jy mod_(\d+).txt '$1'
+Note Autoplot/Das2 now has a StringTransmography class which can be used.
 ''')
-inp= getParam( 'arg_1', 'pj(\d+)_(.+)_(n|s).(dat)' )
-outp= getParam( 'arg_2', '$1 $2 $3' )
-ins= getParam( 'arg_3', '', 'line to run through', { 'examples':['pj1_5_n.dat',''] } )
+inp= getParam( 'arg_1', 'pj(\d+)_(.+)_(n|s).(dat)', 'The regular expression' )
+outp= getParam( 'arg_2', '$1 $2 $3', 'print these to stdout' )
+ins= getParam( 'arg_3', '', 'line to run through, or empty string (the default) for stdin', { 'examples':['pj1_5_n.dat',''] } )
 
 import sys
 
