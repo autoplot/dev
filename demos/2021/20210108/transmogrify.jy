@@ -1,4 +1,4 @@
-See also https://github.com/jbfaden/Utilities/blob/main/src/com/cottagesystems/JGrep.java
+# See also https://github.com/jbfaden/Utilities/blob/main/src/com/cottagesystems/JGrep.java
 
 from java.util.regex import Pattern
 
