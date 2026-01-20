@@ -17,10 +17,14 @@ inp= getParam( 'arg_1', 'pj(\d+)_(.+)_(n|s).(dat)', 'The regular expression' )
 outp= getParam( 'arg_2', '$1 $2 $3', 'print these to stdout' )
 ins= getParam( 'arg_3', '', 'line to run through, or empty string (the default) for stdin', { 'examples':['pj1_5_n.dat',''] } )
 
+print 'arg_1:', arg_1
+print 'arg_2:', arg_2
+
 import sys
 
 st= StringTransmogrifier( inp, outp )
 if ins!='':        
+    print 'arg_3:', arg_3
     print st.transmogrify( ins )
 else:
     for line in sys.stdin:
