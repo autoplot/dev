@@ -19,12 +19,12 @@ ins= getParam( 'arg_3', '', 'line to run through, or empty string (the default) 
 
 print 'arg_1:', arg_1
 print 'arg_2:', arg_2
+print 'arg_3:', arg_3
 
 import sys
 
 st= StringTransmogrifier( inp, outp )
 if ins!='':        
-    print 'arg_3:', arg_3
     print st.transmogrify( ins )
 else:
     for line in sys.stdin:
