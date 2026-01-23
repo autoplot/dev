@@ -1,0 +1,17 @@
+from java.io import File
+setScriptDescription('Change platform.active=default_platform to platform.active=JDK_1.8')
+
+resourceURI= getParam( 'resourceURI', '/home/jbf/temp/autoplot/Autoplot/nbproject/project.properties', 'example file to load' )
+
+ff= getFile(resourceURI)
+
+tf= File(ff.path+ '.t')
+
+write= open(str(tf), 'w') 
+for line in open(str(ff)).readlines():
+    line= line.replace('platform.active=default_platform','platform.active=JDK_1.8')
+    write.write(line)
+write.close()
+
+tf.renameTo(ff)  # TODO: no completions here, there should be
+print 'rewrote ' +str(ff)
