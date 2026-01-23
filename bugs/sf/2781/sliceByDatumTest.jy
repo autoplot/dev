@@ -1,0 +1,9 @@
+setScriptDescription('''Verify slice-at-datum works when switching dimensions.  Run
+this script, then slice on time.  Set this to something late in the day.  Then switch
+to slicing on dim2 (from dim0)''')
+
+ds= randn(300,400,18)
+tt= linspace('2026-01-23T00:00Z','2026-01-24T00:00Z',300)
+ee= logspace(20,20000,400)
+aa= linspace(5,185,18)
+plot( link( tt, ee, aa, ds ) )
