@@ -1,13 +1,16 @@
 index= getParam('index',5,'which fib number')
 
-s0=1
-s1=1
-fib=0
+def fib(i):
+    # iterative; works fine for reasonably large i
+    if i < 0:
+        raise Exception("i must be >= 0")
+    a = 0  # F(0)
+    b = 1  # F(1)
+    # after k iterations, 'a' is F(k)
+    for k in range(i):
+        a, b = b, a + b
+    return a
 
-for i in xrange(index):
-    fib= fib + s0 + s1
-    s0= s1
-    s1= i
-print 'The %d-th fib number is %d.' % ( index, fib )
+f = fib(index)
 
-
+print 'The %d-th Fibonacci number is %d.' % ( index, f )
