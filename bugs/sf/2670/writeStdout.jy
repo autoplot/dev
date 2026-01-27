@@ -1,1 +1,12 @@
+index= getParam('index',5,'which fib number')
+
+s0=1
+s1=1
+
+for i in xrange(index):
+    fib= s0 + s1
+    s0= s1
+    s1= i
+print 'The %d-th fib number is %d.' % ( index, fib )
+
 
