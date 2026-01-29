@@ -1,0 +1,15 @@
+setScriptDescription("""Insert code at the caret position.""")
+setScriptLabel("Insert Def Code")
+setScriptTitle("Insert Def Code")
+
+editor= getApplication().getScriptPanel().getEditorPanel()
+
+text= """
+def test():
+    print 'this is a test.'
+"""
+
+doc= editor.getDocument()
+pos= editor.getCaretPosition()
+
+doc.insertString(pos, text, None)
