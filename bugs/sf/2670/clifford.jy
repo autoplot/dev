@@ -1,0 +1,94 @@
+setScriptDescription('Strange attractor batch demo (Clifford attractor)')
+
+from java.lang import Math
+import os
+
+# ----------------------------
+# User controls
+# ----------------------------
+outDir   = "/tmp/attractors/"  # change as desired
+nIters   = 400000              # points per frame (increase for smoother density)
+burnIn   = 2000                # discard early transient
+nFrames  = 240                 # number of parameter sets / output images
+canvasW  = 900
+canvasH  = 830
+
+k= getParam( 'k', 7.0, 'frame number', { 'min':0, 'max':nFrames } )
+
+# Plot window (clip) for x,y (you can widen if you see cropping)
+xMin, xMax = -2.2, 2.2
+yMin, yMax = -2.2, 2.2
+
+# ----------------------------
+# Clifford attractor generator
+# x_{n+1} = sin(a*y_n) + c*cos(a*x_n)
+# y_{n+1} = sin(b*x_n) + d*cos(b*y_n)
+# ----------------------------
+def clifford_points(a, b, c, d, nIters, burnIn):
+    x = 0.0
+    y = 0.0
+    xs = zeros(nIters)
+    ys = zeros(nIters)
+    # burn-in
+    for i in range(burnIn):
+        xn = Math.sin(a*y) + c*Math.cos(a*x)
+        yn = Math.sin(b*x) + d*Math.cos(b*y)
+        x, y = xn, yn
+
+    for i in range(nIters):
+        xn = Math.sin(a*y) + c*Math.cos(a*x)
+        yn = Math.sin(b*x) + d*Math.cos(b*y)
+        x, y = xn, yn
+        xs[i]=x
+        ys[i]=y
+    return xs, ys
+
+# ----------------------------
+# Parameter path for variety
+# (These ranges produce a nice mix; tweak freely.)
+# ----------------------------
+def params_for_frame(k, nFrames):
+    t = k / float(max(1, nFrames-1))
+    # Smooth-ish sweep through parameter space
+    a = -2.0 + 0.8*Math.sin(2*Math.PI*t)
+    b =  1.6 + 0.9*Math.cos(2*Math.PI*t)
+    c =  1.0 - 0.6*Math.sin(4*Math.PI*t)
+    d =  0.7 + 0.7*Math.cos(4*Math.PI*t)
+    return a, b, c, d
+
+# ----------------------------
+# Main batch loop
+# ----------------------------
+
+mkdir(outDir)
+
+reset()
+setCanvasSize(canvasW, canvasH)
+
+
+a, b, c, d = params_for_frame(k, nFrames)
+
+# Generate point cloud
+xs, ys = clifford_points(a, b, c, d, nIters, burnIn)
+
+# Make a density image (looks great in Autoplot by default)
+dens = histogram2d(xs,ys,[700,700],dataset([xMin,xMax]),dataset([yMin,yMax]))
+
+# Plot + annotate
+reset()  # clean plot each frame
+setCanvasSize(canvasW, canvasH)
+
+plot(dens,zlog=True,isotropic=True,xrange=[xMin,xMax])
+
+column=dom.canvases[0].marginColumn
+column.left,column.right='7em','100%-7em'
+
+# Title / metadata in filename
+title = "Clifford attractor  a=%.3f  b=%.3f  c=%.3f  d=%.3f" % (a, b, c, d)
+dom.plots[0].setTitle(title)
+
+# Export
+fn = os.path.join(outDir, "clifford_%05.1f.png" % k)
+writeToPng(fn)
+
+print("Wrote %d frames to %s" % (nFrames, outDir))
