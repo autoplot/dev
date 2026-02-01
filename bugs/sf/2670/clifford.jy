@@ -13,7 +13,7 @@ nFrames  = 240                 # number of parameter sets / output images
 canvasW  = 900
 canvasH  = 830
 
-k= getParam( 'k', 7.0, 'frame number', { 'min':0, 'max':nFrames } )
+k= getParam( 'k', 7, 'frame number', { 'min':0, 'max':nFrames } )
 
 # Plot window (clip) for x,y (you can widen if you see cropping)
 xMin, xMax = -2.2, 2.2
@@ -80,6 +80,7 @@ setCanvasSize(canvasW, canvasH)
 
 plot(dens,zlog=True,isotropic=True,xrange=[xMin,xMax])
 
+
 column=dom.canvases[0].marginColumn
 column.left,column.right='7em','100%-7em'
 
@@ -87,8 +88,3 @@ column.left,column.right='7em','100%-7em'
 title = "Clifford attractor  a=%.3f  b=%.3f  c=%.3f  d=%.3f" % (a, b, c, d)
 dom.plots[0].setTitle(title)
 
-# Export
-fn = os.path.join(outDir, "clifford_%05.1f.png" % k)
-writeToPng(fn)
-
-print("Wrote %d frames to %s" % (nFrames, outDir))
