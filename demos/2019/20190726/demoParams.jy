@@ -9,6 +9,13 @@ interference= getParam( 'interference', 'F', 'add interference line', ['T','F'] 
 sc= getParam( 'sc', 'Z1', 'the spacecraft name', ['Z1','Z2','Z3'] )
 font= getParam( 'font', 'xkcd Script', 'font to use', ['xkcd Script','sans','Scheme Bk', 'Roboto' ] )
 
+print 'nc=', nc
+print 'noise=', noise
+print 'size=', size
+print 'interference=', interference
+print 'sc=', sc
+print 'font=', font
+
 reset()
 dom.options.canvasFont= font + '-16'
 setCanvasSize(800,600)

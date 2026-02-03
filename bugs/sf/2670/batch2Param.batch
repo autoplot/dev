@@ -1,0 +1,24 @@
+{
+    "param1": "nc",
+    "param1Values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+    ],
+    "param2": "noise",
+    "param2Values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+    ],
+    "script": "https://github.com/autoplot/dev/blob/master/demos/2019/20190726/demoParams.jy?nc=3&noise=0.4&size=400&interference='F'&sc='Z1'&font='xkcd Script'"
+}
