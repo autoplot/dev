@@ -1,0 +1,76 @@
+from org.das2.graph import DasColorBar
+from org.das2.qds import DataSetOps,DataSetUtil
+
+#resourceURI= getParam( 'resourceURI', 'file:/home/jbf/fun/pics/creekpics/2026/20260105_093141.jpg', 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'file:/home/jbf/fun/pics/creekpics/2026/20260104_113720.jpg', 'example file to load' )
+
+sts= ['scatter','channelHist']
+studyType= getParam( 'studyType', sts[0], 'Study Type', sts )
+
+monitor.taskSize=60
+monitor.started()
+
+rgb= getDataSet(resourceURI+'',monitor.getSubtaskMonitor(0,10,'rgb'))
+monitor.taskProgress=10  # TODO: fix this, getSubTask should set to min.
+r= rgb[:,:,0]
+monitor.taskProgress=20  # TODO: fix this, getSubTask should set to min.
+g= rgb[:,:,1]
+monitor.taskProgress=30  # TODO: fix this, getSubTask should set to min.
+b= rgb[:,:,2]
+
+h= getDataSet(resourceURI+'?channel=hue',monitor.getSubtaskMonitor(30,40,'hue'))
+monitor.taskProgress=40  # TODO: fix this, getSubTask should set to min.
+s= getDataSet(resourceURI+'?channel=saturation',monitor.getSubtaskMonitor(40,50,'saturation'))
+monitor.taskProgress=50  # TODO: fix this, getSubTask should set to min.
+v= getDataSet(resourceURI+'?channel=value',monitor.getSubtaskMonitor(50,60,'value'))
+monitor.taskProgress=60  # TODO: fix this, getSubTask should set to min.
+
+def fixedSetLayout(h,v):
+    setLayout(h,v)
+    pp= dom.plots
+    pp.reverse()
+    dom.plots= pp
+
+def hist(ds,mx):
+    return histogram(ds,0,mx,1)
+
+def hist2(x,y,xmax,ymax):
+    return histogram2d(x,y,[xmax,ymax],dataset([0,xmax]),dataset([0,ymax]))
+    
+if studyType=='channelHist':
+    fixedSetLayout(3,2)
+    plot(0,hist(r,256),title='red')
+    plot(1,hist(g,256),title='green')
+    plot(2,hist(b,256),title='blue')
+    plot(3,hist(h,361),title='hue')
+    plot(4,hist(s,100),title='saturation')
+    plot(5,hist(v,100),title='value')
+    
+elif studyType=='scatter':
+    fixedSetLayout(2,3)
+    nele= DataSetUtil.product( DataSetUtil.qubeDims(r) )
+    r= reform(r,[nele])
+    g= reform(g,[nele])
+    b= reform(b,[nele])
+    h= reform(h,[nele])
+    s= reform(s,[nele])
+    v= reform(v,[nele])
+    
+    plot(0,hist2(b,r,255,255),xtitle='green',ytitle='red',zlog=1)
+    plot(1,hist2(b,r,255,255),xtitle='blue',ytitle='',zlog=1)
+    plot(3,hist2(s,v,100,100),xtitle='saturation',ytitle='value',zlog=1)
+    plot(4,hist2(h,v,365,100),xtitle='hue',ytitle='',zlog=1)
+    plot(2,rgb)
+    
+    dom.plots[2].xaxis.visible=False
+    dom.plots[2].yaxis.visible=False
+    dom.plots[2].zaxis.visible=False
+    
+    dom.plots[5].visible=False
+    dom.plots[5].xaxis.visible=False
+    dom.plots[5].yaxis.visible=False
+    dom.plots[5].zaxis.visible=False
+    dom.plotElements[5].active=False
+    
+monitor.finished()
+    

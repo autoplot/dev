@@ -1,0 +1,14 @@
+from java.io import File
+from org.das2.util import FileUtil
+from org.das2.util.filesystem import FileSystem
+tr= getParam( 'timerange', 'Oct 2016', 'Time Range to plot', { 'min':'2010-01-01', 'max':'2025-01-01' } )
+
+reloadd= getParam('reload',False,'Reload the data',[True,False])
+
+if reloadd:
+    ff= File( FileSystem.settings().localCacheDir, 'https/cdaweb.gsfc.nasa.gov/sp_phys/data/omni/hourly/' )
+    FileUtil.deleteFileTree(ff)
+
+ds= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800',tr)
+plot( ds, xrange=tr )
+dom.plots[0].ticksURI= 'vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=KP1800;DST1800;AE1800&filter=omni2'
