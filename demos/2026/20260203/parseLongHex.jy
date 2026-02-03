@@ -1,0 +1,14 @@
+from java.util.regex import Pattern
+from java.lang import Long
+
+startstop= getParam('startstop','7f380ef98000-7f380f2f3000' )
+
+p= Pattern.compile('([0-9a-f]+)\-([0-9a-f]+)')
+r= p.matcher(startstop)
+if not r.matches(): raise Exception('bad string')
+
+
+start= Long.parseUnsignedLong(r.group(1), 16)
+stop= Long.parseUnsignedLong(r.group(2), 16)
+
+print start,stop, stop-start
