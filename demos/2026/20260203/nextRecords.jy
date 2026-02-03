@@ -1,0 +1,9 @@
+setScriptDescription('Demo next records, which is a convenience to avoid loops in jython scripts')
+
+dsb= DataSetBuilder(1,100)
+
+dsb.nextRecords(dataset([1,2,3,4,5,6,7]))
+dsb.nextRecords(dataset([8,9,10]))
+
+print dsb.getDataSet()
+
