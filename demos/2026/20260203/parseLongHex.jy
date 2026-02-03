@@ -1,5 +1,8 @@
+setScriptTitle('Parse Long Hexc')
+setScriptDescription('''Parse long hex ranges printed in /proc/<pid>/map_files/''')
 from java.util.regex import Pattern
 from java.lang import Long
+
 
 startstop= getParam('startstop','7f380ef98000-7f380f2f3000' )
 
