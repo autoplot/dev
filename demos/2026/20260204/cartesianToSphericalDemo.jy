@@ -1,0 +1,48 @@
+from org.das2.qds import DataSetUtil,DataSetOps
+from org.das2.util import GrannyTextRenderer,ColorUtil
+from java.awt import Font
+case= getParam( 'case', 2, 'test case number', [1,2] )
+
+if case==1:
+    xx= linspace( -5, 5, 100 )
+    yy= linspace( 5, 5, 100 )
+    zz= linspace( 0, 5, 100 )
+elif case==2:
+    xyz= dataset( [ [ 1,0,0 ], [ 0,1,0], [0,0,1] ] )
+    xx= xyz[:,0]
+    yy= xyz[:,1]
+    zz= xyz[:,2]
+
+xx= dataset( xx, label='X' )
+yy= dataset( yy, label='Y' )
+zz= dataset( zz, label='Z' )
+
+reset()
+cart=cartesianToSpherical( bundle( xx, yy, zz ) )
+
+setLayout(3,2)
+#gtr= GrannyTextRenderer()
+
+def myDecorator( p, g ):
+    g.setFont( Font.decode('sans-40') )
+    g.color= ColorUtil.LAVENDER
+    gtr= GrannyTextRenderer()
+    gtr.setString( g, p )
+    for i in xrange( 0,1000,50 ):
+        for j in xrange( 0,1000,50 ):
+              gtr.draw(g,i,j)
+
+def myPlot( i, ds ):
+        p,_= plot( i, ds )
+        ll= guessLabel(ds)
+        if len(ll)>1:
+            ll = '&' + ll + ';'
+        addBottomDecoration( p, lambda g : myDecorator(  ll, g ))
+        
+myPlot( 0, xx )
+myPlot( 2, yy )
+myPlot( 4, zz )
+
+myPlot( 1, unbundle( cart,'R' ) )
+myPlot( 3, unbundle( cart,'theta' ) )
+myPlot( 5, unbundle( cart,'phi' ) )
