@@ -1,0 +1,19 @@
+setScriptDescription('''Demo a few modifications to StringTransmogrifier, made after playing
+with it for a couple of months.  Its original behavior was to return the result when the
+regex didn't match ($1 instead of the first group of the match), which was a dumb choice.  It
+now throws an exception.  If the two-arg call is made, then the second value is returned.  Also
+a findall method is added where any number of instances of the regex is replaced, including none.''')
+
+from org.das2.util import StringTransmogrifier
+st= StringTransmogrifier('([a-z]+)=([0-9]+)','$1:$2')
+
+print st.transmogrify('cat=1')
+
+print st.transmogrify('CAT=1','Error!')
+
+try:
+    print st.transmogrify('CAT=1')
+except:
+    print 'Error caught!'
+    
+print st.findall('cat=1 dog=2 goldfish=3')
