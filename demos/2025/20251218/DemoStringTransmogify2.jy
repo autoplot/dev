@@ -16,4 +16,4 @@ try:
 except:
     print 'Error caught!'
     
-print st.findall('cat=1 dog=2 goldfish=3')
+print st.find('cat=1 dog=2 goldfish=3')
