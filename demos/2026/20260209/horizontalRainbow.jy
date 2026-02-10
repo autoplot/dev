@@ -1,0 +1,5 @@
+from org.das2.graph import DasColorBar
+setScriptDescription('''Draw a rainbow spectrogram with descrete horizontal bars.  This can be used to 
+calibrate colors on a pair of monitors.''')
+
+plot( outerProduct(ones(100),linspace(0,15,16)), colorTable=DasColorBar.Type.COLOR_WEDGE ) # COLOR_WEDGE is known as Rainbow elsewhere.
