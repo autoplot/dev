@@ -1,0 +1,19 @@
+setScriptDescription('''Read in each of the coastlines files and create
+one convenient file which can be plotted to get all coastlines.''')
+
+namer= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/namer-cil.txt')
+samer= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/samer-cil.txt')
+africa= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/africa-cil.txt')
+asia= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/asia-cil.txt')
+europe= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/europe-cil.txt')
+
+all= None
+all= concatenate(all,namer)
+all= concatenate(all,samer)
+all= concatenate(all,africa)
+all= concatenate(all,asia)
+all= concatenate(all,europe)
+
+plot(all)
+
+formatDataSet( all, '/home/jbf/tmp/all-cil.txt' )
