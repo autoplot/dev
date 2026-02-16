@@ -1,0 +1,156 @@
+setScriptTitle('Visualize CsvFileLogHandler output')
+setScriptDescription("""
+Visualize log records found in output of CsvFileLogHandler.  
+<code>
+from org.das2.util import LoggerManager
+from org.autoplot.util import CsvFileLogHandler
+
+setScriptDescription('Run this and turn up the log levels on the console tab.')
+
+log= LoggerManager.getLogger('')
+
+handler= CsvFileLogHandler()
+log.addHandler(handler)
+
+log.info('Hi There')
+""")
+
+
+resourceURI= getParam( 'resourceURI', 'file:/tmp/autoplot.log.csv', 'example file to load' )
+
+times= getDataSet( resourceURI + '?column=elapsed_seconds' )
+sourceClass= getDataSet( resourceURI + '?column=source_class')
+thread= getDataSet( resourceURI + '?column=thread')
+logName= getDataSet( resourceURI + '?column=logger')
+
+from java.util.logging import Handler, LogRecord, Logger, Level
+from java.lang import Runnable, Thread, System
+from java.util import ArrayList, HashMap, Collections
+from java.awt import Color, BorderLayout, RenderingHints
+from javax.swing import JPanel, JFrame, JCheckBox, JButton, BoxLayout, AbstractAction
+
+from org.das2 import DasApplication
+from org.das2.graph import DasCanvas, DasPlot, DasRow, DasColumn, DasAxis, Legend, Renderer
+from org.das2.datum import DatumRange, Units
+from org.das2.system import DasLogger
+
+# --- constants (match the Java idea) ---
+YAXIS_THREAD  = -199
+YAXIS_CLASS   = -198
+YAXIS_LOGNAME = -197
+
+# --- Renderer implementation ---
+class LogRenderer(Renderer):
+    def __init__(self, outer):
+        Renderer.__init__(self)
+        self.outer = outer
+
+    def render(self, g1, xAxis, yAxis):
+        g = g1
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+        # Choose which y-values and label map to show
+        if self.outer.yaxisDimension == YAXIS_CLASS:
+            yMap = self.outer.mapClass
+            yVals = self.outer.yClass
+        elif self.outer.yaxisDimension == YAXIS_THREAD:
+            yMap = self.outer.mapThread
+            yVals = self.outer.yThread
+        else:
+            yMap = self.outer.mapLogger
+            yVals = self.outer.yLogger
+
+        # Draw y labels on the left at their y positions (like Java) :contentReference[oaicite:8]{index=8}
+        ix0 = int(xAxis.transform(xAxis.getDataMinimum()))
+        g.setColor(Color.lightGray)
+        for e in yMap.entrySet():
+            name = _safe(e.getKey())
+            iy = int(yAxis.transform(Units.dimensionless.createDatum(int(e.getValue()))))
+            g.drawString(name, ix0 + 2, iy)
+
+        # Draw points for records in current time window
+        minMilli = long(xAxis.getDataMinimum().doubleValue(Units.milliseconds))
+        maxMilli = long(xAxis.getDataMaximum().doubleValue(Units.milliseconds))
+
+        # binary search over sorted self.outer.times
+        first = Collections.binarySearch(self.outer.times, long(minMilli))
+        if first < 0:
+            first = -1 - first
+
+        last = Collections.binarySearch(self.outer.times, long(maxMilli))
+        if last < 0:
+            last = -1 - last
+        else:
+            last = last + 1
+
+        for i in range(first, min(last, self.outer.times.size())):
+            rec = self.outer.records.get(i)
+            t = long(self.outer.times.get(i))
+            y = int(yVals.get(i))
+
+            # choose color by logger name
+            ln = _safe(rec.getLoggerName())
+            col = self.outer.loggerColors.get(ln)
+            if col is None:
+                # simple stable-ish fallback color hash
+                h = abs(hash(ln)) % 6
+                col = [Color.red, Color.blue, Color.green, Color.magenta, Color.orange, Color.cyan][h]
+                self.outer.loggerColors.put(ln, col)
+
+            g.setColor(col)
+            x = int(xAxis.transform(Units.milliseconds.createDatum(t)))
+            yy = int(yAxis.transform(Units.dimensionless.createDatum(y)))
+
+            # a small dot
+            g.fillRect(x - 1, yy - 1, 3, 3)
+
+yaxisValuesClass= HashMap()
+yaxisValuesThread= HashMap()
+yaxisValuesLogger= HashMap()
+yaxisMapClass= HashMap()
+yaxisMapThread= HashMap()
+yaxisMapLogger= HashMap()
+
+for i in xrange(len(times)):
+    if yaxisDimension==YAXIS_THREAD:
+        yAxisName= Thread.currentThread().getName()
+    elif yaxisDimension==YAXIS_CLASS:
+        yAxisName= rec.getSourceClassName()
+    elif yaxisDimension==YAXIS_LOGNAME:
+        yAxisName= rec.getLoggerName()
+    
+
+    yValue= yaxisMapClass.get( rec.getSourceClassName() )
+    if ( yValue==None ) :
+        yValue= yaxisMapClass.size()
+        yaxisMapClass.put( yAxisName, yValue )
+    
+    
+    yValue= yaxisMapThread.get( rec.getSourceClassName() )
+    if ( yValue==None ) :
+        yValue= yaxisMapThread.size()
+        yaxisMapThread.put( yAxisName, yValue )
+    
+    
+    yValue= yaxisMapLogger.get( rec.getLoggerName() )
+    if ( yValue==None ) :
+        yValue= yaxisMapLogger.size()
+        yaxisMapLogger.put( yAxisName, yValue )
+
+    yAxisValuesClass.add( index, yaxisMapClass.get( sourceClass[i].svalue() ) )
+    yAxisValuesThread.add( index, yaxisMapThread.get( thread[i].svalue() ) )
+    yAxisValuesLogger.add( index, yaxisMapLogger.get( logName[i].svalue() ) )
+    
+outer= { 
+   times:times,
+   yaxisDimension:YAXIS_THREAD,
+   yaxisMapClass:yaxisMapClass,
+   yaxisMapThread:yaxisMapThread,
+   yaxisMapLogger:yaxisMapLogger,
+   yaxisValuesClass:yaxisMapClass,
+   yaxisValuesThread:yaxisMapThread,
+   yaxisValuesLogger:yaxisMapLogger,
+   loggerColors:HashMap(),
+}
+
+plot( 0, renderer= LogRenderer(outer) )
