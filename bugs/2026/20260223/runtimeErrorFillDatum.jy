@@ -1,3 +1,8 @@
+setScriptTitle('Demo Runtime Error in Render')
+setScriptDescription('''It's fairly easy to get a fill value into the data and cause it to throw a runtime error each time 
+a paint or render occurs.  I need to identify the path that allows fill data to get in there, and
+ran across this demo which shows.''')
+
 
 l= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2004')
 
