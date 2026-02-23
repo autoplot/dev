@@ -1,0 +1,6 @@
+
+l= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2004')
+
+
+h = histogram2d(xtags(l),l,[366,3],dataset(datumRange('2004').convertTo(Units.t2000)),dataset(datumRange('-10 to 3')))
+plot( h )
