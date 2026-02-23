@@ -3,9 +3,8 @@ setScriptDescription('''It's fairly easy to get a fill value into the data and c
 a paint or render occurs.  I need to identify the path that allows fill data to get in there, and
 ran across this demo which shows.''')
 
-
 l= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2004')
+x= xtags(l)
+x.putProperty(QDataSet.UNITS,Units.t2000)
+plot( x, l )
 
-
-h = histogram2d(xtags(l),l,[366,3],dataset(datumRange('2004').convertTo(Units.t2000)),dataset(datumRange('-10 to 3')))
-plot( h )
