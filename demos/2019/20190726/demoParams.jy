@@ -9,6 +9,10 @@ interference= getParam( 'interference', 'F', 'add interference line', ['T','F'] 
 sc= getParam( 'sc', 'Z1', 'the spacecraft name', ['Z1','Z2','Z3'] )
 font= getParam( 'font', 'xkcd Script', 'font to use', ['xkcd Script','sans','Scheme Bk', 'Roboto' ] )
 
+print '-----'
+print params
+print '-----'
+
 print 'nc=', nc
 print 'noise=', noise
 print 'size=', size
