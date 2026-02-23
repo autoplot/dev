@@ -1,0 +1,12 @@
+from org.das2.qds import SemanticOps
+setScriptTitle('Demo Error in histogram2d')
+setScriptDescription('''This shows where histogram2d was sloppy in its handling of
+units, where it assumed the x dataset units were the same as the xrange units.''')
+
+l= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2004')
+
+print SemanticOps.getUnits(dataset(datumRange('2004')))
+print SemanticOps.getUnits(xtags(l))
+
+h = histogram2d(xtags(l),l,[366,30],dataset(datumRange('2004')),dataset(datumRange('-200 to 20')))
+plot( h )
