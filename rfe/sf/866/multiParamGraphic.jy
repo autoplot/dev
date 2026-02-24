@@ -5,6 +5,9 @@ ncenter=getParam('ncenter',3,'Number of Centers',[1,2,3,4,5])
 radius= getParam('radius',0.0,'Radius of ring',[0,2.0,2.5,3.5,4.5,5.0])
 ann= getParam('annotation','lorem','Annotation',['','lorem','ipsum'])
 
+for p in params:
+    print '%s=%s' % ( p, params[p] )
+
 size=600
 
 if ( case=='1' ):
