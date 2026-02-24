@@ -1,0 +1,38 @@
+setScriptDescription('''Example Script for testing Run Batch''')
+
+case= getParam('case','1','Case number',['1','2','3'])
+ncenter=getParam('ncenter',3,'Number of Centers',[1,2,3,4,5])
+radius= getParam('radius',0.0,'Radius of ring',[0,2.0,2.5,3.5,4.5,5.0])
+ann= getParam('annotation','lorem','Annotation',['','lorem','ipsum'])
+
+size=600
+
+if ( case=='1' ):
+    randomSeed(0)
+elif ( case=='2' ):
+    randomSeed(1)
+elif ( case=='3' ):
+    randomSeed(2)
+
+reset()
+
+result= rand(size,size)/4
+for i in xrange(ncenter):
+    x= randn()*40 + size/2 
+    y= randn()*40 + size/2 
+    result= result + 1/exp( abs(distance( size, size, float(x), float(y), 10, 10 )-radius ) )
+    if ann!='':
+        if x>size/2:
+            apx='W'
+        else:
+            apx='E'
+        if y>size/2:
+            apy='S'
+        else:
+            apy='N'
+        ap=apy+apx
+        a= annotation(i,text=ann,pointAt=[x,y],anchorType='DATA',
+                   xrange=[x,x], yrange=[y,y],borderType='RECTANGLE',fontSize='1em',
+                   anchorPosition=ap)
+        a.anchorOffset='1em,1em'
+plot( result, zrange=[0,2] )
