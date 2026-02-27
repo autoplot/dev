@@ -3,6 +3,14 @@ from org.autoplot.batch import RunBatchTool
 rbt= RunBatchTool(dom)
 addTab('batch',rbt)
 
-ff= getFile( 'https://github.com/autoplot/dev/blob/master/rfe/sf/866/multiParamGraphic.batch' )
-ff= getFile( '/home/jbf/project/autoplot/git/dev/rfe/sf/866/multiParamGraphic.batch'
+#ff= getFile( 'https://github.com/autoplot/dev/blob/master/rfe/sf/866/multiParamGraphic.batch' )
+#ff= getFile( '/home/jbf/project/autoplot/git/dev/rfe/sf/866/multiParamGraphic.batch'
+ff= getFile( '/home/jbf/project/cassini/research-git/cassini-rpws-wideband-pds4/output1/' )
+
 rbt.setBatchDirectory(ff)
+
+while True:
+    sleep(1000)
+    rbt.update()
+    print 'updated'
+    
