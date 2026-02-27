@@ -1,0 +1,3 @@
+setScriptDescription('''Demo how a macro can be used to tweak a .vap file''')
+
+load( PWD + 'demoTweakVap.vap?TODAY=2026/03/27' )
