@@ -4,7 +4,7 @@ case= getParam('case','1','Case number',['1','2','3'])
 ncenter=getParam('ncenter',3,'Number of Centers',[1,2,3,4,5])
 radius= getParam('radius',0.0,'Radius of ring',{'min':0.,'max':10.})
 ann= getParam('annotation','lorem','Annotation',['','lorem','ipsum'])
-interference= getParam('interference',None,'interference parameter',[None,1,2])
+interference= getParam('interference',0,'interference parameter',[0,1,2])
 
 for p in params:
     print '%s=%s' % ( p, params[p] )
@@ -59,6 +59,6 @@ for i in xrange(ncenter):
         a.anchorOffset='1em,1em'
 plot( result, zrange=[0,2] )
 
-if interference!=None:
+if interference!=0:
     a= annotation(ncenter+1,text=str(interference),anchorType='PLOT',
         anchorPosition='center')
