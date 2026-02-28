@@ -1,0 +1,56 @@
+import sys
+
+jar='https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1.jar'
+doc='https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1-javadoc.jar'
+
+addToSearchPath( sys.path,jar,doc,monitor )
+
+from com.github.javaparser import JavaParser
+from com.github.javaparser.ast.body import MethodDeclaration, ClassOrInterfaceDeclaration
+from com.github.javaparser.ast.stmt import Statement
+from com.github.javaparser.ast.visitor import VoidVisitorAdapter
+
+
+def findAll(rootNode, klass):
+    """
+    Return a Python list of all AST nodes under rootNode (including rootNode)
+    whose Java class is assignable to 'klass'.
+
+    Example:
+        methods = findAll(cu, MethodDeclaration)
+    """
+    results = []
+
+    class Collector(VoidVisitorAdapter):
+        def visit(self, n, arg):
+            # Collect BEFORE descending so root can be included.
+            # 'klass.isInstance(n)' matches klass and subclasses.
+            if klass.isInstance(n):
+                results.append(n)
+            # Continue traversal
+            VoidVisitorAdapter.visit(self, n, arg)
+
+    Collector().visit(rootNode, None)
+    return results
+    
+from com.github.javaparser import JavaParser
+from com.github.javaparser.ast.body import MethodDeclaration, ClassOrInterfaceDeclaration
+
+src = "class A { void x(){} int y(int a){return a;} }"
+cu = JavaParser.parse(src)
+
+methods = findAll(cu, MethodDeclaration)
+print 'methods', len(methods)
+for m in methods:
+    print("method:", m.getName(), "returns", m.getType())
+
+statements = findAll(cu, Statement)
+print 'statements', len(statements)
+for m in statements:
+    print("statement:", m)
+
+#types = findAll(cu, ClassOrInterfaceDeclaration)
+#for t in types:
+#    print("type:", t.getName())
+    
+    
