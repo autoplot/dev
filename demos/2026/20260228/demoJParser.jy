@@ -1,0 +1,126 @@
+import sys
+
+jar='https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1.jar'
+doc='https://repo1.maven.org/maven2/com/github/javaparser/javaparser-core/3.27.1/javaparser-core-3.27.1-javadoc.jar'
+
+addToSearchPath( sys.path,jar,doc,monitor )
+
+from com.github.javaparser import JavaParser
+from com.github.javaparser.ast.body import ClassOrInterfaceDeclaration
+from com.github.javaparser.ast.body import MethodDeclaration
+from com.github.javaparser.ast.visitor import VoidVisitorAdapter
+
+def safe_str(x):
+    try:
+        return str(x)
+    except:
+        return "<unprintable>"
+        
+java_src = """
+package demo;
+
+import java.util.List;
+import java.io.File;
+
+public class Hello {
+    private int count = 0;
+
+    public Hello() {}
+
+    public static void main(String[] args) {
+        System.out.println("Hi");
+    }
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    private List<String> names(File f) {
+        return null;
+    }
+}
+"""
+# Parse source
+cu = JavaParser.parse(java_src)
+
+print type(cu)
+
+print '----'
+for d in dir(cu):
+    print d
+print '----'
+
+# Package
+pkg = cu.getPackageDeclaration()
+if pkg.isPresent():
+    print("Package: " + safe_str(pkg.get().getName()))
+else:
+    print("Package: <default>")
+
+# Imports
+imports = cu.getImports()
+print("Imports:")
+for imp in imports:
+    # imp.getName() is a Name object
+    # imp.isAsterisk() indicates "import x.*;"
+    line = "  " + safe_str(imp.getName())
+    if imp.isAsterisk():
+        line = line + ".*"
+    if imp.isStatic():
+        line = "  static " + line.strip()
+    print(line)
+
+class MethodPrinter(VoidVisitorAdapter):
+    def visit(self,method,arg):
+        if method is None: return
+        if arg is None: return
+        VoidVisitorAdapter.visit(self, method, arg)
+        if hasattr(method,"getName"):
+            print("Method:", method.getName())
+
+MethodPrinter().visit(cu, None)
+
+# Find all class/interface declarations
+types = cu.findAll(ClassOrInterfaceDeclaration)
+print("Types:")
+for t in types:
+    if t.isInterface:
+        kind = "interface" 
+    else:
+        king= "class"
+    print("  " + kind + " " + safe_str(t.getName()))
+
+    # Methods inside this type
+    methods = t.getMethods()
+    if methods.size() == 0:
+        print("    (no methods)")
+        continue
+
+    print("    Methods:")
+    for m in methods:
+        # m is MethodDeclaration
+        # Return type
+        rtype = safe_str(m.getType())
+        mname = safe_str(m.getName())
+
+        # Params
+        params = []
+        for p in m.getParameters():
+            # p.getType(), p.getName()
+            params.append(safe_str(p.getType()) + " " + safe_str(p.getName()))
+        param_str = ", ".join(params)
+
+        # Modifiers
+        mods = []
+        for mod in m.getModifiers():
+            mods.append(safe_str(mod))
+        mod_str = " ".join(mods)
+
+        if mod_str:
+            sig = "      " + mod_str + " " + rtype + " " + mname + "(" + param_str + ")"
+        else:
+            sig = "      " + rtype + " " + mname + "(" + param_str + ")"
+            
+        print(sig)
+
+print("Done.")
