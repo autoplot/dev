@@ -29,7 +29,7 @@
                 <property name="scale" type="Double" value="1.0"/>
                 <property name="showArrow" type="Boolean" value="false"/>
                 <property name="splitAnchorType" type="Boolean" value="false"/>
-                <property default="Annotation" name="text" type="String" value="%{TODAY} &amp;larr; Today"/>
+                <property default="Annotation" name="text" type="String" value="%{TODAY} &amp;larr; Today<br>!K%{TODAY} %{TODAY}"/>
                 <property name="textColor" type="color" value="#000000 (Black)"/>
                 <property name="url" type="String" value=""/>
                 <property name="verticalAnchorType"
