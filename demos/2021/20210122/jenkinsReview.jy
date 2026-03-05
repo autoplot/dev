@@ -2,7 +2,7 @@ from org.autoplot.pngwalk import PngWalkTool
 setScriptDescription('''Study Jenkins test results with three pngwalks: test, okay, and diff.
 Buttons are added to copy over artifacts to become new okay version.''')
 
-host= getParam( 'host', 'spot8', 'tests from this hist', [ 'ci-pw', 'spot8', 'spot8-private' ] )
+host= getParam( 'host', 'spot10', 'tests from this hist', [ 'ci-pw', 'spot8', 'spot10', 'spot10-private' ] )
 if ( host=='ci-pw' ):
     test= getParam( 'test', '147', 'test number', { 'examples':['147'] } )
 else:
@@ -21,7 +21,10 @@ if ( host=='ci-pw' ):
 elif ( host=='spot8' ):
    tests= '/net/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/test*.png'
    diffs=  '/net/spot8/var/local/jenkins/workspace/autoplot-test'+test+'/diffs.test*.png'
-elif ( host=='spot8-private' ):
+elif ( host=='spot10' ):
+   tests= '/net/spot10/var/local/jenkins/workspace/autoplot-test'+test+'/test*.png'
+   diffs=  '/net/spot10/var/local/jenkins/workspace/autoplot-test'+test+'/diffs.test*.png'
+elif ( host=='spot10-private' ):
    test= '099'
    tests= '/home/jbf/ct/hudson/private/test/test'+test+'*.png'
    diffs= '/home/jbf/ct/hudson/private/diffs/diffs.test'+test+'*.png'
