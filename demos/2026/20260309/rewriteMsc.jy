@@ -1,0 +1,8 @@
+setScriptDescription('Rewrite CDF files')
+
+epoch= getDataSet( 'https://tracers-portal.physics.uiowa.edu/L2/TS2/2025/12/01/ts2_l2_msc_bac_20251201_v1.0.0.cdf?Epoch')
+ts2_l2_bac_fac= getDataSet( 'https://tracers-portal.physics.uiowa.edu/L2/TS2/2025/12/01/ts2_l2_msc_bac_20251201_v1.0.0.cdf?ts2_l2_bac_fac')
+ts2_l2_bac_tscs= getDataSet( 'https://tracers-portal.physics.uiowa.edu/L2/TS2/2025/12/01/ts2_l2_msc_bac_20251201_v1.0.0.cdf?ts2_l2_bac_tscs')
+
+formatDataSet( link(epoch,ts2_l2_bac_fac), '/home/jbf/tmp/output.cdf' )
+formatDataSet( link(epoch,ts2_l2_bac_tscs), '/home/jbf/tmp/output.cdf?append=T' )
