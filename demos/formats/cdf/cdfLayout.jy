@@ -89,7 +89,9 @@ def followChain( bbuf, iptr, dsb, context=None ):
        siz= bbuf.getLong(iptr+0)
        typ= bbuf.getInt(iptr+8)
        styp= typeStr(typ)
-       print styp, iptr, context
+       if include(styp): 
+           print styp, 'byte_offset=',iptr, 'byte_length=',siz, context
+           
        if styp=='CDR': # CDR - CDF Descriptor Record
            offs= bbuf.getLong(iptr+12)
            if include(styp): dsb.nextRecord([iptr,iptr+siz,CDR_COLOR, 'CDR'] )
@@ -103,6 +105,7 @@ def followChain( bbuf, iptr, dsb, context=None ):
            break
        elif styp=='ADR': # ADR - Attribute Descriptor Record
            name= getCString(bbuf,iptr+68)
+           context=name
            if include(styp): dsb.nextRecord([iptr,iptr+siz,ADR_COLOR, 'ADR: '+name] )
            adrnext= bbuf.getLong(iptr+12)
            if adrnext==0:
@@ -113,6 +116,7 @@ def followChain( bbuf, iptr, dsb, context=None ):
            last= bbuf.getLong(iptr+36)
            
            name= getCString(bbuf,iptr+84)
+           context=name
            if include(styp): dsb.nextRecord([iptr,iptr+siz,ZVDR_COLOR, 'zVDR:'+name] )
            vxrhead= bbuf.getLong(iptr+28)
            if vxrhead!=iptr:               
@@ -133,8 +137,9 @@ def followChain( bbuf, iptr, dsb, context=None ):
            if include(styp): dsb.nextRecord([iptr,iptr+siz,VXR_COLOR, s ] )
            for j in xrange(nusedentries):
                ptr= bbuf.getLong(iptr+28+8*nentries+j*8)
-               followChain( bbuf, ptr, dsb, context=context+' block '+str(j) )
+               followChain( bbuf, ptr, dsb, context='block '+str(j) + ' of "'+context+'"')
            break
+
 
 dsb= DataSetBuilder(2,100,4)
 dsb.putProperty( QDataSet.FORMAT, '%d' )
