@@ -1,0 +1,98 @@
+from java.beans import PropertyChangeListener
+
+from java.lang import System,Thread
+from java.awt import BasicStroke
+from java.awt.geom import Rectangle2D,Line2D
+from javax.swing import Timer
+from java.awt.event import ActionListener
+
+from org.das2.graph import Auralizor
+
+setScriptDescription('Experiment with Sonification of TRACERS MSC')
+
+timeScale= getParam('timeScale',1.0,'Speed or slow the sound by this much, >1 is speed, <1 is slow.',
+                 { 'examples':[0.25,0.5,0.75,1.0,2,4,10,20] } )
+                 
+scale= getParam('scale',False,'Scale data to fill dynamic range',[True,False])
+
+baset= System.currentTimeMillis()
+
+#plot( 'https://tracers-portal.physics.uiowa.edu/L2/TS2/2025/12/01/ts2_l2_msc_bac_20251201_v1.0.0.cdf?ts2_l2_bac_fac[:,:,0]' )
+#dom.plotElements[0].component= '|slice2(0)|fftPower(1024,1,Hanning)'
+#dom.plotElements[0].component= '|fftPower(1024,1,Hanning)'
+plot( 'https://cottagesystems.com/~jbf/autoplot/data/wav/Christmas_Tree_Farm_by_Taylor_Swift.wav' )
+dom.plotElements[0].component= '|fftPower(1024,1,Hanning)'
+
+dom.plots[0].zaxis.log=True
+#dom.plots[0].zaxis.range=datumRange('1e-7 to 1e-4')
+
+t0= None
+t= None
+event=None
+auralizor=None
+timer=None
+
+def feedback(g):
+     global event,t,t0,auralizor,timer
+     if auralizor is None:
+         return
+     t= auralizor.getFramePosition()
+     
+     if event is None:
+         return
+     ix0= dom.plots[0].controller.dasPlot.getXAxis().transform(event.getStartX())
+     ix1= dom.plots[0].controller.dasPlot.getXAxis().transform(event.getFinishX())
+     iy0= dom.plots[0].controller.dasPlot.getYAxis().transform(event.getStartY())
+     iy1= dom.plots[0].controller.dasPlot.getYAxis().transform(event.getFinishY())
+     if ix0>ix1: ix1,ix0= ix0,ix1
+     if iy0>iy1: iy1,iy0= iy0,iy1
+     rect= Rectangle2D.Double(ix0,iy0,ix1-ix0,iy1-iy0)
+     tvalid= not t is None
+     if tvalid:
+         it= dom.plots[0].controller.dasPlot.getXAxis().transform(t)
+         tick= Line2D.Double(it,rect.y,it,rect.y+rect.height)
+     g.color= Color.WHITE
+     g.stroke= BasicStroke(3)
+     g.draw(rect)
+     if tvalid:
+         g.draw(tick)
+     g.drawString(str(t),rect.x,rect.y+rect.height)
+     g.color= Color.BLACK
+     g.stroke= BasicStroke(1)
+     g.draw(rect)
+     if tvalid:
+         g.draw(tick)
+     g.drawString(str(t),rect.x+1,rect.y+rect.height-1)
+
+class FeedbackActionListener(ActionListener):
+    def actionPerformed(self,actionEvent):
+        global event,t,t0,auralizor,timer
+        #print System.currentTimeMillis()-baset, 'timer '
+        dom.plots[0].controller.dasPlot.repaint()
+        if not auralizor.playing:
+            if not timer is None:
+                timer.stop()
+                
+def sonify(evt):
+     global event,t,t0,auralizor,timer
+     t0= evt.getStartX()
+     event=evt
+     t= t0
+     dom.canvases[0].controller.dasCanvas.repaint()
+     dom.canvases[0].controller.dasCanvas.invalidate()
+     dom.plots[0].controller.dasPlot.invalidateCacheImage()
+     
+     ds= dom.dataSourceFilters[0].controller.dataSet
+     ds= trim( ds, evt.getXRange() )
+     auralizor= Auralizor(ds)
+     auralizor.reportPeriod= datum('100ms')
+     auralizor.scale= scale
+     auralizor.timeScale= timeScale
+     #auralizor.addPropertyChangeListener(Auralizor.PROP_POSITION,FeedbackListener())
+     auralizor.start()
+     
+     timer= Timer(100,FeedbackActionListener()).start()
+
+addTopDecoration( dom.plots[0], feedback )
+addMouseModule( dom.plots[0], 'sonify', sonify )
+
