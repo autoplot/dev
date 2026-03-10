@@ -87,7 +87,6 @@ def sonify(evt):
      ds= dom.dataSourceFilters[0].controller.dataSet
      ds= trim( ds, evt.getXRange() )
      auralizor= Auralizor(ds)
-     auralizor.reportPeriod= datum('100ms')
      auralizor.scale= scale
      auralizor.timeScale= timeScale
      auralizor.start()
