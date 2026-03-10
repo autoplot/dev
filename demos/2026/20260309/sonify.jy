@@ -52,15 +52,17 @@ def feedback(g):
          it= dom.plots[0].controller.dasPlot.getXAxis().transform(t)
          tick= Line2D.Double(it,rect.y,it,rect.y+rect.height)
      g.color= Color.WHITE
-     g.stroke= BasicStroke(3)
+                                       #g.stroke= BasicStroke(3)
      g.draw(rect)
      if tvalid:
-         g.draw(tick)
+         g.draw(tick)     
      g.drawString(str(t),rect.x,rect.y+rect.height)
      g.color= Color.BLACK
-     g.stroke= BasicStroke(1)
+                                       #g.stroke= BasicStroke(1)
+     rect= Rectangle2D.Double(ix0+1,iy0+1,ix1-ix0,iy1-iy0)
      g.draw(rect)
      if tvalid:
+         tick= Line2D.Double(it+1,rect.y,it+1,rect.y+rect.height)
          g.draw(tick)
      g.drawString(str(t),rect.x+1,rect.y+rect.height-1)
 
@@ -88,7 +90,6 @@ def sonify(evt):
      auralizor.reportPeriod= datum('100ms')
      auralizor.scale= scale
      auralizor.timeScale= timeScale
-     #auralizor.addPropertyChangeListener(Auralizor.PROP_POSITION,FeedbackListener())
      auralizor.start()
      
      timer= Timer(100,FeedbackActionListener()).start()
