@@ -8,7 +8,7 @@ from java.awt.event import ActionListener
 
 from org.das2.graph import Auralizor
 
-setScriptDescription('Experiment with Sonification of TRACERS MSC')
+setScriptDescription('Experiment with Sonification')
 
 timeScale= getParam('timeScale',1.0,'Speed or slow the sound by this much, >1 is speed, <1 is slow.',
                  { 'examples':[0.25,0.5,0.75,1.0,2,4,10,20] } )
