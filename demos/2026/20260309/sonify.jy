@@ -13,14 +13,13 @@ setScriptDescription('Experiment with Sonification')
 timeScale= getParam('timeScale',1.0,'Speed or slow the sound by this much, >1 is speed, <1 is slow.',
                  { 'examples':[0.25,0.5,0.75,1.0,2,4,10,20] } )
                  
-scale= getParam('scale',False,'Scale data to fill dynamic range', [True,False] )
+scale= getParam('scale',True,'Scale data to fill dynamic range', [True,False] )
 
 filterY= getParam('filterFreq', 0, 'Apply Butterworth filter of this order in frequency (0=off)', [0,1,2,3] )
 
 baset= System.currentTimeMillis()
 
 #plot( 'https://tracers-portal.physics.uiowa.edu/L2/TS2/2025/12/01/ts2_l2_msc_bac_20251201_v1.0.0.cdf?ts2_l2_bac_fac[:,:,0]' )
-#dom.plotElements[0].component= '|slice2(0)|fftPower(1024,1,Hanning)'
 #dom.plotElements[0].component= '|fftPower(1024,1,Hanning)'
 plot( 'https://cottagesystems.com/~jbf/autoplot/data/wav/Christmas_Tree_Farm_by_Taylor_Swift.wav' )
 dom.plotElements[0].component= '|fftPower(1024,1,Hanning)'
@@ -88,7 +87,7 @@ def sonify(evt):
      
      ds= dom.dataSourceFilters[0].controller.dataSet
      ds= trim( ds, evt.getXRange() )
-     
+     ds= flattenWaveform(ds)
      if filterY>0:
          ymin= evt.getYRange().min()
          if ymin.value()<0:
