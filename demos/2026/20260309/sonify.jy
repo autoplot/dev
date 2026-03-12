@@ -13,7 +13,9 @@ setScriptDescription('Experiment with Sonification of TRACERS MSC')
 timeScale= getParam('timeScale',1.0,'Speed or slow the sound by this much, >1 is speed, <1 is slow.',
                  { 'examples':[0.25,0.5,0.75,1.0,2,4,10,20] } )
                  
-scale= getParam('scale',False,'Scale data to fill dynamic range',[True,False])
+scale= getParam('scale',False,'Scale data to fill dynamic range', [True,False] )
+
+filterY= getParam('filterFreq', 0, 'Apply Butterworth filter of this order in frequency (0=off)', [0,1,2,3] )
 
 baset= System.currentTimeMillis()
 
@@ -86,6 +88,14 @@ def sonify(evt):
      
      ds= dom.dataSourceFilters[0].controller.dataSet
      ds= trim( ds, evt.getXRange() )
+     
+     if filterY>0:
+         ymin= evt.getYRange().min()
+         if ymin.value()<0:
+             ymin= Units.hertz.createDatum(0.)
+         ymax= evt.getYRange().max()
+         ds= butterworth( ds, filterY, ymin, ymax, True )
+         
      auralizor= Auralizor(ds)
      auralizor.scale= scale
      auralizor.timeScale= timeScale
