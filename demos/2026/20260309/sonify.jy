@@ -87,7 +87,8 @@ def sonify(evt):
      
      ds= dom.dataSourceFilters[0].controller.dataSet
      ds= trim( ds, evt.getXRange() )
-     ds= flattenWaveform(ds)
+     if ds.rank()>1:
+         ds= flattenWaveform(ds)
      if filterY>0:
          ymin= evt.getYRange().min()
          if ymin.value()<0:
