@@ -1,9 +1,12 @@
+from org.das2.event import AbstractDragRenderer
+from org.autoplot import Util
+from org.das2.qds.examples import Schemes
 from java.beans import PropertyChangeListener
 
 from java.lang import System,Thread
-from java.awt import BasicStroke
+from java.awt import BasicStroke,FlowLayout,Dimension
 from java.awt.geom import Rectangle2D,Line2D
-from javax.swing import Timer
+from javax.swing import Timer,JPanel,BoxLayout,JCheckBox,JTextField,JLabel,Box,JComboBox
 from java.awt.event import ActionListener
 
 from org.das2.graph import Auralizor
@@ -17,6 +20,38 @@ scale= getParam('scale',True,'Scale data to fill dynamic range', [True,False] )
 
 filterY= getParam('filterFreq', 0, 'Apply Butterworth filter of this order in frequency (0=off)', [0,1,2,3] )
 
+control= JPanel()
+control.layout= BoxLayout(control,BoxLayout.X_AXIS)
+
+def filterCBAction(evt):
+    global filterY,filterFreqCB
+    filterY=filterFreqCB.selectedItem
+timeScaleLabel=JLabel(text='filterFreq')
+control.add( timeScaleLabel )
+filterFreqCB=JComboBox([0,1,2,3],selectedItem=filterY,itemStateChanged=filterCBAction)
+control.add( filterFreqCB )
+
+control.add( Box.createRigidArea(Dimension(10,10)) )
+def scaleCBAction(evt):
+    global scale,scaleCB
+    scale=scaleCB.selected
+scaleCB=JCheckBox('scale',selected=scale,actionPerformed=scaleCBAction)
+control.add( scaleCB )
+    
+control.add( Box.createRigidArea(Dimension(10,10)) )
+def timeScaleTFAction(evt):
+    global timeScale,timeScaleTF
+    timeScale=float(timeScaleTF.text)
+timeScaleLabel=JLabel(text='timeScale')
+control.add( timeScaleLabel )
+timeScaleTF=JTextField(str(timeScale),5,actionPerformed=timeScaleTFAction)
+control.add( timeScaleTF )
+
+control.add( Box.createRigidArea(Dimension(100,10)) )
+control.add( Box.createHorizontalGlue() )
+
+getApplication().setBottomPanel(control)
+
 baset= System.currentTimeMillis()
 
 #plot( 'https://tracers-portal.physics.uiowa.edu/L2/TS2/2025/12/01/ts2_l2_msc_bac_20251201_v1.0.0.cdf?ts2_l2_bac_fac[:,:,0]' )
@@ -27,6 +62,14 @@ dom.plotElements[0].component= '|fftPower(1024,1,Hanning)'
 dom.plots[0].zaxis.log=True
 #dom.plots[0].zaxis.range=datumRange('1e-7 to 1e-4')
 
+ds= dom.dataSourceFilters[0].controller.dataSet
+if not( ds.rank()==1 or Schemes.isRank2Waveform(ds) ):
+    raise Exception('Data must be a waveform')
+
+tag = Util.getBuildTime()
+if ( tag!='????' and tag<'2026-03-10a' ):
+    raise Exception('Autoplot v2026a_3 or 20260310a are required')
+    
 t0= None
 t= None
 event=None
@@ -103,6 +146,21 @@ def sonify(evt):
      
      timer= Timer(100,FeedbackActionListener()).start()
 
+class BoxOrRangeDragRenderer(AbstractDragRenderer):
+    def renderDrag( self, g, p1, p2 ):
+        print p1,p2,filterY
+        rect= Rectangle2D.Double(p1.x,p1.y,0,0)
+        rect.add(p2.x,p2.y)
+        if filterY>0:
+            g.draw(rect)
+        else:
+            line1= Line2D.Double(rect.x,rect.y,rect.x,rect.y+rect.height)
+            g.draw(line1)
+            line2= Line2D.Double(rect.x+rect.width,rect.y,rect.x+rect.width,rect.y+rect.height)
+            g.draw(line2)
+
 addTopDecoration( dom.plots[0], feedback )
-addMouseModule( dom.plots[0], 'sonify', sonify )
+mm= addMouseModule( dom.plots[0], 'sonify', sonify )
+mm.setDragRenderer(BoxOrRangeDragRenderer())
+
 
