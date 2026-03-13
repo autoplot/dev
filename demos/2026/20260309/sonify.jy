@@ -59,7 +59,7 @@ baset= System.currentTimeMillis()
 plot( 'https://cottagesystems.com/~jbf/autoplot/data/wav/Christmas_Tree_Farm_by_Taylor_Swift.wav' )
 dom.plotElements[0].component= '|fftPower(1024,1,Hanning)'
 
-dom.plots[0].zaxis.log=True
+#dom.plots[0].zaxis.log=True
 #dom.plots[0].zaxis.range=datumRange('1e-7 to 1e-4')
 
 ds= dom.dataSourceFilters[0].controller.dataSet
@@ -148,7 +148,6 @@ def sonify(evt):
 
 class BoxOrRangeDragRenderer(AbstractDragRenderer):
     def renderDrag( self, g, p1, p2 ):
-        print p1,p2,filterY
         rect= Rectangle2D.Double(p1.x,p1.y,0,0)
         rect.add(p2.x,p2.y)
         if filterY>0:
