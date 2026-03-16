@@ -1,4 +1,4 @@
-from org.das2.event import LabelDragRenderer
+from org.das2.event import BoxRenderer
 from java.awt.geom import Ellipse2D,Line2D
 
 setScriptDescription('Slice at radius')
@@ -11,7 +11,10 @@ if ( demo ):
     ds= link( xx, yy, ds )
     plot( ds )
     
-class MyDragRenderer( LabelDragRenderer ):
+class MyDragRenderer( BoxRenderer ):
+    #def __init__(self,dasplot):
+    #    BoxRenderer.__init__(self,dasplot)
+        
     def renderDrag( self, g, p1, p2 ):
         x0= dom.plots[0].controller.dasPlot.getXAxis().transform(datum(0))
         y0= dom.plots[0].controller.dasPlot.getYAxis().transform(datum(0))
@@ -20,21 +23,22 @@ class MyDragRenderer( LabelDragRenderer ):
         
 
 def radiusMouse(evt):
-    print 'doing...'
     ds= dom.plotElements[0].controller.dataSet
+    r= sqrt( (evt.getFinishX())**2 + (evt.getFinishY())**2 )
     aa= linspace(-PI,PI,1000)
-    xx= cos(aa)
-    yy= sin(aa)
+    xx= cos(aa)*r
+    yy= sin(aa)*r
     ixx= findex( xtags(ds), xx )
     iyy= findex( ytags(ds), yy )
     dsn= interpolate( ds,ixx, iyy )
     app0= getApplication()
     sliceApp= newApplication('slice')
     setApplication(sliceApp)
-    plot( aa, dsn )
+    plot( toDegrees(aa), dsn, title='Radius='+str(r), xtickValues='+30/3' )
     setApplication(app0)
-    print 'done!'
     
 mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
-mm.dragRenderer= MyDragRenderer()
+mdr= MyDragRenderer(dom.plots[0].controller.dasPlot)
+mm.dragRenderer= mdr
+
 print 'okay...'
