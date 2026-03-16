@@ -1,5 +1,7 @@
 from org.autoplot.datasource import URISplit
-setScriptDescription('Fix all vap printingLogLevel')
+setScriptDescription('''Fix vap printingLogLevel and displayLogLevel, looking for
+...ALL and replacing with ....OFF.  Darrelle kept running into the case where
+her Autoplot would keep clobbering these values.''')
 
 resourceURI= getParam( 'resourceURI', 'file:/home/jbf/project/tracers/research-git/tracers-portal/scripts/ts2_ql_ace_epd.vap', 'example file to load' )
 uu= URISplit.parse(resourceURI)
