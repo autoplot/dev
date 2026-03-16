@@ -1,7 +1,8 @@
 from org.autoplot.datasource import URISplit
 setScriptDescription('''Fix vap printingLogLevel and displayLogLevel, looking for
 ...ALL and replacing with ....OFF.  Darrelle kept running into the case where
-her Autoplot would keep clobbering these values.''')
+her Autoplot would keep clobbering these values.  This should be used with the
+run batch tool to run on all files.''')
 
 resourceURI= getParam( 'resourceURI', 'file:/home/jbf/project/tracers/research-git/tracers-portal/scripts/ts2_ql_ace_epd.vap', 'example file to load' )
 uu= URISplit.parse(resourceURI)
