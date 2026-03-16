@@ -1,0 +1,19 @@
+from org.autoplot.datasource import URISplit
+setScriptDescription('Fix all vap printingLogLevel')
+
+resourceURI= getParam( 'resourceURI', 'file:/home/jbf/project/tracers/research-git/tracers-portal/scripts/ts2_ql_ace_epd.vap', 'example file to load' )
+uu= URISplit.parse(resourceURI)
+ff= uu.file[len(uu.path):]
+
+f= getFile(resourceURI)
+
+mkdir('/tmp/ap/')
+out= open('/tmp/ap/'+ff,'w')
+ins= open(str(f))
+
+for line in ins.readlines():
+    if ( line.endswith('LogLevel" type="level" value="ALL"/>\n') ):
+        line= line.replace('LogLevel" type="level" value="ALL"/>','LogLevel" type="level" value="OFF"/>')
+    out.write(line)
+out.close()    
+
