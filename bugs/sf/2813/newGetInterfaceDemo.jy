@@ -1,0 +1,36 @@
+source1= '''
+setScriptDescription('Test of new refactor')
+
+a=1
+b=a+1
+
+c= getParam('c',3,'integer param')
+print a,b,c
+
+'''
+
+source2= '''
+setScriptDescription('make xml file describing .csv file')
+
+from org.das2.util import LoggerManager
+from org.das2.util import FileUtil
+from java.io import File
+
+logger= LoggerManager.getLogger( 'script.makeCollectionBrowseXML' )
+from java.util.logging import Level
+
+stopYYYY_MM_DD= FileUtil.readFileToString(File(URL(PWD).path + 'pubDate.txt'))
+print stopYYYY_MM_DD
+
+stopYYYYMMDD= stopYYYY_MM_DD[0:4] + stopYYYY_MM_DD[5:7] + stopYYYY_MM_DD[8:10] 
+
+modDate= stopYYYY_MM_DD
+
+sc= getParam( 'sc', 1, 'Voyager S/C', [1,2] )
+
+'''
+
+
+from org.autoplot.jythonsupport import JythonUtil
+#print JythonUtil.simplifyScriptToGetInterface(source1)
+print JythonUtil.simplifyScriptToGetInterface(source2)
