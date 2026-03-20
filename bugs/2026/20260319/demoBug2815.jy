@@ -1,3 +1,4 @@
+setScriptDescription('Use color scatter to show where warning bubble is used but should not be.')
 t= linspace(3*TAU,10*TAU,1001)
 x= rand(len(t))*10+sin(t)*t
 y= rand(len(t))*10+cos(t)*t
