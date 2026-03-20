@@ -11,7 +11,7 @@ if ( demo ):
     ds= link( xx, yy, ds )
     plot( ds )
     
-class MyDragRenderer(  LabelDragRenderer ):
+class RadiusDragRenderer(  LabelDragRenderer ):
     #def __init__(self,dasplot):
     #    BoxRenderer.__init__(self,dasplot)
         
@@ -38,7 +38,7 @@ def radiusMouse(evt):
     setApplication(app0)
     
 #mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
-#mdr= MyDragRenderer(dom.plots[0].controller.dasPlot)
+#mdr= RadiusDragRenderer(dom.plots[0].controller.dasPlot)
 #mm.dragRenderer= mdr
 
 #print 'okay...'
