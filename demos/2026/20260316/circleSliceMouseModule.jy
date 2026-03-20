@@ -1,4 +1,4 @@
-from org.das2.event import BoxRenderer
+from org.das2.event import  LabelDragRenderer
 from java.awt.geom import Ellipse2D,Line2D
 
 setScriptDescription('Slice at radius')
@@ -11,7 +11,7 @@ if ( demo ):
     ds= link( xx, yy, ds )
     plot( ds )
     
-class MyDragRenderer( BoxRenderer ):
+class MyDragRenderer(  LabelDragRenderer ):
     #def __init__(self,dasplot):
     #    BoxRenderer.__init__(self,dasplot)
         
