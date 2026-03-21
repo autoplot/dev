@@ -8,4 +8,5 @@ http://autoplot.org/data/script/sayHello.jy
 # relative links to this file should be used.
 bugs/2019/20190222/demoUnitsAssumptions.jy
 
+# this tweaked a bug where I tested radius against the min for max value allowed.
 https://github.com/autoplot/dev/blob/master/rfe/sf/866/multiParamGraphic.jy?ncenter=5&radius=10
