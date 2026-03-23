@@ -4,6 +4,7 @@ from java.awt.geom import Ellipse2D,Line2D
 setScriptDescription('Slice at radius')
 demo= getParam( 'demo', False, 'use Demo data', [True,False] )
 
+
 if ( demo ):
     ds= distance( 60,60, 20, 20, 10,7 ) + randn(60,60)/10.
     xx= linspace( -20,50,60 )
@@ -11,10 +12,7 @@ if ( demo ):
     ds= link( xx, yy, ds )
     plot( ds )
     
-class MyDragRenderer( BoxRenderer ):
-    #def __init__(self,dasplot):
-    #    BoxRenderer.__init__(self,dasplot)
-        
+class RadiusDragRenderer( BoxRenderer ):
     def renderDrag( self, g, p1, p2 ):
         x0= dom.plots[0].controller.dasPlot.getXAxis().transform(datum(0))
         y0= dom.plots[0].controller.dasPlot.getYAxis().transform(datum(0))
@@ -37,8 +35,10 @@ def radiusMouse(evt):
     plot( toDegrees(aa), dsn, title='Radius='+str(r), xtickValues='+30/3' )
     setApplication(app0)
     
-mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
-mdr= MyDragRenderer(dom.plots[0].controller.dasPlot)
-mm.dragRenderer= mdr
+if ( demo ):
+    mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
+    mdr= RadiusDragRenderer(dom.plots[0].controller.dasPlot)
+    mm.dragRenderer= mdr
+    showMessageDialog( getApplication(), 'Click to slice at radius' )
 
 print 'okay...'
