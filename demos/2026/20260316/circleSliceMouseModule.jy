@@ -1,4 +1,4 @@
-from org.das2.event import  LabelDragRenderer
+from org.das2.event import BoxRenderer
 from java.awt.geom import Ellipse2D,Line2D
 
 setScriptDescription('Slice at radius')
@@ -11,7 +11,7 @@ if ( demo ):
     ds= link( xx, yy, ds )
     plot( ds )
     
-class RadiusDragRenderer(  LabelDragRenderer ):
+class MyDragRenderer( BoxRenderer ):
     #def __init__(self,dasplot):
     #    BoxRenderer.__init__(self,dasplot)
         
@@ -37,8 +37,8 @@ def radiusMouse(evt):
     plot( toDegrees(aa), dsn, title='Radius='+str(r), xtickValues='+30/3' )
     setApplication(app0)
     
-#mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
-#mdr= RadiusDragRenderer(dom.plots[0].controller.dasPlot)
-#mm.dragRenderer= mdr
+mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
+mdr= MyDragRenderer(dom.plots[0].controller.dasPlot)
+mm.dragRenderer= mdr
 
-#print 'okay...'
+print 'okay...'
