@@ -30,7 +30,12 @@ sc= getParam( 'sc', 1, 'Voyager S/C', [1,2] )
 
 '''
 
+source3= '''
+sc= getParam( 'sc', 1, 'Voyager S/C', [1,2] )
+sc= getParam( 'sc2', 1, 'Voyager S/C', {'values':[1,2]} )
+'''
 
 from org.autoplot.jythonsupport import JythonUtil
 #print JythonUtil.simplifyScriptToGetInterface(source1)
-print JythonUtil.simplifyScriptToGetInterface(source2)
+#print JythonUtil.simplifyScriptToGetInterface(source2)
+print JythonUtil.simplifyScriptToGetInterface(source3)
