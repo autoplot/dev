@@ -1,8 +1,9 @@
 from java.lang import System
 from org.das2.event import CrossHairRenderer,SimpleCrossHairRenderer
-setScriptDescription('''Definitive place describing slice types''')
-
-typ= getParam('type','Drag','Mouse event types',['Drag','Box','Keyboard'])
+setScriptDescription('''Simple example showing a Mouse Action which does an action with each movement of the mouse.
+This is similar to the Cross Hair Digitizer, which takes some action as you mouse around.
+The trick is that both the DragRenderer and the MouseModule need to be set to send update 
+events.''')
 
 reset()
 
@@ -26,7 +27,6 @@ def drag(evt):
     sl2= slice1(ds,dataset(evt.getFinishY()))
     print 'sl2 in %d millis' % ( System.currentTimeMillis()-t0 )
     ann.text=  'x:%s y:%s' % ( evt.getFinishX(), evt.getFinishY() ) 
-    
     
 dragMM= addMouseModule(p,typ,drag)
 dragMM.dragEvents=True
