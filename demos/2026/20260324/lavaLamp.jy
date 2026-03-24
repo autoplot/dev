@@ -1,0 +1,75 @@
+from java.util import HashMap
+from org.autoplot.datasource import URISplit
+
+nt = getParam(
+    'nt',
+    70,
+    'number of time steps; larger &rarr; smoother animation, slower computation',
+    { 'min': 10, 'max': 300 }
+)
+
+ny = getParam(
+    'ny',
+    90,
+    'number of rows in each image',
+    { 'min': 20, 'max': 400 }
+)
+
+nx = getParam(
+    'nx',
+    110,
+    'number of columns in each image',
+    { 'min': 20, 'max': 400 }
+)
+
+numBlobs = getParam(
+    'numBlobs',
+    5,
+    'number of blobs to include',
+    { 'min': 1, 'max': 10 }
+)
+
+threshold = getParam(
+    'threshold',
+    0.42,
+    'smaller &rarr; more merging, fatter blobs\nlarger &rarr; more separated blobs',
+    { 'min': 0.20, 'max': 1.00 }
+)
+
+softness = getParam(
+    'softness',
+    0.08,
+    'edge softness: smaller &rarr; sharper blobs, larger &rarr; mushier blobs',
+    { 'min': 0.02, 'max': 0.20 }
+)
+
+driftScale = getParam(
+    'driftScale',
+    1.0,
+    'multiplier for how much blobs wander around',
+    { 'min': 0.0, 'max': 2.5 }
+)
+
+sizeScale = getParam(
+    'sizeScale',
+    1.0,
+    'overall blob size multiplier',
+    { 'min': 0.5, 'max': 2.0 }
+)
+
+glow = getParam(
+    'glow',
+    0.18,
+    'internal brightness of blobs',
+    { 'min': 0.0, 'max': 0.5 }
+)
+
+def dictToMap(d):
+    m = HashMap()
+    for k in d:
+        m.put(k, str(d[k]))
+    return m
+    
+mm= dictToMap(params)
+data= getDataSet( PWD + 'lavaLamp.jyds?' + URISplit.formatParams(mm) )
+plot(data)
