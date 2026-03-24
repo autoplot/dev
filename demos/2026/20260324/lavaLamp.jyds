@@ -1,0 +1,167 @@
+from java.lang import Math
+
+# ---- parameters (data source interface) ----
+
+nt = getParam(
+    'nt',
+    70,
+    'number of time steps; larger &rarr; smoother animation, slower computation',
+    { 'min': 10, 'max': 300 }
+)
+
+ny = getParam(
+    'ny',
+    90,
+    'number of rows in each image',
+    { 'min': 20, 'max': 400 }
+)
+
+nx = getParam(
+    'nx',
+    110,
+    'number of columns in each image',
+    { 'min': 20, 'max': 400 }
+)
+
+numBlobs = getParam(
+    'numBlobs',
+    5,
+    'number of blobs to include',
+    { 'min': 1, 'max': 10 }
+)
+
+threshold = getParam(
+    'threshold',
+    0.42,
+    'smaller &rarr; more merging, fatter blobs\nlarger &rarr; more separated blobs',
+    { 'min': 0.20, 'max': 1.00 }
+)
+
+softness = getParam(
+    'softness',
+    0.08,
+    'edge softness: smaller &rarr; sharper blobs, larger &rarr; mushier blobs',
+    { 'min': 0.02, 'max': 0.20 }
+)
+
+driftScale = getParam(
+    'driftScale',
+    1.0,
+    'multiplier for how much blobs wander around',
+    { 'min': 0.0, 'max': 2.5 }
+)
+
+sizeScale = getParam(
+    'sizeScale',
+    1.0,
+    'overall blob size multiplier',
+    { 'min': 0.5, 'max': 2.0 }
+)
+
+glow = getParam(
+    'glow',
+    0.18,
+    'internal brightness of blobs',
+    { 'min': 0.0, 'max': 0.5 }
+)
+
+
+# ---- generator ----
+
+def makeLavaLampCube(nt, ny, nx, numBlobs, threshold, softness, driftScale, sizeScale, glow):
+
+    # Up to 10 predefined blobs:
+    #   x0, y0, amp, r0, dr, ph, dxm, dym, wx, wy
+    allBlobs = [
+        [0.25 * nx, 0.30 * ny, 1.00,  7.0, 2.0, 0.0,  7.0, 10.0, 1.0, 0.7],
+        [0.55 * nx, 0.35 * ny, 0.95,  9.0, 2.5, 1.1,  9.0,  7.0, 0.8, 1.1],
+        [0.72 * nx, 0.55 * ny, 0.90,  8.0, 2.0, 2.0,  6.0,  9.0, 1.2, 0.9],
+        [0.40 * nx, 0.72 * ny, 1.05, 10.0, 3.0, 0.5,  8.0,  6.0, 0.9, 1.3],
+        [0.68 * nx, 0.78 * ny, 0.85,  7.0, 1.8, 2.7,  5.0,  8.0, 1.1, 0.8],
+        [0.18 * nx, 0.58 * ny, 0.75,  6.0, 1.6, 1.7,  4.0,  7.0, 1.4, 0.6],
+        [0.83 * nx, 0.26 * ny, 0.80,  7.5, 2.1, 0.9,  6.0,  5.0, 0.7, 1.4],
+        [0.33 * nx, 0.50 * ny, 0.70,  5.5, 1.5, 2.9,  3.5,  6.5, 1.5, 1.0],
+        [0.50 * nx, 0.18 * ny, 0.78,  6.5, 1.7, 1.4,  7.5,  4.0, 0.6, 1.2],
+        [0.82 * nx, 0.62 * ny, 0.72,  5.8, 1.4, 2.4,  4.5,  5.5, 1.3, 0.7]
+    ]
+
+    # Clamp just in case
+    if numBlobs < 1:
+        numBlobs = 1
+    if numBlobs > 10:
+        numBlobs = 10
+
+    cube = []
+
+    it = 0
+    while it < nt:
+        t = 2.0 * Math.PI * it / (nt - 1.0)
+        plane = []
+
+        iy = 0
+        while iy < ny:
+            row = []
+            ix = 0
+            while ix < nx:
+                field = 0.0
+
+                ib = 0
+                while ib < numBlobs:
+                    x0  = allBlobs[ib][0]
+                    y0  = allBlobs[ib][1]
+                    amp = allBlobs[ib][2]
+                    r0  = allBlobs[ib][3]
+                    dr  = allBlobs[ib][4]
+                    ph  = allBlobs[ib][5]
+                    dxm = allBlobs[ib][6]
+                    dym = allBlobs[ib][7]
+                    wx  = allBlobs[ib][8]
+                    wy  = allBlobs[ib][9]
+
+                    xc = x0 + driftScale * dxm * Math.cos(wx * t + ph)
+                    yc = y0 + driftScale * dym * Math.sin(wy * t + 0.6 * ph)
+
+                    r = sizeScale * (r0 + dr * (0.5 + 0.5 * Math.sin(t + ph)))
+
+                    dx = ix - xc
+                    dy = iy - yc
+
+                    field = field + amp * Math.exp(-(dx * dx + dy * dy) / (2.0 * r * r))
+
+                    ib = ib + 1
+
+                z = 1.0 / (1.0 + Math.exp(-(field - threshold) / softness))
+                z = z + glow * field
+
+                row.append(z)
+                ix = ix + 1
+
+            plane.append(row)
+            iy = iy + 1
+
+        cube.append(plane)
+        it = it + 1
+
+    ds = dataset(cube)
+
+    ds = putProperty(ds, QDataSet.DEPEND_0, findgen(nt))
+    ds = putProperty(ds, QDataSet.DEPEND_1, findgen(ny))
+    ds = putProperty(ds, QDataSet.DEPEND_2, findgen(nx))
+    ds = putProperty(ds, QDataSet.TITLE, "Lava Lamp Data Source")
+
+    return ds
+
+
+# ---- required output for .jyds ----
+
+result = makeLavaLampCube(
+    nt,
+    ny,
+    nx,
+    numBlobs,
+    threshold,
+    softness,
+    driftScale,
+    sizeScale,
+    glow
+)
