@@ -1,5 +1,36 @@
 from java.lang import Math
 
+setScriptDescription(
+    '<html>'
+    '<h2>Lava Lamp Demo Data Source</h2>'
+    '<p>'
+    'Generates a synthetic rank 3 dataset <code>(time, y, x)</code> showing drifting, '
+    'merging blobs similar to a lava lamp. Each time slice is a 2D field where nearby '
+    'blobs merge based on a soft threshold.'
+    '</p>'
+    '<p><b>Key parameters</b></p>'
+    '<ul>'
+    '<li><code>numBlobs</code> - number of blobs (1 &rarr; simple, 10 &rarr; complex)</li>'
+    '<li><code>threshold</code> - smaller &rarr; more merging, larger &rarr; more separation</li>'
+    '<li><code>softness</code> - edge softness of blobs</li>'
+    '<li><code>driftScale</code> - how much blobs move around</li>'
+    '<li><code>sizeScale</code> - overall blob size</li>'
+    '<li><code>glow</code> - internal brightness of blobs</li>'
+    '<li><code>nt</code> - number of time steps</li>'
+    '<li><code>ny</code>, <code>nx</code> - image dimensions</li>'
+    '</ul>'
+    '<p><b>Typical use</b></p>'
+    '<ul>'
+    '<li>Load as a <code>.jyds</code> data source</li>'
+    '<li>Adjust parameters interactively with <code>getParam</code></li>'
+    '<li>Use Run Batch to sweep parameters such as <code>threshold</code> or <code>numBlobs</code></li>'
+    '<li>Browse the results with PNGWalk</li>'
+    '</ul>'
+    '<p><b>Example</b></p>'
+    '<p><code>file:lavaLamp.jyds?numBlobs=8&amp;threshold=0.35&amp;softness=0.05</code></p>'
+    '</html>'
+)
+
 # ---- parameters (data source interface) ----
 
 nt = getParam(
