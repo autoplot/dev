@@ -1,0 +1,44 @@
+from java.lang import System
+from org.das2.event import CrossHairRenderer,SimpleCrossHairRenderer
+setScriptDescription('''Definitive place describing slice types''')
+
+typ= getParam('type','Drag','Mouse event types',['Drag','Box','Keyboard'])
+
+reset()
+
+ds= getDataSet('https://github.com/autoplot/dev/blob/master/demos/2026/20260324/lavaLamp.jyds',monitor )
+ds= ds[34]
+
+load(PWD+'demoSliceTypes.vap')
+
+p,pe= \
+    plot( ds,zlog=False )
+#addPlots(2,1,'right')
+      
+
+def drag(evt):
+    t0= System.currentTimeMillis()
+    ds= pe.controller.dataSet
+    print 'ds in %d millis' % ( System.currentTimeMillis()-t0 )
+    sl1= slice0(ds,dataset(evt.getFinishX()))
+    print 'sl1 in %d millis' % ( System.currentTimeMillis()-t0 )
+    sl2= slice1(ds,dataset(evt.getFinishY()))
+    print 'sl2 in %d millis' % ( System.currentTimeMillis()-t0 )
+    #if ( True ):
+    #    plot( 1, sl1, title='Slice along Y<br>at X='+str(evt.getFinishX()) )
+    #else:
+    #    dom.plotElements[1].controller.dataSet= sl1
+    #print 'plot sl1 in %d millis' % ( System.currentTimeMillis()-t0 )
+    #if ( True ):
+    #    plot( 2, sl2, title='Slice along X<br>at Y='+str(evt.getFinishY()) )
+    #else:
+    #    dom.plotElements[2].controller.dataSet= sl2
+    #print 'plot sl2 in %d millis' % ( System.currentTimeMillis()-t0 )
+    #print 'drag complete in %d millis' % ( System.currentTimeMillis()-t0 )
+    setStatus( 'x:%s y:%s' % ( evt.getFinishX(), evt.getFinishY() ) )
+    
+dragMM= addMouseModule(p,typ,drag)
+dp=p.controller.dasPlot
+dr= SimpleCrossHairRenderer()
+dragMM.setDragRenderer(dr)
+    
