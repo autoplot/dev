@@ -1,0 +1,92 @@
+setScriptDescription("""ChatGPT after also could you show me option 3, but also make the bubbles drift?""")
+
+from java.lang import Math
+
+def makeDriftingHardBubbleCube(nt, ny, nx):
+    # Each bubble:
+    #   x0, y0   = base center
+    #   amp      = amplitude
+    #   r0       = average radius
+    #   dr       = radius variation
+    #   ph       = phase for breathing
+    #   dx, dy   = drift amplitudes
+    #   w        = angular drift multiplier
+    bubbles = [
+        [0.28 * nx, 0.30 * ny, 1.00,  7.0, 2.0, 0.0,  6.0, 4.0, 1.0],
+        [0.68 * nx, 0.40 * ny, 0.85, 10.0, 3.0, 1.1,  5.0, 7.0, 0.7],
+        [0.42 * nx, 0.70 * ny, 0.95,  8.0, 2.5, 2.2,  8.0, 3.0, 1.3],
+        [0.75 * nx, 0.75 * ny, 0.75,  6.0, 1.8, 0.6,  4.0, 5.0, 0.9]
+    ]
+
+    cube = []
+
+    # controls how sharp the bubble wall is
+    edgeWidth = 1.2
+
+    it = 0
+    while it < nt:
+        t = 2.0 * Math.PI * it / (nt - 1.0)
+        plane = []
+
+        iy = 0
+        while iy < ny:
+            row = []
+            ix = 0
+            while ix < nx:
+                z = 0.0
+
+                ib = 0
+                while ib < len(bubbles):
+                    x0  = bubbles[ib][0]
+                    y0  = bubbles[ib][1]
+                    amp = bubbles[ib][2]
+                    r0  = bubbles[ib][3]
+                    dr  = bubbles[ib][4]
+                    ph  = bubbles[ib][5]
+                    dxm = bubbles[ib][6]
+                    dym = bubbles[ib][7]
+                    w   = bubbles[ib][8]
+
+                    # drifting center
+                    xc = x0 + dxm * Math.cos(w * t + ph)
+                    yc = y0 + dym * Math.sin(w * t + 0.7 * ph)
+
+                    # growing / shrinking radius
+                    r = r0 + dr * (0.5 + 0.5 * Math.sin(t + ph))
+
+                    dx = ix - xc
+                    dy = iy - yc
+                    d = Math.sqrt(dx * dx + dy * dy)
+
+                    # "Hard bubble" profile:
+                    #   - nearly flat inside
+                    #   - bright rim near d = r
+                    #   - soft falloff outside
+                    inside = 0.18 * amp / (1.0 + Math.exp((d - (r - 1.5)) / 0.8))
+                    rim    = 0.95 * amp * Math.exp(-((d - r) * (d - r)) / (2.0 * edgeWidth * edgeWidth))
+                    halo   = 0.10 * amp * Math.exp(-((d - (r + 1.8)) * (d - (r + 1.8))) / (2.0 * 2.2 * 2.2))
+
+                    z = z + inside + rim + halo
+
+                    ib = ib + 1
+
+                row.append(z)
+                ix = ix + 1
+            plane.append(row)
+            iy = iy + 1
+
+        cube.append(plane)
+        it = it + 1
+
+    ds = dataset(cube)
+
+    # simple dependencies
+    ds = putProperty(ds, QDataSet.DEPEND_0, findgen(nt))
+    ds = putProperty(ds, QDataSet.DEPEND_1, findgen(ny))
+    ds = putProperty(ds, QDataSet.DEPEND_2, findgen(nx))
+    ds = putProperty(ds, QDataSet.TITLE, "Drifting Hard-Edged Bubbles")
+
+    return ds
+
+ds = makeDriftingHardBubbleCube(60, 80, 100)
+plot(ds)
