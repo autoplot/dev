@@ -1,4 +1,3 @@
-from java.lang import System
 from org.das2.event import SimpleCrossHairRenderer,BoxSelectionEvent
 
 setScriptDescription('''Simple example showing a Mouse Action which does an action with each movement of the mouse.
@@ -22,7 +21,6 @@ p,pe= \
 
 def drag(evt):
     assert isinstance(evt,BoxSelectionEvent)
-    ds= pe.controller.dataSet
     ann.text=  'x:%s y:%s' % ( evt.getFinishX(), evt.getFinishY() ) 
 
 dragMM= addMouseModule(p,'Drag',drag)
