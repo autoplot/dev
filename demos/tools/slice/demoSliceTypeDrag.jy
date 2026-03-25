@@ -1,5 +1,6 @@
 from java.lang import System
-from org.das2.event import CrossHairRenderer,SimpleCrossHairRenderer
+from org.das2.event import SimpleCrossHairRenderer,BoxSelectionEvent
+
 setScriptDescription('''Simple example showing a Mouse Action which does an action with each movement of the mouse.
 This is similar to the Cross Hair Digitizer, which takes some action as you mouse around.
 The trick is that both the DragRenderer and the MouseModule need to be set to send update 
@@ -18,18 +19,14 @@ ann= annotation(0,text='',borderType='rounded_rectangle')
 p,pe= \
     plot( ds,zlog=False )
 #addPlots(2,1,'right')
-      
+
 def drag(evt):
-    t0= System.currentTimeMillis()
+    assert isinstance(evt,BoxSelectionEvent)
     ds= pe.controller.dataSet
-    sl1= slice0(ds,dataset(evt.getFinishX()))
-    sl2= slice1(ds,dataset(evt.getFinishY()))
     ann.text=  'x:%s y:%s' % ( evt.getFinishX(), evt.getFinishY() ) 
-    
-    
+
 dragMM= addMouseModule(p,'Drag',drag)
 dragMM.dragEvents=True
-dp=p.controller.dasPlot
 dr= SimpleCrossHairRenderer(True)
 dragMM.setDragRenderer(dr)
 
