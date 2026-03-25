@@ -29,9 +29,7 @@ key=''
 def keybox(evt):
     global key
     assert isinstance(evt,BoxSelectionEvent) # Note completions don't work with this.
-    k= evt.getKeyStroke()
-    if not k=='':
-        key= k
+    key= evt.getKeyStroke()
     ann.text=  'x:%s y:%s key:%s' % ( evt.getXRange(), evt.getYRange(), key ) 
     
     
