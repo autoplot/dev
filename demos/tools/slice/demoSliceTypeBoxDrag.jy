@@ -1,0 +1,46 @@
+from java.lang import System
+from org.das2.event import CrossHairRenderer,SimpleCrossHairRenderer,BoxSelectionEvent
+
+setScriptDescription('''
+Simple example showing a Mouse Action which does an action with each movement of the mouse.
+This is similar to the Cross Hair Digitizer, which takes some action as you mouse around.
+The trick is that both the DragRenderer and the MouseModule need to be set to send update 
+events.  This demo adds keyEvents, which are now retreived with getKeyStroke''')
+
+requireAutoplotBuildTime('2026-03-25T00:00Z')
+
+reset()
+
+ds= getDataSet('https://github.com/autoplot/dev/blob/master/demos/2026/20260324/lavaLamp.jyds',monitor )
+ds= ds[34]
+
+load(PWD+'demoSliceTypes.vap')
+ds.putProperty(QDataSet.TITLE,None)
+
+ann= annotation(0,text='',borderType='rounded_rectangle')
+
+p,pe= \
+    plot( ds,zlog=False )
+      
+key=''
+
+#assert isinstance(evt,BoxSelectionEvent)  # uncomment this to get completions
+
+def drag(evt):
+    global key
+    assert isinstance(evt,BoxSelectionEvent) # Note completions don't work with this.
+    k= evt.getKeyStroke()
+    if not k=='':
+        key= k
+    ds= pe.controller.dataSet
+    ds= trim(ds,evt.getXRange())
+    yr= evt.getYRange()
+    ds= trim(1,ds,dataset(yr.min()),dataset(yr.max()))
+    maxx= reduceMax(reduceMax(ds,0),0)
+    ann.text=  'x:%s y:%s max:%s' % ( evt.getXRange(), evt.getYRange(), maxx ) 
+    
+    
+dragMM= addMouseModule(p,'DragBox',drag)
+dragMM.dragEvents=True
+dragMM.setDirections('The maximum value in the box is shown.')
+
