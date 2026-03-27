@@ -27,6 +27,7 @@ control.layout= BoxLayout(control,BoxLayout.X_AXIS)
 timeScaleLabel=JLabel(text='filterFreq',toolTipText='Apply Butterworth filter, 0 is off.')
 control.add( timeScaleLabel )
 filterFreqCB=JComboBox([0,1,2,3],selectedItem=filterY)
+filterFreqCB.setMaximumSize(filterFreqCB.getPreferredSize());
 control.add( filterFreqCB )
 
 control.add( Box.createRigidArea(Dimension(10,10)) )
