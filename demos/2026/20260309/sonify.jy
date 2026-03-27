@@ -38,6 +38,7 @@ control.add( Box.createRigidArea(Dimension(10,10)) )
 timeScaleLabel=JLabel(text='timeScale',toolTipText='>1 is speed up, <1 is slow down')
 control.add( timeScaleLabel )
 timeScaleTF=JTextField(str(timeScale),5)
+timeScaleTF.setMaximumSize(timeScaleTF.getPreferredSize());
 control.add( timeScaleTF )
 
 control.add( Box.createRigidArea(Dimension(100,10)) )
