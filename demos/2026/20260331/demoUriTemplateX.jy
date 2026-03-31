@@ -1,0 +1,30 @@
+from java.util import HashMap
+
+from org.das2.event import SimpleCrossHairRenderer,BoxSelectionEvent
+
+setScriptDescription('''
+It looks like the URI templates used in Autoplot (and Das2) don't support
+$(x;name=band) properly in v2026a_3.  Though there is a extra map passed in, the named
+value is not inserted at its name.  This is to demonstrate how it now works
+properly.
+''')
+
+fln= getParam('fln','sc_a_20260401.dat','file name matching',{'regex':'sc_[a|b]_\d{8}\.dat'})
+
+requireAutoplotBuildTime('2026-03-31T00:00Z')
+
+tp= TimeParser.create('sc_$(x;name=sc)_$Y$m$d.dat')
+
+mm= HashMap()
+tr= tp.parse(fln,mm)
+
+print tr, mm.get('x'), mm.get('sc')
+
+mm= HashMap()
+mm.put('sc','b')
+print tp.format( datum('2026-03-31'),datum('2026-04-01'),mm )
+
+mm= HashMap()
+mm.put('x','b')
+print tp.format( datum('2026-03-31'),datum('2026-04-01'),mm )
+
