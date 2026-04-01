@@ -1,0 +1,28 @@
+from java.awt.geom import Rectangle2D
+from java.awt import BasicStroke
+from org.das2.event import SimpleCrossHairRenderer
+setScriptDescription('''The drag renderer paints during the drag to indicate the action.
+We override SimpleCrossHairRenderer so that the mouse will fire drag events.''')
+
+thick=3
+
+class MyBoxDragRenderer(SimpleCrossHairRenderer):
+    def renderDrag( self, g, p1, p2 ):
+        global thick
+        g.setStroke(BasicStroke(thick))
+        rr= Rectangle2D.Double(p1.x,p1.y,0,0)
+        rr.add(p2.x,p2.y)
+        g.draw(rr)
+    
+def box(evt):
+    global thick
+    key= evt.getKeyStroke()
+    if key>='0' and key<='9':
+        thick= 0.1 + int(key)
+        bmm= evt.source
+        bmm.parent.repaint()
+    #dom.plots[0].controller.dasPlot.invalidateCacheImage()
+    
+mm= addMouseModule( dom.plots[0], 'box', box )
+mm.dragRenderer= MyBoxDragRenderer()
+mm.directions='Press 0-9 to set the thickness'
