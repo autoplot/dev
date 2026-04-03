@@ -1,0 +1,13 @@
+from org.autoplot.dom import Plot
+
+assert isinstance(p,Plot)
+
+def proc(d):
+    assert isinstance(d,Plot)
+    x=2
+    print d
+    y=x+3
+    print y
+    
+
+proc(p)
