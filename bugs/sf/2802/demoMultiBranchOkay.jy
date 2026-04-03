@@ -1,0 +1,14 @@
+setScriptDescription('''Darrelle found a bug where she had two parameters with the
+same name (timerange).  Old Autoplots allowed this, obscuring the bug.''')
+
+branch= getParam('branch',1,'Which branch',[1,2])
+
+if branch==1:
+    week= getParam('week','2026-04-03/P7D')
+    outer= getParam('outer','2026-01-01/now')
+else:
+    week= getParam('week','2026-04-03/P7D')
+    outer= getParam('outer','2025-01-01/2026-01-01')
+    
+print week
+print outer

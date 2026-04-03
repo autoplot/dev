@@ -16,7 +16,7 @@ requireAutoplotBuildTime('2026-03-31T00:00Z')
 tp= TimeParser.create('sc_$(x;name=sc)_$Y$m$d.dat')
 
 mm= HashMap()
-tr= tp.parse(fln,mm)
+tr= tp.parse(fln,mm).timeRange
 
 print tr, mm.get('x'), mm.get('sc')
 
