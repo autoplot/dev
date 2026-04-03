@@ -1,5 +1,6 @@
 from org.das2.util.filesystem import FileSystem
-setScriptDescription('More tests of GitHubFS')
+setScriptDescription('''More tests of GitHubFS.  This was originally on 
+https://git.jfaden.net/jbfaden/public/blob/main/u/jeremy/2026/20260401/moreTests.jy.''')
 
 FileSystem.reset()
 
