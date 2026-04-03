@@ -1,0 +1,36 @@
+from org.das2.util.filesystem import FileSystem
+setScriptDescription('More tests of GitHubFS')
+
+FileSystem.reset()
+
+ll= listDirectory('https://research-git.uiowa.edu/space-physics/juno/ap-script/-/tree/master/u/mitchell/2026/20260319/')
+print '%9d %s' % ( len(ll), ';'.join(ll) )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/juno/ap-script/-/blob/master/u/mitchell/2026/20260319/addEphemeris.jy')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://github.com/autoplot/dev/blob/master/screen/20190704/flag4th.jy')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://research-git.uiowa.edu/jbf/testproject/-/blob/master/script/testScript.jy')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/doc/README.md') # this works with v2026a_3!
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/doc/-/blob/master/README.md')
+print '%9d %s' % ( ff.length(), ff )
+
+ll= listDirectory('https://research-git.uiowa.edu/space-physics/rbsp/doc/')
+print '%9d %s' % ( len(ll), ';'.join(ll) )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/tracers/autoplot/-/blob/main/u/shirsh/2025/20251205/makePlot.jy')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/tracers/msc/public/-/blob/main/u/dave/20260225/digitizer.jy' )
+print '%9d %s' % ( ff.length(), ff )
+
+# legacy URLs for git filesystem don't have a mark to tell the branch from the project.  They must be listed first.
+ff= getFile('https://research-git.uiowa.edu/space-physics/rbsp/doc/README.md')
+print '%9d %s' % ( ff.length(), ff )
+
