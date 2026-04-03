@@ -4,6 +4,9 @@ https://git.jfaden.net/jbfaden/public/blob/main/u/jeremy/2026/20260401/moreTests
 
 FileSystem.reset()
 
+ll= listDirectory('https://github.com/autoplot/dev/')
+print '%9d %s' % ( len(ll), ';'.join(ll) )
+
 ff= getFile('https://research-git.uiowa.edu/space-physics/doc/README.md') # this works with v2026a_3!
 print '%9d %s' % ( ff.length(), ff )
 
