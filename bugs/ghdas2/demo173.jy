@@ -4,6 +4,21 @@ https://git.jfaden.net/jbfaden/public/blob/main/u/jeremy/2026/20260401/moreTests
 
 FileSystem.reset()
 
+ff= getFile('https://research-git.uiowa.edu/space-physics/doc/README.md') # this works with v2026a_3!
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://git.jfaden.net/jbfaden/public/-/blob/main/2021/nonsense.png')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://research-git.uiowa.edu/jbf/testproject/-/blob/master/script/testScript.jy')
+print '%9d %s' % ( ff.length(), ff )
+
+ll= listDirectory('https://github.com/autoplot/dev/blob/master/screen/20190704/')
+print '%9d %s' % ( len(ll), ';'.join(ll) )
+
+ff= getFile('https://github.com/autoplot/dev/blob/master/screen/20190704/flag4th.jy')
+print '%9d %s' % ( ff.length(), ff )
+
 ll= listDirectory('https://research-git.uiowa.edu/space-physics/juno/ap-script/-/tree/master/u/mitchell/2026/20260319/')
 print '%9d %s' % ( len(ll), ';'.join(ll) )
 
