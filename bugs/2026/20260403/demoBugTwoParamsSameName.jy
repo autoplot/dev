@@ -1,5 +1,5 @@
 setScriptDescription('''Darrelle found a bug where she had two parameters with the
-same name.  Old Autoplots allowed this, obscuring the bug.''')
+same name (timerange).  Old Autoplots allowed this, obscuring the bug.''')
 
 week= getParam('timerange','2026-04-03/P7D')
 outer= getParam('timerange','2026-01-01/now')
