@@ -4,6 +4,15 @@ https://git.jfaden.net/jbfaden/public/blob/main/u/jeremy/2026/20260401/moreTests
 
 FileSystem.reset()
 
+ll= listDirectory('https://research-git.uiowa.edu/space-physics/juno/ap-script/public/masafumi/')
+print '%9d %s' % ( len(ll), ';'.join(ll) )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/juno/ap-script/public/masafumi/PigtailMoons.jy')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://research-git.uiowa.edu/space-physics/doc/README.md') # this works with v2026a_3!
+print '%9d %s' % ( ff.length(), ff )
+
 ff= getFile('https://research-git.uiowa.edu/abbith/juno/-/tree/main/team/angleEyBy//colorbar.png')
 print '%9d %s' % ( ff.length(), ff )
 
