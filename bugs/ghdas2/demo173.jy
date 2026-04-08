@@ -4,6 +4,12 @@ https://git.jfaden.net/jbfaden/public/blob/main/u/jeremy/2026/20260401/moreTests
 
 FileSystem.reset()
 
+ff= getFile('https://research-git.uiowa.edu/abbith/juno/-/tree/main/team/angleEyBy//colorbar.png')
+print '%9d %s' % ( ff.length(), ff )
+
+ff= getFile('https://abbith.physics.uiowa.edu/jbf/juno/-/blob/main/team/ephemeris/ephemeris.jyds')
+print '%9d %s' % ( ff.length(), ff )
+
 ll= listDirectory('https://github.com/autoplot/dev/master/rfe/sf/866/')
 print '%9d %s' % ( len(ll), ';'.join(ll) )
 
@@ -11,6 +17,9 @@ ff= getFile('https://github.com/autoplot/dev/master/rfe/sf/866/multiParamGraphic
 print '%9d %s' % ( ff.length(), ff )
  
 ll= listDirectory('https://github.com/autoplot/dev/')
+print '%9d %s' % ( len(ll), ';'.join(ll) )
+
+ll= listDirectory('https://github.com/jbfaden/public-repo/')
 print '%9d %s' % ( len(ll), ';'.join(ll) )
 
 ll= listDirectory('https://github.com/autoplot/')
