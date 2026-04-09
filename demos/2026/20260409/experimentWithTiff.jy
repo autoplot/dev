@@ -1,0 +1,14 @@
+from javax.imageio import ImageIO
+
+import sys
+addToSearchPath(sys.path,'https://repo1.maven.org/maven2/com/twelvemonkeys/imageio/imageio-tiff/3.13.1/imageio-tiff-3.13.1.jar',monitor)
+
+ff= getFile('https://people.math.sc.edu/Burkardt/data/tif/galaxy.tif')
+im= ImageIO.read(ff)
+
+print im
+
+ff= getFile('https://people.math.sc.edu/Burkardt/data/tif/galaxy.png')
+im= ImageIO.read(ff)
+
+print im
