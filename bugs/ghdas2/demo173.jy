@@ -4,10 +4,13 @@ https://git.jfaden.net/jbfaden/public/blob/main/u/jeremy/2026/20260401/moreTests
 
 FileSystem.reset()
 
+ff= getFile('https://research-git.uiowa.edu/abbith/juno/-/blob/main/team/angleEyBy/angleEyBz.jy')
+print '%9d %s' % ( ff.length(), ff )
+
 ll= listDirectory('https://research-git.uiowa.edu/space-physics/juno/ap-script/public/masafumi/')
 print '%9d %s' % ( len(ll), ';'.join(ll) )
 
-ff= getFile('https://research-git.uiowa.edu/space-physics/juno/ap-script/public/masafumi/PigtailMoons.jy')
+ff= getFile('https://research-git.uiowa.edu/space-physics/juno/ap-script/public/masafumi/JunoPigtailMoons.jy')
 print '%9d %s' % ( ff.length(), ff )
 
 ff= getFile('https://research-git.uiowa.edu/space-physics/doc/README.md') # this works with v2026a_3!
@@ -39,6 +42,10 @@ print '%9d %s' % ( len(ll), ';'.join(ll) )
 
 ll= listDirectory('https://research-git.uiowa.edu/space-physics/')
 print '%9d %s' % ( len(ll), ';'.join(ll) )
+
+# legacy URLs for git filesystem don't have a mark to tell the branch from the project.  They must be listed first.
+ff= getFile('https://research-git.uiowa.edu/space-physics/rbsp/doc/README.md')
+print '%9d %s' % ( ff.length(), ff )
 
 ff= getFile('https://research-git.uiowa.edu/space-physics/doc/README.md') # this works with v2026a_3!
 print '%9d %s' % ( ff.length(), ff )
@@ -82,7 +89,5 @@ print '%9d %s' % ( ff.length(), ff )
 ff= getFile('https://research-git.uiowa.edu/space-physics/tracers/msc/public/-/blob/main/u/dave/20260225/digitizer.jy' )
 print '%9d %s' % ( ff.length(), ff )
 
-# legacy URLs for git filesystem don't have a mark to tell the branch from the project.  They must be listed first.
-ff= getFile('https://research-git.uiowa.edu/space-physics/rbsp/doc/README.md')
-print '%9d %s' % ( ff.length(), ff )
+
 
