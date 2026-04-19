@@ -1,8 +1,8 @@
 from org.das2.datum import TimeUtil
 from java.io import File
 from javax.imageio import ImageIO
-from java.awt import Graphics2D
 from java.lang import ProcessBuilder
+
 setScriptDescription('''The Remarkable 2 is a digital notebook, where you can put a custom
 sleep screen on the device.  The sleep screen is just a 1404x1872 pixel png, which this script
 generates.  This script creates a display which is pushed to the device.''')
@@ -11,23 +11,36 @@ width= getParam('width',344,'Width in pixels of the name region')
 ip= getParam('ip','192.168.1.19','ip of the Remarkable device')
 push= getParam('push',False,'Push to RM',[True,False])
 
+mode= getParam('mode','','RM mode',['','suspended','sleeping'])
+
 setCanvasSize(1404,1872)
 
 setLayout( 2,1 )
 dom.options.canvasFont='Sans-24'
 
 plot( 0, 'vap+hapi:https://cottagesystems.com/server/ct/hapi?id=temperatures&parameters=Time,ground&timerange=P10D', yrange=[30,80])
-plot( 1, 'vap+hapi:https://cottagesystems.com/server/ct/hapi?id=temperatures&parameters=Time,pool&timerange=P10D', yrange=[30,80],lineThick=2)
+plot( 1, 'vap+hapi:https://cottagesystems.com/server/ct/hapi?id=temperatures&parameters=Time,pool&timerange=P10D', yrange=[30,80],lineThick=2,\
+    ytitle='Pool Temperature (&deg;F)')
 plot( 2, 'vap+csv:file:///home/jbf/data/yosmart/db/$Y/$Y$m$d.csv?column=groundTempAt16Inches&timerange=P10D&units=F', \
-    ytitle='Ground Temp<br>Away from Pool', yrange=[30,80], overplotOf=dom.plots[1], lineThick=2 )
-times= TimeParser.create('$Y-$m-$dT$H:$MZ').format(TimeUtil.now())
-annotation( 0, text=times, fontSize='0.8em', anchorPosition='NW' )
+    ytitle='Ground Temp (&deg;F)', yrange=[30,80], overplotOf=dom.plots[1], lineThick=2 )
 
+timeText= TimeParser.create('$Y-$m-$dT$H:$MZ!(color;#636363)+$SS!(color)').format(TimeUtil.now())
+annotation( 0, text=timeText, fontSize='0.8em', anchorPosition='NW' )
+
+legendText='!(painter;psym;none;size=0.5em;connect=solid) Outside Pool<br>!(painter;psym;none;size=0.5em;connect=solid;lineThick=2) Garden House'
+annotation( 1, text=legendText, fontSize='1.0em', anchorPosition='NE', plotId=dom.plots[1] )
+
+if mode!='':
+    ann= annotation( 2, text=mode, fontSize='3.0em', anchorPosition='center', anchorType='canvas', rowId='', columnId='', background=None )
+    ann.rotate=20
+else:
+    mode= 'suspended'
+    
 mkdir('/tmp/ap/remarkable/remarkable/')
-writeToPng( '/tmp/ap/remarkable/remarkable/suspended.png',1404,1872 )
+writeToPng( '/tmp/ap/remarkable/remarkable/'+mode+'.png',1404,1872 )
 
 monitor.progressMessage='adding region for name'
-bufferedImage= ImageIO.read(File('/tmp/ap/remarkable/remarkable/suspended.png'))
+bufferedImage= ImageIO.read(File('/tmp/ap/remarkable/remarkable/'+mode+'.png'))
 g= bufferedImage.createGraphics()
 
 g.color=Color.WHITE
@@ -36,13 +49,13 @@ g.color=Color.BLACK
 g.drawRoundRect((1404-width)/2,1872-260,width,260-93,30,30)
 
 monitor.progressMessage='writing final file'
-ImageIO.write( bufferedImage,'png',File('/home/jbf/public_html/remarkable/suspended.png'))
+ImageIO.write( bufferedImage,'png',File('/home/jbf/public_html/remarkable/'+mode+'.png'))
 
 if push:
     monitor.progressMessage='copy out to remarkable'
     pb=ProcessBuilder(['scp',\
-                  '/home/jbf/public_html/remarkable/suspended.png',\
-                  'root@'+ip+':/usr/share/remarkable/suspended.png' ] )
+                  '/home/jbf/public_html/remarkable/'+mode+'.png',\
+                  'root@'+ip+':/usr/share/remarkable/'+mode+'.png' ] )
     process= pb.start()
     process.waitFor()
 else:
