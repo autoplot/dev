@@ -1,0 +1,666 @@
+# title: Read TIFF / GeoTIFF DEM
+# label: TIFF / GeoTIFF DEM
+#
+# Reads a simple TIFF/GeoTIFF DEM using:
+#   - Java NIO for TIFF parsing
+#   - vap+bin: for numeric raster reads
+#   - GeoTIFF tags 33550 and 33922 when present
+#   - .tfw fallback when GeoTIFF tags are absent
+#
+# Supports:
+#   - strip TIFF
+#   - tiled TIFF
+#   - uncompressed
+#   - one band
+#
+# Parameters:
+#   resourceURI  URI or file to load
+#   flipY        if true, reverse Y so it increases upward
+#   tileIndex    for tiled TIFFs, optional tile number to read; -1 means stitch full image
+#
+# Limitations:
+#   - compression not supported
+#   - BigTIFF not supported
+#   - multiband not supported
+#   - only simple north-up georeferencing is interpreted
+
+from java.io import File
+from java.io import FileInputStream
+from java.io import BufferedReader
+from java.io import FileReader
+from java.lang import Double
+from java.nio import ByteBuffer
+from java.nio import ByteOrder
+from org.das2.qds import DDataSet
+from org.das2.qds import QDataSet
+
+#resourceURI= getParam( 'resourceURI', 'https://github.com/GeoTIFF/test-data/blob/main/files/bremen_sea_ice_conc_2022_9_9.tif', 'example file to load' )
+#resourceURI= getParam( 'resourceURI', 'https://github.com/GeoTIFF/test-data/blob/main/files/bremen_sea_ice_conc_2022_9_9.tif', 'example file to load' )
+resourceURI= getParam( 'resourceURI', 'file:///home/jbf/ct/autoplot/data/image/davenport_w.zip/davenport_w.tif', 'example file to load' )
+flipY      = getParam( "flipY", True, "Flip the  Y coordinates", [ True,False] )
+tileIndex  = int( getParam( "tileIndex", "-1", "Tile index for tiled TIFF, -1 means full image" ) )
+
+f = getFile(resourceURI)
+
+def openChannel(file):
+    fis = FileInputStream(file)
+    return [ fis, fis.getChannel() ]
+
+def getOrder(little):
+    if little:
+        return ByteOrder.LITTLE_ENDIAN
+    else:
+        return ByteOrder.BIG_ENDIAN
+
+def readBytes(ch, pos, n):
+    bb = ByteBuffer.allocate(n)
+    ch.position(long(pos))
+    while bb.hasRemaining():
+        nr = ch.read(bb)
+        if nr < 0:
+            raise Exception("unexpected EOF")
+    bb.flip()
+    return bb
+
+def readUnsignedShortAt(ch, pos, little):
+    bb = readBytes(ch, pos, 2)
+    bb.order(getOrder(little))
+    v = bb.getShort()
+    if v < 0:
+        v = v + 65536
+    return v
+
+def readUnsignedIntAt(ch, pos, little):
+    bb = readBytes(ch, pos, 4)
+    bb.order(getOrder(little))
+    v = bb.getInt()
+    if v < 0:
+        v = v + 4294967296L
+    return long(v)
+
+def typeSizeBytes(tiffType):
+    if tiffType == 1:  return 1
+    if tiffType == 2:  return 1
+    if tiffType == 3:  return 2
+    if tiffType == 4:  return 4
+    if tiffType == 5:  return 8
+    if tiffType == 6:  return 1
+    if tiffType == 7:  return 1
+    if tiffType == 8:  return 2
+    if tiffType == 9:  return 4
+    if tiffType == 10: return 8
+    if tiffType == 11: return 4
+    if tiffType == 12: return 8
+    raise Exception("unsupported TIFF field type: " + str(tiffType))
+
+def decodeInlineValues(fieldType, count, valueOffsetField, little):
+    bb = ByteBuffer.allocate(4)
+    bb.order(getOrder(little))
+    bb.putInt(int(valueOffsetField & 0xffffffffL))
+    bb.flip()
+
+    vals = []
+    i = 0
+    while i < count:
+        if fieldType == 1 or fieldType == 6 or fieldType == 7:
+            vals.append(bb.get() & 255)
+        elif fieldType == 3 or fieldType == 8:
+            v = bb.getShort()
+            if v < 0:
+                v = v + 65536
+            vals.append(v)
+        elif fieldType == 4 or fieldType == 9:
+            v = bb.getInt()
+            if v < 0:
+                v = v + 4294967296L
+            vals.append(long(v))
+        else:
+            raise Exception("unsupported inline TIFF field type: " + str(fieldType))
+        i = i + 1
+
+    return vals
+
+def readValuesAt(ch, little, tiffType, count, offset):
+    totalBytes = typeSizeBytes(tiffType) * count
+    bb = readBytes(ch, offset, totalBytes)
+    bb.order(getOrder(little))
+
+    vals = []
+    i = 0
+    while i < count:
+        if tiffType == 1 or tiffType == 6 or tiffType == 7:
+            vals.append(bb.get() & 255)
+        elif tiffType == 3 or tiffType == 8:
+            v = bb.getShort()
+            if v < 0:
+                v = v + 65536
+            vals.append(v)
+        elif tiffType == 4 or tiffType == 9:
+            v = bb.getInt()
+            if v < 0:
+                v = v + 4294967296L
+            vals.append(long(v))
+        elif tiffType == 12:
+            vals.append(bb.getDouble())
+        else:
+            raise Exception("unsupported TIFF field type: " + str(tiffType))
+        i = i + 1
+
+    return vals
+
+def readIFDEntryValue(ch, little, fieldType, count, valueOffsetField):
+    totalBytes = typeSizeBytes(fieldType) * count
+    if totalBytes <= 4:
+        return decodeInlineValues(fieldType, count, valueOffsetField, little)
+    else:
+        return readValuesAt(ch, little, fieldType, count, valueOffsetField)
+
+def parseSimpleTIFF(tiffFile):
+    neededTags = {}
+    for t in [256,257,258,259,273,277,278,279,322,323,324,325,339,33550,33922]:
+        neededTags[t] = 1
+
+    oc = openChannel(tiffFile)
+    fis = oc[0]
+    ch  = oc[1]
+
+    try:
+        hdr = readBytes(ch, 0, 8)
+
+        b0 = hdr.get() & 255
+        b1 = hdr.get() & 255
+
+        if b0 == 73 and b1 == 73:
+            little = True
+        elif b0 == 77 and b1 == 77:
+            little = False
+        else:
+            raise Exception("not a TIFF file")
+
+        hdr.order(getOrder(little))
+        magic = hdr.getShort()
+        if magic < 0:
+            magic = magic + 65536
+
+        if magic == 43:
+            raise Exception("BigTIFF is not supported")
+        if magic != 42:
+            raise Exception("unsupported TIFF magic number: " + str(magic))
+
+        ifdOffset = hdr.getInt()
+        if ifdOffset < 0:
+            ifdOffset = ifdOffset + 4294967296L
+
+        nentries = readUnsignedShortAt(ch, ifdOffset, little)
+        pos = ifdOffset + 2
+
+        tags = {}
+
+        i = 0
+        while i < nentries:
+            ent = readBytes(ch, pos, 12)
+            ent.order(getOrder(little))
+
+            tag = ent.getShort()
+            if tag < 0:
+                tag = tag + 65536
+
+            fieldType = ent.getShort()
+            if fieldType < 0:
+                fieldType = fieldType + 65536
+
+            count = ent.getInt()
+            if count < 0:
+                count = count + 4294967296L
+
+            valueOff = ent.getInt()
+            if valueOff < 0:
+                valueOff = valueOff + 4294967296L
+
+            if neededTags.has_key(tag):
+                tags[tag] = readIFDEntryValue(ch, little, fieldType, int(count), long(valueOff))
+
+            pos = pos + 12
+            i = i + 1
+
+        info = {}
+        info["little"] = little
+
+        if not tags.has_key(256):
+            raise Exception("TIFF tag 256 ImageWidth not found")
+        if not tags.has_key(257):
+            raise Exception("TIFF tag 257 ImageLength not found")
+
+        info["width"]  = int(tags[256][0])
+        info["length"] = int(tags[257][0])
+
+        if tags.has_key(258):
+            info["bitsPerSample"] = int(tags[258][0])
+        else:
+            info["bitsPerSample"] = 1
+
+        if tags.has_key(259):
+            info["compression"] = int(tags[259][0])
+        else:
+            info["compression"] = 1
+
+        if tags.has_key(277):
+            info["samplesPerPixel"] = int(tags[277][0])
+        else:
+            info["samplesPerPixel"] = 1
+
+        if tags.has_key(339):
+            info["sampleFormat"] = int(tags[339][0])
+        else:
+            info["sampleFormat"] = 1
+
+        if tags.has_key(33550):
+            info["modelPixelScale"] = tags[33550]
+        else:
+            info["modelPixelScale"] = None
+
+        if tags.has_key(33922):
+            info["modelTiepoint"] = tags[33922]
+        else:
+            info["modelTiepoint"] = None
+
+        if tags.has_key(273):
+            info["storage"] = "strips"
+            info["stripOffsets"] = tags[273]
+
+            if tags.has_key(279):
+                info["stripByteCounts"] = tags[279]
+            else:
+                raise Exception("strip TIFF is missing tag 279 StripByteCounts")
+
+            if tags.has_key(278):
+                info["rowsPerStrip"] = int(tags[278][0])
+            else:
+                if len(tags[273]) == 1:
+                    info["rowsPerStrip"] = info["length"]
+                else:
+                    info["rowsPerStrip"] = (info["length"] + len(tags[273]) - 1) / len(tags[273])
+
+        elif tags.has_key(324):
+            info["storage"] = "tiles"
+
+            if not tags.has_key(322):
+                raise Exception("tiled TIFF missing tag 322 TileWidth")
+            if not tags.has_key(323):
+                raise Exception("tiled TIFF missing tag 323 TileLength")
+            if not tags.has_key(325):
+                raise Exception("tiled TIFF missing tag 325 TileByteCounts")
+
+            info["tileWidth"] = int(tags[322][0])
+            info["tileLength"] = int(tags[323][0])
+            info["tileOffsets"] = tags[324]
+            info["tileByteCounts"] = tags[325]
+
+        else:
+            raise Exception("Neither strip tags nor tile tags found")
+
+        return info
+
+    finally:
+        ch.close()
+        fis.close()
+
+def mapToBinaryDataSourceType(bitsPerSample, sampleFormat):
+    if sampleFormat == 1:
+        if bitsPerSample == 8:
+            return "ubyte"
+        elif bitsPerSample == 16:
+            return "ushort"
+        elif bitsPerSample == 32:
+            return "uint"
+    elif sampleFormat == 2:
+        if bitsPerSample == 8:
+            return "byte"
+        elif bitsPerSample == 16:
+            return "short"
+        elif bitsPerSample == 32:
+            return "int"
+    elif sampleFormat == 3:
+        if bitsPerSample == 32:
+            return "float"
+        elif bitsPerSample == 64:
+            return "double"
+
+    raise Exception("unsupported sampleFormat=" + str(sampleFormat) + " bitsPerSample=" + str(bitsPerSample))
+
+def bytesPerValue(dtype):
+    if dtype == "byte":   return 1
+    if dtype == "ubyte":  return 1
+    if dtype == "short":  return 2
+    if dtype == "ushort": return 2
+    if dtype == "int":    return 4
+    if dtype == "uint":   return 4
+    if dtype == "float":  return 4
+    if dtype == "double": return 8
+    raise Exception("unsupported dtype: " + dtype)
+
+def readWorldFile(tiffFile):
+    path = tiffFile.getAbsolutePath()
+    pl = path.lower()
+
+    if pl.endswith(".tiff"):
+        wpath = path[0:len(path)-5] + ".tfw"
+    elif pl.endswith(".tif"):
+        wpath = path[0:len(path)-4] + ".tfw"
+    else:
+        return None
+
+    wf = File(wpath)
+    if not wf.exists():
+        return None
+
+    br = BufferedReader(FileReader(wf))
+    vals = []
+    try:
+        while True:
+            line = br.readLine()
+            if line == None:
+                break
+            line = line.strip()
+            if line != "":
+                vals.append(Double.parseDouble(line))
+    finally:
+        br.close()
+
+    if len(vals) < 6:
+        raise Exception("world file has fewer than 6 values: " + wpath)
+
+    return vals
+
+def readBlock(fileObj, offset, nx, nrows, dtype, little):
+    recLength = nx * bytesPerValue(dtype)
+
+    uri = "vap+bin:" + fileObj.toURI().toString()
+    uri = uri + "?byteOffset=" + str(offset)
+    uri = uri + "&rank2=:"
+    uri = uri + "&recLength=" + str(recLength)
+    uri = uri + "&type=" + dtype
+
+    if little:
+        uri = uri + "&byteOrder=little"
+    else:
+        uri = uri + "&byteOrder=big"
+
+    ds = getDataSet(uri)
+
+    if ds.length() != nrows:
+        ds = ds[0:nrows,:]
+
+    return ds
+
+def copyInto(outds, startRow, inds):
+    ny0 = inds.length()
+    nx0 = inds.length(0)
+
+    j = 0
+    while j < ny0:
+        i = 0
+        while i < nx0:
+            outds.putValue(startRow + j, i, inds.value(j, i))
+            i = i + 1
+        j = j + 1
+
+def copyTileInto(outds, tileDs, x0, y0, nxTotal, nyTotal):
+    tileNy = tileDs.length()
+    tileNx = tileDs.length(0)
+
+    j = 0
+    while j < tileNy:
+        yy = y0 + j
+        if yy >= nyTotal:
+            break
+        i = 0
+        while i < tileNx:
+            xx = x0 + i
+            if xx >= nxTotal:
+                break
+            outds.putValue(yy, xx, tileDs.value(j, i))
+            i = i + 1
+        j = j + 1
+
+def makeXY(nx, ny, info, flipY, x0Shift, y0Shift):
+    xds = DDataSet.createRank1(nx)
+    yds = DDataSet.createRank1(ny)
+
+    scale = info["modelPixelScale"]
+    tie   = info["modelTiepoint"]
+
+    if scale != None and tie != None and len(scale) >= 2 and len(tie) >= 6:
+        sx = scale[0]
+        sy = scale[1]
+
+        i0 = tie[0]
+        j0 = tie[1]
+        x0 = tie[3]
+        y0 = tie[4]
+
+        i = 0
+        while i < nx:
+            xds.putValue(i, x0 + (x0Shift + i - i0) * sx)
+            i = i + 1
+
+        if flipY:
+            j = 0
+            while j < ny:
+                yds.putValue(j, y0 - (y0Shift + (ny - 1 - j) - j0) * sy)
+                j = j + 1
+        else:
+            j = 0
+            while j < ny:
+                yds.putValue(j, y0 - (y0Shift + j - j0) * sy)
+                j = j + 1
+
+    else:
+        wf = readWorldFile(f)
+
+        if wf != None:
+            A = wf[0]
+            D = wf[1]
+            B = wf[2]
+            E = wf[3]
+            C = wf[4]
+            F = wf[5]
+
+            if abs(B) > 1e-12 or abs(D) > 1e-12:
+                print "warning: rotated world file detected; using simple 1-D coordinates"
+
+            i = 0
+            while i < nx:
+                xds.putValue(i, C + (x0Shift + i) * A)
+                i = i + 1
+
+            if flipY:
+                j = 0
+                while j < ny:
+                    yds.putValue(j, F + (y0Shift + (ny - 1 - j)) * E)
+                    j = j + 1
+            else:
+                j = 0
+                while j < ny:
+                    yds.putValue(j, F + (y0Shift + j) * E)
+                    j = j + 1
+        else:
+            i = 0
+            while i < nx:
+                xds.putValue(i, x0Shift + i)
+                i = i + 1
+
+            if flipY:
+                j = 0
+                while j < ny:
+                    yds.putValue(j, y0Shift + (ny - 1 - j))
+                    j = j + 1
+            else:
+                j = 0
+                while j < ny:
+                    yds.putValue(j, y0Shift + j)
+                    j = j + 1
+
+    return [xds, yds]
+
+info = parseSimpleTIFF(f)
+
+nx             = info["width"]
+ny             = info["length"]
+bitsPerSample  = info["bitsPerSample"]
+sampleFormat   = info["sampleFormat"]
+compression    = info["compression"]
+samplesPerPixel= info["samplesPerPixel"]
+little         = info["little"]
+storage        = info["storage"]
+
+if compression != 1:
+    raise Exception("compressed TIFF is not supported, compression=" + str(compression))
+
+if samplesPerPixel != 1:
+    raise Exception("only one-band TIFF is supported, samplesPerPixel=" + str(samplesPerPixel))
+
+dtype = mapToBinaryDataSourceType(bitsPerSample, sampleFormat)
+
+if storage == "strips":
+    stripOffsets    = info["stripOffsets"]
+    stripByteCounts = info["stripByteCounts"]
+    rowsPerStrip    = info["rowsPerStrip"]
+
+    if len(stripOffsets) != len(stripByteCounts):
+        raise Exception("stripOffsets and stripByteCounts have different lengths")
+
+    z = DDataSet.createRank2(ny, nx)
+
+    row0 = 0
+    s = 0
+    while s < len(stripOffsets):
+        offset = long(stripOffsets[s])
+        nbytes = long(stripByteCounts[s])
+
+        rowsThisStrip = rowsPerStrip
+        if row0 + rowsThisStrip > ny:
+            rowsThisStrip = ny - row0
+
+        expectedBytes = long(rowsThisStrip) * long(nx) * long(bytesPerValue(dtype))
+        if nbytes < expectedBytes:
+            raise Exception("strip byte count too small for strip " + str(s))
+
+        dsStrip = readBlock(f, offset, nx, rowsThisStrip, dtype, little)
+        copyInto(z, row0, dsStrip)
+
+        row0 = row0 + rowsThisStrip
+        s = s + 1
+
+    if flipY:
+        z = z[::-1,:]
+
+    xy = makeXY(nx, ny, info, flipY, 0, 0)
+    xds = xy[0]
+    yds = xy[1]
+
+    z.putProperty(QDataSet.DEPEND_0, yds)
+    z.putProperty(QDataSet.DEPEND_1, xds)
+    z.putProperty(QDataSet.NAME, "geotiff")
+    z.putProperty(QDataSet.LABEL, "GeoTIFF DEM")
+    z.putProperty(QDataSet.TITLE, f.getName())
+
+    result = z
+
+elif storage == "tiles":
+    tileWidth      = info["tileWidth"]
+    tileLength     = info["tileLength"]
+    tileOffsets    = info["tileOffsets"]
+    tileByteCounts = info["tileByteCounts"]
+
+    if len(tileOffsets) != len(tileByteCounts):
+        raise Exception("tileOffsets and tileByteCounts have different lengths")
+
+    tilesAcross = (nx + tileWidth - 1) / tileWidth
+    tilesDown   = (ny + tileLength - 1) / tileLength
+    expectedTiles = tilesAcross * tilesDown
+
+    if len(tileOffsets) < expectedTiles:
+        raise Exception("not enough tiles in TIFF: got " + str(len(tileOffsets)) + " expected " + str(expectedTiles))
+
+    if tileIndex >= 0:
+        if tileIndex >= len(tileOffsets):
+            raise Exception("tileIndex out of range")
+
+        tileX = tileIndex % tilesAcross
+        tileY = tileIndex / tilesAcross
+
+        x0 = tileX * tileWidth
+        y0 = tileY * tileLength
+
+        actualTileWidth = tileWidth
+        if x0 + actualTileWidth > nx:
+            actualTileWidth = nx - x0
+
+        actualTileLength = tileLength
+        if y0 + actualTileLength > ny:
+            actualTileLength = ny - y0
+
+        offset = long(tileOffsets[tileIndex])
+        z = readBlock(f, offset, tileWidth, tileLength, dtype, little)
+        z = z[0:actualTileLength,0:actualTileWidth]
+
+        if flipY:
+            z = z[::-1,:]
+
+        xy = makeXY(actualTileWidth, actualTileLength, info, flipY, x0, y0)
+        xds = xy[0]
+        yds = xy[1]
+
+        z.putProperty(QDataSet.DEPEND_0, yds)
+        z.putProperty(QDataSet.DEPEND_1, xds)
+        z.putProperty(QDataSet.NAME, "geotiff_tile")
+        z.putProperty(QDataSet.LABEL, "GeoTIFF Tile " + str(tileIndex))
+        z.putProperty(QDataSet.TITLE, f.getName())
+
+        result = z
+
+    else:
+        z = DDataSet.createRank2(ny, nx)
+
+        t = 0
+        while t < expectedTiles:
+            tileX = t % tilesAcross
+            tileY = t / tilesAcross
+
+            x0 = tileX * tileWidth
+            y0 = tileY * tileLength
+
+            actualTileWidth = tileWidth
+            if x0 + actualTileWidth > nx:
+                actualTileWidth = nx - x0
+
+            actualTileLength = tileLength
+            if y0 + actualTileLength > ny:
+                actualTileLength = ny - y0
+
+            offset = long(tileOffsets[t])
+            tileDs = readBlock(f, offset, tileWidth, tileLength, dtype, little)
+            tileDs = tileDs[0:actualTileLength,0:actualTileWidth]
+
+            copyTileInto(z, tileDs, x0, y0, nx, ny)
+            t = t + 1
+
+        if flipY:
+            z = z[::-1,:]
+
+        xy = makeXY(nx, ny, info, flipY, 0, 0)
+        xds = xy[0]
+        yds = xy[1]
+
+        z.putProperty(QDataSet.DEPEND_0, yds)
+        z.putProperty(QDataSet.DEPEND_1, xds)
+        z.putProperty(QDataSet.NAME, "geotiff")
+        z.putProperty(QDataSet.LABEL, "GeoTIFF DEM")
+        z.putProperty(QDataSet.TITLE, f.getName())
+
+        result = z
+
+else:
+    raise Exception("unsupported storage type: " + storage)
+    
