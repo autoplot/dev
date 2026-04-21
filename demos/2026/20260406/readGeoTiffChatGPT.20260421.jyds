@@ -36,8 +36,8 @@ from org.das2.qds import QDataSet
 
 #resourceURI= getParam( 'resourceURI', 'https://github.com/GeoTIFF/test-data/blob/main/files/bremen_sea_ice_conc_2022_9_9.tif', 'example file to load' )
 #resourceURI= getParam( 'resourceURI', 'https://github.com/GeoTIFF/test-data/blob/main/files/bremen_sea_ice_conc_2022_9_9.tif', 'example file to load' )
-resourceURI= getParam( 'resourceURI', 'file:///home/jbf/ct/autoplot/data/image/davenport_w.zip/davenport_w.tif', 'example file to load' )
-flipY      = getParam( "flipY", True, "Flip the  Y coordinates", [ True,False] )
+resourceURI= getParam( 'resourceURI', 'https://programs.iowadnr.gov/common/documents/AirQuality/davenport_w.zip/davenport_w.tif', 'example file to load' )
+flipY      = getParam( "flipY", False, "Flip the  Y coordinates", [ True,False] )
 tileIndex  = int( getParam( "tileIndex", "-1", "Tile index for tiled TIFF, -1 means full image" ) )
 
 f = getFile(resourceURI)
@@ -156,6 +156,7 @@ def readIFDEntryValue(ch, little, fieldType, count, valueOffsetField):
         return readValuesAt(ch, little, fieldType, count, valueOffsetField)
 
 def parseSimpleTIFF(tiffFile):
+    print 'reading '+str(tiffFile)
     neededTags = {}
     for t in [256,257,258,259,273,277,278,279,322,323,324,325,339,33550,33922]:
         neededTags[t] = 1
@@ -566,7 +567,8 @@ if storage == "strips":
     z.putProperty(QDataSet.TITLE, f.getName())
 
     result = z
-
+    result= transpose(result)
+    
 elif storage == "tiles":
     tileWidth      = info["tileWidth"]
     tileLength     = info["tileLength"]
@@ -660,7 +662,9 @@ elif storage == "tiles":
         z.putProperty(QDataSet.TITLE, f.getName())
 
         result = z
-
+        
+    result= transpose(result)
+    
 else:
     raise Exception("unsupported storage type: " + storage)
     
