@@ -55,7 +55,7 @@ def getOrder(little):
 def readBytes(ch, pos, n):
     bb = ByteBuffer.allocate(n)
     ch.position(long(pos))
-    while bb.hasRemaining():
+    while bb.position()<n:
         nr = ch.read(bb)
         if nr < 0:
             raise Exception("unexpected EOF")
