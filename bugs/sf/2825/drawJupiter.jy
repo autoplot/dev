@@ -1,0 +1,8 @@
+from org.autoplot import APSplash
+
+setCanvasSize(900,450)
+setLayout(1,2)
+plot(0,'https://space.physics.uiowa.edu/~mimai/PIA07782_hires.rot.jpg')
+plot(1,'https://space.physics.uiowa.edu/~mimai/PIA07782_hires.rot.jpg?xaxis=[360,0,-0.5,2047]&yaxis=[-90,0,90,1024]')
+writeToPng('/tmp/ap/apv/'+APSplash.getVersion()+'.jpg')
+print 'done done'
