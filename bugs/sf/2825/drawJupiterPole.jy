@@ -1,5 +1,3 @@
-from org.autoplot import APSplash
-
 ds= getDataSet('https://space.physics.uiowa.edu/~mimai/PIA07782_hires.rot.jpg?xaxis=[360deg,0,-0.5deg,2047]&yaxis=[-90,0,90,1024]')
 
 setLayout(2,2)
