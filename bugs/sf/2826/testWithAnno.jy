@@ -1,0 +1,7 @@
+from org.das2.util import ColorUtil
+
+run= getParam('run',1,'Run Number',[1,2,3,4,5,6] )
+
+annotation( text='%06d<br>%s' % ( rand()*100000, run ), \
+     anchorPosition='NW', \
+     textColor=ColorUtil.DARK_VIOLET )
