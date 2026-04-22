@@ -1,0 +1,19 @@
+{
+    "param1": "apv",
+    "param1Values": [
+        "20250513a",
+        "20250604b",
+        "20250609b",
+        "20250610a",
+        "20250611a",
+        "20250619a",
+        "20250621a",
+        "20250622a",
+        "20250623b",
+        "20250625a",
+        "20250628a"
+    ],
+    "param2": "",
+    "param2Values": [],
+    "script": "https://github.com/autoplot/dev/blob/34d57f67beb6a6462bacab1084ee3c8a9233cb9b/bugs/tools/testagator.jy?scriptName='/home/jbf/ct/autoplot/git/dev/bugs/sf/2825/drawJupiter.jy'&apv='v2019a_5'&headless=True&javaexe='java'"
+}
