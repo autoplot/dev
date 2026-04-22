@@ -1,0 +1,41 @@
+from org.autoplot import APSplash
+
+ds= getDataSet('https://space.physics.uiowa.edu/~mimai/PIA07782_hires.rot.jpg?xaxis=[360deg,0,-0.5deg,2047]&yaxis=[-90,0,90,1024]')
+
+setLayout(2,2)
+
+ds= ds[::-1,:,:]
+
+rr= distance(1000,1000,500,500,500./90,500/90.)
+plot( 0, rr)
+
+xx= outerProduct(linspace(-90,90,1000),ones(1000))
+yy= outerProduct(ones(1000),linspace(-90,90,1000))
+
+aa= toDegrees( atan2( yy, xx ) )
+
+# angles are expressed between 0 and 360.
+r= where( aa.lt(0) )
+aa[r]= aa[r]+360
+
+plot( 1, aa )
+
+ff0= findex( xtags(ds), aa )
+ff1= findex( ytags(ds), 90-rr )
+
+imageRR= interpolate( ds[:,:,0], ff0, ff1 )
+imageGG= interpolate( ds[:,:,1], ff0, ff1 )
+imageBB= interpolate( ds[:,:,2], ff0, ff1 )
+
+image= bundle( imageRR, imageGG, imageBB )
+image.putProperty( QDataSet.DEPEND_2, ds.property(QDataSet.DEPEND_2) )
+image.putProperty( QDataSet.RENDER_TYPE, QDataSet.VALUE_RENDER_TYPE_COMPOSITE_IMAGE )
+
+plot( 2, image )
+
+r= where( rr.gt(90) )
+print r
+
+image[r[:,0],r[:,1],:]= 0
+
+plot( 3, image )
