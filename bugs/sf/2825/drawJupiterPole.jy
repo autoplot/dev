@@ -1,6 +1,5 @@
 setScriptTitle('Jupiter Pole Experiment')
-setScriptDescription('''Experiment with code which draws the Jupiter North pole, using an image which 
-has longitude and latitude axes.  Masafumi requested this.''')
+setScriptDescription('''Experiment with code which draws the Jupiter North pole, using an image which has longitude and latitude axes.  Masafumi requested this.''')
 
 ds= getDataSet('https://space.physics.uiowa.edu/~mimai/PIA07782_hires.rot.jpg?xaxis=[360deg,0,-0.5deg,2047]&yaxis=[-90,0,90,1024]')
 
@@ -25,19 +24,21 @@ plot( 1, aa )
 ff0= findex( xtags(ds), aa )
 ff1= findex( ytags(ds), 90-rr )
 
+imageAA= replicate( 255, ff0.length(), ff1.length() )
 imageRR= interpolate( ds[:,:,0], ff0, ff1 )
 imageGG= interpolate( ds[:,:,1], ff0, ff1 )
 imageBB= interpolate( ds[:,:,2], ff0, ff1 )
 
-image= bundle( imageRR, imageGG, imageBB )
-image.putProperty( QDataSet.DEPEND_2, ds.property(QDataSet.DEPEND_2) )
+r= where( rr.gt(90) )
+imageAA[r]= 0
+imageRR[r]= 0
+imageGG[r]= 0
+imageBB[r]= 0
+
+image= bundle( imageAA, imageRR, imageGG, imageBB )
+image.putProperty( QDataSet.DEPEND_2, labelsDataset(['alpha','red','green','blue']) )
 image.putProperty( QDataSet.RENDER_TYPE, QDataSet.VALUE_RENDER_TYPE_COMPOSITE_IMAGE )
 
-plot( 2, image )
-
-r= where( rr.gt(90) )
-print r
-
-image[r[:,0],r[:,1],:]= 0
+# TODO: image[r[:,0],r[:,1],:]=0 was impossibly slow.
 
 plot( 3, image )
