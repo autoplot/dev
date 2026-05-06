@@ -1,6 +1,6 @@
-setScriptDescription('''this demos where the
- trace feature doesn't work,
- because it doesn't count lines properly''')
+setScriptDescription('''this demos where the trace 
+feature doesn't work, because it 
+doesn't count lines properly''')
 
 sleep(300)
 a='''this is a long 
@@ -11,3 +11,4 @@ sleep(300)
 print a+str(b)
 sleep(300)
 print 'done'
+
