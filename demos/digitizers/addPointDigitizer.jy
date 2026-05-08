@@ -59,6 +59,6 @@ def pointClicked( evt ):
    
 addMouseModule( dom.plots[0], 'digitize', pointClicked )
 
-import javax
+import javax.swing.JOptionPane
 javax.swing.JOptionPane.showMessageDialog( getViewWindow(),'Click on the plot, and the x,y position will be recorded on the digitizer tab')
 
