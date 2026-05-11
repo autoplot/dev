@@ -1,8 +1,8 @@
 radius= getParam( 'radius', 4.0, 'radius of colors', [1,1.1,1.2,2,3,4,5,10,15,20,25,30] )
 
-red= 255-distance(300,300,50,50,radius,radius)
-green= 255-distance(300,300,150,150,radius,radius)
-blue= 255-distance(300,300,50,250,radius,radius)
+red= greaterOf( 0, 255-distance(300,300,50,50,radius,radius) )
+green= greaterOf( 0, 255-distance(300,300,150,150,radius,radius) )
+blue= greaterOf( 0, 255-distance(300,300,50,250,radius,radius) )
 
 ds= bundle(red,green,blue)
 plot( ds,renderType='image')
