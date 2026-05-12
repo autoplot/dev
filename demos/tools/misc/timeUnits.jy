@@ -1,0 +1,10 @@
+setScriptDescription('Time Representation.  Give a time and the doubles used to represent the time are shown.')
+
+time= getParam('time','2025-10-14')
+
+print 't2000', Units.t2000.parse(time).doubleValue(Units.t2000)
+print 't1970', Units.t1970.parse(time).doubleValue(Units.t1970)
+print 'us2000', Units.us2000.parse(time).doubleValue(Units.us2000)
+print 'cdfTT2000', Units.cdfTT2000.parse(time).doubleValue(Units.cdfTT2000)
+print 'cdfEpoch', Units.cdfEpoch.parse(time).doubleValue(Units.cdfEpoch)
+print 'julianDay', Units.julianDay.parse(time).doubleValue(Units.julianDay)
