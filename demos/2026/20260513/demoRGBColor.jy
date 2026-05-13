@@ -1,0 +1,11 @@
+setScriptDescription('Demo the special case where Units.rgbColor is used to explicitly set colors')
+
+x= randu(200)
+y= randu(200)
+
+red= x*255
+green= y*255
+z= rgbColorDataset(red,green,dataset(0))
+
+plot( x,y,z, symbolSize=20 )
+
