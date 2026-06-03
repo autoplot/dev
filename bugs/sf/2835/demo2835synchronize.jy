@@ -1,0 +1,13 @@
+setScriptDescription('''Study if synchronize should be a keyword argument to the getDataSets
+command.  Maybe not for now, since it's just a single line of coded needed.''')
+
+u1= 'vap+inline:x=2.0,2.5,3,3.5,4,4.5,5.0,5.5,6.0&y=-1,0,1,2,3,4,5,6,7&x,y'
+u2= 'vap+inline:x=2.5,3.5,4.5,5.5&y=4,5,4,5&x,y'
+
+a,b = getDataSets([u1,u2])
+plot( 0, a, xrange=[0,10], ytitle='a'  )
+plot( 1, b, xrange=[0,10], ytitle='b'  )
+
+a,b= synchronize( a, [a,b] )
+plot( 2, a, xrange=[0,10], ytitle='a after sync' )
+plot( 3, b, xrange=[0,10], ytitle='b after sync' )
