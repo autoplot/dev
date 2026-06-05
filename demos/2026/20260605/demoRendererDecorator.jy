@@ -3,11 +3,11 @@ from org.das2.graph import Painter
 setScriptDescription('''Demo renderer decorators.  It looks like you can add decorators
 to individual renderers''')
 
-X0= randn(1000)+3
-Y0= randn(1000)+3
+X0= randn(200)+3
+Y0= randn(200)+3
 
-X2= randn(1000)+2
-Y2= randn(1000)+2
+X2= randn(200)+2
+Y2= randn(200)+2
 
 setLayoutOverplot(2)
 
