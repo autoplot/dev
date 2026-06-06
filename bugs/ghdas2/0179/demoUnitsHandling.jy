@@ -1,0 +1,11 @@
+from org.das2.util import ColorUtil
+setScriptDescription('''Demo units handling''')
+
+reset()
+
+plot( 0, randn(100)+sin(linspace(0,TAU,100)), yrange='-3 to 3 Hz' )
+plot( 1, dataset( randn(100)+sin(linspace(0,TAU,100)), units='Hz'), yrange='-3 to 3 m' )
+
+# force an axis to be dimensionless with Hz overplotted.
+p,pe= plot( 2, randn(100)+sin(linspace(0,TAU,100)), color=ColorUtil.LAVENDER )
+plot( 3, dataset( randn(100)+sin(linspace(0,TAU,100)), units='Hz'), overplotOf=p )
