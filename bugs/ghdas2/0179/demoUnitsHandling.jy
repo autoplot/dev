@@ -1,4 +1,8 @@
 from org.das2.util import ColorUtil
+from org.autoplot.dom import Plot
+from org.das2.graph import DasAxis
+from org.das2.datum import InconvertibleUnitsException
+
 setScriptDescription('''Demo units handling''')
 
 reset()
@@ -9,3 +13,13 @@ plot( 1, dataset( randn(100)+sin(linspace(0,TAU,100)), units='Hz'), yrange='-3 t
 # force an axis to be dimensionless with Hz overplotted.
 p,pe= plot( 2, randn(100)+sin(linspace(0,TAU,100)), color=ColorUtil.LAVENDER )
 plot( 3, dataset( randn(100)+sin(linspace(0,TAU,100)), units='Hz'), overplotOf=p )
+
+assert isinstance( p, Plot )
+xa= p.getController().dasPlot.getXAxis()
+
+assert isinstance( xa, DasAxis )
+try:
+    xa.transform(datum('0 Hz'))
+except InconvertibleUnitsException:
+    print 'can not convert...'
+    
