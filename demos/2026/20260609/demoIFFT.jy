@@ -1,0 +1,5 @@
+ds= randn(512)
+ff= fft(ds)
+iff= ifft(ff)
+plot( 0, ds )
+plot( 1, iff )
