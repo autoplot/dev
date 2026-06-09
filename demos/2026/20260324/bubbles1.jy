@@ -1,0 +1,68 @@
+setScriptDescription("""Makes a Rank 3 demo dataset:<br>
+   ds[it, iy, ix]
+where each rank 2 slice is a set of "bubbles" that grow and shrink with time.""")
+
+from java.lang import Math
+
+def makeBubbleCube(nt, ny, nx):
+    # Bubble definitions:
+    #   x0, y0 = center
+    #   a      = amplitude
+    #   r0     = average radius
+    #   dr     = radius variation
+    #   ph     = phase
+    bubbles = [
+        [0.30 * nx, 0.35 * ny, 1.0,  4.0, 2.0, 0.0],
+        [0.70 * nx, 0.45 * ny, 0.8,  6.0, 2.5, 1.2],
+        [0.45 * nx, 0.72 * ny, 0.9,  5.0, 1.8, 2.3],
+        [0.78 * nx, 0.78 * ny, 0.7,  3.5, 1.5, 0.7]
+    ]
+
+    cube = []
+
+    for it in range(nt):
+        t = 2.0 * Math.PI * it / (nt - 1.0)
+        plane = []
+
+        for iy in range(ny):
+            row = []
+            for ix in range(nx):
+                z = 0.0
+
+                ib = 0
+                while ib < len(bubbles):
+                    x0 = bubbles[ib][0]
+                    y0 = bubbles[ib][1]
+                    a  = bubbles[ib][2]
+                    r0 = bubbles[ib][3]
+                    dr = bubbles[ib][4]
+                    ph = bubbles[ib][5]
+
+                    # radius grows and shrinks with time
+                    r = r0 + dr * (0.5 + 0.5 * Math.sin(t + ph))
+
+                    dx = ix - x0
+                    dy = iy - y0
+                    rr = dx * dx + dy * dy
+
+                    # Gaussian bubble
+                    z = z + a * Math.exp(-rr / (2.0 * r * r))
+
+                    ib = ib + 1
+
+                row.append(z)
+            plane.append(row)
+        cube.append(plane)
+
+    ds = dataset(cube)
+
+    # Optional metadata
+    ds = putProperty(ds, QDataSet.DEPEND_0, findgen(nt))
+    ds = putProperty(ds, QDataSet.DEPEND_1, findgen(ny))
+    ds = putProperty(ds, QDataSet.DEPEND_2, findgen(nx))
+    ds = putProperty(ds, QDataSet.TITLE, "Growing/Shrinking Bubbles Demo")
+
+    return ds
+
+ds = makeBubbleCube(60, 80, 100)
+plot(ds)

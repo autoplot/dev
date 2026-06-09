@@ -1,0 +1,33 @@
+from org.das2.util import ColorUtil
+from org.das2.graph import Painter
+setScriptDescription('''Demo renderer decorators.  It looks like you can add decorators
+to individual renderers''')
+
+X0= randn(200)+3
+Y0= randn(200)+3
+
+X2= randn(200)+2
+Y2= randn(200)+2
+
+setLayoutOverplot(2)
+
+p,pe0= plot( 0, X0,Y0, color=ColorUtil.CORNFLOWER_BLUE )
+
+class CirclePainter(Painter):
+    def __init__(self,x,y):
+        self.x= datum(x)
+        self.y= datum(y)
+    def paint( self,g ):
+        print 'painting ',self.x,self.y
+        g.color= Color.LIGHT_GRAY
+        ix0= p.xaxis.controller.dasAxis.transform(self.x-0.5)
+        iy0= p.yaxis.controller.dasAxis.transform(self.y-0.5)
+        ix1= p.xaxis.controller.dasAxis.transform(self.x+0.5)
+        iy1= p.yaxis.controller.dasAxis.transform(self.y+0.5)
+        g.fillOval(int(ix0),int(iy1),int(ix1-ix0),int(iy0-iy1))
+        
+pe0.controller.renderer.setTopDecorator(CirclePainter(3,3))
+
+p,pe2= plot( 1, X2,Y2, color=ColorUtil.CORAL )
+pe2.controller.renderer.setBottomDecorator(CirclePainter(2,2))
+

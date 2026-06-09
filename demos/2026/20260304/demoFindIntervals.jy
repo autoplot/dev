@@ -1,0 +1,34 @@
+setScriptDescription('''ChatGPT generated this pretty good code for marking intervals.''')
+
+def findIntervals(t, cond):
+    'return the events list showing the intervals where a condition is true'
+    from org.das2.qds.ops import Ops
+    
+    mask = cond
+    edges = Ops.where(Ops.ne(Ops.diff(mask),0))
+
+    if mask.value(0)==1:
+        edges = Ops.append(-1, edges)
+
+    if mask.value(mask.length()-1)==1:
+        edges = Ops.append(edges, mask.length()-1)
+
+    intervals=[]
+
+    evts=None
+    for i in range(0, edges.length(), 2):
+        s = int(edges.value(i))+1
+        e = int(edges.value(i+1))
+        evts= createEvent(evts,datumRange([t[s],t[e]]),Color.GRAY.getRGB(),'evt')
+
+    return evts
+
+t= linspace(0,20*TAU,10000)
+signal= sin(t)
+
+ff= findIntervals(t,signal.gt(0.5))
+
+setLayoutOverplot(2)
+plot( 1, t, signal )
+plot( 0, ff )
+

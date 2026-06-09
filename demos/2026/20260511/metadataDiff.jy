@@ -1,0 +1,22 @@
+from java.util import HashMap
+
+setScriptDescription('''There's an old feature I've always wanted to put in, where the 
+metadata tab would keep as much open as possible as you focused back and forth between
+two datasets.  Right now the tree always folds back up, and it would be nice if you
+could make comparisons more easily.  This script plots two such datasets as an example.''')
+
+meta1= HashMap()
+meta1.put('sc','RBSP-A')
+
+meta2= HashMap()
+meta2.put('sc','RBSP-B')
+
+ds1= dataset( randn(300), randn(300) )
+ds1.putProperty( QDataSet.USER_PROPERTIES, meta1 )
+
+ds2= dataset( randn(300), randn(300) )
+ds2.putProperty( QDataSet.USER_PROPERTIES, meta2 )
+
+setLayout(1,2)
+plot( 0, ds1 )
+plot( 1, ds2 )

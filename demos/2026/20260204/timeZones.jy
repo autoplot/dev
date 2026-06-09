@@ -1,0 +1,8 @@
+
+tp= TimeParser.create('$-1d $b $Y at $-1H:$M:$S$p $z')
+d1=tp.parse('3 Feb 2026 at 12:24:52am -0800').getTimeDatum()
+print d1
+
+tp= TimeParser.create('$-1d $b $Y at $-1H:$M:$S$p $Z')
+d1=tp.parse('3 Feb 2026 at 12:24:52am PST').getTimeDatum()
+print d1

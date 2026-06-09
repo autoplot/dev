@@ -1,0 +1,27 @@
+from java.awt import Dimension
+from java.awt.geom import Line2D
+from org.das2.graph import DasCanvas,DasPlot
+from javax.swing import JPanel
+
+setScriptDescription('Demo bug <a href="https://sourceforge.net/p/autoplot/bugs/2838/">https://sourceforge.net/p/autoplot/bugs/2838/</a>')
+
+panel= JPanel()
+
+class DrawPanel(JPanel):
+    def paintComponent(self,g):
+        g.draw(Line2D.Double(0,0,100,100))
+        g.draw(Line2D.Double(100,0,0,100))
+    
+p= DrawPanel()
+p.minimumSize=Dimension(100,100)
+p.preferredSize=Dimension(100,100)
+
+panel.add( p )
+
+getApplication().setRightPanel(panel)
+
+load(PWD+'demobug.vap')
+
+dc= dom.canvases[0].controller.dasCanvas
+
+dom.annotations[0].text= 'canvas size: %dx%d<br>dasCanvas size: %dx%d' % ( dom.canvases[0].width, dom.canvases[0].height, dc.width, dc.height  )

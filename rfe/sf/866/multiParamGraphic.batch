@@ -1,0 +1,17 @@
+{
+    "param1": "case",
+    "param1Values": [
+        "1",
+        "2",
+        "3"
+    ],
+    "param2": "ncenter",
+    "param2Values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+    ],
+    "script": "file:/home/jbf/ct/autoplot/git/dev/rfe/sf/866/multiParamGraphic.jy?case='1'&ncenter=3&radius=0.0&annotation='lorem'"
+}

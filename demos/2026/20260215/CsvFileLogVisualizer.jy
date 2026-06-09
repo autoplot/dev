@@ -1,0 +1,188 @@
+
+from java.util.logging import Handler, LogRecord, Logger, Level
+from java.lang import Runnable, Thread, System
+from java.util import ArrayList, HashMap, Collections
+from java.awt import Color, BorderLayout, RenderingHints
+from javax.swing import JPanel, JFrame, JCheckBox, JButton, BoxLayout, AbstractAction
+
+from org.das2 import DasApplication
+from org.das2.graph import DasCanvas, DasPlot, DasRow, DasColumn, DasAxis, Legend, Renderer
+from org.das2.datum import DatumRange, Units
+from org.das2.system import DasLogger
+
+setScriptTitle('Visualize CsvFileLogHandler output')
+setScriptDescription("""
+Visualize log records found in output of CsvFileLogHandler.  
+<code><pre>
+from org.das2.util import LoggerManager
+from org.autoplot.util import CsvFileLogHandler
+
+setScriptDescription('Run this and turn up the log levels on the console tab.')
+
+log= LoggerManager.getLogger('')
+
+handler= CsvFileLogHandler()
+log.addHandler(handler)
+
+log.info('Hi There')
+</pre></code>
+""")
+
+
+resourceURI= getParam( 'resourceURI', 'file:/tmp/autoplot.log.csv', 'example file to load' )
+
+times= getDataSet( resourceURI + '?column=elapsed_seconds&units=s' )
+sourceClass= getDataSet( resourceURI + '?column=source_class')
+thread= getDataSet( resourceURI + '?column=thread')
+logName= getDataSet( resourceURI + '?column=logger')
+
+smoothTimes= smoothFit( None, times, 21 )
+
+setStatus('Loaded '+str(times.length())+' records to visualize')
+
+# --- constants (match the Java idea) ---
+YAXIS_THREAD  = -199
+YAXIS_CLASS   = -198
+YAXIS_LOGNAME = -197
+
+yaxisDimension=YAXIS_LOGNAME
+
+def _safe(k):
+    return k
+    
+# --- Renderer implementation ---
+class LogRenderer(Renderer):
+    def __init__(self, outer):
+        Renderer.__init__(self)
+        print outer.yaxisDimension
+        self.outer = outer
+        print self.outer.times[0]
+        
+        
+    def doAutoRange( self, ds ):
+        print 'in doAutorange!'
+        yrng= dataset([0,100])
+        xrng= extent( self.outer.times )
+        print xrng, '***'
+        
+        return join( xrng, yrng )
+
+    def render(self, g1, xAxis, yAxis):
+        g = g1
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+
+        # Choose which y-values and label map to show
+        if self.outer.yaxisDimension == YAXIS_CLASS:
+            yMap = self.outer.yaxisMapClass
+            yVals = sourceClass
+        elif self.outer.yaxisDimension == YAXIS_THREAD:
+            yMap = self.outer.yaxisMapThread
+            yVals = thread
+        else:
+            yMap = self.outer.yaxisMapLogger
+            yVals = logName
+
+        # Draw y labels on the left at their y positions (like Java) :contentReference[oaicite:8]{index=8}
+        ix0 = int(xAxis.transform(xAxis.getDataMinimum()))
+        g.setColor(Color.lightGray)
+        for e in yMap.entrySet():
+            name = _safe(e.getKey())
+            iy = int(yAxis.transform(Units.dimensionless.createDatum(int(e.getValue()))))
+            g.drawString(name, ix0 + 2, iy)
+
+        # Draw points for records in current time window
+        minMilli = xAxis.getDataMinimum()
+        maxMilli = xAxis.getDataMaximum()
+
+        # binary search over sorted self.outer.times
+        first = int( findex( self.outer.smoothTimes, minMilli ) )
+        if first < 0:
+            first = -1 - first
+
+        last = int( findex( self.outer.smoothTimes, maxMilli) )
+        if last < 0:
+            last = -1 - last
+        else:
+            last = last + 1
+
+        for i in range(first, min(last, self.outer.times.length())):
+            print yVals
+            print yVals[i].svalue()
+            y= yMap.get(yVals[i].svalue())
+            if ( y==None ): y= -99
+
+            # choose color by logger name
+            ln = _safe( logName[i].svalue() )
+            col = self.outer.loggerColors.get(ln)
+            if col is None:
+                # simple stable-ish fallback color hash
+                h = abs(hash(ln)) % 6
+                col = [Color.red, Color.blue, Color.green, Color.magenta, Color.orange, Color.cyan][h]
+                self.outer.loggerColors.put(ln, col)
+
+            g.setColor(col)
+            x = int(xAxis.transform(self.outer.times[i]))
+            yy = int(yAxis.transform(Units.dimensionless.createDatum(y)))
+
+            # a small dot
+            g.fillRect(x - 1, yy - 1, 3, 3)
+
+# map from class to yvalue
+yaxisValuesClass= HashMap()
+
+# map from thread to yvalue
+yaxisValuesThread= HashMap()
+
+# map from logger name to yvalue
+yaxisValuesLogger= HashMap()
+
+yaxisMapClass= HashMap()
+yaxisMapThread= HashMap()
+yaxisMapLogger= HashMap()
+
+for i in xrange(len(times)):
+    if yaxisDimension==YAXIS_THREAD:
+        yAxisName='Thread Number'
+    elif yaxisDimension==YAXIS_CLASS:
+        yAxisName= 'Class Name'
+    elif yaxisDimension==YAXIS_LOGNAME:
+        yAxisName= 'Logger name'
+    
+
+    yValue= yaxisMapClass.get( sourceClass[i].svalue() )
+    if ( yValue==None ) :
+        yValue= yaxisMapClass.size()
+        yaxisMapClass.put( yAxisName, yValue )
+    
+    
+    yValue= yaxisMapThread.get( thread[i].svalue() )
+    if ( yValue==None ) :
+        yValue= yaxisMapThread.size()
+        yaxisMapThread.put( yAxisName, yValue )
+    
+    
+    yValue= yaxisMapLogger.get( logName[i].svalue() )
+    if ( yValue==None ) :
+        yValue= yaxisMapLogger.size()
+        yaxisMapLogger.put( yAxisName, yValue )
+
+    yaxisValuesClass.put( i, yaxisMapClass.get( sourceClass[i].svalue() ) )
+    yaxisValuesThread.put( i, yaxisMapThread.get( thread[i].svalue() ) )
+    yaxisValuesLogger.put( i, yaxisMapLogger.get( logName[i].svalue() ) )
+
+class Outer:
+    def __init__(self):
+        pass
+        
+outer= Outer()        
+outer.times= times
+outer.smoothTimes= smoothTimes
+outer.yaxisDimension=YAXIS_THREAD
+outer.yaxisMapClass=yaxisMapClass
+outer.yaxisMapThread=yaxisMapThread
+outer.yaxisMapLogger=yaxisMapLogger
+outer.loggerColors=HashMap()
+
+print outer.times
+
+plot( 0, renderer= LogRenderer(outer), xrange='0 to 80 s' )

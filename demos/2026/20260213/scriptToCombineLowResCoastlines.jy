@@ -1,0 +1,45 @@
+from java.lang import Double
+setScriptDescription('''Read in each of the coastlines files and create
+one convenient file which can be plotted to get all coastlines.''')
+
+namer= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/namer-cil.txt')
+samer= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/samer-cil.txt')
+africa= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/africa-cil.txt')
+asia= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/asia-cil.txt')
+europe= getDataSet('https://autoplot.org/data/coastlines-low.zip/coastlines/europe-cil.txt')
+
+all= None
+all= concatenate(all,namer)
+all= concatenate(all,samer)
+all= concatenate(all,africa)
+all= concatenate(all,asia)
+all= concatenate(all,europe)
+
+dsb= DataSetBuilder(2,int(all.length()*1.10),2)
+
+NaN= Double.NaN
+
+all= bundle( xtags(all),all )
+
+lastInvalid=True
+
+for i in xrange(len(all)-1 ):
+    if invalid(all[i,0]) and lastInvalid:
+        continue
+    dsb.nextRecord(all[i])
+    if invalid(all[i,0]):
+        lastInvalid= True
+        continue
+    lastInvalid=False
+    if abs(all[i+1,0]-all[i,0])>180:
+        dsb.nextRecord([NaN,NaN])
+        lastInvalid= True
+
+dsb.nextRecord(all[-1])
+
+all= dsb.getDataSet()
+all= dataset( all[:,0], all[:,1] )
+
+plot(all)
+
+formatDataSet( all, '~/tmp/all-cil.txt' )

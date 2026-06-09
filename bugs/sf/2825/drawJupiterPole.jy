@@ -1,0 +1,44 @@
+setScriptTitle('Jupiter Pole Experiment')
+setScriptDescription('''Experiment with code which draws the Jupiter North pole, using an image which has longitude and latitude axes.  Masafumi requested this.''')
+
+ds= getDataSet('https://space.physics.uiowa.edu/~mimai/PIA07782_hires.rot.jpg?xaxis=[360deg,0,-0.5deg,2047]&yaxis=[-90,0,90,1024]')
+
+setLayout(2,2)
+
+ds= ds[::-1,:,:]
+
+rr= distance(1000,1000,500,500,500./90,500/90.)
+plot( 0, rr, title='Radius', colorTable='white_blue')
+
+xx= outerProduct(linspace(-90,90,1000),ones(1000))
+yy= outerProduct(ones(1000),linspace(-90,90,1000))
+
+aa= toDegrees( atan2( yy, xx ) )
+
+# angles are expressed between 0 and 360.
+r= where( aa.lt(0) )
+aa[r]= aa[r]+360
+
+plot( 1, aa, title='Angle', colorTable='white_blue' )
+
+ff0= findex( xtags(ds), aa )
+ff1= findex( ytags(ds), 90-rr )
+
+imageAA= replicate( 255, ff0.length(), ff1.length() )
+imageRR= interpolate( ds[:,:,0], ff0, ff1 )
+imageGG= interpolate( ds[:,:,1], ff0, ff1 )
+imageBB= interpolate( ds[:,:,2], ff0, ff1 )
+
+r= where( rr.gt(90) )
+imageAA[r]= 0
+imageRR[r]= 0
+imageGG[r]= 0
+imageBB[r]= 0
+
+image= bundle( imageAA, imageRR, imageGG, imageBB )
+image.putProperty( QDataSet.DEPEND_2, labelsDataset(['alpha','red','green','blue']) )
+image.putProperty( QDataSet.RENDER_TYPE, QDataSet.VALUE_RENDER_TYPE_COMPOSITE_IMAGE )
+
+# TODO: image[r[:,0],r[:,1],:]=0 was impossibly slow.
+
+plot( 3, image )

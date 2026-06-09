@@ -1,0 +1,9 @@
+setScriptDescription('''Count the number of pixels with the given color in each day's image''')
+
+tr= getParam( 'timerange', '2008-01-01', 'timerange to load' )
+wb= getParam( 'color', 'white', 'the color to count', ['white','black'] )
+ds= getDataSet( 'https://autoplot.org/data/pngwalk/product_$Y$m$d.png?channel=greyscale', tr )
+if wb=='white': iwb=255 
+else: iwb=0
+r= where( ds.eq( iwb ) )
+print r.length()

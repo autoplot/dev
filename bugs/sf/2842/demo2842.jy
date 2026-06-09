@@ -1,0 +1,3 @@
+setScriptDescription('Demo bug where xtitle=None uses the word None for the title')
+
+plot(randn(100),xtitle=None)

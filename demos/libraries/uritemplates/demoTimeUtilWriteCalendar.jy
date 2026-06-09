@@ -1,7 +1,15 @@
 setScriptTitle('Make Markdown Week Calendar')
-setScriptDescription('''Write the header of my weekly log, which contains a one-week calendar ''')
+setScriptDescription('''<html>Write the header of my weekly log, which contains a one-week calendar.
+Here's handy code for generating many intervals:
+<br>
+<code>
+AP> tt= timegen('now','7 days',40)<br>
+AP> for t in tt: print TimeParser.create('$Y-$m-$d').format(datum(t))<br>
+</code>
+''')
 
 day= getParam('date','now','now or a date containing the week', { 'examples':['now+P7D','now','now-P7D'] } )
+writeFile= getParam('writeFile',False,'Write to file',[True,False] )
 
 lib= 'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar'
 doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
@@ -24,22 +32,30 @@ thisSat= TimeUtil.add( [0,0,5-today,0,0,0,0], day )
 nextSat= TimeUtil.add( [0,0,7,0,0,0,0], thisSat )
 prevSat= TimeUtil.subtract( thisSat, [0,0,7,0,0,0,0] )
 
-print ' '
-print '[prev](%d%02d%02d_wk.md) %d%02d%02d_wk.md [next](%d%02d%02d_wk.md)' \
-    % ( prevSat[0], prevSat[1], prevSat[2], thisSat[0], thisSat[1], thisSat[2], nextSat[0], nextSat[1], nextSat[2] )
-print ' '
-print '| sunday | monday | tuesday| wednes | thurs  | friday |saturday|'
-print '| ------ | ------ | ------ | ------ | ------ | ------ | ------ |'
+if writeFile:
+    outf= '/tmp/ap/writeCalendar/%d%02d%02d_wk.md' % ( thisSat[0], thisSat[1], thisSat[2] )
+    mkdir('/tmp/ap/writeCalendar/')
+    outs= open(outf,'w')
+else:
+    outs= sys.stderr
+
+outs.write(' \n')
+outs.write('[prev](%d%02d%02d_wk.md) %d%02d%02d_wk.md [next](%d%02d%02d_wk.md)\n' \
+    % ( prevSat[0], prevSat[1], prevSat[2], thisSat[0], thisSat[1], thisSat[2], nextSat[0], nextSat[1], nextSat[2] ))
+outs.write(' \n')
+outs.write('| sunday | monday | tuesday| wednes | thurs  | friday |saturday|\n')
+outs.write('| ------ | ------ | ------ | ------ | ------ | ------ | ------ |\n')
 
 day= prevSat
 for i in xrange(7):
     day= TimeUtil.add( day, [0,0,1,0,0,0,0] )
-    print '| %6d' % ( day[2] ),
-print '|'
-print ' '
-print ' '
-print 'At Home:'
-print '*'
-print ' '
-print 'On Campus:'
-print '*'
+    outs.write( '| %6d ' % ( day[2] ) )
+outs.write( '|\n' )
+outs.write( ' \n' )
+outs.write( ' \n' )
+outs.write( 'At Home:\n' )
+outs.write( '*\n' )
+outs.write( ' \n' )
+outs.write( 'On Campus:\n' )
+outs.write( '*\n' )
+outs.close()

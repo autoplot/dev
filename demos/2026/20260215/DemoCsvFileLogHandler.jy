@@ -1,0 +1,15 @@
+from org.das2.util import LoggerManager
+from org.das2.graph.util import GraphicalLogHandler
+from org.autoplot.util import CsvFileLogHandler
+
+setScriptDescription('Run this and turn up the log levels on the console tab.')
+
+log= LoggerManager.getLogger('')
+
+handler= CsvFileLogHandler()
+log.addHandler(handler)
+
+log.info('Hi There')
+
+
+

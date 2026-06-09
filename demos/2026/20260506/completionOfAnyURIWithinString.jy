@@ -1,0 +1,10 @@
+
+uri= 'https://autoplot.org/data/'
+uri2= PWD
+if (True):
+    uri1= 'https://autoplot.org/Logo96.png'
+
+    
+uri1= PWD + 'demoTraceProblems.jy'
+
+foo= uri2 + ''    

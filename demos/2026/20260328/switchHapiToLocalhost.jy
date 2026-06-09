@@ -1,0 +1,11 @@
+setScriptDescription('''Change the current focus URI from a HAPI server to http://localhost:8280/HapiServer/hapi, for debugging.''')
+
+uri= dom.controller.focusUri
+
+i= uri.find('/hapi?')
+
+if i==-1:
+    showMessageDialog('Set the focus to a HAPI URI')
+else:
+    dom.controller.focusUri= 'http://localhost:8280/HapiServer/hapi?' + uri[(i+6):]
+    

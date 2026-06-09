@@ -1,0 +1,10 @@
+setScriptTitle('Multiplication Table - OuterProduct demo')
+setScriptDescription('''Demonstrates using outerProduct function to create multiplication table,
+also demonstrates two-parameter script.''')
+
+p= getParam('p',5)
+q= getParam('q',7)
+
+zz= outerProduct( findgen(p), findgen(q) )
+plot( zz, renderType='digital>fontSize=4em&format=%d' )
+dom.plots[0].yaxis.flipped=True

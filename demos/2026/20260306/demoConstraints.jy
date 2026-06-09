@@ -1,0 +1,11 @@
+print 'Here are the parameters:'
+
+print params
+
+tr= getParam( 'tr', '2022-06-25', 'the day to run', { 'format':'$Y-$jT$H:$M/$(Y;end)-$jT$H:$M' } )
+rl= getParam( 'rl', 5.4, 'real number with .1 resolution', { 'format':'%.1f' } )
+rg= getParam( 'rg', 'Jeremy', 'Name starting with J', { 'regex': 'J.*' } )
+
+print tr, rl, rg
+
+print 'All done!'

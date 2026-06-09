@@ -1,0 +1,17 @@
+from java.lang import System
+setScriptDescription('Make graphic suitable for batch testing')
+
+count= getParam( 'ifix', 80, 'Number of points', {'min':1, 'max':20000 } )
+
+t0 = System.currentTimeMillis()
+
+x= accum( randn(count) )
+y= accum( randn(count) )
+z= sqrt( x**2 + y**2 )
+
+ss= sqrt(count)
+plot( x, y, z, symbolSize=10, xrange=[-ss,ss], yrange=[-ss,ss], zrange=[0,ss] )
+
+millis= System.currentTimeMillis() - t0 
+
+print 'scatter plot of %d points rendered in %d milliseconds' % ( count, millis )

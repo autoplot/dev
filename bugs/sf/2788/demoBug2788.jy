@@ -1,0 +1,30 @@
+setScriptTitle('Demo 2788')
+setScriptDescription('''Demonstrate bug where only one plotElement is used to determine the step/scan logic.  Run this 
+script and zoom in on one segment of the blue data. Then step over until "scan" incorrectly appears,
+and it scans over to the next blue segment.''')
+
+tt= linspace('2026-02-09T00:00','2026-02-09T24:00',100000)
+
+ds1= randn(len(tt))/10 + sin((tt-'2026-02-09T00:00')/'24hr'*5*TAU)
+ds2= randn(len(tt))/10 + sin((tt-'2026-02-09T00:00')/'24hr'*5*TAU) + .3
+ds3= randn(len(tt))/10 + sin((tt-'2026-02-09T00:00')/'24hr'*5*TAU) + .6
+
+ds1= dataset( tt,ds1 )
+ds2= dataset( tt,ds2 )
+ds3= dataset( tt,ds3 )
+
+wh= mod( floor( ( tt-'2026-02-09T00:00' ) / '1hr' ), 3 )
+
+r= where( wh.eq(0) )
+ds1=ds1[r]
+
+r= where( wh.eq(1) )
+ds2=ds2[r]
+
+r= where( wh.eq(2) )
+ds3=ds3[r]
+
+setLayoutOverplot(3)
+plot( 0, ds1, color='blue' )
+plot( 1, ds2, color='purple' )
+plot( 2, ds3, color='red' )

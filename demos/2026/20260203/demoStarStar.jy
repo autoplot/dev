@@ -1,0 +1,13 @@
+setScriptDescription('''Demonstrate **kwargs which is like IDL's _extra=e''')
+
+def myfunct1( abckey=0 ):
+    print 'abckey=', abckey
+    
+def myfunct0( a, b=0, **kwargs ):
+    print 'a=',a
+    print 'b=',b
+    print 'kwargs=', kwargs
+    myfunct1(**kwargs)
+    
+myfunct0(1,2,abckey=1)
+

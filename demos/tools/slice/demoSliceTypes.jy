@@ -1,0 +1,36 @@
+from java.lang import System
+from org.das2.event import CrossHairRenderer,SimpleCrossHairRenderer
+setScriptDescription('''Definitive place describing slice types''')
+
+typ= getParam('type','Drag','Mouse event types',['Drag','Box','Keyboard'])
+
+reset()
+
+ds= getDataSet('https://github.com/autoplot/dev/blob/master/demos/2026/20260324/lavaLamp.jyds',monitor )
+ds= ds[34]
+
+load(PWD+'demoSliceTypes.vap')
+
+ann= annotation(0,text='')
+
+p,pe= \
+    plot( ds,zlog=False )
+#addPlots(2,1,'right')
+      
+def drag(evt):
+    t0= System.currentTimeMillis()
+    ds= pe.controller.dataSet
+    print 'ds in %d millis' % ( System.currentTimeMillis()-t0 )
+    sl1= slice0(ds,dataset(evt.getFinishX()))
+    print 'sl1 in %d millis' % ( System.currentTimeMillis()-t0 )
+    sl2= slice1(ds,dataset(evt.getFinishY()))
+    print 'sl2 in %d millis' % ( System.currentTimeMillis()-t0 )
+    ann.text=  'x:%s y:%s' % ( evt.getFinishX(), evt.getFinishY() ) 
+    
+    
+dragMM= addMouseModule(p,typ,drag)
+dragMM.dragEvents=True
+dp=p.controller.dasPlot
+dr= SimpleCrossHairRenderer(True)
+dragMM.setDragRenderer(dr)
+

@@ -1,0 +1,44 @@
+from org.das2.event import BoxRenderer
+from java.awt.geom import Ellipse2D,Line2D
+
+setScriptDescription('Slice at radius')
+demo= getParam( 'demo', False, 'use Demo data', [True,False] )
+
+
+if ( demo ):
+    ds= distance( 60,60, 20, 20, 10,7 ) + randn(60,60)/10.
+    xx= linspace( -20,50,60 )
+    yy= linspace( -20,30,60 )
+    ds= link( xx, yy, ds )
+    plot( ds )
+    
+class RadiusDragRenderer( BoxRenderer ):
+    def renderDrag( self, g, p1, p2 ):
+        x0= dom.plots[0].controller.dasPlot.getXAxis().transform(datum(0))
+        y0= dom.plots[0].controller.dasPlot.getYAxis().transform(datum(0))
+        r= sqrt( (p2.x-x0)**2 + (p2.y-y0)**2 )
+        g.draw(Ellipse2D.Double(x0-r,y0-r,r*2,r*2))
+        
+
+def radiusMouse(evt):
+    ds= dom.plotElements[0].controller.dataSet
+    r= sqrt( (evt.getFinishX())**2 + (evt.getFinishY())**2 )
+    aa= linspace(-PI,PI,1000)
+    xx= cos(aa)*r
+    yy= sin(aa)*r
+    ixx= findex( xtags(ds), xx )
+    iyy= findex( ytags(ds), yy )
+    dsn= interpolate( ds,ixx, iyy )
+    app0= getApplication()
+    sliceApp= newApplication('slice')
+    setApplication(sliceApp)
+    plot( toDegrees(aa), dsn, title='Radius='+str(r), xtickValues='+30/3' )
+    setApplication(app0)
+    
+if ( demo ):
+    mm= addMouseModule(dom.plots[0],'radius',radiusMouse)
+    mdr= RadiusDragRenderer(dom.plots[0].controller.dasPlot)
+    mm.dragRenderer= mdr
+    showMessageDialog( getApplication(), 'Click to slice at radius' )
+
+print 'okay...'

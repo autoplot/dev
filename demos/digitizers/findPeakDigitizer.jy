@@ -1,3 +1,4 @@
+from org.das2.qds import SemanticOps
 from java.awt import BasicStroke,Rectangle
 from org.das2.event import BoxRenderer
 from java.awt.event import InputEvent
@@ -81,7 +82,7 @@ def getDigitizeAction():
     panel= JPanel()
     panel.setLayout(BorderLayout())
                 
-    cb2= JComboBox( [ 'peak', 'manual', 'select' ] )
+    cb2= JComboBox( [ 'peak', 'manual', 'manual-diag', 'select' ] )
     
     cb2.selectedItem= 'peak'
     
@@ -102,6 +103,8 @@ def doDigitize( ds, xrange, yrange ):
     yt= ytags(ds)
     rf= where( within( yt, yrange ) )
     
+    addedPoints=0
+    
     for i in rt:
         sl= ds[i]
         sl1= sl[rf]
@@ -119,7 +122,7 @@ def doDigitize( ds, xrange, yrange ):
         mad= meanAverageDeviation(sl1[s])
         
         zpeak= ds[i,rf[j]]
-        print zpeak, ( avg + nsigma*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
+        #print zpeak, ( avg + nsigma*mad ), 'np=%f avg=%f mad=%f' % ( np, avg, mad )
         
         if zpeak > ( avg + nsigma*mad ):
             rec= bundle( xt[i], yt[rf[j]], 
@@ -129,6 +132,11 @@ def doDigitize( ds, xrange, yrange ):
                 dataset( mad, name='deviation' ),
                 dataset( ( zpeak - avg ) / mad, name='sigmas' ) )
             dpr.addDataPoint( rec )
+            addedPoints=addedPoints+1
+    if addedPoints==0:
+        print 'no significant peaks found'
+        setStatus('no significant peaks found')
+        sleep(1000)
 
 
 def boxLookup( evt ):
@@ -162,6 +170,28 @@ def boxLookup( evt ):
         for i in xrange(len(rt)):
             zpeak= ds[i,j]
             rec= bundle( xt[rt[i]], yt[j], 
+                dataset( zpeak, name='peak' ), 
+                dataset( len(ry), name='numpoints' ), 
+                dataset( 0, name='avg' ),
+                dataset( 0, name='deviation' ),
+                dataset( 0, name='sigmas' ) )
+            dpr.addDataPoint( rec )
+    elif ( action=='manual-diag' ):
+        ir= len(ry)/2
+        j= ry[ir]
+        yleft= evt.startY
+        yright= evt.finishY
+        xunits= SemanticOps.getUnits(xt)
+        ff= rescale(xt[rt],evt.startX,evt.finishX,datum(0),datum(1))
+        ylog=True
+        if ylog:
+            yy= pow(10,interpolate([log10(yleft),log10(yright)],ff))
+        else:
+            yy= interpolate([yleft,yright],ff)
+        for i in xrange(len(rt)):
+            zpeak= ds[i,j]
+            y= yy[i]
+            rec= bundle( xt[rt[i]], y, 
                 dataset( zpeak, name='peak' ), 
                 dataset( len(ry), name='numpoints' ), 
                 dataset( 0, name='avg' ),

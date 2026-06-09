@@ -1,0 +1,35 @@
+from java.util.regex import Pattern
+from java.time import ZoneId
+from java.time import ZoneOffset
+from java.util import Date
+from java.util import TimeZone
+
+
+setScriptDescription('''Read copy-n-paste from ebay bid history.  Note this
+ignores time zone!''')
+
+resourceURI= getParam( 'resourceURI', PWD + 'bigFurryHatBids.txt' )
+
+amount= DataSetBuilder(1,100)
+time= DataSetBuilder(1,100)
+
+p= Pattern.compile('((\d+) ([a-zA-Z]+) (20\d\d) at (\d+):(\d+):(\d+)([ap]m)) ([A-Z]{3})')
+
+for line in open(str(getFile(resourceURI))).readlines():
+    if line.startswith('$'):
+        a=Units.dollars.parse(line)
+        amount.nextRecord(a)
+        print a
+    m= p.matcher(line)
+    if m.find():
+        tz = TimeZone.getTimeZone(m.group(9))
+
+        ymd= m.group(4)+' '+m.group(3)+' '+m.group(2)
+        hms= m.group(5)+':' + m.group(6)+':'+m.group(7)
+        t= Units.t2000.parse( ymd + ' ' + hms )
+        t= t.add(Units.milliseconds.createDatum(tz.getRawOffset()))
+        
+        time.nextRecord(t)
+
+plot( time.getDataSet(), amount.getDataSet() )
+                

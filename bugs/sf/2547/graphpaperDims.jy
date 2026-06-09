@@ -11,6 +11,11 @@ class GraphPaperPainter(Painter):
         gtr.setString(g,"%d&times;%d %d&times;%d" % ( size.width, size.height, dom.canvases[0].width, dom.canvases[0].height ) )
         gtr.draw(g,0,12)
         g.stroke= BasicStroke(0.2) 
+        for i in xrange(0,size.width,10):
+            g.drawLine(i,0,i,size.height)
+        for i in xrange(0,size.height,10):
+            g.drawLine(0,i,size.width,i)
+        g.color= ColorUtil.PLUM.darker()
         for i in xrange(0,size.width,100):
             g.drawLine(i,0,i,size.height)
         for i in xrange(0,size.height,100):

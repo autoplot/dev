@@ -1,0 +1,57 @@
+from java.io import File
+from javax.imageio import ImageIO
+from java.awt import Graphics2D
+from java.lang import ProcessBuilder
+setScriptDescription('''The Remarkable 2 is a digital notebook, where you can put a custom
+sleep screen on the device.  The sleep screen is just a 1404x1872 pixel png, which this script
+generates.  The notable-utility is a Android or iPhone app which installs this on the 
+Remarkable, but it simply copies the file 'suspended.png' into /usr/share/remarkable/.
+Note this script assumes the Remarkable has ssh enabled and that it is at 192.168.1.19
+on the network, and that public/private keys are set up, and that the device is not
+currently sleeping.''')
+
+width= getParam('width',344,'Width in pixels of the name region')
+ip= getParam('ip','192.168.1.19','ip of the Remarkable device')
+
+N= 1000000
+monitor.started()
+monitor.taskSize= N
+monitor.progressMessage='initialize image'
+ds= replicate(255,1404,1872,3)
+
+monitor.progressMessage='filling random pixels'
+for i in xrange(N):
+    monitor.taskProgress= monitor.taskProgress+1
+    ix= randu()*1404
+    iy= abs(randn()/3*1872)
+    if ( ix>0 and ix<1404 and iy>0 and iy<1872 ):
+        ds[ix,iy,:]= ds[ix,iy,:]-100
+        if ds[ix,iy,0]<0:
+            ds[ix,iy,:]=0
+#ds[530:1404-530,93:260,:]= 220
+
+monitor.progressMessage='saving to temporary file'
+mkdir('/tmp/ap/remarkable/remarkable/')
+formatDataSet( ds,'/tmp/ap/remarkable/remarkable/suspended.png' )
+
+monitor.progressMessage='adding region for name'
+bufferedImage= ImageIO.read(File('/tmp/ap/remarkable/remarkable/suspended.png'))
+g= bufferedImage.createGraphics()
+
+g.color=Color.WHITE
+g.fillRoundRect((1404-width)/2,1872-260,width,260-93,30,30)
+g.color=Color.BLACK
+g.drawRoundRect((1404-width)/2,1872-260,width,260-93,30,30)
+
+monitor.progressMessage='writing final file'
+ImageIO.write( bufferedImage,'png',File('/tmp/ap/remarkable/remarkable/suspended.png'))
+
+monitor.progressMessage='copy out to remarkable'
+pb=ProcessBuilder(['scp',\
+                  '/tmp/ap/remarkable/remarkable/suspended.png',\
+                  'root@'+ip+':/usr/share/remarkable/suspended.png' ] )
+process= pb.start()
+process.waitFor()
+
+monitor.finished()
+

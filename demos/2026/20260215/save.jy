@@ -1,0 +1,6 @@
+from java.io import File
+from org.das2.graph.util import GraphicalLogRenderer
+
+r= GraphicalLogRenderer.getInstance()
+r.readRecords( File('/tmp/autoplot.log.csv' ) )
+plot( None, renderer=r )
