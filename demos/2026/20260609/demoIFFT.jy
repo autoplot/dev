@@ -1,3 +1,7 @@
+setScriptTitle('Demo IFFT Scaling')
+setScriptDescription('''Demonstrates that IFFT doesn't scale the data.  In IDL it does scale the data.''')
+
+
 ds= randn(512)
 ff= fft(ds)
 iff= ifft(ff)
