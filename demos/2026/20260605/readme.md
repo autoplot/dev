@@ -5,3 +5,6 @@ is painted.  I'd forgotten about this functionality, and it was perfect for the 
 had where we wanted to paint data for context, then a polar axis, then the data of interest.
 This script demonstrates this functionality.
 
+Here's another code which uses a decorator and can be used for testing:
+
+https://github.com/autoplot/dev/blob/master/demos/annotations/strike/strikeDecorator.jy
