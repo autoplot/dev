@@ -1,0 +1,11 @@
+setScriptDescription('Demo binAverage 1D')
+
+N=10000
+
+x= randn(N)/3 + 5
+y= exp( -1 * x ) + randn(N)
+
+xx= linspace( 0, 10, 100 )
+r2= binAverage( bundle(x,y), xx )
+
+plot( r2 )
