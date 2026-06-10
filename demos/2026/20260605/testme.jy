@@ -19,15 +19,15 @@ class CirclePainter(Painter):
         self.y= datum(y)
     def paint( self,g ):
         print 'painting ',self.x,self.y
-        peekAt(22)
-        g.color= Color.LIGHT_GRAY
-        peekAt(24)
-        ix0= p.xaxis.controller.dasAxis.transform(self.x-0.5)
-        peekAt(26)
-        iy0= p.yaxis.controller.dasAxis.transform(self.y-0.5)
-        ix1= p.xaxis.controller.dasAxis.transform(self.x+0.5)
-        iy1= p.yaxis.controller.dasAxis.transform(self.y+0.5)
-        g.fillOval(int(ix0),int(iy1),int(ix1-ix0),int(iy0-iy1))
+        #peekAt(22)
+        #g.color= Color.LIGHT_GRAY
+        #peekAt(24)
+        #ix0= p.xaxis.controller.dasAxis.transform(self.x-0.5)
+        #peekAt(26)
+        #iy0= p.yaxis.controller.dasAxis.transform(self.y-0.5)
+        #ix1= p.xaxis.controller.dasAxis.transform(self.x+0.5)
+        #iy1= p.yaxis.controller.dasAxis.transform(self.y+0.5)
+        #g.fillOval(int(ix0),int(iy1),int(ix1-ix0),int(iy0-iy1))
         
 pe0.controller.renderer.setTopDecorator(CirclePainter(3,3))
 
