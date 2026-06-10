@@ -21,8 +21,8 @@ def paint( g, x, y ):
     iy1= p.yaxis.controller.dasAxis.transform(y+0.5)
     g.fillOval(int(ix0),int(iy1),int(ix1-ix0),int(iy0-iy1))
 
-addTopDecoration(pe0,lambda p: paint(g,datum(3),datum(3)))
+addTopDecoration(pe0,lambda g: paint(g,datum(3),datum(3)))
 
 p,pe2= plot( 1, X2,Y2, color=ColorUtil.CORAL )
 
-addBottomDecoration(pe2,lambda p: paint(g,datum(2),datum(2)))
+addBottomDecoration(pe2,lambda g: paint(g,datum(2),datum(2)))
