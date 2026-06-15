@@ -1,5 +1,6 @@
 setScriptDescription('''Demo binAverage use to get regular averaged grid.
-A N-point random grid of X,Y&rarr;Z is reduced to make a regular grid.''')
+A N-point random grid of X,Y&rarr;Z is reduced to make a regular grid.
+See https://sourceforge.net/p/autoplot/bugs/2847/.''')
 
 N= 10000000
 xxx= randn(N)
@@ -14,5 +15,5 @@ xx= linspace( -1, 1, 100 )
 yy= linspace( -1, 1, 100 )
 r2= binAverage( xyz, xx, yy )
 
-plot( r2, zrange=[0,1] )
-plot( 1, r2.property( QDataSet.WEIGHTS ) )
+plot( r2, zrange=[0,1], ytitle='Average' )
+plot( 1, r2.property( QDataSet.WEIGHTS ), ytitle='Weights' )
