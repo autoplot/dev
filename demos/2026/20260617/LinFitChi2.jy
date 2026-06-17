@@ -1,0 +1,24 @@
+from org.das2.client import QDataSetStreamHandler
+from org.das2.qds.util import LinFit
+
+xx= randn(1000)
+yy= randn(1000)
+lf= LinFit(xx,yy)
+print lf.getChi2(), 'no correllation'
+
+xx= randn(1000)
+yy= xx * randn(1000)
+lf= LinFit(xx,yy)
+print lf.getChi2(), 'correllation with errors'
+
+
+xx= randn(1000)
+yy= xx * randn(1000)/100
+lf= LinFit(xx,yy)
+print lf.getChi2(), 'correllation with small (1/100) errors'
+
+xx= randn(1000)
+yy= xx
+lf= LinFit(xx,yy)
+print lf.getChi2(), 'correllation with no errors'
+
