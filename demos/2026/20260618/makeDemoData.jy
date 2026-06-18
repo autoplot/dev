@@ -1,0 +1,4 @@
+x= linspace(100,200,101)
+y= randn(101)
+z= floor((randu(101)*10))
+formatDataSet( bundle(x,y,z), PWD + 'demoData.txt' )
