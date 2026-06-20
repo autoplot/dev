@@ -1,6 +1,8 @@
 from org.das2.client import QDataSetStreamHandler
 from org.das2.qds.util import LinFit
 
+randomSeed(0)
+
 xx= randn(1000)
 yy= randn(1000)
 lf= LinFit(xx,yy)
