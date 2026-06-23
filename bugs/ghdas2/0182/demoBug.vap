@@ -3,12 +3,12 @@
         <property class="Annotation" length="0" name="annotations"/>
         <property class="BindingModel" length="7" name="bindings">
             <property default="null" type="propertyBinding" value="plot_0.colortable to style_0.colortable  (plot_0)"/>
-            <property default="null" type="propertyBinding" value="app_0.timeRange to xaxis_0.range  (app_0)"/>
             <property default="null" type="propertyBinding" value="plot_1.colortable to style_1.colortable  (plot_1)"/>
             <property default="null" type="propertyBinding" value="yaxis_0.log to yaxis_1.log  (yaxis_0)"/>
             <property default="null" type="propertyBinding" value="zaxis_0.range to zaxis_1.range  (zaxis_0)"/>
             <property default="null" type="propertyBinding" value="zaxis_0.log to zaxis_1.log  (zaxis_0)"/>
             <property default="null" type="propertyBinding" value="zaxis_0.label to zaxis_1.label  (zaxis_0)"/>
+            <property default="null" type="propertyBinding" value="app_0.timeRange to plot_0.context  (app_0)"/>
         </property>
         <property class="Canvas" length="1" name="canvases">
             <Canvas id="canvas_0">
@@ -48,17 +48,11 @@
         <property class="Connector" length="1" name="connectors">
             <property default="null" type="connector" value="plot_0 to plot_1"/>
         </property>
-        <property class="DataSourceFilter" length="2" name="dataSourceFilters">
+        <property class="DataSourceFilter" length="1" name="dataSourceFilters">
             <DataSourceFilter id="data_0">
                 <property name="fill" type="String" value=""/>
                 <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+internal:"/>
-                <property name="validRange" type="String" value=""/>
-            </DataSourceFilter>
-            <DataSourceFilter id="data_1">
-                <property name="fill" type="String" value=""/>
-                <property name="filters" type="String" value=""/>
-                <property default="" name="uri" type="String" value="vap+internal:"/>
+                <property default="" name="uri" type="String" value="vap+jyds:%{PWD}r2waveform.jyds"/>
                 <property name="validRange" type="String" value=""/>
             </DataSourceFilter>
         </property>
@@ -111,7 +105,7 @@
                 <property name="active" type="Boolean" value="true"/>
                 <property default="false" name="autoComponent" type="Boolean" value="true"/>
                 <property default="false" name="autoLabel" type="Boolean" value="true"/>
-                <property name="autoRenderType" type="Boolean" value="false"/>
+                <property default="false" name="autoRenderType" type="Boolean" value="true"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
                 <property default="" name="dataSourceFilterId" type="String" value="data_0"/>
@@ -127,7 +121,7 @@
                         <property name="colortable" type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
                         <property name="columnId" type="String" value=""/>
                         <property name="context" type="datumRange">
-                            <datumRange units="us2000" value="2010-01-01"/>
+                            <datumRange units="us2000" value="2012-10-02 12:02:59.900 to 12:03:02.100"/>
                         </property>
                         <property name="displayLegend" type="Boolean" value="true"/>
                         <property name="displayTitle" type="Boolean" value="true"/>
@@ -158,7 +152,7 @@
                                     <datumRange units="us2000" value="2012-10-02 12:02:59.900 to 12:03:02.100"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
-                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.074129 (dimensionless)"/>
+                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="microseconds: 2231.2"/>
                                 <property name="tickFormat" type="String" value=""/>
                                 <property name="tickValues" type="String" value=""/>
                                 <property name="visible" type="Boolean" value="true"/>
@@ -181,7 +175,7 @@
                                     <datumRange units="" value="-7759.096807781097 to 10690.630442209389"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
-                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.20243 (dimensionless)"/>
+                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="116.77 (dimensionless)"/>
                                 <property name="tickFormat" type="String" value=""/>
                                 <property name="tickValues" type="String" value=""/>
                                 <property name="visible" type="Boolean" value="true"/>
@@ -204,7 +198,7 @@
                                     <datumRange units="" value="0.0 to 100.0"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
-                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.20243 (dimensionless)"/>
+                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.63291 (dimensionless)"/>
                                 <property name="tickFormat" type="String" value=""/>
                                 <property name="tickValues" type="String" value=""/>
                                 <property default="true" name="visible" type="Boolean" value="false"/>
@@ -231,7 +225,7 @@
                         <property name="reference" type="datum" value="0.0 (dimensionless)"/>
                         <property name="showLimits" type="Boolean" value="true"/>
                         <property default="None" name="symbolConnector" type="enum:org.das2.graph.PsymConnector" value="Solid"/>
-                        <property name="symbolSize" type="Double" value="1.0"/>
+                        <property default="1.0" name="symbolSize" type="Double" value="3.0"/>
                     </PlotElementStyle>
                 </property>
             </PlotElement>
@@ -242,7 +236,7 @@
                 <property name="autoRenderType" type="Boolean" value="false"/>
                 <property name="cadenceCheck" type="Boolean" value="true"/>
                 <property name="component" type="String" value=""/>
-                <property default="" name="dataSourceFilterId" type="String" value="data_1"/>
+                <property default="" name="dataSourceFilterId" type="String" value="data_0"/>
                 <property name="displayLegend" type="Boolean" value="false"/>
                 <property name="legendLabel" type="String" value=""/>
                 <property name="parent" type="String" value=""/>
@@ -255,7 +249,7 @@
                         <property name="colortable" type="enum:org.das2.graph.DasColorBar$Type" value="color_wedge"/>
                         <property name="columnId" type="String" value=""/>
                         <property name="context" type="datumRange">
-                            <datumRange units="us2000" value="2010-01-01"/>
+                            <datumRange units="us2000" value="2012-10-02 12:02:59.900 to 12:03:02.100"/>
                         </property>
                         <property name="displayLegend" type="Boolean" value="true"/>
                         <property name="displayTitle" type="Boolean" value="true"/>
@@ -272,7 +266,7 @@
                         <property name="xaxis" type="DomNode">
                             <Axis>
                                 <property default="false" name="autoLabel" type="Boolean" value="true"/>
-                                <property default="false" name="autoRange" type="Boolean" value="true"/>
+                                <property name="autoRange" type="Boolean" value="false"/>
                                 <property name="autoRangeHints" type="String" value=""/>
                                 <property name="axisOffset" type="String" value=""/>
                                 <property name="drawTickLabels" type="Boolean" value="true"/>
@@ -286,7 +280,7 @@
                                     <datumRange units="us2000" value="2012-10-02 12:02:59.900 to 12:03:02.100"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
-                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.074129 (dimensionless)"/>
+                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="microseconds: 2.41910E5"/>
                                 <property name="tickFormat" type="String" value=""/>
                                 <property name="tickValues" type="String" value=""/>
                                 <property name="visible" type="Boolean" value="true"/>
@@ -309,7 +303,7 @@
                                     <datumRange units="" value="-7759.096807781097 to 10690.630442209389"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
-                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.20243 (dimensionless)"/>
+                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="116.04 (dimensionless)"/>
                                 <property name="tickFormat" type="String" value=""/>
                                 <property name="tickValues" type="String" value=""/>
                                 <property name="visible" type="Boolean" value="true"/>
@@ -332,7 +326,7 @@
                                     <datumRange units="" value="0.0 to 100.0"/>
                                 </property>
                                 <property name="reference" type="String" value=""/>
-                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.20243 (dimensionless)"/>
+                                <property default="0.1 (dimensionless)" name="scale" type="datum" value="0.62893 (dimensionless)"/>
                                 <property name="tickFormat" type="String" value=""/>
                                 <property name="tickValues" type="String" value=""/>
                                 <property default="true" name="visible" type="Boolean" value="false"/>
@@ -359,7 +353,7 @@
                         <property name="reference" type="datum" value="0.0 (dimensionless)"/>
                         <property name="showLimits" type="Boolean" value="true"/>
                         <property default="None" name="symbolConnector" type="enum:org.das2.graph.PsymConnector" value="Solid"/>
-                        <property name="symbolSize" type="Double" value="1.0"/>
+                        <property default="1.0" name="symbolSize" type="Double" value="3.0"/>
                     </PlotElementStyle>
                 </property>
             </PlotElement>
@@ -390,7 +384,7 @@
                 <property name="xaxis" type="DomNode">
                     <Axis id="xaxis_0">
                         <property default="false" name="autoLabel" type="Boolean" value="true"/>
-                        <property name="autoRange" type="Boolean" value="false"/>
+                        <property default="false" name="autoRange" type="Boolean" value="true"/>
                         <property name="autoRangeHints" type="String" value=""/>
                         <property name="axisOffset" type="String" value=""/>
                         <property name="drawTickLabels" type="Boolean" value="true"/>
@@ -400,10 +394,10 @@
                         <property name="log" type="Boolean" value="false"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="us2000" value="2012-10-02 12:02:59.750 to 12:03:02.250"/>
+                            <datumRange units="us2000" value="2012-10-02 12:02:59.900 to 12:03:02.100"/>
                         </property>
                         <property name="reference" type="String" value=""/>
-                        <property default="0.1 (dimensionless)" name="scale" type="datum" value="microseconds: 2535.5"/>
+                        <property default="0.1 (dimensionless)" name="scale" type="datum" value="microseconds: 2231.2"/>
                         <property name="tickFormat" type="String" value=""/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
@@ -489,10 +483,10 @@
                         <property name="log" type="Boolean" value="false"/>
                         <property name="opposite" type="Boolean" value="false"/>
                         <property name="range" type="datumRange">
-                            <datumRange units="us2000" value="2012-10-02 12:01:01.737760 to 12:05:00.262240"/>
+                            <datumRange units="us2000" value="2012-10-02 12:00:31.922200 to 12:05:30.077800"/>
                         </property>
                         <property name="reference" type="String" value=""/>
-                        <property default="0.1 (dimensionless)" name="scale" type="datum" value="microseconds: 2.41910E5"/>
+                        <property default="0.1 (dimensionless)" name="scale" type="datum" value="microseconds: 3.02390E5"/>
                         <property name="tickFormat" type="String" value=""/>
                         <property name="tickValues" type="String" value=""/>
                         <property name="visible" type="Boolean" value="true"/>
@@ -545,7 +539,7 @@
             </Plot>
         </property>
         <property name="timeRange" type="datumRange">
-            <datumRange units="us2000" value="2012-10-02 12:02:59.750 to 12:03:02.250"/>
+            <datumRange units="us2000" value="2012-10-02 12:02:59.900 to 12:03:02.100"/>
         </property>
     </Application>
 </vap>
