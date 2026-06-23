@@ -1,0 +1,2 @@
+from org.das2.qds.examples import Schemes
+result= dataset( Schemes.rank2Waveform(), renderType='series' )
