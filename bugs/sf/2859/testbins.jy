@@ -1,0 +1,11 @@
+x= linspace('2020-02-02T00:00','2020-02-03T00:00',1441)
+x= putProperty( x, QDataSet.BIN_MINUS, '15s')
+x= putProperty( x, QDataSet.BIN_PLUS, '15s')
+
+z= randn(1441,30)
+y= linspace(5,130,30)
+y= putProperty( y, QDataSet.BIN_MINUS, 3 )
+y= putProperty( y, QDataSet.BIN_PLUS, 2 )
+
+formatDataSet( link( x, y, z ) , '/tmp/foo.cdf' )
+plot( link( x, y, z ) )
