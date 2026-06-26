@@ -1,0 +1,26 @@
+setScriptDescription('''Read BeReal times file, see https://bereal.devin.fun/#uscChart.  Thanks to Devin Baeten for collecting data.''')
+
+region=getParam('region','Americas','Be Real Region',['Americas','Europe','East Asia','West Asia','United Kingdom'])
+
+rgMap= { 'us-central':'Americas', 'europe-west':'Europe', 'asia-west':'West Asia', 'asia-east':'East Asia', 'united-kingdom':'United Kingdom' }
+
+ff= downloadResourceAsTempFile(URL('https://apis.devinbaeten.com/prod/app/bereal/api/moments/history/csv?tz=UTC'),monitor)
+
+dsb= DataSetBuilder(2,100,2)
+dsb.setName(0,'Time')
+dsb.setName(1,'TimeOfDay (UT)')
+dsb.setUnits(1,Units.hours)
+
+fl= open(str(ff))
+for line in fl.readlines():
+    ss= line.split(',')
+    rg= ss[1].strip()
+    ts= ss[2].strip()
+    if rgMap.has_key(rg):
+        rg= rgMap[rg]
+    if rg==region and ts.startswith('"') and ts.endswith('"'):
+        t= datum(ts[1:-1])
+        tod= t-TimeUtil.prevMidnight(t)
+        dsb.nextRecord([t,tod])
+
+result= dsb.getDataSet()
