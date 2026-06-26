@@ -1,4 +1,6 @@
-setScriptDescription('''Read BeReal times file, see https://bereal.devin.fun/#uscChart.  Thanks to Devin Baeten for collecting data.''')
+setScriptDescription('''Read BeReal times file, see https://bereal.devin.fun/#uscChart.  The file is generated
+so it must be downloaded to a temporary file, and its times are formatted such that a custom parser is needed.
+Thanks to Devin Baeten for collecting data and maintaining the website.''')
 
 region=getParam('region','Americas','Be Real Region',['Americas','Europe','East Asia','West Asia','United Kingdom'])
 
@@ -8,9 +10,9 @@ ff= downloadResourceAsTempFile(URL('https://apis.devinbaeten.com/prod/app/bereal
 
 dsb= DataSetBuilder(2,100,2)
 dsb.setName(0,'Time')
-dsb.setName(1,'TimeOfDay (UT)')
+dsb.setName(1,'TimeOfDay')
 dsb.setUnits(1,Units.hours)
-
+dsb.setLabel(1,'Time Of Day (UT)')
 fl= open(str(ff))
 for line in fl.readlines():
     ss= line.split(',')
@@ -24,3 +26,5 @@ for line in fl.readlines():
         dsb.nextRecord([t,tod])
 
 result= dsb.getDataSet()
+result.putProperty( QDataSet.TITLE, 'Be Real times for '+region )
+result.putProperty( QDataSet.LABEL, region + '<br>Time UT' )
