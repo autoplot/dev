@@ -1,0 +1,23 @@
+setScriptDescription('''Demo serveral bugs with formatting 64-bit long dataset values''')
+
+use015d= getParam('use015d',True,'Use the format specifier %%015d',[True,False])
+
+from org.das2.qds import LDataSet
+ds= LDataSet.createRank1(10)
+ds.putValue(0,12345678912345)
+ds.putValue(1,1234567891234)
+ds.putValue(2,123456789123)
+ds.putValue(3,12345678912)
+ds.putValue(4,1234567891)
+ds.putValue(5,123456789)
+ds.putValue(6,12345678)
+ds.putValue(7,1234567)
+ds.putValue(8,123456)
+ds.putValue(9,12345)
+
+if use015d:
+    ds.putProperty(QDataSet.FORMAT,'%015d')
+else:
+    ds.putProperty(QDataSet.FORMAT,'%d')
+
+plot(ds)
