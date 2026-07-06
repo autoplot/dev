@@ -1,3 +1,5 @@
+setScriptDescription('''Print all attributes of an object''')
+
 class A:
     pass
 
