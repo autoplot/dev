@@ -21,8 +21,11 @@ from java.lang import Math
 
 setScriptDescription('Read a GeoJSON file and plot its coordinates as lon/lat paths.')
 
+monitor.setTaskSize(100)
+monitor.started()
+
 def read_text(uri):
-    ff= downloadResourceAsTempFile(URL(uri),3600,monitor.getSubtaskMonitor('Download file'))
+    ff= downloadResourceAsTempFile(URL(uri),3600,monitor.getSubtaskMonitor(0,50,'Download file'))
     if uri.find('://') >= 0:
         ins = URL(uri).openStream()
     else:
@@ -192,7 +195,11 @@ def finite_max_abs(a):
                 m = av
     return m
 
+monitor.taskProgress=50
+monitor.progressMessage='parsing geojson'
+
 add_obj(obj)
+monitor.taskProgress=95
 
 if len(xs) == 0:
     raise Exception('No plottable coordinates found in GeoJSON file.')
@@ -208,4 +215,7 @@ if not use_epsg3395:
 xds = Ops.dataset(array(xs, 'd'))
 yds = Ops.dataset(array(ys, 'd'))
 
+monitor.taskProgress=100
+
 plot(Ops.bundle(xds, yds))
+monitor.finished()
