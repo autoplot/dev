@@ -10,6 +10,9 @@ tf= File(ff.path+ '.t')
 write= open(str(tf), 'w') 
 for line in open(str(ff)).readlines():
     line= line.replace('platform.active=default_platform','platform.active=JDK_1.8')
+    line= line.replace('platform.active=JDK_8__System','platform.active=JDK_1.8')
+    line= line.replace('platform.active=JDK_1.8_','platform.active=JDK_1.8')
+    
     write.write(line)
 write.close()
 
