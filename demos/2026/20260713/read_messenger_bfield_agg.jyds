@@ -1,0 +1,17 @@
+setScriptDescription('''Load Messenger B-field from PDS''')
+
+tr= getParam('timerange','2015-001', 'The timerange', { 'min':'2006', 'max':'2016', 'format':'$Y-$j' } )
+
+fln= 'https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/$Y/$x/MAGMSOSCIAVG15$j_01_V$v.xml'
+year= getDataSet(fln+'?YEAR', tr )
+doy= getDataSet(fln+'?DAY_OF_YEAR',tr)
+hour= getDataSet(fln+'?HOUR',tr)
+minute= getDataSet(fln+'?MINUTE',tr)
+second= getDataSet(fln+'?SECOND',tr)
+
+times= toTimeDataSet(year,1,doy,hour,minute,second,0)
+bx= getDataSet(fln+'?BX_MSO',tr)
+by= getDataSet(fln+'?BY_MSO',tr)
+bz= getDataSet(fln+'?BZ_MSO',tr)
+
+result= dataset( times, bundle(bx,by,bz) )

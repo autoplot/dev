@@ -1,0 +1,17 @@
+setScriptDescription('''Load Messenger B-field from PDS.  This reads one file.  Use aggregation to read in multiple files, for example
+vap+jyds:https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/$Y/$x/MAGMSOSCIAVG$y$j_01_V$v.xml?script=https://github.com/autoplot/dev/demos/demos/2026/20260713/read_messenger_bfield_resource_param.jyds&timerange=2015-01''')
+
+fln= getParam( 'resourceURI', 'https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml', 'example file to load' )
+
+year= getDataSet(fln+'?YEAR')
+doy= getDataSet(fln+'?DAY_OF_YEAR')
+hour= getDataSet(fln+'?HOUR')
+minute= getDataSet(fln+'?MINUTE')
+second= getDataSet(fln+'?SECOND')
+
+times= toTimeDataSet(year,1,doy,hour,minute,second,0)
+bx= getDataSet(fln+'?BX_MSO')
+by= getDataSet(fln+'?BY_MSO')
+bz= getDataSet(fln+'?BZ_MSO')
+
+result= dataset( times, bundle(bx,by,bz) )
