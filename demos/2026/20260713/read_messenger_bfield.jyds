@@ -1,4 +1,5 @@
-setScriptDescription('''Load Messenger B-field from PDS''')
+setScriptDescription('''Load Messenger B-field from PDS.  The components of the timetags are loaded
+and combined to make proper timetags.''')
 
 year= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml?YEAR')
 doy= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml?DAY_OF_YEAR')
@@ -7,6 +8,7 @@ minute= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/
 second= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml?SECOND')
 
 times= toTimeDataSet(year,1,doy,hour,minute,second,0)
+
 bx= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml?BX_MSO')
 by= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml?BY_MSO')
 bz= getDataSet('https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/2015/001_031_JAN/MAGMSOSCIAVG15001_01_V08.xml?BZ_MSO')
