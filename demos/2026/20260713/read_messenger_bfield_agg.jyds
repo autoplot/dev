@@ -1,8 +1,10 @@
-setScriptDescription('''Load Messenger B-field from PDS''')
+setScriptDescription('''Load Messenger B-field from PDS.  This shows how aggregation spec can be used to load
+any file.''')
 
-tr= getParam('timerange','2015-001', 'The timerange', { 'min':'2006', 'max':'2016', 'format':'$Y-$j' } )
+tr= getParam('timerange','2015-001', 'The timerange', { 'min':'2006', 'max':'2016' } )
+cad= getParam('cadence','01','Number of seconds between measurements',['01','05','10','60'])
 
-fln= 'https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/$Y/$x/MAGMSOSCIAVG15$j_01_V$v.xml'
+fln= 'https://pds-ppi.igpp.ucla.edu/data/mess-mag-calibrated/data/mso-avg/$Y/$x/MAGMSOSCIAVG$y$j_%s_V$v.xml' % cad
 year= getDataSet(fln+'?YEAR', tr )
 doy= getDataSet(fln+'?DAY_OF_YEAR',tr)
 hour= getDataSet(fln+'?HOUR',tr)
@@ -10,6 +12,7 @@ minute= getDataSet(fln+'?MINUTE',tr)
 second= getDataSet(fln+'?SECOND',tr)
 
 times= toTimeDataSet(year,1,doy,hour,minute,second,0)
+
 bx= getDataSet(fln+'?BX_MSO',tr)
 by= getDataSet(fln+'?BY_MSO',tr)
 bz= getDataSet(fln+'?BZ_MSO',tr)
