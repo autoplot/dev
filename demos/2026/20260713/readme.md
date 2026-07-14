@@ -4,6 +4,6 @@ year, day-of-year, hour, minute, and second components, and with the PDS reader
 they need to be combined into a time tag for Autoplot.  Second, there's a mysterious
 cadence parameter in the file names, and this is controlled with another parameter.
 
-[read_messenger_bfield.jyds] - reads one file and returns the data
-[read_messenger_bfield_agg.jyds] - reads using aggregation and adds a cadence parameter
-[read_messenger_bfield_oneday.jyds] - reads one file and allows for Autoplot's aggregation to combine the data.
+* [read_messenger_bfield.jyds] - reads one file and returns the data
+* [read_messenger_bfield_agg.jyds] - reads using aggregation and adds a cadence parameter
+* [read_messenger_bfield_oneday.jyds] - reads one file and allows for Autoplot's aggregation to combine the data.
