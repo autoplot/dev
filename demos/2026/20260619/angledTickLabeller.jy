@@ -5,6 +5,9 @@ from org.das2.datum.format import DatumFormatter
 from org.autoplot import RenderType
 from org.das2.graph import TickLabeller,TickCurveRenderer,GrannyTickLabeller,TickVDescriptor
 
+setScriptDescription('''Demo how a custom tick labeller could be used to draw angled ticks.  Note the 
+bounds which are returned are not used, and this is a bug which should be fixed at some point.''')
+
 class AngledTickLabeller( TickLabeller ):
     def __init__(self,angle):
         'orientation - left or bottom'
