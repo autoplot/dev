@@ -1,0 +1,3 @@
+x= PWD + 'demoItem5.jy'
+ds= getDataSet( PWD + 'demoItem5.jy' )
+load( PWD + 'demoItem5.jy' )
