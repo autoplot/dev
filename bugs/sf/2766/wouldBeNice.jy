@@ -1,0 +1,11 @@
+stopTime= getParam( 'stop', TimeUtil.now() )
+
+anInterval= datumRange('2025-11-02/2025-11-09')
+
+while anInterval.max().lt( stopTime ):
+    print anInterval
+    if ( True ):
+        print 'will get stuck'
+    else:
+        anInterval= anInterval.next() 
+    
