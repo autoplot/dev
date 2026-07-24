@@ -1,0 +1,36 @@
+from java.awt import FontMetrics
+from org.das2.util import GrannyTextRenderer
+from org.das2.datum.format import DatumFormatter
+from org.autoplot import RenderType
+from org.das2.graph import TickLabeller,TickCurveRenderer,GrannyTickLabeller,TickVDescriptor
+
+class FunTickLabeller( TickLabeller ):
+    def __init__(self,orientation):
+        'orientation - left or bottom'
+        self.orientation= orientation
+        
+    def init(self,ticks):
+        self.ticks= ticks
+        
+    def labelMajorTick(self, g, tickNumber, tickLine ):
+        gtr= GrannyTextRenderer()
+        v= self.ticks.getMajorTicks().get(tickNumber)
+        gtr.setString(g,str(int(v)))
+
+        centerX= tickLine.getX2()
+        centerY= tickLine.getY2()
+        
+        bb= gtr.bounds
+        if self.orientation=='left':
+            g.drawRoundRect( (int)(centerX-bb.width-4), int(centerY-(bb.height/2)), bb.width+4, bb.height, 6, 6 )
+            g.drawString( str(int(v)), centerX-bb.width-2, centerY+(bb.height/3) )
+        else:
+            g.drawRoundRect( (int)(centerX-bb.width/2-2), int(centerY), bb.width+4, bb.height, 6, 6 )
+            g.drawString( str(int(v)), centerX-bb.width/2, centerY+bb.height-bb.height/6 )
+        return None
+        
+    def finished(self):
+        return
+        
+dom.plots[0].yaxis.controller.dasAxis.setTickLabeller(FunTickLabeller('left'))
+dom.plots[0].xaxis.controller.dasAxis.setTickLabeller(FunTickLabeller('bottom'))

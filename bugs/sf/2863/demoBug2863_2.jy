@@ -1,0 +1,2 @@
+p,_= plot(0,randn(100))
+plot(1,randn(100)+6,overplotOf=p)

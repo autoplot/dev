@@ -29,9 +29,9 @@ if linux:
 
 elif windows:
    from javax.swing import JOptionPane
-   JOptionPane.showMessageDialog( 'Windows not supported.' )
+   JOptionPane.showMessageDialog( getApplication(), 'Windows not supported.' )
 
 else:
    from javax.swing import JOptionPane
-   JOptionPane.showMessageDialog( 'Mac not supported.' )
+   JOptionPane.showMessageDialog( getApplication(), 'Mac not supported.' )
    

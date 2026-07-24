@@ -1,0 +1,20 @@
+signal= getDataSet( PWD + 'cow.wav' )
+tt= signal.property(QDataSet.DEPEND_0)
+
+interf= 4000*sin(((tt-tt[0])*'440Hz')*TAU)
+
+signal= signal + interf
+
+signal= signal[400:(400+256)]
+
+formatDataSet(signal,PWD + 'cow.sav')
+
+ff= fft(signal)
+ff.putProperty( QDataSet.DEPEND_0, None )
+
+formatDataSet(signal,PWD + 'fft.cow.sav')
+
+
+setLayout(2)
+plot( ff[:,0], ytitle='Real' )
+plot( 1, ff[:,1], ytitle='Imaginary' )

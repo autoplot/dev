@@ -1,0 +1,8 @@
+from java.lang import ProcessBuilder
+setScriptDescription('''Run test 140 with testSav.txt many times''')
+
+for i in xrange(1000):
+    reset()
+    plot('file:///home/jbf/public_html/autoplot/data/sav/arrayOfStruct.idlsav?ZZ.XX')
+    writeToPng('/home/jbf/tmp/20260614/%04d.png'%i)
+    

@@ -1,0 +1,13 @@
+setScriptDescription('''Create files to test where=z.ne(2) in URIs for csv, cdf, and h5''')
+
+x= linspace(100,200,101)
+x.putProperty(QDataSet.NAME,'x')
+y= randn(101)
+y.putProperty(QDataSet.NAME,'y')
+z= floor((randu(101)*10))
+z.putProperty(QDataSet.NAME,'z')
+formatDataSet( bundle(x,y,z), PWD + 'demoData.txt' )
+formatDataSet( x, PWD + 'demoData.cdf?x' )
+formatDataSet( y, PWD + 'demoData.cdf?y&append=T' )
+formatDataSet( z, PWD + 'demoData.cdf?z&append=T' )
+formatDataSet( link(x,y), PWD + 'demoData.h5' )

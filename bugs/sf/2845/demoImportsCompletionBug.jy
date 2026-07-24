@@ -1,0 +1,20 @@
+setScriptDescription('''Demo where DasAxis is not offered as completion for <tt>
+from org.das2.graph import <T><tt>.''')
+
+from org.das2.graph import DasAxis
+
+targetComponents = 'org.das2.graph'.split('.')
+base = targetComponents[0]
+baseModule = __import__(base, globals(), locals())
+module = baseModule    
+for component in targetComponents[1:]:
+    module = getattr(module, component)
+
+print 'Listing ',module
+list = dir(module)
+
+print 'module contains DasAxis:', "DasAxis" in list
+if ( list.count('__name__')>0 ):
+    list.remove('__name__')
+list.append('*')
+print list

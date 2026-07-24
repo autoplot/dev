@@ -1,0 +1,221 @@
+# readGeoJson.jy
+# Reads GeoJSON and plots longitude vs latitude paths.
+# Java 8 / Jython 2.2 compatible.
+
+setScriptDescription('''ChatGPT-generated code for loading and plotting GeoJSON files.''')
+
+uri = getParam('resourceURI', 'https://zenodo.org/records/17122148/files/itinere_roads.geojson?download=1', 'GeoJSON file or URL')
+
+# readGeoJson.jy
+# Reads GeoJSON and plots longitude vs latitude paths.
+# Supports normal lon/lat GeoJSON and EPSG:3395 World Mercator.
+# Java 8 / Jython 2.2 compatible.
+
+from java.io import BufferedReader, InputStreamReader, FileInputStream
+from java.net import URL
+from javax.script import ScriptEngineManager
+from java.lang import Double
+from org.das2.qds.ops import Ops
+from jarray import array
+from java.lang import Math
+
+setScriptDescription('Read a GeoJSON file and plot its coordinates as lon/lat paths.')
+
+monitor.setTaskSize(100)
+monitor.started()
+
+def read_text(uri):
+    ff= downloadResourceAsTempFile(URL(uri),3600,monitor.getSubtaskMonitor(0,50,'Download file'))
+    if uri.find('://') >= 0:
+        ins = URL(uri).openStream()
+    else:
+        ins = FileInputStream(uri)
+
+    br = BufferedReader(InputStreamReader(ins, 'UTF-8'))
+    sb = []
+    line = br.readLine()
+    while line is not None:
+        sb.append(line)
+        line = br.readLine()
+    br.close()
+    return '\n'.join(sb)
+
+def parse_json(txt):
+    eng = ScriptEngineManager().getEngineByName('javascript')
+    eng.put('jsonText', txt)
+    return eng.eval('Java.asJSONCompatible(JSON.parse(jsonText))')
+
+def find_crs(o):
+    if o is None:
+        return None
+
+    crs = o.get('crs')
+    if crs is not None:
+        props = crs.get('properties')
+        if props is not None:
+            name = props.get('name')
+            if name is not None:
+                return str(name)
+        name = crs.get('name')
+        if name is not None:
+            return str(name)
+
+    keys = ['srs', 'projection', 'spatialReference', 'spatial_reference']
+    for k in keys:
+        v = o.get(k)
+        if v is not None:
+            return str(v)
+
+    return None
+
+# EPSG:3395 inverse World Mercator.
+# Input x,y meters. Output lon,lat degrees.
+def epsg3395_to_lonlat(x, y):
+    a = 6378137.0
+    e = 0.08181919084262149
+
+    lon = x / a
+
+    # Initial spherical Mercator inverse.
+    phi = Math.PI / 2.0 - 2.0 * Math.atan(Math.exp(-y / a))
+
+    # Iterate ellipsoidal correction.
+    i = 0
+    while i < 10:
+        esin = e * Math.sin(phi)
+        phi2 = Math.PI / 2.0 - 2.0 * Math.atan(
+            Math.exp(-y / a) * Math.pow((1.0 - esin) / (1.0 + esin), e / 2.0)
+        )
+        if Math.abs(phi2 - phi) < 1.0e-12:
+            phi = phi2
+            break
+        phi = phi2
+        i = i + 1
+
+    return [lon * 180.0 / Math.PI, phi * 180.0 / Math.PI]
+
+txt = read_text(uri)
+obj = parse_json(txt)
+
+crs_name = find_crs(obj)
+use_epsg3395 = False
+
+if crs_name is not None:
+    print 'GeoJSON CRS/projection metadata:', crs_name
+    if crs_name.find('EPSG::3395') >= 0 or crs_name.find('EPSG:3395') >= 0:
+        print 'Projection: World Mercator EPSG:3395; converting meters to lon/lat degrees.'
+        use_epsg3395 = True
+else:
+    print 'No GeoJSON CRS/projection metadata found.'
+
+xs = []
+ys = []
+
+def add_break():
+    if len(xs) > 0:
+        if xs[-1] == xs[-1]:
+            xs.append(Double.NaN)
+            ys.append(Double.NaN)
+
+def add_pos(pos):
+    x = float(pos[0])
+    y = float(pos[1])
+
+    if use_epsg3395:
+        ll = epsg3395_to_lonlat(x, y)
+        x = ll[0]
+        y = ll[1]
+
+    xs.append(x)
+    ys.append(y)
+
+def add_line(coords):
+    for p in coords:
+        add_pos(p)
+    add_break()
+
+def add_polygon(coords):
+    for ring in coords:
+        add_line(ring)
+
+def add_geom(g):
+    if g is None:
+        return
+
+    typ = g.get('type')
+    coords = g.get('coordinates')
+
+    if typ == 'Point':
+        add_pos(coords)
+        add_break()
+
+    elif typ == 'MultiPoint':
+        for p in coords:
+            add_pos(p)
+            add_break()
+
+    elif typ == 'LineString':
+        add_line(coords)
+
+    elif typ == 'MultiLineString':
+        for line in coords:
+            add_line(line)
+
+    elif typ == 'Polygon':
+        add_polygon(coords)
+
+    elif typ == 'MultiPolygon':
+        for poly in coords:
+            add_polygon(poly)
+
+    elif typ == 'GeometryCollection':
+        geoms = g.get('geometries')
+        for gg in geoms:
+            add_geom(gg)
+
+def add_obj(o):
+    typ = o.get('type')
+
+    if typ == 'FeatureCollection':
+        for f in o.get('features'):
+            add_obj(f)
+
+    elif typ == 'Feature':
+        add_geom(o.get('geometry'))
+
+    else:
+        add_geom(o)
+
+def finite_max_abs(a):
+    m = 0.0
+    for v in a:
+        if v == v:
+            av = abs(v)
+            if av > m:
+                m = av
+    return m
+
+monitor.taskProgress=50
+monitor.progressMessage='parsing geojson'
+
+add_obj(obj)
+monitor.taskProgress=95
+
+if len(xs) == 0:
+    raise Exception('No plottable coordinates found in GeoJSON file.')
+
+maxx = finite_max_abs(xs)
+maxy = finite_max_abs(ys)
+
+if not use_epsg3395:
+    if maxx > 360.0 or maxy > 90.0:
+        print 'WARNING: coordinates are outside lon/lat degree ranges.'
+        print 'These are probably projected coordinates, e.g. UTM, State Plane, Web Mercator, or World Mercator.'
+
+xds = Ops.dataset(array(xs, 'd'))
+yds = Ops.dataset(array(ys, 'd'))
+
+monitor.taskProgress=100
+
+plot(Ops.bundle(xds, yds))
+monitor.finished()

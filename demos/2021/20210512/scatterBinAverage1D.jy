@@ -1,0 +1,19 @@
+setScriptDescription('Demo binAverage 1D')
+
+randomSeed(0)
+
+N=10000
+
+x= randn(N)*10 
+y= exp( -1 *  sqrt( (x-5)**2 ) ) + randn(N)/10
+
+r= where(x.lt(-0.1))
+y[r]=1.
+
+xx= linspace( 0, 10, 100 )
+r2= binAverage( bundle(x,y), xx )
+
+ww= r2.property(QDataSet.WEIGHTS)
+
+plot( r2, ylog=False )
+plot( 1, ww, ylog=False )

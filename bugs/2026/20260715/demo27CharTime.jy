@@ -1,0 +1,26 @@
+from java.nio import ByteBuffer
+from org.das2.qds.buffer import TimeDataSet,BufferDataSet
+
+length= getParam('length',30,'length in bytes',xrange(16,31))
+table= getParam('table',False,'Print table', [True,False] )
+
+type='time'+str(length)
+
+typeLen= BufferDataSet.byteCount(type)
+len0=10
+
+buf= ByteBuffer.allocateDirect( typeLen * len0 )
+recLen= typeLen;
+tds= BufferDataSet.makeDataSet( 1, recLen, 0, len0, 1, 1, 1, buf, type )
+
+tds.putValue(0,0)
+print tds[0]
+
+for i in xrange(typeLen):
+    print ( '%c' % buf.get(i) ),
+print ''
+
+if table:
+    for i in xrange(typeLen):
+         print '%3d: %3d %c' % ( i, buf.get(i),(buf.get(i)) )
+

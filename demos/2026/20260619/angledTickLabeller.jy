@@ -1,0 +1,53 @@
+from java.awt.geom import AffineTransform
+from java.awt import FontMetrics
+from org.das2.util import GrannyTextRenderer
+from org.das2.datum.format import DatumFormatter
+from org.autoplot import RenderType
+from org.das2.graph import TickLabeller,TickCurveRenderer,GrannyTickLabeller,TickVDescriptor
+
+setScriptDescription('''Demo how a custom tick labeller could be used to draw angled ticks.  Note the 
+bounds which are returned are not used, and this is a bug which should be fixed at some point.''')
+
+class AngledTickLabeller( TickLabeller ):
+    def __init__(self,angle):
+        'orientation - left or bottom'
+        self.angle= angle
+        
+    def init(self,ticks):
+        self.ticks= ticks
+        
+    def labelMajorTick(self, g, tickNumber, tickLine ):
+        g0= g.create()
+        gtr= GrannyTextRenderer()
+        v= self.ticks.getMajorTicks().get(tickNumber)
+        gtr.setString(g,str(int(v)))
+        bb= gtr.bounds
+
+        centerX= tickLine.getX2()
+        centerY= tickLine.getY2()
+        
+        print tickNumber, v, tickLine.getX2()
+             
+        at = AffineTransform()
+        at.translate(centerX,centerY)
+        at.rotate(-self.angle*PI/180)
+        at.translate( -bb.height/6, -2*bb.height/3 )
+        at.rotate(PI)
+        
+        
+        g.translate(centerX,centerY)
+        g.rotate(-self.angle*PI/180)
+        g.translate( -bb.height/6, -2*bb.height/3 )
+        
+        #g.drawRoundRect( (int)(-bb.width-4), int(bb.height/6), bb.width+4, bb.height, 6, 6 )
+        gtr.draw( g, -bb.width, bb.height )
+
+        bb= at.createTransformedShape(bb)
+        #g0.draw(bb.getBounds())
+        
+        return bb.getBounds()
+        
+    def finished(self):
+        return
+        
+dom.plots[0].xaxis.controller.dasAxis.setTickLabeller(AngledTickLabeller(45))

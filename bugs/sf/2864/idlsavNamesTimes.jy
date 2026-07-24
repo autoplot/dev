@@ -1,0 +1,14 @@
+setScriptDescription('The latest version of Autoplot recycles timetags in append operations')
+
+ds1= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/omni/hourly/2016/omni2_h0_mrg1hr_20160701_v01.cdf?DST')
+ds2= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/omni/hourly/2016/omni2_h0_mrg1hr_20160701_v01.cdf?AE')
+ds3= getDataSet('https://cdaweb.gsfc.nasa.gov/sp_phys/data/omni/hourly/2016/omni2_h0_mrg1hr_20160701_v01.cdf?KP')
+
+#ds1= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=Oct+2016')
+#ds2= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=AE1800&timerange=Oct+2016')
+#ds3= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=KP1800&timerange=Oct+2016')
+
+formatDataSet(ds1,PWD+'data.sav')
+formatDataSet(ds2,PWD+'data.sav?append=T')
+formatDataSet(ds3,PWD+'data.sav?append=T')
+

@@ -1,0 +1,7 @@
+setScriptDescription('Remove values where condition is True')
+
+ds= randn(1000)
+ds[::5]= 999
+
+ds= removeValues( ds, where(ds.eq(999)) )
+plot( ds )

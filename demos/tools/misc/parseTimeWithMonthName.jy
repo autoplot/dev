@@ -1,0 +1,2 @@
+tp= TimeParser.create('$b $(d;Y=2025) $H:$M:$S.$(milli)')
+print tp.parse('Jul 05 18:22:38.440').timeDatum

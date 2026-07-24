@@ -1,0 +1,28 @@
+from org.das2.util import ColorUtil
+from org.das2.graph import Painter
+setScriptDescription('''Demo renderer decorators.  It looks like you can add decorators
+to individual renderers.  This version uses a the addTopDecoration which accepts PlotElements.''')
+
+X0= randn(200)+3
+Y0= randn(200)+3
+
+X2= randn(200)+2
+Y2= randn(200)+2
+
+setLayoutOverplot(2)
+
+p,pe0= plot( 0, X0,Y0, color=ColorUtil.CORNFLOWER_BLUE )
+
+def paint( g, x, y ):
+    g.color= Color.LIGHT_GRAY
+    ix0= p.xaxis.controller.dasAxis.transform(x-0.5)
+    iy0= p.yaxis.controller.dasAxis.transform(y-0.5)
+    ix1= p.xaxis.controller.dasAxis.transform(x+0.5)
+    iy1= p.yaxis.controller.dasAxis.transform(y+0.5)
+    g.fillOval(int(ix0),int(iy1),int(ix1-ix0),int(iy0-iy1))
+
+addTopDecoration(pe0,lambda g: paint(g,datum(3),datum(3)))
+
+p,pe2= plot( 1, X2,Y2, color=ColorUtil.CORAL )
+
+addBottomDecoration(pe2,lambda g: paint(g,datum(2),datum(2)))

@@ -1,0 +1,5 @@
+setScriptDescription('''Try completions at "depend0=" below.  They are not for the PDS file but for the directory.''')
+resourceURI= getParam( 'resourceURI', 'https://pds-ppi.igpp.ucla.edu/data/JNO-J-JED-3-CDR-V1.0/DATA/$Y/$j/JED_270_HIERSISP_CDR_$Y$j_V$v.LBL', 'file to load' )
+antenna=4
+tr='2025-03-02 5:00:00 to 6:00:00'
+pitchAngle= getDataSet( resourceURI+ '?depend0=UTC&column=Pitch_Angle_T%d' % ( antenna ), tr )

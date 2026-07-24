@@ -1,0 +1,5 @@
+ffx= fft(sin(linspace(0,TAU*20,1024)))
+ffx_real= ffx[:,0]
+ffx_imag= ffx[:,1]
+formatDataSet(ffx_real,PWD+'ffx.sav?ffx_real')
+formatDataSet(ffx_imag,PWD+'ffx.sav?ffx_imag&append=T')
