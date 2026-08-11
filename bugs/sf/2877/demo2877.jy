@@ -1,0 +1,16 @@
+setScriptDescription('''Demo where incorrect render mode is used to show data,
+and filters are dropped incorrectly.''')
+
+reset()
+ds= randn(101024,3)+sawtooth(linspace(0,200*PI,101024))
+ds.putProperty(QDataSet.DEPEND_1,labelsDataset(['X','Y','Z']))
+ds.putProperty(QDataSet.DEPEND_0,linspace('2026-08-11T00:00','2026-08-12T00:00',101024))
+plot(ds)
+#plot('vap+inline:ripplesVectorTimeSeries(101024)')
+waitUntilIdle()
+
+dom.controller.deletePlotElement(dom.plotElements[-1])
+dom.controller.deletePlotElement(dom.plotElements[-1])
+dom.plotElements[1].component='''|unbundle('X')|fftPower(512,2,'Hanning')'''
+
+#writeToPng('/home/jbf/tmp/20260811/%04d.png' % (rand()*1000) )
