@@ -1,0 +1,9 @@
+setScriptDescription('Item 6')
+
+dr= getParam('dr',180,'Which direction',[90,180,270])
+tr= getParam('timeRange', '2018-091 10:45 to 10:55' )
+sp= getParam('species', 'I', 'Species Electron or Ion', { 'values':['E','I'], 'labels':['Electrons','Ions'] } )
+
+uri= 'https://pds-ppi.igpp.ucla.edu/data/JNO-J-JED-3-CDR-V1.0/DATA/$Y/$j/JED_%03d_HIERS%sSP_CDR_$Y$j_V$v.LBL' % ( dr, sp )
+
+# show simplified script indicates "uri" is a dataset!
