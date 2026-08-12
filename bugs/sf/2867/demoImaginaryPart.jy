@@ -1,0 +1,28 @@
+from org.das2.util import ColorUtil
+
+print 'Both realpart and imaginaryPart
+print realPart(zeros(5))
+print imaginaryPart(zeros(5))
+
+ds= cos(linspace(0,10*TAU,1024)) + sin(linspace(0,4*TAU,1024))
+ff= fft(ds)
+
+rp= realPart(ff)
+ip= imaginaryPart(ff)
+
+p,_= plot( 0, ds, lineThick=2 )
+plot( 1, cos(linspace(0,10*TAU,1024)), overplotOf=p, color= ColorUtil.GRAY )
+plot( 2, sin(linspace(0,4*TAU,1024)), overplotOf=p, color= ColorUtil.GRAY )
+
+rplot,_= plot( 3, rp )
+iplot,_= plot( 4, ip )
+
+r= imax( rp )
+xx= xtags(rp)[r]
+yy= rp[r]
+annotation( 0, text=str(1/xx), plotId=rplot.id, fontSize='0.5em', anchorOffset='', xrange=[xx,xx], yrange=[yy,yy], background=None )
+
+r= imax( ip )
+xx= (xtags(ip)[r])
+yy= ip[r]
+annotation( 1, text=str(1/xx), plotId=iplot.id, fontSize='0.5em', anchorOffset='', xrange=[xx,xx], yrange=[yy,yy], background=None )
