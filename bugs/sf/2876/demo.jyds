@@ -1,0 +1,5 @@
+print PWD
+
+w= getParam('w',1,'which one',[1,2,3])
+result= getDataSet( PWD + str(w) + '.csv' )
+  
