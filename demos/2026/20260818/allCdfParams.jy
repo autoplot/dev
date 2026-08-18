@@ -1,0 +1,13 @@
+from org.autoplot.hapi import HapiServer
+from org.autoplot.cdf import CdfUtil
+
+setScriptDescription('''Check all CDF parameter names to see how many violate check''')
+
+cc= HapiServer.getCatalogIds(URL('https://cottagesystems.com/server/cdaweb/hapi'))
+for c in cc:
+    pp= HapiServer.getParameterIds(URL('https://cottagesystems.com/server/cdaweb/hapi'),c)
+    for p in pp:
+        s= CdfUtil.checkLegalVariableName(p)
+        if s!=None:
+            print c, p, s
+    
