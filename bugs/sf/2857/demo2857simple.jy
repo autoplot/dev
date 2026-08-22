@@ -1,0 +1,6 @@
+orb= [1,2,3]
+roi= ['a','b','c']
+  
+identifiedOrbits=[ 'ROI_%05d_%s' %( alpha, beta ) for alpha, beta in zip( orb, roi )]
+
+print identifiedOrbits
