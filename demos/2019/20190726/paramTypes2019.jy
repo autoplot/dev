@@ -16,8 +16,8 @@ from java.awt.geom import GeneralPath
 class MyPainter( Painter ):
     def paint( self, g ):
         gp= GeneralPath()
-        cx= 100
-        cy= 100
+        cx= 300
+        cy= 300
         r= 50
         
         gp.moveTo( cx+r, cy )
