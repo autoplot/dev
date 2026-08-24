@@ -33,8 +33,11 @@ if ( dirp==None or not File( dirp, 'ro_cache.txt' ).exists() ):
 ss= FileUtil.readFileToString( File( dirp, 'ro_cache.txt' ) )
 ss= ss.strip()
 
-print File( dirp, 'ro_cache.txt' )
-print ss
-print child
+if child.startswith('master/'):
+    child= child[7:]
+
+print 'Found ro_cache.txt file: ', File( dirp, 'ro_cache.txt' )
+print 'Which points to: ', ss
+print 'The file within: ', child
 
 getApplication().getScriptPanel().filename= ss + '/' + child
