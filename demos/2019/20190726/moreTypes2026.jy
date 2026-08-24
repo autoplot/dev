@@ -1,0 +1,16 @@
+from org.das2.util.ColorUtil import decodeColor
+from java.awt import Color
+
+setScriptDescription('''I think datum is another type allowed.  Test this, after seeing
+color types cause problems.''')
+
+d1= getParam( 'datum1', datum('5 cm'), 'Y Axis Mark' )
+d2= getParam( 'datum2', datum('2026-08-24T10:00'), 'Time to highlight', [ datum('2026-08-24T10:00'),datum('2026-08-24T11:00'),datum('2026-08-24T12:00')] )
+print d1
+
+plot( 0, xrange=datumRange('2026-08-24'), yrange=datumRange('0 to 20 cm') )
+
+print params
+
+dom.plots[0].yaxis.reference= str(d1)
+dom.plots[0].xaxis.reference= str(d2)
