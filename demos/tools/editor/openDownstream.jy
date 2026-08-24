@@ -40,4 +40,6 @@ print 'Found ro_cache.txt file: ', File( dirp, 'ro_cache.txt' )
 print 'Which points to: ', ss
 print 'The file within: ', child
 
+showMessageDialog('<html>Switching to local clone<br>'+child)
+
 getApplication().getScriptPanel().filename= ss + '/' + child
