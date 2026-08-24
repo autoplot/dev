@@ -1,8 +1,12 @@
-from org.das2.util import ColorUtil
+from org.das2.util.ColorUtil import decodeColor
 from java.awt import Color
 
+setScriptDescription('''2019 code to demo color parameters.  This was not well-tested and was
+never completed, as shown here.  Note that changing one of the color parameters results
+in a runtime error.''')
+
 color1= getParam( 'color1', Color.RED )
-color2= getParam( 'color2', Color.RED, 'line color', [ Color.BLUE, Color.RED, ColorUtil.decodeColor('saddle brown') ] )
+color2= getParam( 'color2', Color.RED, 'line color', [ Color.BLUE, Color.RED, decodeColor('saddlebrown') ] )
 sides= getParam( 'sides', 4, 'number of sides', { 'values':[ 3,4,6], 'labels':['triangle','square','hexagon'] } )
 
 print params
