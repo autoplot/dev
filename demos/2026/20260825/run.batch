@@ -1,0 +1,16 @@
+{
+    "param1": "p1",
+    "param1Values": [
+        "2",
+        "4",
+        "8",
+        "16"
+    ],
+    "param2": "p2",
+    "param2Values": [
+        "a",
+        "b",
+        "c"
+    ],
+    "script": "file:///home/jbf/project/autoplot/git/dev/demos/2026/20260825/script.jy"
+}
