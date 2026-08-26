@@ -1,0 +1,25 @@
+from java.lang import System
+from org.das2.datum import Orbits
+setScriptDescription('''Demonstrate order-N**2 problems in the Orbits class''')
+
+ss= [ 'rbspa-pp', 'rbspb-pp', 'junoPJ', 'junoPJ_2hr', 'marsx', 'ts-tandem-rois', 'cassini', 'ts1-orbit', 'ts2-orbit', 'de1' ]
+
+for s in ss:
+    o= Orbits.getOrbitsFor(s)
+
+dsb= DataSetBuilder(2,100,2)
+
+for k in xrange(10):
+  print 'k=', k
+  for s in ss:
+    o= Orbits.getOrbitsFor(s)
+    orb= o.first()
+    t0= System.currentTimeMillis()
+    i=0
+    while orb!=None:
+        i=i+1
+        orb= o.next(orb)
+    dsb.nextRecord([i, System.currentTimeMillis()-t0])
+
+ds= dsb.getDataSet()
+plot( ds[:,0], ds[:,1], renderType='scatter', symbolSize=10 )
