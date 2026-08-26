@@ -19,5 +19,6 @@ tfile= File( URL( PWD + 'run.batch' ).path )
 FileUtil.writeStringToFile( tfile,jo.toString(4) )
 
 processor.setBatchDirectory(File('/tmp/ap/20260825/'))
+processor.setThreads(8)
 processor.setWritePngTemplate('/home/jbf/tmp/20260825/%s_%s.png')
 processor.runBatchScript( dom,str(tfile),monitor )

@@ -3,18 +3,20 @@ p1= getParam( 'p1', 8, 'parameter p1', [2,4,8,16,32] )
 p2= getParam( 'p2', "a", 'parameter p2', ['a','b','c'] )
 s1= getParam( 's2', 0, 'random seed', [0,1,2,3] )
 
+plot( None, xrange=[0,100], yrange=[0,100] )
+
 randomSeed(s1)
 
-x= randn() * 80 + 10
-y= randn() * 80 + 10
+x= rand() * 80 + 10
+y= rand() * 80 + 10
 xr=datumRange([x,x])
 yr=datumRange([y,y])
-annotation(0,text=p1,xrange=xr,yrange=yr,fontSize='10em',textColor=ColorUtil.DARK_BLUE)
+annotation(0,text=p1,xrange=xr,yrange=yr,fontSize='10em',textColor=ColorUtil.DARK_BLUE,background=None)
 
-x= randn() * 80 + 10
-y= randn() * 80 + 10
+x= rand() * 80 + 10
+y= rand() * 80 + 10
 xr=datumRange([x,x])
 yr=datumRange([y,y])
-annotation(1,text=p2,xrange=xr,yrange=yr,fontSize='14em',textColor=ColorUtil.DARK_GREEN)
+annotation(1,text=p2,xrange=xr,yrange=yr,fontSize='14em',textColor=ColorUtil.DARK_GREEN,background=None)
 
 
