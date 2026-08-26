@@ -1,0 +1,27 @@
+from java.awt.geom import Rectangle2D
+from org.das2.util import ColorUtil
+setScriptDescription('Demo datum, datumRange, and Color param types')
+
+#d= getParam('datum',datum('5cm'),'Datum value',{'min':datum('0cm'),'max':datum('10cm')})
+#dr= getParam('datumRange',datumRange('2 to 8 cm'),'DatumRange value',{'min':datum('0cm'),'max':datum('10cm')})
+#c= getParam('color',ColorUtil.DARK_SLATE_GRAY,'color')
+
+d= getParam('datum',datum('5cm'),'Datum value')
+dr= getParam('datumRange',datumRange('2 to 8 cm'),'DatumRange value')
+c= getParam('color',ColorUtil.DARK_SLATE_GRAY,'color')
+
+reset()
+p,_= plot(None,xrange='0 to 10cm',yrange='0 to 10cm')
+dom.plots[0].yaxis.reference= str(d)
+dom.plots[0].xaxis.reference= str(dr.min())+','+str(dr.max())
+
+annotation(0,text=ColorUtil.encodeColor(c),background=c,textColor='white',borderType='rounded_rectangle')
+
+def doShade(g):
+    ix0= dom.plots[0].xaxis.controller.dasAxis.transform(dr.min())
+    ix1= dom.plots[0].xaxis.controller.dasAxis.transform(dr.max())
+    iy0= dom.plots[0].yaxis.controller.dasAxis.transform(d)
+    iy1= dom.plots[0].yaxis.controller.dasAxis.row.bottom()
+    g.color= c
+    g.fill(Rectangle2D.Double(ix0,iy0,ix1-ix0,iy1-iy0))
+addTopDecoration(p,doShade)
