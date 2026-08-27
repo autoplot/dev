@@ -22,4 +22,10 @@ for k in xrange(10):
     dsb.nextRecord([i, System.currentTimeMillis()-t0])
 
 ds= dsb.getDataSet()
-plot( ds[:,0], ds[:,1], renderType='scatter', symbolSize=10 )
+
+setLayoutOverplot(2)
+plot( 0, ds[:,0], ds[:,1], renderType='scatter', symbolSize=10 )
+plot( 1, 'vap+inline:x=linspace(0,17000,17001)&y=x**2/500000&x,y' )
+
+ann= annotation( 0, text='y = C * x^2', anchorPosition='center', anchorOffset='' )
+ann.rotate=35
