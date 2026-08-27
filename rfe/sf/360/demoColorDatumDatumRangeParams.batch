@@ -1,0 +1,16 @@
+{
+    "param1": "datum",
+    "param1Values": [
+        "2",
+        "4",
+        "5",
+        "6"
+    ],
+    "param2": "datumRange",
+    "param2Values": [
+        "2 to 4",
+        "4 to 5",
+        "3 to 6"
+    ],
+    "script": "file:/home/jbf/project/autoplot/git/dev/rfe/sf/360/demoColorDatumDatumRangeParams.jy"
+}

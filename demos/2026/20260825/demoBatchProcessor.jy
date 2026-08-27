@@ -1,0 +1,24 @@
+from java.io import File
+from org.das2.util import FileUtil
+from org.json import JSONObject
+from org.autoplot.batch import BatchProcessor
+
+setScriptDescription('Demonstrate how the BatchProcessor can be used in a script to run another script.')
+
+processor= BatchProcessor()
+
+jo= JSONObject()
+jo.put('script',PWD+'script.jy')
+jo.put('param1','p1')
+jo.put('param2','p2')
+jo.put('param1Values',['2','4','8','16'])
+jo.put('param2Values',['a','b','c'])
+
+tfile= File( URL( PWD + 'run.batch' ).path )
+
+FileUtil.writeStringToFile( tfile,jo.toString(4) )
+
+processor.setBatchDirectory(File('/tmp/ap/20260825/'))
+processor.setThreads(8)
+processor.setWritePngTemplate('/home/jbf/tmp/20260825/%s_%s.png')
+processor.runBatchScript( dom,str(tfile),monitor )
