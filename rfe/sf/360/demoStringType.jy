@@ -1,0 +1,8 @@
+from java.io import File
+
+fl1= getParam( 'fl1', File(URL(PWD).path+'data1.txt'), 'Local file starting with data', { 'glob': '*/data*.txt' } )
+fl2= getParam( 'fl2', URL(PWD).path+'data2.txt', 'Local file starting with data', { 'glob': '*/data*.txt', 'stringType':'file' } )
+
+print params
+print fl1
+print fl2
