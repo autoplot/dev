@@ -164,7 +164,7 @@ chi= crossProduct(gamma,beta)/norm(crossProduct(gamma,beta))
 
 monitor.taskSize= len(data)
 monitor.started()
-
+# for i=0l,n_elements(data(0,*))-1 do begin
 beta= beta/norm(beta)
 
 monitor.taskProgress=95
@@ -176,18 +176,18 @@ tmatx[:,0,:] = chi
 tmatx[:,1,:] = gamma
 tmatx[:,2,:] = beta
 
-tdat[:,1:4] = mmult( data[:,1:4], tmatx )
-tdat[:,5]=norm(tdat[:,1:4])
-
-bt=norm(data[:,1:4]) # total field in GSM
+tdat[:,1:4] = matrixMultiply( tmatx, data[:,1:4] )
 
 if flipx:
   # The line below reverses the X component to outward
   tdat[:,1] = - tdat[:,1]
 
+tdat[:,5]=norm(tdat[:,1:4])
+bt=norm(data[:,1:4]) # total field in GSM
+#endfor
 monitor.taskProgress=98
 
-##tdat[:,4] = tdat[:,3] - smooth(tdat[:,3],facavg)  #<=Subtract quiet time field
+tdat[:,4] = tdat[:,3] - smooth(tdat[:,3],facavg)  #<=Subtract quiet time field  # Why are we moving a component?
 #tdat[:,2] = tdat[:,2] - smooth(tdat[:,2],facavg)
 monitor.finished()
 
