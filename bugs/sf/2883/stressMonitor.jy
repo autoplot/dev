@@ -1,4 +1,4 @@
-setScriptDescription('Stress the progress monitor API')
+setScriptDescription('Stress the progress monitor API.  See https://sourceforge.net/p/autoplot/bugs/2883/')
 
 monitor.started()
 monitor.taskSize=100
