@@ -35,6 +35,8 @@ ss= ss.strip()
 
 if child.startswith('master/'):
     child= child[7:]
+elif child.startswith('main/'):
+    child= child[5:]
 
 print 'Found ro_cache.txt file: ', File( dirp, 'ro_cache.txt' )
 print 'Which points to: ', ss
