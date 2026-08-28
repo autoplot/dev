@@ -1,0 +1,13 @@
+setScriptDescription('Stress the progress monitor API')
+
+monitor.started()
+monitor.taskSize=100
+monitor.started()
+monitor.taskSize=200
+monitor.started()
+monitor.started()
+monitor.taskProgress=100
+monitor.finished()
+monitor.started()
+monitor.finished()
+print 'Code was able to finish'
