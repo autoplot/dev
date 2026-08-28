@@ -193,7 +193,7 @@ monitor.finished()
 
 dsx = dataset( link(dtime, tdat[:,1]), label=typ+'X', name=typ+'X' )
 dsy = dataset( link(dtime, tdat[:,2]), label=typ+'Y', name=typ+'Y' )
-dsz = dataset( link(dtime, tdat[:,3]), label=typ+'Z', name=typ+'Z' )
+dsz = dataset( link(dtime, tdat[:,4]), label=typ+'Z', name=typ+'Z' )
 
 #ds = diff(ds)
 #ds1 = diff(ds1)
