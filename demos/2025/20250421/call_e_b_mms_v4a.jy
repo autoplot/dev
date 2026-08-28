@@ -34,6 +34,7 @@ doPntFilt= getParam( 'doPntFilt', True, 'apply the poynting flux filter', [ True
 pntFilt= getParam( 'pntFilt', 9E-3, 'filter poynting flux below this value in watts/km**2' )
 
 monitor.taskSize= 100
+monitor.started()
 
 def do_ffts( eb ):
     'perform sliding ffts on each of the component of the vector, and return the magnitude'
