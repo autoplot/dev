@@ -155,11 +155,9 @@ def pprint(d):
 
 monitor.taskProgress=90
     
-cp1= crossProduct(rho,beta)
-gamma= cp1/norm(cp1)
+gamma= crossProduct(rho,beta)/norm(crossProduct(rho,beta))
 
-cp1= crossProduct(gamma,beta)
-chi= cp1/norm(cp1)
+chi= crossProduct(gamma,beta)/norm(crossProduct(gamma,beta))
 
 #------------------------------------------------
 #Perform the transformation
@@ -170,6 +168,8 @@ monitor.started()
 beta= beta/norm(beta)
 
 monitor.taskProgress=95
+
+print 'chi,gamma,beta', chi,gamma,beta
 
 tmatx= zeros( len(beta), 3, 3 ) 
 tmatx[:,0,:] = chi
