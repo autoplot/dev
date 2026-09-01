@@ -6,6 +6,10 @@ B= getDataSet( 'https://github.com/autoplot/dev/blob/master/demos/2025/20250421/
 
 E = synchronize(B,E) # make sure they have the same timetags
 
+B[:,0] = butterworth(B[:,0],2,Units.hertz.createDatum(0.1),False)
+B[:,1] = butterworth(B[:,1],2,Units.hertz.createDatum(0.1),False)
+B[:,2] = butterworth(B[:,2],2,Units.hertz.createDatum(0.1),False)
+
 T= xtags(E)
 
 tf= TimeParser.create('$Y$m$d_$H$M.dat')
