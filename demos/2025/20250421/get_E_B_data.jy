@@ -8,6 +8,9 @@ E = synchronize(B,E) # make sure they have the same timetags
 
 T= xtags(E)
 
+tf= TimeParser.create('$Y$m$d_$H$M.dat')
+fln= tf.format(datumRange(tr))
+
 data= bundle( T, E[:,0], E[:,1], E[:,2], B[:,0], B[:,1], B[:,2] )
-formatDataSet( data, PWD + 'E_B_data_v3.dat?format=9.5f')
+formatDataSet( data, PWD + fln + '?format=9.5f')
 
