@@ -1,3 +1,3 @@
 Test bed for poynting flux display for Autoplot.
 
-Please run [get_E_B_data.jy](get_E_B_data.jy).
+Please run [get_E_B_data.jy](get_E_B_data.jy) after downloading the raw file to your computer.
