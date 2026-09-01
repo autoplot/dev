@@ -1,8 +1,8 @@
 tr= getParam( 'timerange', '2015-11-25T22:40 to 23:30', 'timerange to load')
 #tr = getParam('timerange','2015-09-19T09:09 to 09:10', 'timerange to load')
 
-E= getDataSet( PWD + 'E_B_MMS_combined_transformed.jyds', tr )
-B= getDataSet( PWD + 'E_B_MMS_combined_transformed.jyds?type=B', tr )
+E= getDataSet( 'https://github.com/autoplot/dev/edit/master/demos/2025/20250421/E_B_MMS_combined_transformed.jyds', tr )
+B= getDataSet( 'https://github.com/autoplot/dev/edit/master/demos/2025/20250421/E_B_MMS_combined_transformed.jyds?type=B', tr )
 
 E = synchronize(B,E) # make sure they have the same timetags
 
