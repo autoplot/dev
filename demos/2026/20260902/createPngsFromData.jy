@@ -1,0 +1,4 @@
+ff= listDirectory('https://jfaden.net/~jbf/autoplot/data/agg/enum/*.dat')
+for f in ff:
+    plot('https://jfaden.net/~jbf/autoplot/data/agg/enum/'+f,title=f)
+    writeToPng('/home/jbf/public_html/autoplot/data/agg/png/'+f[0:-4]+'.png')
