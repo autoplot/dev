@@ -1,0 +1,235 @@
+from org.das2.datum import Orbits
+# JunoPigtailMoons.jy
+# Description: Juno pigtail with magnetic footprints of Jovian moons
+# Author: Masafumi Imai, Jeremy Faden
+# Version: 0.0.7 (August 22 2019) 
+# $Id: JunoPigtailMoons.jy 1132 2019-09-27 20:21:49Z jbf $
+# $Date: 2019-09-27 15:21:49 -0500 (Fri, 27 Sep 2019) $
+# $Author: jbf $
+# Input data: Juno/Ephemeris/Jupiter_Footprint
+
+reset()
+
+DtoR= PI/180.0
+
+dispOpt= getParam( 'dispOpt','None', 'the model-driven parameters along Juno\'s track', [ 'None', 'B0', 'fce', 'LossCone' ] )
+idisp= -1
+if dispOpt == 'B0': idisp = 0
+if dispOpt == 'fce': idisp = 1
+if dispOpt == 'LossCone': idisp = 2
+
+orbitNumber= getParam( 'orbitNumber', 33, 'the orbit number', range(0,73) )
+
+hemiSphere= getParam( 'hemiSphere', 'North', 'the projected hemisphere', ['North','South'])
+if hemiSphere == 'North':
+  ihemi= 0
+else:
+  ihemi= 1
+    
+junoorbits= Orbits.getOrbitsFor('junoPJ_2hr')
+
+TimeOpt= getParam( 'specificTime','T', 'the specific time', [ 'T', 'F' ] )
+if TimeOpt == 'T':
+  tr= getParam( 'timerange', '2024-11-24 12:05 to 14:05', 'timerange to load' )
+else:
+  tr= junoorbits.getDatumRange(orbitNumber)
+AmOpt= getParam( 'Amalthea','F', 'Am Foot', [ 'T', 'F' ] )
+IoOpt= getParam( 'Io'      ,'T', 'Io Foot', [ 'T', 'F' ] )
+EuOpt= getParam( 'Europa'  ,'F', 'Eu Foot', [ 'T', 'F' ] )
+GaOpt= getParam( 'Ganymede','F', 'Ga Foot', [ 'T', 'F' ] )
+CaOpt= getParam( 'Callisto','F', 'Ca Foot', [ 'T', 'F' ] )
+
+satSelect= [AmOpt, IoOpt, EuOpt, GaOpt, CaOpt]
+satName= ['Amalthea', 'Io', 'Europa', 'Ganymede', 'Callisto']
+satColor=['0xff99a0', '0x9a0079', '0x35a16b', '0xedc58f', '0x66ccff']
+
+sPJ= 'PJ%2.2i %s'%(orbitNumber,hemiSphere)
+
+# draw the polar axes
+from org.das2.graph import Painter, DasDevicePosition
+from java.awt import BasicStroke,Font
+from org.das2.graph import Painter
+from org.das2.util import GrannyTextRenderer
+
+class AxisPainter( Painter ):
+    def paint( self,g ):
+        rn= zeros(2)
+        rn[0]= 5.0
+        rn[1]= 90.0
+        rn= putProperty( rn, QDataSet.UNITS, Units.dimensionless )
+        p= dom.plots[0].controller.dasPlot
+        g= g.create()  # create a new graphics context, so this won't affect other plots.  I don't think this is necessary.
+        s= BasicStroke( 0.5,BasicStroke.CAP_BUTT,BasicStroke.JOIN_MITER, 10.0, [4.,4.], 0. )
+        g.setStroke(s)
+        g.setClip( DasDevicePosition.toRectangle( p.getRow(), p.getColumn() ) )
+
+        for i in xrange(36):
+          th= i*10.0*DtoR
+          x0= p.XAxis.transform( cos( th ) * rn[0], Units.dimensionless )
+          y0= p.YAxis.transform( sin( th ) * rn[0], Units.dimensionless )
+          x1= p.XAxis.transform( cos( th ) * rn[1], Units.dimensionless )
+          y1= p.YAxis.transform( sin( th ) * rn[1], Units.dimensionless )  
+          g.setColor( Color.GRAY )
+          g.drawLine( int(x0), int(y0), int(x1), int(y1) ) 
+        gtr= GrannyTextRenderer()
+        [ix,iy]= [ p.XAxis.transform( -1.6, Units.dimensionless ), p.YAxis.transform( -85, Units.dimensionless ) ]
+        ix= min( ix, p.XAxis.column.DMaximum )
+        iy= min( iy, p.YAxis.row.DMaximum )
+        g.setFont( Font.decode( "Scheme Bk-12" ) )
+        #g.setFont( g.getFont().deriveFont(24.) )
+        if ihemi == 0:
+          gtr.setString( g, '180&deg;' )
+        else:
+          gtr.setString( g, ' 0&deg;' )
+        gtr.draw( g, ix, iy )
+        [ix,iy]= [ p.XAxis.transform( 90, Units.dimensionless ), p.YAxis.transform(  0, Units.dimensionless ) ]
+        ix= min( ix, p.XAxis.column.DMaximum )
+        iy= min( iy, p.YAxis.row.DMaximum )
+        gtr.setString( g, '90&deg;' )
+        gtr.draw( g, ix-gtr.width, iy )
+
+        xcen= p.XAxis.transform(-0.8, Units.dimensionless)
+        ycen= p.YAxis.transform(0, Units.dimensionless)
+        g.setFont( Font.decode( "Scheme Bk-12" ) )
+        for r in [ 5, 10, 20, 30, 40, 50, 60, 70, 80, 90 ]:
+            xmin= p.XAxis.transform( -r, Units.dimensionless )
+            ymin= p.YAxis.transform( +r, Units.dimensionless )
+            xmax= p.XAxis.transform( +r, Units.dimensionless )
+            ymax= p.YAxis.transform( -r, Units.dimensionless )
+            g.setColor( Color.GRAY )
+            g.drawOval( int( xmin ), int( ymin ), int( xmax-xmin ), int( ymax-ymin ) )
+            gtr.setString( g, '%d&deg;' % ( 90-r ) )
+            b= gtr.getBounds()
+            gtr.draw( g, xcen-(xmax-x0)*0.0, ycen-(ymax-y0)*1.0)
+        
+dom.canvases[0].controller.dasCanvas.addTopDecorator( AxisPainter() )
+
+class BottomPainter(Painter):
+    def paint( self,g ):
+        rn= zeros(2)
+        rn[0]= 5.0
+        rn[1]= 90.0
+        rn= putProperty( rn, QDataSet.UNITS, Units.degrees )
+        p= dom.plots[0].controller.dasPlot
+        r= 90
+        g= g.create()  # create a new graphics context, so th
+        g.setClip( DasDevicePosition.toRectangle( p.getRow(), p.getColumn() ) )
+        xmin= p.XAxis.transform( -r, Units.dimensionless )
+        ymin= p.YAxis.transform( +r, Units.dimensionless )
+        xmax= p.XAxis.transform( +r, Units.dimensionless )
+        ymax= p.YAxis.transform( -r, Units.dimensionless )
+        g.setColor( Color.WHITE )
+        g.fillOval( int( xmin ), int( ymin ), int( xmax-xmin ), int( ymax-ymin ) )
+dom.canvases[0].controller.dasCanvas.addBottomDecorator( BottomPainter() )
+
+# plotting Juno position onto Jovian atmosphere
+uri= 'vap+das2server:https://jupiter.physics.uiowa.edu/das/server?' \
+  +'dataset=Juno/Ephemeris/Jupiter_Footprint&interval=60&alt=UV%20moon=all%20hem=' \
+  +(['north','south'])[ihemi]
+print uri, tr
+ds= getDataSet(uri, tr)
+if ( ds==None ):
+   raise Exception('no data returned from das2server for Juno/Ephemeris/Jupiter_Footprint')
+
+if ihemi == 0:
+  jlon= (360.0-ds[:,1]) + 90.0
+  jlat= 90.0 - ds[:,2]
+
+  xr= [-70,70]
+  yr= [-90,70]
+else:
+  jlon= ds[:,1] - 90.0
+  jlat= 90.0 + ds[:,2]
+
+  xr= [-70,70]
+  yr= [-90,70]
+
+jlat.putProperty( QDataSet.UNITS, None )
+
+#print jlat.property(QDataSet.UNITS)
+(p0,pe)= plot( 0, jlat*cos(jlon*DtoR), jlat*sin(jlon*DtoR), 
+     lineThick=3, color='0xff9900', lineStyle='dotfine', xrange=xr, yrange=yr,
+     renderType='orbitPlot>fontSize=&color=#ff9900&lineThick=&tickLength=10px&tickSpacing=30min' )
+
+if idisp >= 0:
+  dsb= getDataSet('vap+das2server:http://jupiter.physics.uiowa.edu/das/server?'
+    +'dataset=Juno/Models/MagField_JRM09_CurrentSheet&interval=60&hem='+(['north','south'])[ihemi]+'%20ext='+(['none','all'])[idispMis], tr)
+
+  if idisp <= 1:
+    mkfact= ([1.0,1522.4*1.0*1836.0*1e-5])[idisp]
+    z= link(jlat*cos(jlon*DtoR), jlat*sin(jlon*DtoR), mkfact*dsb[:,0])
+    zvalue= [min(mkfact*dsb[:,0]), max(mkfact*dsb[:,0])]
+    zlabel= 'Modeled ' + (['B0!DJRM09!N (nT)', 'fce!DJRM09!N (Hz)'])[idisp]+' at Juno'
+    zlogflag= 'True'
+  else:
+    alc= asin(sqrt(dsb[:,0]/dsb[:,1]))*180.0/PI
+    z= link(jlat*cos(jlon*DtoR), jlat*sin(jlon*DtoR), alc)
+    zvalue= [min(alc), max(alc)]
+    zlabel= 'Modeled loss cone angle &alpha;!DJRM09!N (&deg;)'
+    zlogflag= 'False'
+    
+  plot( addPlotElement(0), z, renderType='colorScatter', symbol='CIRCLES', 
+    ztitle=zlabel, zrange=zvalue, zlog=zlogflag, symbolSize=5)
+
+iCh= 0
+if True:
+  annotation( iCh, text=sPJ, fontSize='2.5em', anchorPosition='SW', anchorOffset='+1.0em,+1.0em', 
+            columnId=p0.columnId, rowId=p0.rowId, background= Color( 0,0,0,0 ) )
+  iCh += 1
+
+annotation(iCh, text='Juno', fontSize='1.5em', anchorPosition='SE', anchorOffset='+1.0em,+2.0em',
+            columnId=p0.columnId, rowId=p0.rowId, background= Color( 0,0,0,0 ), textColor='#ff9900' )
+
+iSat= 0
+for i in xrange(5):
+  if satSelect[i] == 'T':
+    iSat += 1
+    if ihemi == 0:
+      jloni= (360.0-ds[:,4+i*2]) + 90.0
+      jlati= 90.0 - ds[:,5+i*2]
+    else:
+      jloni= ds[:,14+i*2] - 90.0
+      jlati= 90.0 + ds[:,15+i*2]
+    jlati.putProperty( QDataSet.UNITS, None )
+
+    plot( addPlotElement(0), jlati*cos(jloni*DtoR), jlati*sin(jloni*DtoR), 
+         lineThick=3, color=satColor[i], lineStyle='dotfine', 
+         renderType='orbitPlot>fontSize=&color=#ff9900&lineThick=&tickLength=10px&tickSpacing=60min' )
+
+    annotation(iCh+iSat, text=satName[i], fontSize='1.5em', 
+            anchorPosition='SE', anchorOffset='+1.0em,+%d.0em' % ( 2 + iSat*2 ),
+            columnId=p0.columnId, rowId=p0.rowId, background= Color( 0,0,0,0 ), textColor=satColor[i] )
+
+if ihemi == 0:
+  inlat= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0016-datasets13.txt?column=Lat_N' )
+  inlon= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0016-datasets13.txt?column=Lon_N' )
+
+  outlat= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0017-datasets14.txt?column=Lat_N' )
+  outlon= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0017-datasets14.txt?column=Lon_N' )
+
+  plot( addPlotElement(0), cos( ( 90 - inlon )*DtoR ) * ( 90 - inlat ), sin( ( 90 - inlon )*DtoR ) * ( 90 - inlat ), 
+                linewidth=1, symbol='None' )
+  plot( addPlotElement(0), cos( ( 90 - outlon )*DtoR ) * ( 90 - outlat ), sin( ( 90 - outlon )*DtoR ) * ( 90 - outlat ), 
+                linewidth=1, symbol='None' )
+else:
+
+  inlat= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0016-datasets13.txt?column=Lat_S' )
+  inlon= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0016-datasets13.txt?column=Lon_S' )
+  outlat= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0017-datasets14.txt?column=Lat_S' )
+  outlon= getDataSet('https://www-pw.physics.uiowa.edu/~jbf/juno/trajPlot/jgra53671-sup-0017-datasets14.txt?column=Lon_S' )
+
+  plot( addPlotElement(0), cos( ( 90 - inlon )*DtoR ) * ( 90 + inlat ), -sin( ( 90 - inlon )*DtoR ) * ( 90 + inlat ), 
+                linewidth=1, symbol='None' )
+  plot( addPlotElement(0), cos( ( 90 - outlon )*DtoR ) * ( 90 + outlat ), -sin( ( 90 - outlon )*DtoR ) * ( 90 + outlat ), 
+                linewidth=1, symbol='None' )
+
+p0.yaxis.drawTickLabels= False
+p0.yaxis.visible= False
+p0.xaxis.drawTickLabels= False
+p0.xaxis.visible= False
+
+from org.autoplot.dom import DomOps
+DomOps.newCanvasLayout(dom)
+
+bind( p0.xaxis, 'scale', p0.yaxis, 'scale' )
+

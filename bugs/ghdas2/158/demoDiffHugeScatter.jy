@@ -1,0 +1,7 @@
+setScriptDescription("""There's a difference in the metadata which affects HugeScatter""")
+
+old= getDataSet('http://jfaden.net/~jbf/autoplot/data.backup/d2s/testWBR2.d2s?useOldD2sParser=T')
+new= getDataSet('http://jfaden.net/~jbf/autoplot/data.backup/d2s/testWBR2.d2s?useOldD2sParser=F')
+
+plot(0,old)
+plot(1,new)

@@ -1,0 +1,16 @@
+setScriptTitle('Demo Runtime Error in Render')
+setScriptDescription('''It's fairly easy to get a fill value into the data and cause it to throw a runtime error each time 
+a paint or render occurs.  I need to identify the path that allows fill data to get in there, and
+ran across this demo which shows.''')
+
+
+l= getDataSet('vap+cdaweb:ds=OMNI2_H0_MRG1HR&id=DST1800&timerange=2004')
+
+print xtags(l)
+print l
+print dataset(datumRange('2004').convertTo(Units.t2000))
+
+h = histogram2d(xtags(l),l,[366,3],dataset(datumRange('2004').convertTo(Units.t2000)),dataset(datumRange('-10 to 3')))
+print xtags(h), ytags(h), h
+
+plot( h )

@@ -1,0 +1,6 @@
+if True:
+    raise Exception("Bad!")
+
+nonvariable=nonvariable+1
+
+

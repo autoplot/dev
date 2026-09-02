@@ -1,0 +1,7 @@
+{
+    "param1": "index",
+    "param1Values": "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n",
+    "param2": "",
+    "param2Values": "",
+    "script": "file:///home/jbf/ct/autoplot/git/dev/bugs/sf/2670/writeStdout.jy?index=5"
+}

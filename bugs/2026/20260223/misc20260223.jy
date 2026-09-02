@@ -1,0 +1,14 @@
+x0=0
+y0=0
+
+dsb= DataSetBuilder(2,100,2)
+for i in xrange(10000):
+    r2= (x0**2+y0**2)
+    if (r2>1): f= 1/r2 
+    else: f=1
+    x0=x0+randn()*f
+    y0=y0+randn()*f
+    x0=x0*0.9
+    y0=y0*0.9
+    dsb.nextRecord([x0,y0])
+plot( dsb.getDataSet() )

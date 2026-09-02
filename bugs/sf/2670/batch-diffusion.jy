@@ -1,0 +1,154 @@
+# Gray–Scott reaction–diffusion demo for Autoplot batch processing.
+# Each frame index k is independent => perfect for running in parallel (one JVM per frame).
+#
+# Usage ideas:
+#   - Run all frames in one go (no args)
+#   - Or run one frame per process: pass k as argv[0] (0..nFrames-1)
+
+import os, math
+
+# ----------------------------
+# Controls
+# ----------------------------
+outDir  = "/tmp/reaction_diffusion"  # change as desired
+nFrames = 24                          # number of parameter sets / PNGs
+
+N       = 50                         # grid size (NxN)  (reduce if slow)
+steps   = 3500                        # simulation steps per frame
+dumpEvery = 0                         # 0 => only final frame; or e.g. 250 to dump a time series
+
+Du      = 0.16                        # diffusion for U
+Dv      = 0.08                        # diffusion for V
+dt      = 1.0
+
+# axis extents (just for nice labeling)
+xMin, xMax = -1.0, 1.0
+yMin, yMax = -1.0, 1.0
+
+canvasW, canvasH = 900, 900
+
+# ----------------------------
+# Frame selection (batch-friendly)
+# ----------------------------
+def getFrameIndices():
+    try:
+        k = int(argv[0])
+        return [k]
+    except:
+        return range(nFrames)
+
+# ----------------------------
+# Parameter path through (F, K) space
+# (These ranges typically yield varied, pretty patterns.)
+# ----------------------------
+def params_for_frame(k, nFrames):
+    t = k / float(max(1, nFrames-1))
+    # A gentle sweep: you can tweak these to taste.
+    F = 0.020 + 0.040 * (0.5 + 0.5*math.sin(2.0*math.pi*t))
+    K = 0.045 + 0.030 * (0.5 + 0.5*math.cos(2.0*math.pi*t))
+    return F, K
+
+# ----------------------------
+# Simulation
+# Periodic boundaries, 5-point Laplacian
+# ----------------------------
+def simulate_gray_scott(F, K, N, steps, Du, Dv, dt):
+    
+    #import pdb 
+    #pdb.set_trace()
+    
+    # State arrays (flat, index = i*N + j)
+    U  = ones(N*N)
+    V  = zeros(N*N)
+    Un = zeros(N*N)
+    Vn = zeros(N*N)
+
+
+    # Seed patch
+    r = N//10
+    cx = N//2
+    cy = N//2
+    for i in range(cx-r, cx+r):
+        for j in range(cy-r, cy+r):
+            idx = (i % N)*N + (j % N)
+            U[idx] = 0.50
+            V[idx] = 0.25
+    print 'line 76'
+    # Optional tiny deterministic "noise" to break symmetry (no random import needed)
+    for i in range(0, N, 3):
+        for j in range(0, N, 3):
+            idx = i*N + j
+            V[idx] += 0.01 * ((i*131 + j*313) % 7) / 7.0
+    print 'line 82'
+    for s in range(steps):
+        print 's=', s
+        # update each cell
+        for i in range(N):
+            im = (i - 1) % N
+            ip = (i + 1) % N
+            row  = i*N
+            rowm = im*N
+            rowp = ip*N
+            for j in range(N):
+                jm = (j - 1) % N
+                jp = (j + 1) % N
+                idx = row + j
+
+                u = U[idx]
+                v = V[idx]
+
+                # 5-point Laplacian
+                lapU = (U[row + jm] + U[row + jp] + U[rowm + j] + U[rowp + j] - 4.0*u)
+                lapV = (V[row + jm] + V[row + jp] + V[rowm + j] + V[rowp + j] - 4.0*v)
+
+                uvv = u * v * v
+                du = Du*lapU - uvv + F*(1.0 - u)
+                dv = Dv*lapV + uvv - (F + K)*v
+
+                Un[idx] = u + dt*du
+                Vn[idx] = v + dt*dv
+
+        # swap buffers
+        U, Un = Un, U
+        V, Vn = Vn, V
+
+    return U, V
+
+# ----------------------------
+# Convert V field to a 2-D QDataSet for plotting
+# ----------------------------
+def field_to_dataset(V, N, xMin, xMax, yMin, yMax):
+    # V is already flat; make it a dataset and reshape
+    ds = reform(dataset(V), [N, N])
+
+    # Attach axes
+    xAxis = linspace(xMin, xMax, N)
+    yAxis = linspace(yMin, yMax, N)
+    ds = putProperty(ds, "DEPEND_0", xAxis)
+    ds = putProperty(ds, "DEPEND_1", yAxis)
+    return ds
+
+# ----------------------------
+# Main
+# ----------------------------
+if not os.path.isdir(outDir):
+    os.makedirs(outDir)
+
+setCanvasSize(canvasW, canvasH)
+
+k=21
+
+F, K = params_for_frame(k, nFrames)
+
+# Run simulation (independent per k)
+U, V = simulate_gray_scott(F, K, N, steps, Du, Dv, dt)
+
+# Plot V (usually the most visually interesting)
+reset()
+setCanvasSize(canvasW, canvasH)
+ds = field_to_dataset(V, N, xMin, xMax, yMin, yMax)
+plot(ds)
+
+dom.plots[0].setTitle("Gray–Scott reaction–diffusion  F=%.4f  K=%.4f  steps=%d" % (F, K, steps))
+
+print("Wrote reaction–diffusion PNG(s) to %s" % outDir)
