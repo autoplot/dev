@@ -1,0 +1,20 @@
+tr= getParam( 'timerange', '2015-11-25T22:40 to 23:30', 'timerange to load')
+#tr = getParam('timerange','2015-09-19T09:09 to 09:10', 'timerange to load')
+
+E= getDataSet( 'https://github.com/autoplot/dev/blob/master/demos/2025/20250421/E_B_MMS_combined_transformed.jyds', tr )
+B= getDataSet( 'https://github.com/autoplot/dev/blob/master/demos/2025/20250421/E_B_MMS_combined_transformed.jyds?type=B', tr )
+
+E = synchronize(B,E) # make sure they have the same timetags
+
+B[:,0] = butterworth(B[:,0],2,Units.hertz.createDatum(0.1),False)
+B[:,1] = butterworth(B[:,1],2,Units.hertz.createDatum(0.1),False)
+B[:,2] = butterworth(B[:,2],2,Units.hertz.createDatum(0.1),False)
+
+T= xtags(E)
+
+tf= TimeParser.create('$Y$m$d_$H$M.dat')
+fln= tf.format(datumRange(tr))
+
+data= bundle( T, E[:,0], E[:,1], E[:,2], B[:,0], B[:,1], B[:,2] )
+formatDataSet( data, PWD + fln + '?format=9.5f')
+
