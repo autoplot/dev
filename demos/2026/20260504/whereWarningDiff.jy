@@ -1,0 +1,4 @@
+ts= sin(linspace(0,TAU*3,2000))
+r= where( diff(ts).gt(0) )
+ts= ts[:-1][r]
+plot( ts )

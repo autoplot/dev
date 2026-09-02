@@ -1,0 +1,12 @@
+
+from java.io import File
+from org.das2.graph.util import GraphicalLogRenderer
+
+
+glr= GraphicalLogRenderer.getInstance()
+ds= glr.readRecords(File('/tmp/autoplot.log.csv'))
+
+p,_= plot( 0, ds, renderer=glr.getRenderer() )
+
+p.controller.dasPlot.addMouseModule(glr.getMouseModule())
+p.controller.dasPlot.addMouseModule(glr.getShowLogMouseModule(p.controller.dasPlot))

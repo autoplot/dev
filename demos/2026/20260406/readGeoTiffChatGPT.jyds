@@ -1,0 +1,261 @@
+# title: Read GeoTIFF DEM
+# label: GeoTIFF DEM
+#
+# Reads a simple strip-based TIFF DEM using:
+#  - TIFF header parsing (IFD)
+#  - BinaryDataSource (vap+bin:)
+#  - optional .tfw world file for coordinates
+#
+# Supports:
+#  - uncompressed TIFF
+#  - one band
+#  - multiple strips
+#
+# Limitations:
+#  - no compression
+#  - no tiling
+#  - no GeoTIFF embedded projection parsing
+
+from java.io import RandomAccessFile, BufferedReader, FileReader, File
+from java.lang import Double
+from org.das2.qds import DDataSet, QDataSet
+
+resourceURI = getParam(
+    'resourceURI',
+    'https://github.com/GeoTIFF/test-data/blob/main/files/bremen_sea_ice_conc_2022_9_9.tif',
+    'example file to load'
+)
+
+flipY = getParam("flipY", True, "Flip the  Y coordinates", [ True,False ])
+itile= getParam('tileIndex', 0, 'which tile to read')
+
+f = getFile(resourceURI)
+
+# -------------------------
+# TIFF low-level readers
+# -------------------------
+
+def rb(raf):
+    b = raf.read()
+    if b < 0: raise Exception("EOF")
+    return b
+
+def rushort(raf, le):
+    if le:
+        return rb(raf) | (rb(raf)<<8)
+    else:
+        return (rb(raf)<<8) | rb(raf)
+
+def ruint(raf, le):
+    if le:
+        return long(rb(raf)) | (long(rb(raf))<<8) | (long(rb(raf))<<16) | (long(rb(raf))<<24)
+    else:
+        return (long(rb(raf))<<24) | (long(rb(raf))<<16) | (long(rb(raf))<<8) | long(rb(raf))
+
+def typeSize(t):
+    if t==1 or t==2 or t==6 or t==7: return 1
+    if t==3 or t==8: return 2
+    if t==4 or t==9 or t==11: return 4
+    if t==5 or t==10 or t==12: return 8
+    raise Exception("bad TIFF type "+str(t))
+
+def readVals(raf, le, t, count, off):
+    sz = typeSize(t)*count
+    if sz <= 4:
+        return [off]  # good enough for our tags
+    raf.seek(off)
+    vals=[]
+    i=0
+    while i<count:
+        if t==3 or t==8:
+            vals.append(rushort(raf,le))
+        elif t==4 or t==9:
+            vals.append(ruint(raf,le))
+        else:
+            vals.append(ruint(raf,le))
+        i=i+1
+    return vals
+
+# -------------------------
+# Parse TIFF
+# -------------------------
+
+def parseTIFF(file):
+    raf = RandomAccessFile(file,"r")
+    try:
+        b0 = rb(raf); b1 = rb(raf)
+        le = (b0==73 and b1==73)
+
+        if rushort(raf,le) != 42:
+            raise Exception("not TIFF")
+
+        raf.seek(ruint(raf,le))
+        n = rushort(raf,le)
+
+        print 'reading ', n, 'tags'
+        
+        tags={}
+        i=0
+        while i<n:
+            tag = rushort(raf,le)
+            t   = rushort(raf,le)
+            cnt = int(ruint(raf,le))
+            off = ruint(raf,le)
+            nextPos = raf.getFilePointer()
+            tags[tag] = readVals(raf,le,t,cnt,off)
+            print 'tag ', tag, '=', tags[tag]
+            raf.seek(nextPos)
+
+            i=i+1
+        if tags.has_key(273):
+            storage = "strips"
+        elif tags.has_key(324):
+            storage = "tiles"
+            
+            tileWidth  = int(tags[322][0])
+            tileLength = int(tags[323][0])
+            tileOffsets = tags[324]
+            tileByteCounts = tags[325]
+            
+            byteOffset = long(tileOffsets[itile])
+            byteCount  = long(tileByteCounts[itile])
+
+            recLength = tileWidth * bsize(dtype)
+
+            uri = "vap+bin:" + f.toURI().toString()
+            uri = uri + "?byteOffset=" + str(byteOffset)
+            uri = uri + "&rank2=:"
+            uri = uri + "&recLength=" + str(recLength)
+            uri = uri + "&type=" + dtype
+            print uri
+            
+        else:
+            raise Exception("No strip or tile offsets found")
+    
+        ny = int(tags[257][0])
+        stripOffsets = tags[273]
+
+        if tags.has_key(278):
+            rowsPerStrip = int(tags[278][0])
+        else:
+            if len(stripOffsets) == 1:
+                rowsPerStrip = ny
+            else:
+                rowsPerStrip = (ny + len(stripOffsets) - 1) / len(stripOffsets)
+            
+        return {
+            "le":le,
+            "nx":int(tags[256][0]),
+            "ny":int(tags[257][0]),
+            "bps":int(tags.get(258,[8])[0]),
+            "sf":int(tags.get(339,[1])[0]),
+            "comp":int(tags.get(259,[1])[0]),
+            "rps":rowsPerStrip,
+            "off":tags[273],
+            "cnt":tags[279]
+        }
+    finally:
+        raf.close()
+
+# -------------------------
+# dtype mapping
+# -------------------------
+
+def dtype(bps,sf):
+    if sf==1:
+        if bps==8: return "ubyte"
+        if bps==16: return "ushort"
+        if bps==32: return "uint"
+    if sf==2:
+        if bps==8: return "byte"
+        if bps==16: return "short"
+        if bps==32: return "int"
+    if sf==3:
+        if bps==32: return "float"
+        if bps==64: return "double"
+    raise Exception("unsupported dtype")
+
+def bsize(t):
+    if t in ["byte","ubyte"]: return 1
+    if t in ["short","ushort"]: return 2
+    if t in ["int","uint","float"]: return 4
+    if t=="double": return 8
+
+# -------------------------
+# Read strips
+# -------------------------
+
+info = parseTIFF(f)
+
+if info["comp"] != 1:
+    raise Exception("compressed TIFF not supported")
+
+nx = info["nx"]
+ny = info["ny"]
+
+dt = dtype(info["bps"],info["sf"])
+bpv = bsize(dt)
+
+z = DDataSet.createRank2(ny,nx)
+
+row=0
+i=0
+while i < len(info["off"]):
+    off = long(info["off"][i])
+    nbytes = long(info["cnt"][i])
+
+    rows = info["rps"]
+    if row+rows > ny:
+        rows = ny-row
+
+    recLen = nx*bpv
+
+    uri = "vap+bin:"+f.toURI().toString()
+    uri = uri+"?byteOffset="+str(off)
+    uri = uri+"&rank2=:"
+    uri = uri+"&recLength="+str(recLen)
+    uri = uri+"&type="+dt
+
+    if info["le"]:
+        uri = uri+"&byteOrder=little"
+    else:
+        uri = uri+"&byteOrder=big"
+
+    ds = getDataSet(uri)
+    ds = ds[0:rows,:]
+
+    j=0
+    while j<rows:
+        k=0
+        while k<nx:
+            z.putValue(row+j,k,ds.value(j,k))
+            k=k+1
+        j=j+1
+
+    row = row + rows
+    i=i+1
+
+if flipY:
+    z = z[::-1,:]
+
+# -------------------------
+# simple coordinates
+# -------------------------
+
+x = DDataSet.createRank1(nx)
+y = DDataSet.createRank1(ny)
+
+i=0
+while i<nx:
+    x.putValue(i,i)
+    i=i+1
+
+j=0
+while j<ny:
+    y.putValue(j,j)
+    j=j+1
+
+z.putProperty(QDataSet.DEPEND_0,y)
+z.putProperty(QDataSet.DEPEND_1,x)
+
+result = z

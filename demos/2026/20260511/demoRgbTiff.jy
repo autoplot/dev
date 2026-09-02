@@ -1,0 +1,22 @@
+setScriptDescription('experiment to see if raw uncompressed tiff has 16 bit colors')
+peekAt(0)
+
+#rrr= getDataSet('vap+bin:file:///home/jbf/ct/autoplot/data/20260508_092349.tiff?rank2=::3&recLength=36720&type=short&byteOrder=big')
+#ggg= getDataSet('vap+bin:file:///home/jbf/ct/autoplot/data/20260508_092349.tiff?rank2=1::3&recLength=36720&type=short&byteOrder=big')
+#bbb= getDataSet('vap+bin:file:///home/jbf/ct/autoplot/data/20260508_092349.tiff?rank2=2::3&recLength=36720&type=short&byteOrder=big')
+
+rgb= getDataSet('vap+bin:file:///home/jbf/ct/autoplot/data/20260508_092349.tiff?rank2=:&recLength=36720&type=ushort&byteOrder=big')
+rrr= rgb[:,::3]
+bbb= rgb[:,1::3]
+ggg= rgb[:,2::3]
+
+setLayout(2,2)
+plot( 0, rrr )
+plot( 1, ggg )
+plot( 2, bbb )
+
+rgbds= rgbColorDataset( rrr, ggg, bbb ) 
+
+rgbds.putProperty( QDataSet.DEPEND_2, labelsDataset(['red','green','blue']) )
+
+plot( 3, rgbds )

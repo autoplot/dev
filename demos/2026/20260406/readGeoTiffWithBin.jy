@@ -1,0 +1,6 @@
+ds= getDataSet('vap+bin:file:///home/jbf/Downloads/davenport_w.zip/davenport_w.tif?byteOffset=29584&rank2=:&recLength=14448&type=uint')
+ext= extent(ds)
+print '%d to %d' % ( ext[0], ext[1] )
+
+
+

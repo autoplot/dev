@@ -1,0 +1,170 @@
+# title: Read GeoTIFF via BinaryDataSource
+# label: GeoTIFF via BinaryDataSource
+#
+# Uses Autoplot's BinaryDataSource to read the raster payload from a TIFF file,
+# then attaches X and Y coordinates, optionally using a TFW world file.
+#
+# This is useful when the TIFF layout is already known and the raster can be
+# accessed with vap+bin:file:... ?byteOffset=...&rank2=:&recLength=...&type=...
+#
+# Note:
+#  - This script does not parse embedded GeoTIFF tags.
+#  - Georeferencing comes from the .tfw file if present.
+#  - Otherwise pixel indices are used.
+
+from java.io import File, BufferedReader, FileReader
+from java.lang import Double
+from org.das2.qds import DDataSet
+from org.das2.qds import QDataSet
+
+setScriptDescription(
+    "<html><b>Read GeoTIFF via BinaryDataSource</b><br>"
+    "Reads a TIFF raster using Autoplot's BinaryDataSource, then attaches X and Y coordinates.<br>"
+    "If a <tt>.tfw</tt> world file is present, it is used for the coordinates.<br>"
+    "Otherwise pixel indices are used.<br><br>"
+    "<b>Parameters</b><br>"
+    "<ul>"
+    "<li><tt>file</tt> &mdash; TIFF file</li>"
+    "<li><tt>byteOffset</tt> &mdash; byte offset to raster data</li>"
+    "<li><tt>nx</tt> &mdash; number of columns</li>"
+    "<li><tt>ny</tt> &mdash; number of rows</li>"
+    "<li><tt>type</tt> &mdash; binary type, for example float, double, short, int</li>"
+    "<li><tt>byteOrder</tt> &mdash; little or big, optional</li>"
+    "<li><tt>flipY</tt> &mdash; T or F, default T</li>"
+    "</ul>"
+    "</html>"
+)
+
+filename   = getParam("file", "")
+byteOffset = getParam("byteOffset", "29581")
+nx         = int(getParam("nx", "3612"))
+ny         = int(getParam("ny", "3612"))
+dtype      = getParam("type", "float")
+byteOrder  = getParam("byteOrder", "")
+flipY      = getParam("flipY", "T")
+
+filename= getParam( 'resourceURI', 'file:/home/jbf/Downloads/davenport_w.zip/davenport_w.tif', 'example file to load' )
+
+if byteOffset == "":
+    raise Exception("please provide byteOffset")
+
+if nx <= 0 or ny <= 0:
+    raise Exception("please provide nx and ny")
+
+f = getFile(filename)
+if not f.exists():
+    raise Exception("file not found: " + filename)
+
+def urlEncodeFile(ff):
+    # BinaryDataSource wants a file URL.  For now we just prepend file://
+    # and rely on simple paths.  If your paths may contain spaces, using
+    # ff.toURI().toString() is better.
+    return ff.toURI().toString()
+
+def readWorldFile(tiffFile):
+    path = tiffFile.getAbsolutePath()
+    pl = path.lower()
+    if pl.endswith(".tiff"):
+        wpath = path[0:len(path)-5] + ".tfw"
+    elif pl.endswith(".tif"):
+        wpath = path[0:len(path)-4] + ".tfw"
+    else:
+        return None
+
+    wf = File(wpath)
+    if not wf.exists():
+        return None
+
+    br = BufferedReader(FileReader(wf))
+    vals = []
+    try:
+        while True:
+            line = br.readLine()
+            if line == None:
+                break
+            line = line.strip()
+            if line != "":
+                vals.append(Double.parseDouble(line))
+    finally:
+        br.close()
+
+    if len(vals) < 6:
+        raise Exception("world file has fewer than 6 values: " + wpath)
+
+    return vals
+
+# BinaryDataSource rank2 layout:
+# rank2=<colon syntax>, recLength is bytes per row.
+#
+# For example:
+# vap+bin:file:///.../davenport_w.tif?byteOffset=29581&rank2=:&recLength=14448&type=float
+#
+# Here recLength is bytes per row.  We compute it from nx and type.
+
+def bytesPerValue(t):
+    if t == "byte":   return 1
+    if t == "ubyte":  return 1
+    if t == "short":  return 2
+    if t == "ushort": return 2
+    if t == "int":    return 4
+    if t == "uint":   return 4
+    if t == "float":  return 4
+    if t == "long":   return 8
+    if t == "double": return 8
+    raise Exception("unsupported type: " + t)
+
+bpv = bytesPerValue(dtype)
+recLength = nx * bpv
+
+uri = "vap+bin:" + urlEncodeFile(f)
+uri = uri + "?byteOffset=" + byteOffset
+uri = uri + "&rank2=:"
+uri = uri + "&recLength=" + str(recLength)
+uri = uri + "&type=" + dtype
+
+if byteOrder != "":
+    uri = uri + "&byteOrder=" + byteOrder
+
+z = getDataSet(uri)
+
+# If requested, reverse the first dimension so Y increases upward.
+if flipY == "T":
+    z = z[:: -1, :]
+
+xds = DDataSet.createRank1(nx)
+yds = DDataSet.createRank1(ny)
+
+wf = readWorldFile(f)
+
+if wf != None:
+    A = wf[0]
+    D = wf[1]
+    B = wf[2]
+    E = wf[3]
+    C = wf[4]
+    F = wf[5]
+
+    if abs(B) > 1e-12 or abs(D) > 1e-12:
+        print "warning: rotated world file detected; using simple 1-D coordinates"
+
+    for i in range(nx):
+        xds.putValue(i, C + i * A)
+
+    if flipY == "T":
+        for j in range(ny):
+            yds.putValue(j, F + (ny - 1 - j) * E)
+    else:
+        for j in range(ny):
+            yds.putValue(j, F + j * E)
+else:
+    for i in range(nx):
+        xds.putValue(i, i)
+    for j in range(ny):
+        yds.putValue(j, j)
+
+z.putProperty(QDataSet.DEPEND_0, yds)
+z.putProperty(QDataSet.DEPEND_1, xds)
+z.putProperty(QDataSet.NAME, "geotiff")
+z.putProperty(QDataSet.LABEL, "GeoTIFF raster")
+
+result = z

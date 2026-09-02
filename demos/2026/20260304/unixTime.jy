@@ -1,0 +1,6 @@
+setScriptDescription('Demo unix time')
+
+tt= putProperty( linspace( 1.45185e9, 1.45215e9, 1000 ), QDataSet.UNITS, Units.t1970 )
+vv= sawtooth( linspace( 0, 10*TAU, 1000 ) )
+
+plot( tt, vv )
