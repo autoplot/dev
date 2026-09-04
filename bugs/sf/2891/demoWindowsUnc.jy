@@ -1,0 +1,10 @@
+from java.io import File
+ff= File('\\\\spdr0.physics.uiowa.edu\\home\\jbf\\data\\istp\\omni\\omni_cdaweb\\hro_5min\\2007\\omni_hro_5min_20070301_v01.cdf')
+print ff
+print ff.exists()
+
+ff= File('//spdr0.physics.uiowa.edu/home/jbf/data/istp/omni/omni_cdaweb/hro_5min/2007/omni_hro_5min_20070301_v01.cdf')
+print ff
+print ff.exists()
+
+print 'A future version of Autoplot will support this file as file://spdr0.physics.uiowa.edu/home/jbf/data/istp/omni/omni_cdaweb/hro_5min/2007/omni_hro_5min_20070301_v01.cdf.'
