@@ -2,7 +2,7 @@ from org.das2.util import ColorUtil
 from org.das2.graph import Painter
 from java.awt import BasicStroke
 
-setScriptDescription('''Example showing different strokes''')
+setScriptDescription('''Example showing different strokes.  Windows with Java 17 has issues.''')
 
 class MyPainter(Painter):
 
