@@ -1,0 +1,44 @@
+from org.das2.util import ColorUtil
+from org.das2.graph import Painter
+from java.awt import BasicStroke
+
+setScriptDescription('''Example showing different strokes''')
+
+class MyPainter(Painter):
+
+    def paint(self, g):
+
+        oldStroke = g.getStroke()
+        oldColor = g.getColor()
+
+        try:
+            g.setColor(ColorUtil.DARK_BLUE)
+
+            g.setStroke(BasicStroke(1.0))
+            g.drawLine(50, 150, 250, 150)
+
+            g.setStroke(BasicStroke(3.0))
+            g.drawLine(50, 180, 250, 180)
+
+            g.setStroke(BasicStroke(6.0))
+            g.drawLine(50, 210, 250, 210)
+            
+            # Dash-dot
+            g.setStroke(BasicStroke( 2.0, \
+                BasicStroke.CAP_BUTT, \
+                BasicStroke.JOIN_MITER, \
+                10.0, \
+                [12.0, 5.0, 2.0, 5.0], \
+                0.0)) 
+            g.drawLine(50, 240, 250, 240)
+            
+        finally:
+            g.setStroke(oldStroke)
+            g.setColor(oldColor)
+
+
+painter = MyPainter()
+
+plot = dom.plots[0]
+plot.controller.dasPlot.topDecorator = painter
+
