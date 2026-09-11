@@ -1,0 +1,5 @@
+tr= getParam( 'timerange', '021-06-08T07:22:49.300Z/2021-06-08T07:22:49.800Z', 'timerange to load' )
+print tr
+
+result=None
+setOutputParam('N',None)

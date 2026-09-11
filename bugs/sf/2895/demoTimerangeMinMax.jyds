@@ -1,0 +1,6 @@
+constraints= { 'min':'2026-09-10T12:00/PT0S', 'max':'2026-09-12T12:00/PT0S' }
+tr= getParam( 'timerange', '2026-09-12', 'timerange to load', constraints )
+print tr
+
+result=None
+setOutputParam('N',None)
