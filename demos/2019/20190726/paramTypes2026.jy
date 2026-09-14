@@ -1,0 +1,17 @@
+from org.das2.util.ColorUtil import decodeColor
+from java.awt import Color
+
+setScriptDescription('''In 2026 I went to review the state of odd parameter
+types like Datum and Color, and was reminded that this was never finished
+off.  This is a study of what does work.''')
+
+datm= getParam( 'datum', datum('5cm'), 'datum value', [ datum('5cm'),datum('10cm'),datum('15cm') ] )
+color= getParam( 'color', Color.RED, 'line color' )
+#color= getParam( 'color', Color.RED, 'line color', [ Color.BLUE, Color.RED, Color.DARK_GRAY ] )
+#sides= getParam( 'sides', 4, 'number of sides',  [3,4,6] )
+
+#sides= getParam( 'sides', 4, 'number of sides', { 'values':[ 3,4,6], 'labels':['triangle','square','hexagon'] } )
+
+print 'datm: ', datm, datm.getClass().getName()
+print 'color: ', color, color.getClass().getName()
+#print 'sides: ', sides
