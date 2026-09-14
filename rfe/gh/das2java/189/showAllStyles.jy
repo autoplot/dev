@@ -1,0 +1,29 @@
+x=linspace(-3,3,256)
+y=exp(-x**2)*sin(x*10)
+
+style='''solid
+dashed
+dotted
+dashDot
+dashDotDot
+longDash
+shortDash
+longDashDot
+sparseDot'''
+     
+style='''solid
+none
+dashfine
+dotfine
+dashes
+dots
+'''
+     
+style= style.splitlines()
+
+setLayout(3,3)
+i=0
+for s in style:
+    p,_= plot(i,x,y,lineStyle=s,symbol=None)
+    annotation(i,plotId=p.id,anchorPosition='NW',text=s)
+    i=i+1
