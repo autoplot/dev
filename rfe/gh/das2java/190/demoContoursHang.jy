@@ -1,0 +1,8 @@
+ds= distance(1000,1000,400,400,100,200)+outerProduct(sin(linspace(0,10*TAU,1000)),ones(1000))
+ds= ds+randn(1000,1000)/4
+p,pe=plot(ds,renderType='contour>levels=0.')
+sleep(1000)
+pe.renderControl='color=blue'
+sleep(1000)
+annotation(text='about to hang application...',anchorPosition='NW')
+pe.renderControl='levels=+0.1'
