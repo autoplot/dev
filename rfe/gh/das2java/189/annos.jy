@@ -1,0 +1,20 @@
+from org.das2.util import ColorUtil
+
+setScriptTitle('Many Annotations')
+setScriptDescription('''Add many annotations to paint palette of colors''')
+
+ind=0
+
+names = list(ColorUtil.getNamedColors().keySet())
+
+for i in xrange(5,95,10):
+    for j in xrange(15,95,10):
+        xr= [i-4,i+4]
+        yr= [j-4,j+4]
+        
+        ann= annotation(ind,anchorType='data',anchorBorderType='ellipse',\
+            xrange=xr,yrange=yr,\
+            text=names[ind],anchorPosition='outsideS',anchorOffset='0em,-0.5em',background=None,\
+            fontSize='0.8em')
+        ann.anchorStyle='background='+names[ind]
+        ind=ind+1

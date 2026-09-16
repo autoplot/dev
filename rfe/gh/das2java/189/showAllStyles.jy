@@ -1,7 +1,7 @@
 x=linspace(-3,3,256)
 y=exp(-x**2)*sin(x*10)
 
-style='''solid
+styleAnnotation='''solid
 dashed
 dotted
 dashDot
@@ -12,18 +12,44 @@ longDashDot
 sparseDot'''
      
 style='''solid
-none
-dashfine
-dotfine
 dashes
 dots
+dashfine
+dotfine
+dotdashes
+none
 '''
-     
+
 style= style.splitlines()
+styleAnnotation= styleAnnotation.splitlines()
 
 setLayout(3,3)
+p= dom.plots
+p.reverse()
+dom.plots=p
+
 i=0
-for s in style:
-    p,_= plot(i,x,y,lineStyle=s,symbol=None)
-    annotation(i,plotId=p.id,anchorPosition='NW',text=s)
-    i=i+1
+for i in range(9):
+    if i<len(style):
+        s= style[i]
+    else:
+        s= 'solid'
+    p,_= plot(i,x,y,lineStyle=s,symbol=None,ytitle=s)
+        
+    a=annotation(i,plotId=dom.plots[i].id,anchorPosition='NW',text=styleAnnotation[i],xrange=[-2,2],yrange=[0.5,1],anchorBorderType='ellipse')
+    a.anchorStyle='style='+styleAnnotation[i]
+    
+for a in linspace(0.1,10,100):
+    for pe in dom.plotElements:
+        pe.style.lineWidth=a.value()
+        sleep(1)
+        
+for a in reverse(linspace(0.1,10,100)):
+    for pe in dom.plotElements:
+        pe.style.lineWidth=a.value()
+        sleep(1)        
+    
+for a in linspace(0.1,1,10):
+    for pe in dom.plotElements:
+        pe.style.lineWidth=a.value()
+        sleep(1)
