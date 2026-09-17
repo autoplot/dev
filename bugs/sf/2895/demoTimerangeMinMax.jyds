@@ -2,5 +2,7 @@ constraints= { 'min':'2026-09-10T12:00/PT0S', 'max':'2026-09-12T12:00/PT0S' }
 tr= getParam( 'timerange', '2026-09-12', 'timerange to load', constraints )
 print tr
 
-result=None
-setOutputParam('N',None)
+t= linspace('2026-09-10T12:00', '2026-09-12T12:00', 100 )
+d= (t-'2026-09-11T12:00') / '240min'
+result=dataset( t, exp(-abs(d) ) * sin(d*2) )
+
