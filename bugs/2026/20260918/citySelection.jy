@@ -1,0 +1,8 @@
+
+setScriptDescription('''Neither of these parameters work!!''')
+
+zzs= findgen(4)
+z= getParam('z',0,'0,1,2,3',zzs)
+
+cities= labelsDataset(['Chicago','Los Angeles','New York'])
+city= getParam( 'city','Chicago','City Selection',cities)
