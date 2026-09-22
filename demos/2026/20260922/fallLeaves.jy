@@ -1,0 +1,148 @@
+# Falling leaves for the Autoplot Fall Release
+#
+# The zero contour of the generated field makes leaf shapes.
+
+import math
+from org.das2.qds.ops import Ops
+
+setScriptTitle('Autoplot Fall Leaves')
+setScriptDescription('''Creates an implicit field containing falling 
+leaf shapes for the Autoplot contour renderer.''')
+
+nx = 500
+ny = 400
+
+xmin = -6.0
+xmax =  6.0
+ymin = -5.0
+ymax =  5.0
+
+# Each leaf is:
+#    x, y, size, rotation, serration count, serration strength
+leaves = [
+    (-3.8,  2.8, 1.25,  0.35, 5, 0.15),
+    (-1.3,  3.4, 0.85, -0.55, 7, 0.12),
+    ( 1.4,  3.0, 1.10,  0.75, 5, 0.18),
+    ( 4.0,  2.0, 0.90, -0.30, 7, 0.14),
+
+    (-4.4,  0.0, 0.80, -0.80, 5, 0.17),
+    (-2.0,  0.6, 1.15,  0.15, 7, 0.11),
+    ( 0.5,  0.2, 0.95, -0.40, 5, 0.19),
+    ( 3.0, -0.1, 1.25,  0.60, 7, 0.13),
+
+    (-3.0, -2.5, 1.05,  0.85, 5, 0.16),
+    (-0.6, -2.8, 0.80, -0.15, 7, 0.13),
+    ( 1.8, -2.5, 1.15,  0.35, 5, 0.18),
+    ( 4.3, -3.0, 0.75, -0.70, 7, 0.14)
+]
+
+
+def leafField(x, y, leaf):
+    cx = leaf[0]
+    cy = leaf[1]
+    size = leaf[2]
+    angle = leaf[3]
+    n = leaf[4]
+    serration = leaf[5]
+
+    # Translate to leaf coordinates.
+    xx = x - cx
+    yy = y - cy
+
+    # Rotate.
+    ca = math.cos(angle)
+    sa = math.sin(angle)
+
+    xr =  ca * xx + sa * yy
+    yr = -sa * xx + ca * yy
+
+    # Scale.
+    xr = xr / size
+    yr = yr / size
+
+    r = math.sqrt(xr*xr + yr*yr)
+    theta = math.atan2(yr, xr)
+
+    # Long axis is vertical.
+    #
+    # abs(sin(theta)) produces pointed ends at theta=0,pi.
+    # Shift theta by pi/2 so that the points are vertical.
+    t = theta - math.pi/2
+
+    s = abs(math.sin(t))
+
+    # Avoid pow(0, fractional number) surprises.
+    if s < 1.e-10:
+        rr = 0.0
+    else:
+        rr = math.pow(s, 0.70)
+
+    # Give the edge some lobes/serrations.
+    rr = rr * (1.0 + serration * math.cos(n*t))
+
+    return r - rr
+
+
+# Build the field.
+zz = []
+
+for iy in xrange(ny):
+
+    y = ymin + (ymax-ymin) * iy / float(ny-1)
+
+    for ix in xrange(nx):
+
+        x = xmin + (xmax-xmin) * ix / float(nx-1)
+
+        # Union of all the leaves.  Negative means "inside".
+        z = 1.e30
+
+        for leaf in leaves:
+            q = leafField(x, y, leaf)
+            if q < z:
+                z = q
+
+        zz.append(z)
+
+
+result = Ops.dataset(zz)
+result = Ops.reform(result, [ny, nx])
+
+# Coordinates for the two dimensions.
+xx = []
+for ix in xrange(nx):
+    xx.append(xmin + (xmax-xmin) * ix / float(nx-1))
+
+yy = []
+for iy in xrange(ny):
+    yy.append(ymin + (ymax-ymin) * iy / float(ny-1))
+
+xx = Ops.dataset(xx)
+yy = Ops.dataset(yy)
+
+result.putProperty(QDataSet.DEPEND_0, yy)
+result.putProperty(QDataSet.DEPEND_1, xx)
+
+from java.awt import Color
+
+rgb = dataset([
+    Color(70,  20,  10),   # dark brown
+    Color(140, 25,  10),   # deep red
+    Color(210, 55,   5),   # burnt orange
+    Color(245, 130, 10),   # orange
+    Color(250, 200, 30),   # golden yellow
+    Color(255, 240, 140),  # pale yellow
+    Color(255, 255, 255)   # white
+])
+
+colorBarType = makeColorTable(
+    'fall5',
+    dataset([0, 45, 90, 140, 180, 220, 240]),
+    rgb
+)
+
+# Plot the scalar field first.  Switch the plot's renderer to
+# "contour" and select the zero contour.
+setLayoutOverplot(2)
+plot(0, result, colorTable='fall5', zrange='-2.019 to 0.181')
+plot(1, result, renderType='contour>levels=0&color=brown', colorTable='fall5')
