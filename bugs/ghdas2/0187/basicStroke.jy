@@ -32,7 +32,7 @@ class MyPainter(Painter):
                 0.0)) 
             g.drawLine(50, 240, 250, 240)
 
-            g.stroke= BasicStroke(9.0)
+            g.stroke= BasicStroke(9.0)  # This will crash on Java >= 9, where modules are used and reflection is more strict.
             g.drawLine(50, 270, 250, 270)
 
         finally:
