@@ -1,0 +1,9 @@
+from net.sf.image4j.codec.ico import ICODecoder
+
+f= getFile('https://cottagesystems.com/favicon.ico')
+imgicon= ICODecoder.read(f)
+
+for i in imgicon:
+    print i.getWidth(), i.getHeight()
+    
+print ICODecoder.getResource("ICODecoder.class")

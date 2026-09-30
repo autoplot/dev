@@ -10,7 +10,7 @@ sc= getParam('sc','mms1','MMS Spacecraft',['mms1','mms2','mms3','mms4'] )
 typ = getParam('type', 'E', 'E or B', ['E','B'])
 flipx= getParam( 'flipx', False, 'Flip X component', [ True, False ] )
 
-modes= getParam( 'modes', 'slow', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
+modes= getParam( 'modes', 'both', 'fast/brst, slow/srvy, or both', [ 'fast','slow','both' ] )
 
 def smoothTruncate( ds, len ):
     'implement IDL smooth with edge_truncate keyword set.'
