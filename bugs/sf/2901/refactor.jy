@@ -1,0 +1,15 @@
+from org.das2.util import FileUtil
+import org.python.core.parser.parse
+from org.autoplot.jythonsupport import JythonAstFormatter
+
+setScriptDescription('Demo refactor by parsing and reformatting script')
+
+script= FileUtil.readFileToString( getFile( PWD + 'script.jy' ) )
+
+print '### The script'
+print script
+print '### end, The script'
+
+ff= org.python.core.parser.parse(script, "exec")
+print JythonAstFormatter.format(ff)
+
