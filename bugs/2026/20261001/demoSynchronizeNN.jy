@@ -1,0 +1,20 @@
+from org.das2.qds import DataSetUtil
+from java.lang import Double
+tt= linspace(2.,4.9,100)
+ss= sin(tt)
+ss[40]= Double.NaN
+ss[41]= Double.NaN
+
+setLayoutOverplot(2)
+
+plot( tt,ss )
+
+tt1= linspace(0,5.0,1000)
+
+tlimit= DataSetUtil.guessCadenceNew( tt, None )
+print 'tlimit', tlimit, tt1[1]-tt1[0]
+
+ss1= synchronizeNN(tt1,link(tt,ss))
+
+plot( 1, tt1, ss1, color='red', symbolSize=2, lineThick=0.3 )
+
