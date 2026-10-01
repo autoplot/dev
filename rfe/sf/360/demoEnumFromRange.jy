@@ -1,0 +1,11 @@
+avalues= range(0,10)
+bvalues= findgen(10)
+dvalues= [x / 10.0 for x in range(0, 10)]
+cvalues= linspace(2.4,15.3,10)
+
+p1= getParam('p1',avalues[0],'a values',avalues)
+p2= getParam('p2',bvalues[0],'b values',bvalues)
+p3= getParam('p3',cvalues[0],'c values',cvalues)
+p4= getParam('p4',dvalues[0],'d values',dvalues)
+
+print p1,p2,p3,p4
