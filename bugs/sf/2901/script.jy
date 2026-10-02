@@ -1,9 +1,9 @@
 # Script fails with Autoplot v2026a_8 because of https://sourceforge.net/p/autoplot/bugs/2901/
 reduc= getParam( 'reduce', '1s', 'reduce to resolution', ['','1s'] )
 
-if ( reduc=='' ): reduc= None
-else: reduc= dataset('0.5s')
+if ( reduc=='' ):     reduc= None
+else:    reduc= dataset('0.5s')
 
-newVersion= True # getParam( 'newVersion', True, 'Run with new version (requires 20200605a or v2020a_7)', [ True, False ] )
+newVersion = True # getParam( 'newVersion', True, 'Run with new version (requires 20200605a or v2020a_7)', [ True, False ] )
 
 allowReload = getParam( 'allowReload', True, 'listen for timerange changes and allow navigation without reload', [ True, False ] )
