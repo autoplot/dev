@@ -1,0 +1,3 @@
+getParam=open
+x=getParam('hijeremy','w')
+x.close()

@@ -1,0 +1,28 @@
+from org.das2.util import FileUtil
+from org.autoplot.jythonsupport import JythonAstFormatter
+
+def foo():
+   print 'hello'
+   
+   print 'there'
+   print 'sally'
+   
+   
+   
+def bar():
+
+
+   print 'hello'
+   
+   print 'there'
+   print 'jimmy'
+
+
+#foo()
+#bar()
+
+import org.python.core.parser.parse
+script= FileUtil.readFileToString( getFile( PWD + 'formatLine.jy' ) )
+n = org.python.core.parser.parse(script, "exec")
+
+print JythonAstFormatter.format(n)

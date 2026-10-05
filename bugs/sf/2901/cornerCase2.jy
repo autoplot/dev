@@ -1,0 +1,16 @@
+setScriptDescription('''Demo where else clause for while and for 
+commands is not handled''')
+
+things= [1,2,3]
+for x in things:
+    print x
+else:
+    print 'else'
+
+condition=True
+while condition:
+    print 'T'
+    condition=False
+else:
+    print 'else'
+    

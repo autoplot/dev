@@ -1,0 +1,59 @@
+from java.util.regex import Pattern
+from java.io import File
+from java.lang import System
+from java.util.prefs import Preferences
+from javax.swing import JButton,JFileChooser,JOptionPane,JPanel,BoxLayout,Box
+from javax.swing.filechooser import FileNameExtensionFilter
+from org.das2.util import LoggerManager
+
+setScriptTitle("Add Point Digitizer")  
+setScriptLabel('Point Digitizer')
+setScriptDescription('''Click events are registered on the tab "digitizer." This also 
+provides feedback showing the digitized data and the data points selected in the digitizer 
+tab.  See https://research-git.uiowa.edu/abbith/juno/-/issues/3''')
+    
+
+# B. L. Barnhart paper: https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2009JA014069
+mode= getParam( 'mode', 'LFRH', 'instrument mode', [ 'HFRL','LFRH', 'LFRL','B' ] )
+svybst= getParam( 'svybst', 'rbspa', 'surveyall, survey, or burst mode', ['burst', 'burst4096', 'survey', 'surveyall', 'EBRatio', 'GLL', 'vg1', 'vg2', 'vg1_ljg', 'cassiniKey', 'rbspa', 'rbspb' ])
+#mode= 'LFRL'
+detectMode='bottom'
+disallowEdges='T'
+
+commentStr= ''
+
+commentStr= getParam( 'comment', commentStr, 'Comment to attach to each record, blank for user.name' )
+
+reduc= getParam( 'reduce', '', 'reduce to resolution', ['','1s'] )
+
+pass  # if ( reduc=='' ): reduc= None
+
+pass  # else: reduc= dataset('0.5s')
+newVersion= True # getParam( 'newVersion', True, 'Run with new version (requires 20200605a or v2020a_7)', [ True, False ] )
+
+allowReload = getParam( 'allowReload', True, 'listen for timerange changes and allow navigation without reload', [ True, False ] )
+
+if mode=='B':
+    if svybst=='survey':
+       mode='B'
+    else:
+# B. L. Barnhart paper: https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2009JA014069
+#mode= 'LFRL'
+                 # getParam( 'newVersion', True, 'Run with new version (requires 20200605a or v2020a_7)', [ True, False ] )
+       mode='LFRB'
+
+
+if ( commentStr=='' ):
+    pass  #     commentStr= System.getProperty('user.name')
+                 # getParam( 'newVersion', True, 'Run with new version (requires 20200605a or v2020a_7)', [ True, False ] )
+from java.lang.Double import NaN
+
+# handle strings
+from org.das2.datum import EnumerationUnits
+
+# end, handle strings
+# tr= '2016-08-27T07:30:00.000Z/2016-08-27T12:30:00.000Z'
+exs= [ '2018-07-16T04:36:00.000Z/2018-07-16T04:52:00.000Z', '2018-07-16T04:36:00.000Z/2018-07-16T04:52:00.000Z', '2018-07-16T04:36:00.000Z/2018-07-16T04:52:00.000Z' ]
+
+tr= getParam( 'timerange', 'orbit:rbspa-pp:376', 'the timerange to load', { "examples":exs } )
+

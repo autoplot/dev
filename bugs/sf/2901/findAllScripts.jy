@@ -1,0 +1,14 @@
+def foo(dd):
+    try:
+        files= listDirectory(dd)
+        for f in files:
+            if f.endswith('.jy'):
+                print dd + f
+            elif f.endswith('/'):
+                foo(dd+f)
+    except:
+        pass
+       
+
+foo('https://github.com/autoplot/dev/tree/master/demos/2019/')
+  

@@ -1,0 +1,8 @@
+from org.das2.util import FileUtil
+setScriptDescription('''Long description telling what
+the script does.  This should also include 
+Caveats and other things the scientist 
+needs to know.''')
+
+raise Exception('Bad thing happened')
+
