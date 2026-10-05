@@ -17,5 +17,4 @@ wavelength= 0.95 * 300/freq
 
 print 'frequency: ', freq
 print 'wavelength: ', wavelength, 'meters'
-print 'the antenna dipole loop length should be ' + str(wavelength/2) + ' meters
- or '+ str( wavelength/2 * 100 / 2.54 ) + ' inches'
+print 'the antenna dipole loop length should be ' + str(wavelength/2) + ' meters or '+ str( wavelength/2 * 100 / 2.54 ) + ' inches'
