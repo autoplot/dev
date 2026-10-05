@@ -1,0 +1,13 @@
+setScriptDescription('''There's a strange bug with Jython where this is a syntax error
+when debugging, but not with a released version.''')
+
+if ( PWD.startswith('file:') ):
+    filename= PWD[5:]+'graphPaper.png'
+else:
+    filename= '/tmp/autoplot/graphPaper.png'
+    mkdir('/tmp/autoplot/')
+    
+    
+#print 'l'
+#filenme= getParam( 'filenme', filenme )
+x=getParam('x',1)
