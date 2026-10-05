@@ -1,0 +1,6 @@
+setScriptDescription('''I found this bit of code in a script, and I think this is a
+security issue.''')
+
+from java.lang import System
+root= getParam( 'root', System.getProperty( 'user.home' ) )
+annotation(0,text='Home is where '+root+' is', anchorPosition='Center', anchorOffset='' )
