@@ -6,8 +6,5 @@ if ( PWD.startswith('file:') ):
 else:
     filename= '/tmp/autoplot/graphPaper.png'
     mkdir('/tmp/autoplot/')
-    
-    
-#print 'l'
-#filenme= getParam( 'filenme', filenme )
+
 x=getParam('x',1)
