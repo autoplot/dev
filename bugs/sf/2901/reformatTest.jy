@@ -1,13 +1,31 @@
+from java.io import File
 from org.das2.util import FileUtil
 from org.autoplot.jythonsupport import JythonAstFormatter
 
-scriptfile= getParam('script','cornerCase2.jy','Script (no path)',{'examples':['cornerCases.jy','cornerCase2.jy']})
+scriptfile= getParam('script','/home/jbf/ct/autoplot/git/dev/demos/formats/cdf/cdflayout_chatgpt.jy','Script (no path)',{'examples':['cornerCases.jy','cornerCase2.jy']})
 
 if scriptfile.find('/')==-1:
     scriptfile= PWD + scriptfile
     
 import org.python.core.parser.parse
 script= FileUtil.readFileToString( getFile( scriptfile ) )
+
+FileUtil.writeStringToFile(File('/home/jbf/tmp/20261005/script00.jy'),script)
+
 n = org.python.core.parser.parse(script, "exec")
 
-print JythonAstFormatter.format(n)
+newscript= JythonAstFormatter.format(n)
+try:
+    n = org.python.core.parser.parse(newscript, "exec")
+except:
+    print 'Unable to parse reformatted script:'
+    print newscript
+    raise Exception('unable to parse reformatted script!')
+newscript2= JythonAstFormatter.format(n)
+
+if newscript==newscript2:
+    print 'Okay! ' + newscript2
+else:
+    FileUtil.writeStringToFile(File('/home/jbf/tmp/20261005/newscript01.jy'),newscript)
+    FileUtil.writeStringToFile(File('/home/jbf/tmp/20261005/newscript02.jy'),newscript2)
+    raise Exception('error!')
