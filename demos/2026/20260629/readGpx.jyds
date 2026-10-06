@@ -1,0 +1,259 @@
+
+# readGpx.jyds
+#
+# Reads a GPX file and returns a trajectory:
+#
+#     [ longitude, latitude, elevation ]
+#
+# If every point has a time tag, time is attached as DEPEND_0.
+#
+# Longitude and latitude are in degrees and elevation is in meters.
+
+setScriptDescription('Read a GPX file as a trajectory.')
+
+uri = getParam(
+    'resourceURI',
+    'https://github.com/gps-touring/sample-gpx/blob/master/BrittanyJura/Basel_St-Brevin_Eurovelo6.gpx',
+    'GPX file or URL'
+)
+
+inclElev= getParam( 'inclElev', True, 'Include Elevation', [ True,False ] )
+inclTime= getParam( 'inclTime', True, 'Include Time Tags', [ True,False ] )
+
+from java.io import FileInputStream
+from java.lang import Double
+from javax.xml.parsers import DocumentBuilderFactory
+
+from org.das2.datum import Units
+from org.das2.qds import QDataSet
+from org.das2.qds.ops import Ops
+from org.das2.qds.util import DataSetBuilder
+
+
+monitor.setTaskSize(100)
+monitor.started()
+
+
+def child_text(node, name):
+    children = node.getChildNodes()
+
+    i = 0
+    while i < children.getLength():
+        n = children.item(i)
+
+        if n.getNodeType() == n.ELEMENT_NODE:
+            local = n.getLocalName()
+
+            if local == name or n.getNodeName() == name:
+                return n.getTextContent()
+
+        i = i + 1
+
+    return None
+
+
+#
+# Read the GPX document.
+#
+
+monitor.progressMessage = 'reading GPX'
+
+f = getFile(
+    uri,
+    monitor.getSubtaskMonitor(0, 40, 'Read GPX file')
+)
+
+ins = FileInputStream(f)
+
+factory = DocumentBuilderFactory.newInstance()
+factory.setNamespaceAware(True)
+
+try:
+    factory.setFeature(
+        'http://xml.org/sax/features/external-general-entities',
+        False
+    )
+except:
+    pass
+
+try:
+    factory.setFeature(
+        'http://xml.org/sax/features/external-parameter-entities',
+        False
+    )
+except:
+    pass
+
+try:
+    factory.setFeature(
+        'http://apache.org/xml/features/nonvalidating/load-external-dtd',
+        False
+    )
+except:
+    pass
+
+builder = factory.newDocumentBuilder()
+
+try:
+    doc = builder.parse(ins)
+finally:
+    ins.close()
+
+
+monitor.taskProgress = 40
+monitor.progressMessage = 'parsing GPX'
+
+
+#
+# Builders
+#
+
+timeBuilder = DataSetBuilder(1, 10000)
+lonBuilder  = DataSetBuilder(1, 10000)
+latBuilder  = DataSetBuilder(1, 10000)
+eleBuilder  = DataSetBuilder(1, 10000)
+
+timeBuilder.putProperty(QDataSet.UNITS, Units.us2000)
+timeBuilder.putProperty(QDataSet.NAME, 'time')
+timeBuilder.putProperty(QDataSet.LABEL, 'Time')
+
+lonBuilder.putProperty(QDataSet.UNITS, Units.degrees)
+lonBuilder.putProperty(QDataSet.NAME, 'longitude')
+lonBuilder.putProperty(QDataSet.LABEL, 'Longitude')
+
+latBuilder.putProperty(QDataSet.UNITS, Units.degrees)
+latBuilder.putProperty(QDataSet.NAME, 'latitude')
+latBuilder.putProperty(QDataSet.LABEL, 'Latitude')
+
+eleBuilder.putProperty(QDataSet.UNITS, Units.meters)
+eleBuilder.putProperty(QDataSet.NAME, 'elevation')
+eleBuilder.putProperty(QDataSet.LABEL, 'Elevation')
+
+
+haveElevation = False
+haveAnyTime = False
+haveMissingTime = False
+npoint = 0
+
+
+def add_point(p):
+    global haveElevation
+    global haveAnyTime
+    global haveMissingTime
+    global npoint
+
+    lat = float(p.getAttribute('lat'))
+    lon = float(p.getAttribute('lon'))
+
+    stime = child_text(p, 'time')
+    sele = child_text(p, 'ele')
+
+    if sele is None:
+        ele = Double.NaN
+    else:
+        ele = float(sele)
+        haveElevation = True
+
+    lonBuilder.nextRecord(lon)
+    latBuilder.nextRecord(lat)
+    eleBuilder.nextRecord(ele)
+
+    #
+    # Keep the time builder aligned with the other builders.
+    # NaN is temporary here; we will only use this dataset if
+    # every point actually had a time.
+    #
+    if stime is None:
+        timeBuilder.nextRecord(Double.NaN)
+        haveMissingTime = True
+    else:
+        t = Units.us2000.parse(stime).doubleValue(Units.us2000)
+        timeBuilder.nextRecord(t)
+        haveAnyTime = True
+
+    npoint = npoint + 1
+
+
+#
+# Tracks
+#
+
+segments = doc.getElementsByTagNameNS('*', 'trkseg')
+
+iseg = 0
+while iseg < segments.getLength():
+
+    seg = segments.item(iseg)
+    points = seg.getElementsByTagNameNS('*', 'trkpt')
+
+    ip = 0
+    while ip < points.getLength():
+        add_point(points.item(ip))
+        ip = ip + 1
+
+    iseg = iseg + 1
+
+
+#
+# Routes
+#
+
+routes = doc.getElementsByTagNameNS('*', 'rte')
+
+iroute = 0
+while iroute < routes.getLength():
+
+    route = routes.item(iroute)
+    points = route.getElementsByTagNameNS('*', 'rtept')
+
+    ip = 0
+    while ip < points.getLength():
+        add_point(points.item(ip))
+        ip = ip + 1
+
+    iroute = iroute + 1
+
+
+monitor.taskProgress = 90
+
+if npoint == 0:
+    raise Exception('No track or route points found in GPX file.')
+
+
+#
+# Finish datasets.
+#
+
+londs = lonBuilder.getDataSet()
+latds = latBuilder.getDataSet()
+eleds = eleBuilder.getDataSet()
+
+
+#
+# Bundle the trajectory.
+#
+
+if haveElevation and inclElev:
+    result = Ops.bundle(londs, latds, eleds)
+else:
+    result = Ops.bundle(londs, latds)
+
+
+#
+# Time is a valid DEPEND_0 only when every trajectory point
+# supplied a time.
+#
+
+if haveAnyTime and not haveMissingTime and inclTime:
+
+    tds = timeBuilder.getDataSet()
+
+    londs.putProperty(QDataSet.DEPEND_0, tds)
+    latds.putProperty(QDataSet.DEPEND_0, tds)
+    eleds.putProperty(QDataSet.DEPEND_0, tds)
+
+    result.putProperty(QDataSet.DEPEND_0, tds)
+
+
+monitor.taskProgress = 100
+monitor.finished()
