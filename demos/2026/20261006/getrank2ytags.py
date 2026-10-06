@@ -46,16 +46,7 @@ print("z:    ", z.shape)
 print("time: ", time.shape)
 print("ytags:", ytags.shape)
 
-
-# Convert t1970 seconds to Python datetime objects, then to Matplotlib's
-# numeric time representation.
-dates = [
-    datetime.fromtimestamp(float(t), timezone.utc)
-    for t in time
-]
-
-x = mdates.date2num(dates)
-
+x= time
 
 # pcolormesh allows X and Y to both be two-dimensional.
 #
