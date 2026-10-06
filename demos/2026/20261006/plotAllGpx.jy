@@ -1,0 +1,12 @@
+
+ff= listDirectory('https://github.com/gps-touring/sample-gpx/blob/master/BrittanyJura/*.gpx')
+
+setLayoutOverplot(len(ff)+1)
+p,_= plot('https://autoplot.org/data/coastlines-low-all.zip/coastlines/all-cil.txt')
+
+i=1
+for f in ff:
+    plot(i,'vap+jyds:https://github.com/gps-touring/sample-gpx/blob/master/BrittanyJura/'+f+'?script=https://github.com/autoplot/dev/blob/master/demos/2026/20260629/readGpx.jyds')
+    i+=1
+    
+    
