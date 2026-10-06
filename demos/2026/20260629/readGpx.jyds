@@ -17,6 +17,9 @@ uri = getParam(
     'GPX file or URL'
 )
 
+inclElev= getParam( 'inclElev', True, 'Include Elevation', [ True,False ] )
+inclTime= getParam( 'inclTime', True, 'Include Time Tags', [ True,False ] )
+
 from java.io import FileInputStream
 from java.lang import Double
 from javax.xml.parsers import DocumentBuilderFactory
@@ -230,7 +233,7 @@ eleds = eleBuilder.getDataSet()
 # Bundle the trajectory.
 #
 
-if haveElevation:
+if haveElevation and inclElev:
     result = Ops.bundle(londs, latds, eleds)
 else:
     result = Ops.bundle(londs, latds)
@@ -241,7 +244,7 @@ else:
 # supplied a time.
 #
 
-if haveAnyTime and not haveMissingTime:
+if haveAnyTime and not haveMissingTime and inclTime:
 
     tds = timeBuilder.getDataSet()
 
