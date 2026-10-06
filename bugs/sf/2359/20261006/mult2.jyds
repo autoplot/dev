@@ -1,0 +1,4 @@
+setScriptDescription('''Demo bug 2359, where embed data doesn't embed data.csv.''')
+
+ds= getDataSet(PWD+'data.csv')
+result= ds*10
