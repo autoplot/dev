@@ -1,0 +1,12 @@
+setScriptDescription('''This shows two issues with Autoplot's implementation
+of URI_Templates.''')
+
+print 'These should be ten-day intervals:'
+print generateTimeRanges('$Y$m$(d;span=10)_$(Y,end)$m$d','1979-jan')
+
+print 'These should be formatted respecting the shift control:'
+drs= generateTimeRanges('$Y$m$(d,span=4)/P4D','2016-12-01/2017-01-01')
+tp= TimeParser.create('$Y$m$d_$(Y,end)$m$(d;shift=-1)')
+for dr in drs:
+    trdr= datumRange(dr)
+    print tp.format(trdr)
