@@ -1,0 +1,129 @@
+
+# Animated Lorenz butterfly attractor
+# Autoplot Jython 2.2
+#
+# frame=0,1,2,... for PNGWalk
+
+from java.lang import Math,System
+from java.awt import Color
+from org.das2.datum import Units
+from org.das2.qds import DDataSet, QDataSet, IDataSet
+from org.das2.qds.ops import Ops
+
+setScriptTitle('Rotating Lorenz Butterfly')
+setScriptDescription(
+    'A colorful rotating Lorenz attractor for PNGWalk testing.')
+
+frame = getParam('frame', 0, 'Animation frame number')
+
+n = 6000
+
+def getTrajectory():
+    cache = System.getProperties()
+    key = "org.autoplot.demo.lorenzTrajectory"
+
+    trajectory = cache.get(key)
+    trajectory= None
+
+    if trajectory is None:
+        print "Computing Lorenz trajectory..."
+
+        # Lorenz system parameters
+        sigma = 10.0
+        rho = 28.0
+        beta = 8.0 / 3.0
+        dt = 0.005
+        
+        warmup = 1000
+        # Compute the Lorenz trajectory
+        xx = []
+        yy = []
+        zz = []
+        
+        x = 0.1
+        y = 0.0
+        z = 0.0
+        
+        for i in xrange(n + warmup):
+            dx = sigma * (y - x)
+            dy = x * (rho - z) - y
+            dz = x * y - beta * z
+        
+            x = x + dt * dx
+            y = y + dt * dy
+            z = z + dt * dz
+        
+            if i >= warmup:
+                xx.append(x)
+                yy.append(y)
+                zz.append(z)
+
+        xx= dataset(xx)
+        yy= dataset(yy)
+        zz= dataset(zz)
+        
+        # Generate the trajectory here
+        trajectory = bundle( xx, yy, zz )
+
+        cache.put(key, trajectory)
+        return trajectory
+        
+    else:
+        print "Using cached trajectory"
+        return trajectory
+
+trajectory= getTrajectory()
+
+# Rotate the viewing angle
+angle = frame * 0.012
+ca = Math.cos(angle)
+sa = Math.sin(angle)
+
+# Slight tilt makes the 3-D shape clearer
+tilt = 0.35
+ct = Math.cos(tilt)
+st = Math.sin(tilt)
+
+# Each point gets X, Y and RGB color
+dsx= DDataSet.createRank1(n)
+dsy= DDataSet.createRank1(n)
+dsc= IDataSet.createRank1(n)
+
+dsc.putProperty(QDataSet.UNITS,Units.rgbColor)
+
+for i in xrange(n):
+    x = trajectory[i,0]
+    y = trajectory[i,1]
+    z = trajectory[i,2] - 25.0
+
+    # Rotation about vertical axis
+    xr = ca * x - sa * y
+    yr = sa * x + ca * y
+
+    # Tilt the viewpoint
+    yp = ct * yr - st * z
+
+    # Rainbow coloring, animated over time
+    hue = ( float(i) / (n*2) + frame * 0.001) % 1.0
+    rgb = Color.HSBtoRGB(hue, 0.9, 1.0)
+
+    dsx.putValue(i, xr.value()) ## Annoying, why can't it call value?
+    dsy.putValue(i, yp.value())
+    dsc.putValue(i, rgb)
+
+
+# Label the coordinate columns
+#ds.putProperty(QDataSet.BUNDLE_1,
+#    labelsDataset(['X', 'Y', 'Color']))
+
+# Color values are literal RGB colors
+# The third column must have Units.rgbColor.
+
+# Plotting can be adapted to use Autoplot's
+# RGB-color scatter renderer.
+plot(dsx, dsy, dsc, title='Lorenz Butterfly - Frame %05d' % frame,\
+    symbolSize=5, xrange=[-30,30],yrange=[-30,30])
+dom.plots[0].zaxis.visible=False
+
+# Optional direct export:
+# writeToPng('/tmp/pngwalk/butterfly_%05d.png' % frame)
