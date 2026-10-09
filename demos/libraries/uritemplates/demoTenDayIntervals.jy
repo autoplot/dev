@@ -1,0 +1,15 @@
+setScriptDescription('''This shows two issues with Autoplot's implementation
+of URI_Templates.''')
+
+lib= 'https://cottagesystems.com/autoplot/git/uri-templates/UriTemplatesJava/dist/UriTemplatesJava.jar'
+doc= 'https://jfaden.net/~jbf/javadoc/uri-templates/'
+
+import sys
+addToSearchPath( sys.path,lib,doc,monitor )  # caution: this only loads once!!!!!
+
+print 'These should be ten-day intervals:'
+from org.hapiserver import URITemplate
+
+ss= URITemplate.formatRange('$Y$m$d_$(Y;end)$m$(d;delta=10;phasestart=2020-01-04)','2020-01-01','2020-02-01')
+for s in ss: print s
+                        
