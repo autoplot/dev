@@ -1,3 +1,5 @@
+setScriptDescription('Make fake data to use for demo')
+
 for y in [ '15', '16', '17', '18' ]:
    tt= linspace(datum('2026-10-'+y+'T00:00'),datum('2026-10-'+y+'T24:00'),301)
    tt= tt[0:-1]
