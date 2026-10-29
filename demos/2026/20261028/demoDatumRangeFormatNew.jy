@@ -1,0 +1,14 @@
+from org.das2.datum.format import DatumFormatUtil
+
+p1= [3.123, 4.2 ] # %.3f   3.123, 4.200
+p2= [3.123, 4.2e4] # %.3e  3.123e+00, 4.200e+04
+p3= [0.00123, 0.002] # 	%.5f	0.00123, 0.00200
+p4= [1234.567, 1234.568] #$	%.3f	1234.567, 1234.568
+p5= [1.23e-8, 4.5e-7]  # %.2e	1.23e-08, 4.50e-07
+
+    
+print DatumFormatUtil.bestFormatter(p1[0],p1[1])
+print DatumFormatUtil.bestFormatter(p2[0],p2[1])
+print DatumFormatUtil.bestFormatter(p3[0],p3[1])
+print DatumFormatUtil.bestFormatter(p4[0],p4[1])
+print DatumFormatUtil.bestFormatter(p5[0],p5[1])
