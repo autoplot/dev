@@ -1,0 +1,38 @@
+
+
+i=2.
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
+i= ( i + j ) / 2
+j=10./i
+print i, j
+sleep(10)
