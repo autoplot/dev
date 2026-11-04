@@ -1,0 +1,13 @@
+ds= findgen(100,10)
+filt= findgen(100,10)
+
+nch= len(filt[0])
+for i in xrange(nch):
+    sl= ds[i,:]
+    r0= where( filt.eq(0) )
+    r1= where( filt.eq(1) )
+    
+    xt= findgen(100)
+    
+    sl[r0]= interpolate( sl[r1], findex(xt[r1], xt[r0] ) )
+
