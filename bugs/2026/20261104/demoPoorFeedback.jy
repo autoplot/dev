@@ -1,3 +1,7 @@
+setScriptDescription('''This was an example which killed some time where
+the feedback was poor.  (r1 is on rank 2 dataset but used on rank 1).
+See sftp://draylax.physics.uiowa.edu/home/jbf/project/juno/research-git/juno/u/jaya/2026/20261023/filterChannelsEcB.jyds''')
+
 ds= findgen(100,10)
 filt= findgen(100,10)
 
