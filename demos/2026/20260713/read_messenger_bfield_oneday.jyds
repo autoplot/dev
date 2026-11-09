@@ -10,6 +10,7 @@ minute= getDataSet(fln+'?MINUTE')
 second= getDataSet(fln+'?SECOND')
 
 times= toTimeDataSet(year,1,doy,hour,minute,second,0)
+
 bx= getDataSet(fln+'?BX_MSO')
 by= getDataSet(fln+'?BY_MSO')
 bz= getDataSet(fln+'?BZ_MSO')

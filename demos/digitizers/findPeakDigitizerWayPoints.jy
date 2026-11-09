@@ -186,8 +186,7 @@ def boxLookup( evt ):
     global wpmm
     ds= dom.plotElements[0].controller.dataSet
     if ( ds.rank()==3 ):
-        ds= getDataSet( 'file:///home/jbf/ct/autoplot/screenshots/2022-03-21T11-26-20.png?channel=greyscale' )
-        ds= -ds
+        raise Exception('Rank 3 data is not supported')
         
     if ( ds==None ): 
         showMessageDialog( "No data loaded in plotElements[0]" )

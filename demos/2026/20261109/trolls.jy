@@ -1,0 +1,401 @@
+# Trolls and Tribulations - Autoplot Jython 2.2 arcade tribute
+# Run from Autoplot's script editor. No third-party libraries needed.
+# Original level layouts and simple vector graphics (not original game assets).
+from javax.swing import Timer, SwingUtilities
+from java.awt import Color, Font, RenderingHints, BasicStroke
+from java.awt.event import KeyAdapter, KeyEvent, ActionListener, MouseAdapter
+from org.das2.graph import Painter
+import math
+
+TILE = 28
+MAPS = [
+ [
+ '########################',
+ '#......................#',
+ '#....C.........C.......#',
+ '#..####....####....K...#',
+ '#......H........####...#',
+ '#......H...C...........#',
+ '#..T...H..####.........#',
+ '#..###.H..........C....#',
+ '#......H......#######..#',
+ '#......H...............#',
+ '#..P...H....C......D...#',
+ '####################WWW#'],
+ [
+ '########################',
+ '#........C.............#',
+ '#...#######.......K....#',
+ '#...........H....#####.#',
+ '#...C.......H..........#',
+ '#..####.....H....C.....#',
+ '#...........H..######..#',
+ '#...T.......H..........#',
+ '#..####.....H......C...#',
+ '#...........H...####...#',
+ '#..P........H.......D..#',
+ '###############WWWW#####'],
+ [
+ '########################',
+ '#....C.........C.......#',
+ '#...#####.........K....#',
+ '#........H.....######..#',
+ '#..C.....H.............#',
+ '#.#####..H....C........#',
+ '#........H..######.....#',
+ '#....T...H.............#',
+ '#..####..H.....C.......#',
+ '#........H...#######...#',
+ '#..P.....H..........D..#',
+ '##########WWWW##########']
+]
+W = 24 * TILE
+H = 12 * TILE
+HUD = 48
+
+class Keys(KeyAdapter):
+    def __init__(self, game):
+        self.game = game
+    def keyPressed(self, e):
+        k = e.getKeyCode()
+        self.game.keys[k] = 1
+        if k == KeyEvent.VK_R:
+            self.game.reset_all()
+        if k == KeyEvent.VK_SPACE and not self.game.space_down:
+            self.game.shoot()
+            self.game.space_down = 1
+    def keyReleased(self, e):
+        k = e.getKeyCode()
+        if self.game.keys.has_key(k):
+            del self.game.keys[k]
+        if k == KeyEvent.VK_SPACE:
+            self.game.space_down = 0
+
+class Tick(ActionListener):
+    def __init__(self, game):
+        self.game = game
+    def actionPerformed(self, e):
+        self.game.tick()
+        self.game.canvas.repaint()
+
+class Game(object):
+    def __init__(self, canvas):
+        self.canvas = canvas
+        self.keys = {}
+        self.space_down = 0
+        self.reset_all()
+        self.key_listener = Keys(self)
+        canvas.addKeyListener(self.key_listener)
+        canvas.setFocusable(True)
+        self.timer = Timer(33, Tick(self))
+        self.timer.start()
+
+    def reset_all(self):
+        self.level = 0
+        self.score = 0
+        self.lives = 3
+        self.state = 'playing'
+        self.load_level()
+
+    def load_level(self):
+        self.grid = []
+        self.enemies = []
+        self.eggs = []
+        self.bullets = []
+        self.key_collected = 0
+        self.frame = 0
+        for y in range(12):
+            row = list(MAPS[self.level][y])
+            for x in range(24):
+                c = row[x]
+                if c == 'P':
+                    self.px = float(x*TILE+4)
+                    self.py = float(y*TILE+3)
+                    row[x] = '.'
+                elif c == 'C':
+                    if x % 2:
+                        direction = -1
+                    else:
+                        direction = 1
+                    self.enemies.append([float(x*TILE+5), float(y*TILE+5), direction])
+                    row[x] = '.'
+            self.grid.append(row)
+        self.vy = 0.0
+        self.facing = 1
+        self.grounded = 0
+        self.invuln = 65
+        self.shot_wait = 0
+
+    def tile(self, x, y):
+        tx = int(math.floor(float(x)/TILE))
+        ty = int(math.floor(float(y)/TILE))
+        if tx < 0 or tx >= 24 or ty < 0 or ty >= 12:
+            return '#'
+        return self.grid[ty][tx]
+
+    def solid(self, x, y):
+        return self.tile(x,y) == '#'
+
+    def overlaps_solid(self, x, y, w, h):
+        return (self.solid(x+2,y+2) or self.solid(x+w-2,y+2) or
+                self.solid(x+2,y+h-1) or self.solid(x+w-2,y+h-1))
+
+    def shoot(self):
+        if self.state != 'playing' or self.shot_wait > 0:
+            return
+        self.bullets.append([self.px+10+self.facing*9, self.py+10, self.facing])
+        self.shot_wait = 11
+
+    def hurt(self):
+        if self.invuln > 0:
+            return
+        self.lives -= 1
+        if self.lives <= 0:
+            self.state = 'gameover'
+        else:
+            self.load_level()
+
+    def tick(self):
+        if self.state != 'playing':
+            return
+        self.frame += 1
+        if self.invuln > 0: self.invuln -= 1
+        if self.shot_wait > 0: self.shot_wait -= 1
+        speed = 2.8
+        dx = 0.0
+        if self.keys.has_key(KeyEvent.VK_LEFT): dx -= speed
+        if self.keys.has_key(KeyEvent.VK_RIGHT): dx += speed
+        if dx != 0:
+            if dx > 0:
+                self.facing = 1
+            else:
+                self.facing = -1
+            if not self.overlaps_solid(self.px+dx,self.py,20,24):
+                self.px += dx
+        centerx = self.px+10
+        centery = self.py+12
+        ladder = self.tile(centerx,centery) == 'H' or self.tile(centerx,self.py+24) == 'H'
+        climb = 0
+        if ladder and self.keys.has_key(KeyEvent.VK_UP): climb = -2.7
+        if ladder and self.keys.has_key(KeyEvent.VK_DOWN): climb = 2.7
+        if climb != 0:
+            self.vy = 0.0
+            if not self.overlaps_solid(self.px,self.py+climb,20,24):
+                self.py += climb
+        else:
+            below = self.solid(self.px+3,self.py+25) or self.solid(self.px+17,self.py+25)
+            self.grounded = below
+            if self.keys.has_key(KeyEvent.VK_UP) and below:
+                self.vy = -8.2
+            if ladder and self.vy > 0: self.vy = 0
+            self.vy = min(8.0,self.vy+0.42)
+            step = self.vy
+            count = int(abs(step))+1
+            inc = step/count
+            for i in range(count):
+                if not self.overlaps_solid(self.px,self.py+inc,20,24):
+                    self.py += inc
+                else:
+                    self.vy = 0.0
+                    break
+        # Trampolines and collectible/exit triggers.
+        foot = self.tile(self.px+10,self.py+23)
+        if foot == 'T' and self.vy >= 0:
+            self.vy = -11.5
+        if foot == 'W' or self.tile(self.px+10,self.py+12) == 'W':
+            self.hurt()
+            return
+        for ty in range(12):
+            for tx in range(24):
+                c = self.grid[ty][tx]
+                if c == 'K' and abs(self.px+10-(tx*TILE+14)) < 20 and abs(self.py+12-(ty*TILE+14)) < 23:
+                    self.key_collected = 1
+                    self.grid[ty][tx] = '.'
+                    self.score += 100
+                if c == 'D' and self.key_collected and len(self.enemies) == 0 and len(self.eggs) == 0:
+                    if abs(self.px+10-(tx*TILE+14)) < 18 and abs(self.py+12-(ty*TILE+14)) < 22:
+                        self.score += 500
+                        self.level += 1
+                        if self.level >= len(MAPS):
+                            self.state = 'won'
+                        else:
+                            self.load_level()
+                        return
+        # Projectile collisions.
+        next_bullets = []
+        for b in self.bullets:
+            b[0] += b[2]*8.0
+            if self.solid(b[0],b[1]): continue
+            hit = 0
+            for enemy in self.enemies[:]:
+                if abs(b[0]-(enemy[0]+9)) < 14 and abs(b[1]-(enemy[1]+10)) < 15:
+                    self.enemies.remove(enemy)
+                    self.eggs.append([enemy[0],enemy[1],270])
+                    self.score += 25
+                    hit = 1
+                    break
+            if not hit: next_bullets.append(b)
+        self.bullets = next_bullets
+        # Enemy patrols, falling and egg hatching.
+        for enemy in self.enemies:
+            nx = enemy[0]+enemy[2]*1.0
+            if self.overlaps_solid(nx,enemy[1],19,20) or not self.solid(nx+9,enemy[1]+25):
+                enemy[2] = -enemy[2]
+            else:
+                enemy[0] = nx
+            if abs(self.px-enemy[0]) < 17 and abs(self.py-enemy[1]) < 20:
+                self.hurt()
+                return
+        for egg in self.eggs[:]:
+            if not self.solid(egg[0]+9,egg[1]+23):
+                egg[1] += 2.5
+            if self.tile(egg[0]+9,egg[1]+17) == 'W':
+                self.eggs.remove(egg)
+                self.score += 75
+                continue
+            # Push eggs by walking into them.
+            if abs(self.px-egg[0]) < 18 and abs(self.py-egg[1]) < 20:
+                if self.px < egg[0]:
+                    direction = 1
+                else:
+                    direction = -1
+                if not self.overlaps_solid(egg[0]+direction*3,egg[1],19,20):
+                    egg[0] += direction*3
+            egg[2] -= 1
+            if egg[2] <= 0:
+                self.eggs.remove(egg)
+                self.enemies.append([egg[0],egg[1],1])
+        if self.py > H:
+            self.hurt()
+
+    def paint(self, g):
+        g2 = g.create()
+        try:
+            cw = self.canvas.getWidth()
+            ch = self.canvas.getHeight()
+            if cw <= 0 or ch <= 0:
+                return
+            scale = min(float(cw)/W, float(ch)/(H+HUD))
+            ox = int((cw-W*scale)/2)
+            oy = int((ch-(H+HUD)*scale)/2)
+            g2.setColor(Color(12,13,30))
+            g2.fillRect(0,0,cw,ch)
+            g2.translate(ox,oy)
+            g2.scale(scale,scale)
+            g2.setClip(0,0,W,H+HUD)
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+            g2.setFont(Font('Monospaced',Font.BOLD,15))
+            g2.setColor(Color(230,230,255))
+            g2.drawString('TROLLS & TRIBULATIONS  |  SCORE %06d  |  LIVES %d  |  LEVEL %d' % (self.score,self.lives,self.level+1),12,21)
+            g2.setFont(Font('Monospaced',Font.PLAIN,12))
+            g2.drawString('ARROWS move/climb/jump   SPACE shoot   R restart',12,39)
+            g2.translate(0,HUD)
+            for y in range(12):
+                for x in range(24):
+                    c = self.grid[y][x]
+                    xx = x*TILE
+                    yy = y*TILE
+                    if c == '#':
+                        g2.setColor(Color(66,65,118))
+                        g2.fillRect(xx,yy,TILE,TILE)
+                        g2.setColor(Color(108,106,168))
+                        g2.drawRect(xx+2,yy+2,TILE-5,TILE-5)
+                    elif c == 'H':
+                        g2.setColor(Color(211,160,79))
+                        g2.fillRect(xx+6,yy,3,TILE)
+                        g2.fillRect(xx+19,yy,3,TILE)
+                        for r in range(4,28,9): g2.fillRect(xx+7,yy+r,15,3)
+                    elif c == 'W':
+                        g2.setColor(Color(26,107,189))
+                        g2.fillRect(xx,yy,TILE,TILE)
+                        g2.setColor(Color(89,199,240))
+                        g2.drawArc(xx+2,yy+3,19,9,0,180)
+                    elif c == 'T':
+                        g2.setColor(Color(250,112,167))
+                        g2.fillRoundRect(xx+3,yy+17,22,8,5,5)
+                        g2.drawLine(xx+5,yy+25,xx+12,yy+12)
+                        g2.drawLine(xx+23,yy+25,xx+16,yy+12)
+                    elif c == 'K':
+                        g2.setColor(Color(255,222,70))
+                        g2.setStroke(BasicStroke(3.0))
+                        g2.drawOval(xx+7,yy+5,11,11)
+                        g2.drawLine(xx+13,yy+16,xx+13,yy+25)
+                        g2.drawLine(xx+13,yy+22,xx+19,yy+22)
+                    elif c == 'D':
+                        ready = self.key_collected and len(self.enemies)==0 and len(self.eggs)==0
+                        if ready:
+                            g2.setColor(Color(64,210,132))
+                        else:
+                            g2.setColor(Color(149,73,72))
+                        g2.fillRoundRect(xx+3,yy+1,22,27,6,6)
+                        g2.setColor(Color(245,228,153))
+                        g2.fillOval(xx+18,yy+14,4,4)
+            for e in self.enemies:
+                xx = int(e[0]); yy = int(e[1])
+                g2.setColor(Color(235,90,96))
+                g2.fillRoundRect(xx,yy,19,20,7,7)
+                g2.setColor(Color.white)
+                g2.fillOval(xx+3,yy+5,5,5)
+                g2.fillOval(xx+11,yy+5,5,5)
+                g2.setColor(Color.black)
+                g2.fillOval(xx+5,yy+7,2,2)
+                g2.fillOval(xx+13,yy+7,2,2)
+            for egg in self.eggs:
+                xx = int(egg[0]); yy = int(egg[1])
+                g2.setColor(Color(255,221,146))
+                g2.fillOval(xx+2,yy+1,17,20)
+                g2.setColor(Color(184,139,88))
+                g2.drawOval(xx+2,yy+1,17,20)
+            g2.setColor(Color(255,241,107))
+            for b in self.bullets: g2.fillOval(int(b[0])-3,int(b[1])-3,7,7)
+            if self.invuln == 0 or (self.frame/4)%2 == 0:
+                xx = int(self.px); yy = int(self.py)
+                g2.setColor(Color(94,224,132))
+                g2.fillRoundRect(xx,yy,20,24,8,8)
+                g2.setColor(Color(37,89,50))
+                g2.fillOval(xx+4,yy+6,4,5)
+                g2.fillOval(xx+12,yy+6,4,5)
+                g2.setColor(Color(239,251,185))
+                g2.drawArc(xx+5,yy+10,10,8,180,180)
+            if self.state != 'playing':
+                g2.setColor(Color(0,0,0,195))
+                g2.fillRect(0,0,W,H)
+                g2.setFont(Font('SansSerif',Font.BOLD,35))
+                g2.setColor(Color(255,228,110))
+                if self.state == 'won':
+                    msg = 'YOU WIN!'
+                else:
+                    msg = 'GAME OVER'
+                g2.drawString(msg, W/2-110,H/2)
+                g2.setFont(Font('SansSerif',Font.PLAIN,17))
+                g2.drawString('Press R to play again',W/2-95,H/2+32)
+            elif self.frame < 180:
+                g2.setColor(Color(240,240,200))
+                g2.setFont(Font('SansSerif',Font.BOLD,13))
+                g2.drawString('Collect the key, shoot Cretins, push eggs into water, reach the door!',10,H-39)
+        finally:
+            g2.dispose()
+
+class GamePainter(Painter):
+    def __init__(self, game):
+        self.game = game
+    def paint(self, g):
+        self.game.paint(g)
+
+# Application-context script: render directly onto the existing DasCanvas.
+# Re-running replaces this script's game.  The decorator collection is
+# cleared so that old game painters do not accumulate.
+canvas = dom.canvases[0].controller.dasCanvas
+previous = canvas.getClientProperty('trolls.tribulations.game')
+if previous is not None:
+    previous.timer.stop()
+    canvas.removeKeyListener(previous.key_listener)
+
+# NOTE: this also clears any unrelated top decorators on the canvas.
+canvas.removeTopDecorators()
+game = Game(canvas)
+canvas.addTopDecorator(GamePainter(game))
+canvas.putClientProperty('trolls.tribulations.game', game)
+canvas.requestFocusInWindow()
+canvas.repaint()
+print('Trolls and Tribulations: click the DasCanvas, use arrow keys, Space, R.')
