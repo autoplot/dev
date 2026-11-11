@@ -221,7 +221,7 @@ class AsteroidsGame(object):
             return
         g = graphics.create()
         try:
-            g.setColor(Color(6, 12, 24))
+            g.setColor(Color(6, 12, 24, 200))
             g.fillRect(0, 0, self.canvas.getWidth(), self.canvas.getHeight())
             g.scale(self.canvas.getWidth()/WIDTH, self.canvas.getHeight()/HEIGHT)
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
