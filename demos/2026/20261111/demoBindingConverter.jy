@@ -1,0 +1,20 @@
+setScriptTitle('Demo Binding Converter')
+setScriptDescription('''Demonstrates binding a string to a datum range.''')
+from org.jdesktop.beansbinding import Converter
+
+
+xr= datumRange([45,55])
+
+a= annotation(text='X: ',anchorType='DATA',xrange=xr,yrange=xr,anchorBorderType='rectangle')
+
+class MyConverter( Converter ):
+    def convertForward( self, c ):
+        return 'X: '+str(c.middle())
+        
+    def convertReverse( self, c ):
+        mid= datum(c[3:])
+        return datumRange([mid-5,mid+5])
+
+bind( a, 'xrange', a, 'text', MyConverter() )
+
+ 
