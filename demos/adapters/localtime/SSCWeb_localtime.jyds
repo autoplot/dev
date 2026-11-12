@@ -7,7 +7,7 @@ sats='''rbspa,rbspb'''.split(',')
 
 sc= getParam('sat','rbspa','satellite', { 'examples:':['rbspa','rbspb'] } )
 
-hapiParam= getParam( 'param', 'LT_GM', 'parameter to read' )
+hapiParam= getParam( 'param', 'LT_GM', 'parameter to read', { 'examples':['LT_GM','LT_SM','LT_GSE','LT_GEO'] } )
 
 tr= getParam( 'timerange', '2019-12-04', 'timerange to load' )
 
