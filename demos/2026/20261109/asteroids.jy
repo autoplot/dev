@@ -1,11 +1,10 @@
-# Asteroids for Autoplot / Das2 - Jython 2.2 compatible
-# Run in Autoplot's script editor. Click canvas for keyboard focus.
+# Asteroids JPanel edition for Autoplot - Jython 2.2 compatible
+# Run in Autoplot's script editor; embed AsteroidsPanel in a JTabbedPane.
 # LEFT/RIGHT rotate, UP thrust, SPACE fire, P pause, R restart.
 # Original vector arcade game; no external images or libraries.
-from javax.swing import Timer
+from javax.swing import Timer, JPanel, JFrame, JTabbedPane, SwingUtilities
 from java.awt import Color, Font, BasicStroke, RenderingHints
-from java.awt.event import KeyAdapter, KeyEvent, ActionListener
-from org.das2.graph import Painter
+from java.awt.event import KeyAdapter, KeyEvent, ActionListener, MouseAdapter
 import math
 import random
 
@@ -77,7 +76,7 @@ class AsteroidsGame(object):
         canvas.addKeyListener(self.key_listener)
         canvas.setFocusable(True)
         self.timer = Timer(33, GameTick(self))
-        self.timer.start()
+        # The panel starts/stops this timer as it enters/leaves the UI.
 
     def reset(self):
         self.score = 0
@@ -221,7 +220,7 @@ class AsteroidsGame(object):
             return
         g = graphics.create()
         try:
-            g.setColor(Color(6, 12, 24, 200))
+            g.setColor(Color(6, 12, 24))
             g.fillRect(0, 0, self.canvas.getWidth(), self.canvas.getHeight())
             g.scale(self.canvas.getWidth()/WIDTH, self.canvas.getHeight()/HEIGHT)
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -299,34 +298,64 @@ class AsteroidsGame(object):
             s.dispose()
 
 
-class AsteroidsPainter(Painter):
-    def __init__(self, game):
-        self.game = game
+class FocusMouse(MouseAdapter):
+    def __init__(self, panel):
+        self.panel = panel
 
-    def paint(self, graphics):
+    def mousePressed(self, event):
+        self.panel.requestFocusInWindow()
+
+
+class AsteroidsPanel(JPanel):
+    """Embeddable Swing component; add it to any JTabbedPane."""
+    def __init__(self):
+        JPanel.__init__(self)
+        self.setFocusable(True)
+        self.setBackground(Color(6, 12, 24))
+        self.game = AsteroidsGame(self)
+        self.addMouseListener(FocusMouse(self))
+
+    def paintComponent(self, graphics):
+        graphics.setColor(self.getBackground())
+        graphics.fillRect(0, 0, self.getWidth(), self.getHeight())
         self.game.paint(graphics)
 
+    def addNotify(self):
+        JPanel.addNotify(self)
+        self.game.timer.start()
 
-# DasCanvas integration: re-running the script stops its previous timer.
-canvas = dom.canvases[0].controller.dasCanvas
-previous = canvas.getClientProperty('autoplot.asteroids.game')
-if previous is not None:
-    previous.timer.stop()
-    canvas.removeKeyListener(previous.key_listener)
+    def removeNotify(self):
+        self.game.timer.stop()
+        self.game.keys.clear()
+        JPanel.removeNotify(self)
 
-# DasCanvas exposes removeTopDecorators(), but it also removes other
-# decorations. Preserve unrelated decorators when removeTopDecorator exists.
-if previous is not None:
-    if hasattr(canvas, 'removeTopDecorator'):
-        canvas.removeTopDecorator(previous.painter)
-    else:
-        canvas.removeTopDecorators()
+    def stop(self):
+        self.game.timer.stop()
+        self.game.keys.clear()
 
-game = AsteroidsGame(canvas)
-painter = AsteroidsPainter(game)
-game.painter = painter
-canvas.addTopDecorator(painter)
-canvas.putClientProperty('autoplot.asteroids.game', game)
-canvas.requestFocusInWindow()
-canvas.repaint()
-print('Asteroids: click canvas; LEFT/RIGHT rotate, UP thrust, SPACE fire, P pause, R restart.')
+
+# Embed in an existing JTabbedPane with:
+#     panel = AsteroidsPanel()
+#     tabs.addTab('Asteroids', panel)
+#     tabs.setSelectedComponent(panel)
+#     panel.requestFocusInWindow()
+#
+# When the tab is removed, removeNotify() stops the timer.
+# To stop the game explicitly, call panel.stop().
+#
+# Standalone demonstration (set SHOW_DEMO = False if embedding elsewhere).
+SHOW_DEMO = True
+
+if SHOW_DEMO:
+    #frame = JFrame('Autoplot Asteroids - JPanel edition')
+    #frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
+    tabs = JTabbedPane()
+    panel = AsteroidsPanel()
+    addTab('Asteroids', panel)
+    #frame.setContentPane(tabs)
+    #frame.setSize(840, 680)
+    #frame.setLocationByPlatform(True)
+    #frame.setVisible(True)
+    tabs.setSelectedComponent(panel)
+    panel.requestFocusInWindow()
+    print('Asteroids panel: click the tab to focus; arrows, SPACE, P, R.')
