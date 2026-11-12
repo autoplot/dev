@@ -1,0 +1,19 @@
+from org.jdesktop.beansbinding import Converter
+
+setScriptTitle('Binding Converter Vap Bug')
+setScriptDescription('''Binding registers the binding in the .vap, so that
+it can be restored later.  But when it has a converter,
+it should not be registered.''')
+
+a0= annotation(0,text='one')
+a1= annotation(1,text='two',anchorOffset='1em,4em')
+
+class ReverseBC( Converter ):
+    def convertForward( self, c ):
+        print c, '->', c[::-1] 
+        return c[::-1]
+    def convertReverse( self, c ):
+        print c, '->', c[::-1] 
+        return c[::-1]
+        
+bind( a0, 'text', a1, 'text', ReverseBC() )
