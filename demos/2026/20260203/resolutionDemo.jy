@@ -1,0 +1,4 @@
+#ds= getDataSet('vap+das2server:https://planet.physics.uiowa.edu/das/das2Server?dataset=Van_Allen_Probes/A/Ephemeris/Geomagnetic&interval=60&start_time=2012-09-01T00:00:00.000Z&end_time=2012-10-01T00:00:00.000Z')
+ds= getDataSet('vap+das2server:https://planet.physics.uiowa.edu/das/das2Server?dataset=Van_Allen_Probes/A/EMFISIS/L2/HFR_spectra&start_time=2012-09-16T00:00:00.000Z&end_time=2012-09-17T00:00:00.000Z&resolution=1200')
+print ds
+plot(ds)
