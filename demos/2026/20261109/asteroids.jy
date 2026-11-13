@@ -346,16 +346,7 @@ class AsteroidsPanel(JPanel):
 # Standalone demonstration (set SHOW_DEMO = False if embedding elsewhere).
 SHOW_DEMO = True
 
-if SHOW_DEMO:
-    #frame = JFrame('Autoplot Asteroids - JPanel edition')
-    #frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE)
-    tabs = JTabbedPane()
-    panel = AsteroidsPanel()
-    addTab('Asteroids', panel)
-    #frame.setContentPane(tabs)
-    #frame.setSize(840, 680)
-    #frame.setLocationByPlatform(True)
-    #frame.setVisible(True)
-    tabs.setSelectedComponent(panel)
-    panel.requestFocusInWindow()
-    print('Asteroids panel: click the tab to focus; arrows, SPACE, P, R.')
+panel = AsteroidsPanel()
+addTab('Asteroids', panel)
+panel.requestFocusInWindow()
+print('Asteroids panel: click the tab to focus; arrows, SPACE, P, R.')
