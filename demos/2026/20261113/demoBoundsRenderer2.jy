@@ -1,0 +1,165 @@
+from java.util import Random
+from java.lang.Double import NaN
+from math import sqrt
+
+# Parameters
+size = getParam( 'size', 200.0, 'number of units across' )
+spacing = getParam( 'spacing', 35.0, 'approximate spacing between stones' )
+gap = getParam( 'gap', 5.0, 'gap between stones' )
+jitter = getParam( 'jitter', 9.0 )
+roughness = getParam( 'roughness', 1.2 )
+seed = getParam( 'seed', 12345, 'Random Seed' )
+
+rnd = Random(seed)
+
+# Clip a polygon against a half-plane:
+# a*x + b*y <= c
+def clip(poly, a, b, c):
+    result = []
+    if len(poly) == 0:
+        return result
+
+    p = poly[-1]
+    dp = a*p[0] + b*p[1] - c
+
+    for q in poly:
+        dq = a*q[0] + b*q[1] - c
+
+        if (dp <= 0) != (dq <= 0):
+            t = dp / (dp - dq)
+            result.append((
+                p[0] + t*(q[0]-p[0]),
+                p[1] + t*(q[1]-p[1])
+            ))
+
+        if dq <= 0:
+            result.append(q)
+
+        p = q
+        dp = dq
+
+    return result
+
+
+# Create irregularly spaced centers.
+centers = []
+n = int(size / spacing) + 1
+
+for iy in xrange(n):
+    for ix in xrange(n):
+        x = (ix + 0.5)*spacing
+        y = (iy + 0.5)*spacing
+
+        x += (rnd.nextDouble()-0.5)*2*jitter
+        y += (rnd.nextDouble()-0.5)*2*jitter
+
+        centers.append((x, y))
+
+
+# Construct Voronoi polygons.
+stones = []
+
+for i in xrange(len(centers)):
+    x, y = centers[i]
+
+    poly = [(0.,0.), (size,0.),
+            (size,size), (0.,size)]
+
+    for j in xrange(len(centers)):
+        if i == j:
+            continue
+
+        xx, yy = centers[j]
+
+        a = xx-x
+        b = yy-y
+        distance = sqrt(a*a + b*b)
+        c = (xx*xx + yy*yy - x*x - y*y)/2.
+        c = c - (gap/2.) * distance
+
+        poly = clip(poly, a, b, c)
+
+        if len(poly) == 0:
+            break
+
+    if len(poly) < 3:
+        continue
+
+    # Shrink the polygon to make gaps.
+    cx = sum([p[0] for p in poly])/len(poly)
+    cy = sum([p[1] for p in poly])/len(poly)
+
+    inset = []
+
+    for px, py in poly:
+        dx = px-cx
+        dy = py-cy
+        r = sqrt(dx*dx + dy*dy)
+
+        if r > 0:
+            f = max(0., (r-gap/2.)/r)
+        else:
+            f = 1.
+
+        inset.append((cx+f*dx, cy+f*dy))
+
+    # Add intermediate points along each edge
+    # for slightly chipped, irregular outlines.
+    rough = []
+
+    for k in xrange(len(inset)):
+        p = inset[k]
+        q = inset[(k+1) % len(inset)]
+
+        rough.append(p)
+
+        dx = q[0]-p[0]
+        dy = q[1]-p[1]
+        length = sqrt(dx*dx+dy*dy)
+
+        if length > 0:
+            nx = -dy/length
+            ny = dx/length
+
+            t = 0.5
+            offset = (rnd.nextDouble()-0.5)*2*roughness
+
+            rough.append((
+                p[0]+t*dx+offset*nx,
+                p[1]+t*dy+offset*ny
+            ))
+
+    stones.append(rough)
+
+
+# Build one rank-2 trajectory dataset.
+# NaN rows separate the individual stones.
+points = []
+
+for poly in stones:
+    for p in poly:
+        points.append(p)
+
+    # Explicitly close the polygon.
+    points.append(poly[0])
+
+    # Separate this stone from the next.
+    points.append((NaN, NaN))
+
+
+# Create the QDataSet.
+result = zeros(len(points), 2)
+
+for i in xrange(len(points)):
+    result[i,0] = points[i][0]
+    result[i,1] = points[i][1]
+
+# Bundle X and Y so this is recognized as a trajectory.
+result = bundle(result[:,0], result[:,1])
+
+print "Created", len(stones), "flagstones"
+print "Trajectory points:", len(points)
+
+# Display using BoundsRenderer.
+reset()
+plot(result, renderType='bounds')
