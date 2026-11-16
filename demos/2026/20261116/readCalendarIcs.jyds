@@ -1,5 +1,6 @@
 setScriptTitle('ICS Calendar File Reader')
-setScriptDescription('''Reads ICS files exported from Google Calendar or other software and returns as events dataset.''')
+setScriptDescription('''Reads ICS files exported from Google Calendar or other software and returns as events dataset.
+This ignores timezone information.''')
 
 resourceURI= getParam( 'resourceURI', PWD + 'silly_vacation.ics', 'example file to load' )
 filename = getFile(resourceURI)
