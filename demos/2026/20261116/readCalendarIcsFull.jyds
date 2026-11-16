@@ -1,0 +1,241 @@
+# Full-featured iCalendar events reader for Autoplot (Java 8 / Jython 2.2).
+# Output columns: start, stop, ARGB, label.
+# Recurrence rules are not expanded; detached recurrence instances are included.
+
+from java.text import SimpleDateFormat
+from java.util import TimeZone
+
+setScriptTitle('ICS Calendar File Reader (Full)')
+setScriptDescription('''Reads iCalendar files as colored events datasets.
+Supports UTC, TZID, floating and all-day times, folded lines, and categories.
+RRULE recurrence expansion and custom VTIMEZONE definitions are not supported.''')
+
+resourceURI = getParam('resourceURI', PWD + 'silly_vacation_categories.ics', 'iCalendar file to load')
+floatingZone = getParam('floatingZone', 'UTC', 'Timezone for floating times (e.g. America/Chicago)')
+filename = getFile(resourceURI)
+
+# Colors are opaque ARGB values. Colors are also assigned by CATEGORIES.
+categoryColors = {
+    'food': 0xFFFFA34D,
+    'dining': 0xFFFFA34D,
+    'travel': 0xFF4A90E2,
+    'adventure': 0xFFE57373,
+    'relaxation': 0xFF81C784,
+    'entertainment': 0xFFBA68C8,
+    'work': 0xFF78909C,
+    'meeting': 0xFF78909C,
+    'holiday': 0xFFFFD54F,
+    'vacation': 0xFF4DB6AC
+}
+defaultColor = 0xFF64B5F6
+
+
+def unfold(filename):
+    lines = []
+    f = open(str(filename), 'r')
+    try:
+        for raw in f:
+            line = raw.rstrip('\r\n')
+            if (line.startswith(' ') or line.startswith('\t')) and len(lines) > 0:
+                lines[-1] = lines[-1] + line[1:]
+            else:
+                lines.append(line)
+    finally:
+        f.close()
+    return lines
+
+
+def unescapeText(value):
+    out = []
+    i = 0
+    while i < len(value):
+        if value[i] == '\\' and i + 1 < len(value):
+            ch = value[i + 1]
+            if ch == 'n' or ch == 'N':
+                out.append('\n')
+            elif ch == ',' or ch == ';' or ch == '\\':
+                out.append(ch)
+            else:
+                out.append('\\' + ch)
+            i = i + 2
+        else:
+            out.append(value[i])
+            i = i + 1
+    return ''.join(out)
+
+
+def propertyParts(line):
+    # The first unquoted colon separates the property name/parameters and value.
+    quoted = False
+    index = -1
+    for i in range(len(line)):
+        if line[i] == '"':
+            quoted = not quoted
+        elif line[i] == ':' and not quoted:
+            index = i
+            break
+    if index < 0:
+        return None, {}, ''
+    header = line[:index]
+    value = line[index + 1:]
+    pieces = header.split(';')
+    name = pieces[0].upper()
+    params = {}
+    for p in pieces[1:]:
+        if '=' in p:
+            k, v = p.split('=', 1)
+            params[k.upper()] = v.strip('"')
+    return name, params, value
+
+
+def parseTime(item):
+    value, params = item
+    allDay = params.get('VALUE', '').upper() == 'DATE' or len(value) == 8
+    if allDay:
+        pattern = 'yyyyMMdd'
+    elif len(value) >= 15:
+        pattern = "yyyyMMdd'T'HHmmss"
+    else:
+        pattern = "yyyyMMdd'T'HHmm"
+    fmt = SimpleDateFormat(pattern)
+    fmt.setLenient(False)
+    if value.endswith('Z') and not allDay:
+        zone = 'UTC'
+        value = value[:-1]
+    else:
+        zone = params.get('TZID', floatingZone)
+    # Java's timezone parser silently maps unknown TZIDs to GMT: reject them.
+    tz = TimeZone.getTimeZone(zone)
+    known = False
+    if zone in ('UTC', 'GMT', 'Etc/UTC'):
+        known = True
+    elif zone.startswith('GMT+') or zone.startswith('GMT-'):
+        known = True
+    elif zone in TimeZone.getAvailableIDs():
+        known = True
+    if not known:
+        raise ValueError('Unknown timezone: ' + zone)
+    fmt.setTimeZone(tz)
+    return fmt.parse(value).getTime() / 1000.0, allDay
+
+
+def argbFromText(value):
+    value = value.strip()
+    if value.startswith('#'):
+        value = value[1:]
+    if len(value) == 6:
+        return 0xFF000000 | int(value, 16)
+    if len(value) == 8:
+        return int(value, 16)
+    # COLOR may also use CSS-style names, supported by java.awt.Color only
+    # through the explicit map below.
+    names = {'red': 0xFFFF0000, 'blue': 0xFF0000FF,
+             'green': 0xFF008000, 'yellow': 0xFFFFFF00,
+             'orange': 0xFFFFA500, 'purple': 0xFF800080}
+    return names.get(value.lower(), None)
+
+
+records = []
+calendarColor = None
+calendarCategories = []
+event = None
+for line in unfold(filename):
+    if line.upper() == 'BEGIN:VEVENT':
+        event = {}
+        continue
+    if line.upper() == 'END:VEVENT':
+        if event is not None and 'DTSTART' in event:
+            records.append(event)
+        event = None
+        continue
+    name, params, value = propertyParts(line)
+    if name is None:
+        continue
+    if event is not None:
+        if name in ('DTSTART', 'DTEND', 'DURATION'):
+            event[name] = (value, params)
+        elif name in ('SUMMARY', 'COLOR', 'CATEGORIES', 'STATUS'):
+            event[name] = unescapeText(value)
+    else:
+        if name == 'COLOR':
+            calendarColor = argbFromText(value)
+        elif name == 'X-APPLE-CALENDAR-COLOR':
+            calendarColor = argbFromText(value)
+        elif name == 'CATEGORIES':
+            calendarCategories = unescapeText(value).split(',')
+
+
+def durationSeconds(value):
+    # RFC 5545 duration: P[nW][nD][T[nH][nM][nS]], optional sign.
+    import re
+    match = re.match(r'^([+-]?)P(?:(\d+)W|(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?)$', value)
+    if match is None:
+        raise ValueError('Unsupported DURATION: ' + value)
+    sign, weeks, days, hours, minutes, seconds = match.groups()
+    total = (int(weeks or 0) * 604800 + int(days or 0) * 86400 +
+             int(hours or 0) * 3600 + int(minutes or 0) * 60 + int(seconds or 0))
+    if sign == '-':
+        total = -total
+    return total
+
+
+def chooseColor(event):
+    if 'COLOR' in event:
+        color = argbFromText(event['COLOR'])
+        if color is not None:
+            return color
+    categories = event.get('CATEGORIES', '')
+    if categories == '':
+        categories = ','.join(calendarCategories)
+    for category in categories.split(','):
+        key = category.strip().lower()
+        if key in categoryColors:
+            return categoryColors[key]
+    if calendarColor is not None:
+        return calendarColor
+    return defaultColor
+
+
+# Parse first, then allocate an exact-size DataSetBuilder.
+events = []
+for event in records:
+    if event.get('STATUS', '').upper() == 'CANCELLED':
+        continue
+    start, allDay = parseTime(event['DTSTART'])
+    if 'DTEND' in event:
+        stop, unused = parseTime(event['DTEND'])
+    elif 'DURATION' in event:
+        stop = start + durationSeconds(event['DURATION'][0])
+    elif allDay:
+        stop = start + 86400.0
+    else:
+        stop = start
+    if stop < start:
+        continue
+    label = event.get('SUMMARY', '(untitled)')
+    events.append((start, stop, chooseColor(event), label))
+
+
+dsb = DataSetBuilder(2, len(events), 4)
+tu = Units.t2000
+eu = Units.nominal()
+dsb.setUnits(0, tu)
+dsb.setUnits(1, tu)
+dsb.setUnits(2, Units.dimensionless)
+dsb.setUnits(3, eu)
+dsb.setLabel(0, 'start')
+dsb.setLabel(1, 'stop')
+dsb.setLabel(2, 'rgb')
+dsb.setLabel(3, 'label')
+dsb.putProperty(QDataSet.RENDER_TYPE, QDataSet.VALUE_RENDER_TYPE_EVENTS_BAR)
+
+# t1970 is seconds since 1970, t2000 is seconds since 2000.
+# Convert through datum() so Autoplot's unit conversion is authoritative.
+for i, (start, stop, color, label) in enumerate(events):
+    dsb.putValue(i, 0, Units.t1970.createDatum(start).doubleValue(tu))
+    dsb.putValue(i, 1, Units.t1970.createDatum(stop).doubleValue(tu))
+    dsb.putValue(i, 2, float(color))
+    dsb.putValue(i, 3, eu.createDatum(label).doubleValue(eu))
+    dsb.nextRecord()
+
+result = dsb.getDataSet()
