@@ -1,0 +1,49 @@
+setScriptTitle('ICS Calendar File Reader')
+setScriptDescription('''Reads ICS files exported from Google Calendar or other software and returns as events dataset.''')
+
+resourceURI= getParam( 'resourceURI', PWD + 'silly_vacation.ics', 'example file to load' )
+filename = getFile(resourceURI)
+
+events = []
+start = None
+summary = ''
+
+for line in open(str(filename)):
+    line = line.strip()
+    if line.startswith('DTSTART'):
+        start = line.split(':', 1)[1]
+    if line.startswith('DTEND') and start:
+        stop = line.split(':', 1)[1]
+    if line.startswith('SUMMARY:'):
+        summary = line[8:]
+    if line == 'END:VEVENT':
+        events.append((start, stop, summary))
+        start = None
+        summary = ''
+
+ymd= TimeParser.create('$Y$m$d')
+
+dsb= DataSetBuilder(2,len(events),3)
+tu= Units.t2000
+eu= Units.nominal()
+dsb.setUnits(0,tu)
+dsb.setUnits(1,tu)
+dsb.setUnits(2,eu)
+dsb.setLabel(0,'start')
+dsb.setLabel(1,'stop')
+dsb.setLabel(2,'summary')
+
+dsb.putProperty( QDataSet.RENDER_TYPE,QDataSet.VALUE_RENDER_TYPE_EVENTS_BAR )
+for i, (start, stop, title) in enumerate(events):
+    if len(start)==8: 
+        dsb.putValue(i, 0, ymd.parse(start).getTimeDatum().doubleValue(tu))
+        dsb.putValue(i, 1, ymd.parse(stop).getTimeDatum().doubleValue(tu))
+    else:
+        dsb.putValue(i, 0, datum(start).doubleValue(tu))
+        dsb.putValue(i, 1, datum(stop).doubleValue(tu))
+    dsb.putValue(i, 2, eu.createDatum(title).doubleValue(eu) )
+    dsb.nextRecord()
+
+ds= dsb.getDataSet()
+
+result= ds
