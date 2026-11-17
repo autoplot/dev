@@ -1,0 +1,36 @@
+from java.awt.geom import GeneralPath,Area
+
+setScriptDescription('Old demo shows how to use Area objects to build up a region')
+
+reset()
+
+n= 500
+xx= randn(n)*2-6
+yy= randn(n)/5+2.5
+
+xx= append( xx, randn(n)*2+7.4)
+yy= append( yy, randn(n)/6+2.0)
+
+plot( xx, yy )
+
+gp= GeneralPath()
+
+a= Area()
+from java.awt.geom import Ellipse2D
+
+ax= dom.plots[0].controller.dasPlot.getXAxis()
+ay= dom.plots[0].controller.dasPlot.getYAxis()
+
+for i in xrange(xx.length()):
+    x= ax.transform(xx[i])
+    y= ay.transform(yy[i])
+    a.add( Area( Ellipse2D.Double(x-10,y-10,20,20) ) )
+
+print a
+
+from org.das2.graph import Painter
+
+class MyPainter( Painter ):
+    def paint( self,g ):
+        g.draw(a)
+dom.canvases[0].controller.dasCanvas.addTopDecorator(MyPainter())
