@@ -11,7 +11,7 @@ yy= randn(n)/5+2.5
 xx= append( xx, randn(n)*2+7.4)
 yy= append( yy, randn(n)/6+2.0)
 
-plot( xx, yy )
+plot( xx, yy, symbolSize=3, renderType='scatter', color=Color.GRAY )
 
 gp= GeneralPath()
 
