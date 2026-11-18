@@ -1,0 +1,27 @@
+import sys
+from StringIO import StringIO
+from java.io import StringWriter
+
+print 'hello', 'there', 'november'
+
+a= 'hello'
+b= 'there'
+c= 'november'
+
+print a, b, c
+
+sys.stderr.write('''Traceback (most recent call last):
+  File "print_exc.jy", line 11, in ?
+NameError: np_moment_gd\n''')
+
+try:
+    np_moment_gd = magnitude(np_moment_gd)
+except:         
+    import traceback
+    traceback.print_exc()
+    #buf = StringWriter()
+    #traceback.print_exc(file=buf)
+    #print "CAPTURED:", repr(buf.toString())
+    
+    
+    
