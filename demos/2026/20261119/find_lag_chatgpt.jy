@@ -23,7 +23,7 @@ lag = convertUnitsTo( (t2matched - t1), Units.seconds )
 
 plot(t1, lag, yrange=[-25,25] )
 annotation(0,text='lag=%.3f'%mean(lag),
-           xrange=extent(xtags(lag)),
+           xrange=extent(t1),
            yrange=extent(lag),
            anchorType='data', 
            anchorPosition=AnchorPosition.OutsideSSE,
