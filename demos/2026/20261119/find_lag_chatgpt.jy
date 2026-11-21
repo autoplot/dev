@@ -1,0 +1,30 @@
+from org.das2.graph import AnchorPosition
+setScriptDescription('''ChatGPT showed me how to more accurately calculate the TS2-TS1 time lag over an interval''')
+
+# mlat1 and mlat2 are monotonic rank-1 datasets
+# with DEPEND_0 containing their time tags.
+
+tr= '2026-06-01T19:37/19:47'
+
+mlat1= getDataSet( 'vap+hapi:https://hapi-server.org/servers/SSCWeb/hapi?id=tracers1&parameters=Time,Lat_GM',tr )
+mlat2= getDataSet( 'vap+hapi:https://hapi-server.org/servers/SSCWeb/hapi?id=tracers2&parameters=Time,Lat_GM',tr )
+
+t1 = xtags(mlat1)
+t2 = xtags(mlat2)
+
+# Find where each MLAT from spacecraft 1 occurs in spacecraft 2.
+ff = findex(mlat2, mlat1)
+
+# Interpolate spacecraft 2's times at those latitudes.
+t2matched = interpolate(t2, ff)
+
+# Calculate lag in seconds.
+lag = convertUnitsTo( (t2matched - t1), Units.seconds )
+
+plot(t1, lag, yrange=[-25,25] )
+annotation(0,text='lag=%.3f'%mean(lag),
+           xrange=extent(t1),
+           yrange=extent(lag),
+           anchorType='data', 
+           anchorPosition=AnchorPosition.OutsideSSE,
+           anchorOffset='')

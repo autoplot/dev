@@ -1,0 +1,20 @@
+multiline='''This is
+a multi-line
+text
+'''
+
+print multiline
+
+for i in xrange(3):
+    print 'value=%d' % i
+
+try:
+    print undef
+except:    
+    import traceback
+    traceback.print_exc()
+    
+    
+    
+
+
