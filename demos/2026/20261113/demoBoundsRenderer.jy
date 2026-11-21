@@ -1,0 +1,14 @@
+from org.das2.qds.util import AsciiParser
+s='''
+20.000	80.000
+20.000	25.000
+80.000	25.000
+80.000	60.000
+50.000	60.000
+50.000	80.000
+20.000	80.000
+'''
+
+uri = 'vap+inline:'+s.strip().replace('\n',';').replace('\t',',')
+ds= getDataSet(uri)
+plot(ds,renderType='bounds>color=Silver&fillColor=Silver&fillTexture=backhatch&polar=F')
